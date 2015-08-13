@@ -1,4 +1,4 @@
-import Matter from '../../src/matter-library';
+import Matter from '../../src/matter-client';
 
 describe('Matter', () => {
   describe('Login method', () => {
@@ -64,16 +64,6 @@ describe('Matter', () => {
       };
       Matter.getAuthToken();
       expect(Matter.getAuthToken).to.have.been.calledOnce;
-    });
-  });
-  describe('getApps method', () => {
-    beforeEach(() => {
-      spy(Matter, 'getApps');
-      Matter.getApps();
-    });
-
-    it('should have been run once', () => {
-      expect(Matter.getApps).to.have.been.calledOnce;
     });
   });
 });

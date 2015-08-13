@@ -1,17 +1,17 @@
 import Firebase from 'firebase';
 import axios from 'axios';
-import Promise from 'babelify/polyfill';
 
-const serverUrl = 'http://localhost:4000';
+const serverUrl = 'http://hypercube.elasticbeanstalk.com';
 const fbUrl = 'https://pruvit.firebaseio.com';
-const tokenName = 'matter';
+const tokenName = 'matter-client';
 
 let user;
 let token;
 
 if (typeof Firebase == 'undefined') {
-	console.error('Firebase is required to use Matter');
+	console.error('Firebase is required to use file structure functionality of matter-client');
 }
+//TODO: Replace dependency on axios with vanilla solution
 if (typeof axios == 'undefined') {
 	console.error('Axios is required to use Matter');
 } else {
@@ -30,7 +30,7 @@ if (typeof axios == 'undefined') {
 	});
 }
 
-let Matter = {
+class MatterClient {
 	signup(signupData) {
 		return axios.post(serverUrl + '/signup', signupData)
 		.then(function(response) {
@@ -40,7 +40,7 @@ let Matter = {
 		  console.error('[signup()] Error signing up:', errRes);
 		  return errRes;
 		});
-	},
+	}
 
 	login(loginData) {
 		if (!loginData || !loginData.password || !loginData.username) {
@@ -60,7 +60,7 @@ let Matter = {
 			console.error('[login()] Error logging in: ', errRes);
 			return errRes;
 		});
-	},
+	}
 
 	logout() {
 		return axios.put(serverUrl + '/logout', {
@@ -74,7 +74,7 @@ let Matter = {
 		  console.error('[logout()] Error logging out: ', errRes);
 		  return errRes;
 		});
-	},
+	}
 
 	getCurrentUser() {
 		//TODO: Check Current user variable
@@ -88,7 +88,7 @@ let Matter = {
 			console.error('[getCurrentUser()] Error getting current user: ', errRes);
 			return errRes;
 		});
-	},
+	}
 
 	getAuthToken() {
 		//TODO: Load token from storage
@@ -96,7 +96,7 @@ let Matter = {
 			return null;
 		}
 		return window.localStorage.getItem(tokenName);
-	},
+	}
 
 	getApps() {
 		//TODO:Set authentication header
@@ -112,5 +112,5 @@ let Matter = {
 
 };
 
-export default Matter;
+export default MatterClient;
 

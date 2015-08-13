@@ -1,11 +1,11 @@
-# matter-library
+# matter-client
 
 
-[![Travis build status](https://travis-ci.org/KyperTech/matter-library.svg?branch=master)](https://travis-ci.org/kypertech/matter-library)
-[![Code Climate](https://codeclimate.com/github/KyperTech/matter-library/badges/gpa.svg)](https://codeclimate.com/github/kypertech/matter-library)
-[![Test Coverage](https://codeclimate.com/github/KyperTech/matter-library/badges/coverage.svg)](https://codeclimate.com/github/KyperTech/matter-library)
-[![Dependency Status](https://david-dm.org/kypertech/matter-library.svg)](https://david-dm.org/kypertech/matter-library)
-[![devDependency Status](https://david-dm.org/kypertech/matter-library/dev-status.svg)](https://david-dm.org/kypertech/matter-library#info=devDependencies)
+[![Travis build status](https://travis-ci.org/KyperTech/matter-client.svg?branch=master)](https://travis-ci.org/kypertech/matter-client)
+[![Code Climate](https://codeclimate.com/github/KyperTech/matter-client/badges/gpa.svg)](https://codeclimate.com/github/kypertech/matter-client)
+[![Test Coverage](https://codeclimate.com/github/KyperTech/matter-client/badges/coverage.svg)](https://codeclimate.com/github/KyperTech/matter-client)
+[![Dependency Status](https://david-dm.org/kypertech/matter-client.svg)](https://david-dm.org/kypertech/matter-client)
+[![devDependency Status](https://david-dm.org/kypertech/matter-client/dev-status.svg)](https://david-dm.org/kypertech/matter-client#info=devDependencies)
 
 Client library to simplify communication with Matter application building service.
 

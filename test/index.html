@@ -2,18 +2,39 @@
 <html lang='en'>
 <head>
   <meta charset='utf-8'>
-  <title>Tests</title>
+  <title>Matter-Client | Tester</title>
   <script src='../node_modules/axios/dist/axios.js'></script>
+  <script src="https://cdn.firebase.com/js/client/2.2.9/firebase.js"></script>
 
   <!-- Polyfill (required by Babel) -->
-  <script src='../dist/matter-library.js'></script>
+  <script src='../dist/matter-client.js'></script>
   <script>
-  console.log('matter:', Matter);
+    var matter = new MatterClient();
+    console.log('matter:', matter);
+    document.addEventListener("DOMContentLoaded", function(event) { 
+      if(matter.getAuthToken()){
+        document.getElementById("status").innerHTML = "True";
+      }
+    });
+    
+    function login(){
+      console.log('login called');
+      matter.login({username:'test', password:'test'}).then(function(loginInfo){
+        console.log('successful login:', loginInfo);
+        document.getElementById("status").innerHTML = "True";
+      });   
+    }
   </script>
 
 </head>
 <body>
-
+  <div style="text-align:center;">
+    <h2>Matter Client Tester</h2>
+    <h4>Logged In: <span id='status'>False</span></h4>
+      <p class="submit">
+        <button onclick="login()">Login As Test User</button>
+      </p>
+  </div>
 
 </body>
 </html>

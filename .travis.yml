@@ -3,6 +3,9 @@ node_js:
   - "0.10"
   - "0.12"
   - "io.js"
+branches:
+  only:
+    - master
 sudo: false
 script: "gulp coverage"
 after_success:

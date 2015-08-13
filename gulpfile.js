@@ -139,7 +139,7 @@ function test() {
 
 gulp.task('coverage', ['lint-src', 'lint-test'], function(done) {
   require('babel-core/register');
-  gulp.src(['src/**/*.js'])
+  gulp.src(['src/**/*.js', '!gulpfile.js', '!dist/**/*.js'])
     .pipe($.istanbul({ instrumenter: isparta.Instrumenter }))
     .pipe($.istanbul.hookRequire())
     .on('finish', function() {
