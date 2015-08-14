@@ -36,7 +36,7 @@ Matter.signup({username: 'test', name:'Test User', password: 'test'})
 .then(function(){ console.log('User logged in')});
 ```
 
-###getcurrentUser()
+###getCurrentUser()
 Get currently logged in user.
 
 Example: 
@@ -49,10 +49,95 @@ Get Auth token for currently logged in user
 
 Example: `var token = Matter.getAuthToken();`
 
-###getApps()
-Log user in provided username/email and password.
+### apps(appName)
+Begin an app action such as creating a new application or getting an application's data. Providing a name makes the action apply to a specific application matching the name provided.
 
-Example: 
+#### apps().get()
+
+Get list of applications or data for a specific application.
+
+Get List Example: 
 ```
-Matter.getApps().then(function(appsList){ console.log('Users apps:', appsList)});
+//Get list of all of your apps
+Matter.apps().get().then(function(appsList){ console.log('Users apps:', appsList)});
+```
+
+Get Application: 
+```
+//Get app named example app
+Matter.apps('exampleApp').get().then(function(appData){ 
+    console.log('Application data for exampleApp:', appData);
+});
+```
+
+#### apps().get()
+
+Get list of applications or data for a specific application.
+
+Get List Example: 
+```
+//Get list of all of your apps
+Matter.apps().get().then(function(appsList){ console.log('Users apps:', appsList)});
+```
+
+Get Application: 
+```
+//Get app named example app
+Matter.apps('exampleApp').get().then(function(appData){ 
+    console.log('Application data for exampleApp:', appData);
+});
+```
+
+#### apps().add(appData)
+
+Add a new application:
+
+```
+//Delete example app
+var appData = {name:'newApp1', frontend:{bucket:{url:"", }}, collaborators:[]};
+Matter.apps().add(appData).then(function(appData){ 
+    console.log('Application data for exampleApp:', appData);
+});
+```
+
+#### apps(appName).update()
+
+Update an application:
+
+```
+//Update exampleApp to the new name: newAppName
+var appData = {name:'newAppName'};
+Matter.apps('exampleApp').update(appData).then(function(appData){ 
+    console.log('Application data for exampleApp:', appData);
+});
+```
+
+#### apps(appName).del()
+
+Delete an application:
+
+```
+//Delete example app
+Matter.apps('exampleApp').del().then(function(appData){ 
+    console.log('Application data for exampleApp:', appData);
+});
+```
+
+
+#### apps().files().get()
+Get Application's files:
+```
+//Get app named example app
+Matter.apps('exampleApp').files().get().then(function(appData){ 
+    console.log('Application data for exampleApp:', appData);
+});
+```
+
+#### apps().structure().get()
+Get Files/Folders in structure/children format:
+```
+//Get app named example app
+Matter.apps('exampleApp').structure().get().then(function(appData){ 
+    console.log('Application data for exampleApp:', appData);
+});
 ```
