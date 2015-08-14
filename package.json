@@ -67,6 +67,7 @@
   },
   "dependencies": {
     "axios": "^0.5.4",
-    "firebase": "^2.2.9"
+    "firebase": "^2.2.9",
+    "underscore": "^1.8.3"
   }
 }
