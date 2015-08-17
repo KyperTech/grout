@@ -1,13 +1,13 @@
 import Firebase from 'firebase';
 import AWS from 'aws-sdk';
+import request from './utils/request';
 import _ from 'underscore';
-import axios from 'axios';
 let user;
 let token;
 const config = {
 	serverUrl: 'http://localhost:4000',
 	tokenName: 'matter-client',
-	fbUrl: 'https://pruvit.firebaseio.com',
+	fbUrl: 'https://pruvit.firebaseio.com/',
 	aws: {
 		region: 'us-east-1',
 		cognito: {
@@ -28,22 +28,8 @@ if (typeof AWS == 'undefined') {
 if (typeof _ == 'undefined') {
 	console.error('Underscore is required to use Matter');
 }
-if (typeof axios == 'undefined') {
-	console.error('Axios is required to use Matter');
-} else {
-	// Add a request interceptor
-	axios.interceptors.request.use((config) => {
-		// Do something before request is sent
-		//TODO: Handle there already being headers
-		if (typeof window != 'undefined' && window.sessionStorage.getItem(tokenName)) {
-			config.headers = {'Authorization': 'Bearer ' + sessionStorage.getItem(tokenName)};
-			console.log('Set auth header through interceptor');
-		}
-		return config;
-	}, (error) => {
-		// Do something with request error
-		return Promise.reject(error);
-	});
+if (typeof request == 'undefined') {
+	console.error('Request is required to use Matter');
 }
 /**
  * Application class.
@@ -122,9 +108,9 @@ class Application {
 	addStorage() {
 		//TODO:Add storage bucket
 		var endpoint = config.serverUrl + '/apps/' + this.name + '/storage';
-		return axios.post(endpoint, appData).then((response) => {
-			console.log('[Application.addStorage()] Apps:', response.data);
-			return new Application(response.data);
+		return request.post(endpoint, appData).then((response) => {
+			console.log('[Application.addStorage()] Apps:', response);
+			return new Application(response);
 		})['catch']((errRes) => {
 			console.error('[Application.addStorage()] Error getting apps list: ', errRes);
 			return Promise.reject(errRes);
@@ -133,12 +119,12 @@ class Application {
 	applyTemplate() {
 		var endpoint = config.serverUrl + '/apps/' + this.name + '/template';
 		console.log('Applying templates to existing');
-		// return axios.post(endpoint, appData).then(function(response) {
-		// 	console.log('[Application.addStorage()] Apps:', response.data);
+		// return request.post(endpoint, appData).then(function(response) {
+		// 	console.log('[Application.addStorage()] Apps:', response);
 		// 	if (!apps.isList) {
-		// 		return new Application(response.data);
+		// 		return new Application(response);
 		// 	}
-		// 	return response.data;
+		// 	return response;
 		// })['catch'](function(errRes) {
 		// 	console.error('[Application.addStorage()] Error getting apps list: ', errRes);
 		// 	return Promise.reject(errRes);
@@ -153,9 +139,9 @@ class AppsAction {
 	}
 	//Get applications or single application
 	get() {
-		return axios.get(this.endpoint).then((response) => {
-			console.log('[MatterClient.apps().get()] App(s) data loaded:', response.data);
-			return response.data;
+		return request.get(this.endpoint).then((response) => {
+			console.log('[MatterClient.apps().get()] App(s) data loaded:', response);
+			return response;
 		})['catch']((errRes) => {
 			console.error('[MatterClient.apps().get()] Error getting apps list: ', errRes);
 			return Promise.reject(errRes);
@@ -163,9 +149,9 @@ class AppsAction {
 	}
 	//Add an application
 	add(appData) {
-		return axios.post(this.endpoint, appData).then((response) => {
-			console.log('[MatterClient.apps().add()] Application added successfully: ', response.data);
-			return new Application(response.data);
+		return request.post(this.endpoint, appData).then((response) => {
+			console.log('[MatterClient.apps().add()] Application added successfully: ', response);
+			return new Application(response);
 		})['catch']((errRes) => {
 			console.error('[MatterClient.getApps()] Error adding application: ', errRes);
 			return Promise.reject(errRes);
@@ -185,9 +171,9 @@ class AppAction {
 	}
 	//Get applications or single application
 	get() {
-		return axios.get(this.endpoint).then((response) => {
-			console.log('[MatterClient.app().get()] App(s) data loaded:', response.data);
-			return new Application(response.data);
+		return request.get(this.endpoint).then((response) => {
+			console.log('[MatterClient.app().get()] App(s) data loaded:', response);
+			return new Application(response);
 		})['catch']((errRes) => {
 			console.error('[MatterClient.app().get()] Error getting apps list: ', errRes);
 			return Promise.reject(errRes);
@@ -195,9 +181,9 @@ class AppAction {
 	}
 	//Update an application
 	update(appData) {
-		return axios.put(this.endpoint, appData).then((response) => {
-			console.log('[MatterClient.apps().update()] App:', response.data);
-			return new Application(response.data);
+		return request.put(this.endpoint, appData).then((response) => {
+			console.log('[MatterClient.apps().update()] App:', response);
+			return new Application(response);
 		})['catch']((errRes) => {
 			console.error('[MatterClient.apps().update()] Error updating app: ', errRes);
 			return Promise.reject(errRes);
@@ -205,9 +191,9 @@ class AppAction {
 	}
 	//Delete an application
 	del(appData) {
-		return axios.delete(this.endpoint, appData).then((response) => {
-			console.log('[MatterClient.apps().del()] Apps:', response.data);
-			return new Application(response.data);
+		return request.delete(this.endpoint, appData).then((response) => {
+			console.log('[MatterClient.apps().del()] Apps:', response);
+			return new Application(response);
 		})['catch']((errRes) => {
 			console.error('[MatterClient.apps().del()] Error deleting app: ', errRes);
 			return Promise.reject(errRes);
@@ -246,10 +232,10 @@ class AppAction {
 class MatterClient {
 	//Signup a new user
 	signup(signupData) {
-		return axios.post(config.serverUrl + '/signup', signupData)
+		return request.post(config.serverUrl + '/signup', signupData)
 		.then((response) => {
 		  console.log(response);
-		  return response.data;
+		  return response;
 		})
 		['catch']((errRes) => {
 		  console.error('[MatterClient.signup()] Error signing up:', errRes);
@@ -263,16 +249,17 @@ class MatterClient {
 			console.error('Username/Email and Password are required to login.');
 			return Promise.reject({message: 'Username/Email and Password are required to login.'});
 		}
-		return axios.put(config.serverUrl + '/login', loginData)
+		return request.put(config.serverUrl + '/login', loginData)
 		.then((response) => {
 			//TODO: Save token locally
 			console.log('[MatterClient.login()]: Login response: ', response);
-			token = response.data.token;
+			token = response.token;
 			if (window.sessionStorage.getItem(config.tokenName) === null) {
-				window.sessionStorage.setItem(config.tokenName, response.data.token);
+				window.sessionStorage.setItem(config.tokenName, response.token);
 				console.log('[MatterClient.login()]: token set to storage:', window.sessionStorage.getItem(config.tokenName));
 			}
-			return response.data;
+			setAuthHeader();
+			return response;
 		})['catch']((errRes) => {
 			console.error('[MatterClient.login()] Error logging in: ', errRes);
 			return Promise.reject(errRes);
@@ -280,15 +267,22 @@ class MatterClient {
 	}
 
 	logout() {
-		return axios.put(config.serverUrl + '/logout', {
+		return request.put(config.serverUrl + '/logout', {
 		}).then(function(response) {
 		  console.log('[MatterClient.logout()] Logout successful: ', response);
-		  if (typeof window != 'undefined' && typeof window.sessionStorage.getItem(tokenName) != null) {
+		  if (typeof window != 'undefined' && typeof window.sessionStorage.getItem(config.tokenName) != null) {
 				//Clear session storage
 				window.sessionStorage.clear();
 			}
 			return response.body;
 		})['catch'](function(errRes) {
+			if (errRes.status && errRes.status == 401) {
+				if (typeof window != 'undefined' && window.sessionStorage.getItem(config.tokenName) != null) {
+					//Clear session storage
+					window.sessionStorage.clear();
+				}
+				return;
+			}
 			console.error('[MatterClient.logout()] Error logging out: ', errRes);
 			return Promise.reject(errRes);
 		});
@@ -296,11 +290,11 @@ class MatterClient {
 
 	getCurrentUser() {
 		//TODO: Check Current user variable
-		return axios.get(config.serverUrl + '/user', {
+		return request.get(config.serverUrl + '/user', {
 		}).then(function(response) {
 			//TODO: Save user information locally
-			console.log('[MatterClient.getCurrentUser()] Current User:', response.data);
-			user = response.data;
+			console.log('[MatterClient.getCurrentUser()] Current User:', response);
+			user = response;
 			return user;
 		})['catch'](function(errRes) {
 			console.error('[MatterClient.getCurrentUser()] Error getting current user: ', errRes);

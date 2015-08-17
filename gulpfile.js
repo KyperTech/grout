@@ -53,7 +53,7 @@ function createLintTask(taskName, files) {
 }
 
 // Lint our source code
-createLintTask('lint-src', ['src/**/*.js']);
+createLintTask('lint-src', ['src/**/*.js', '!src/lib/*.js']);
 
 // Lint our test code
 createLintTask('lint-test', ['test/**/*.js']);

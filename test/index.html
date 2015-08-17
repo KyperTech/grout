@@ -3,10 +3,11 @@
 <head>
   <meta charset='utf-8'>
   <title>Matter-Client | Tester</title>
-  <script src='../node_modules/axios/dist/axios.js'></script>
   <script src="https://cdn.firebase.com/js/client/2.2.9/firebase.js"></script>
 
   <!-- Polyfill (required by Babel) -->
+  <script src='../src/lib/superagent.js'></script>
+
   <script src='../dist/matter-client.js'></script>
   <script>
     var matter = new MatterClient();
@@ -24,6 +25,25 @@
         document.getElementById("status").innerHTML = "True";
       });   
     }
+    function logout(){
+      console.log('logout called');
+      matter.logout().then(function(loginInfo){
+        console.log('successful logout:', loginInfo);
+        document.getElementById("status").innerHTML = "False";
+      });   
+    }
+    function getApps(){
+      console.log('getApps called');
+      matter.apps().get().then(function(appsList){
+        console.log('apps list loaded:', appsList);
+        var outHtml = '<ul>';
+        appsList.forEach(function(app){
+        	outHtml += '<li>' + app.name + '</li></br>'
+        });
+        outHtml += '</ul>';
+        document.getElementById("output").innerHTML = outHtml;
+      });   
+    }
   </script>
 
 </head>
@@ -33,6 +53,11 @@
     <h4>Logged In: <span id='status'>False</span></h4>
       <p class="submit">
         <button onclick="login()">Login As Test User</button>
+        <button onclick="logout()">Logout</button>
+      </p>
+      <p>
+        <button onclick="getApps()">Get Apps</button>
+      	<span id="output"></span>
       </p>
   </div>
 
