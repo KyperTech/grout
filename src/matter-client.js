@@ -185,8 +185,6 @@ class AppAction {
 	}
 	//Get applications or single application
 	get() {
-		this.endpoint += `/${this.name}`;
-		let self = this;
 		return axios.get(this.endpoint).then((response) => {
 			console.log('[MatterClient.app().get()] App(s) data loaded:', response.data);
 			return new Application(response.data);
@@ -197,10 +195,6 @@ class AppAction {
 	}
 	//Update an application
 	update(appData) {
-		if (this.isList) {
-			console.error('Update action can only be applied to a specific application.');
-			return Promise.reject({message: 'Update action can only be applied to a specific application.'});
-		}
 		return axios.put(this.endpoint, appData).then((response) => {
 			console.log('[MatterClient.apps().update()] App:', response.data);
 			return new Application(response.data);
@@ -211,10 +205,6 @@ class AppAction {
 	}
 	//Delete an application
 	del(appData) {
-		if (this.isList) {
-			console.error('Delete action can only be applied to a specific application.');
-			return Promise.reject({message: 'Delete action can only be applied to a specific applicaiton.'});
-		}
 		return axios.delete(this.endpoint, appData).then((response) => {
 			console.log('[MatterClient.apps().del()] Apps:', response.data);
 			return new Application(response.data);
@@ -224,7 +214,7 @@ class AppAction {
 		});
 	}
 	getFiles() {
-		this.get().then((app) => {
+		return this.get().then((app) => {
 			app.getFiles().then((filesArray)=> {
 				return filesArray;
 			})['catch']((err) => {
@@ -238,8 +228,8 @@ class AppAction {
 	}
 
 	getStructure() {
-		this.get().then((app) => {
-			app.getStructure().then((structure)=> {
+		return this.get().then((app) => {
+			return app.getStructure().then((structure)=> {
 				console.log('Structure loaded: ', structure);
 				return structure;
 			})['catch']((err) => {
