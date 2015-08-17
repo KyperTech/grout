@@ -14,6 +14,7 @@ const esperanto = require('esperanto');
 const browserify = require('browserify');
 const runSequence = require('run-sequence');
 const source = require('vinyl-source-stream');
+const jsdoc = require("gulp-jsdoc");
 
 // Gather the library data from `package.json`
 const manifest = require('./package.json');
@@ -177,6 +178,11 @@ gulp.task('watch', function() {
 gulp.task('test-browser', ['build-in-sequence'], function() {
   $.livereload.listen({port: 35729, host: 'localhost', start: true});
   return gulp.watch(otherWatchFiles, ['build-in-sequence']);
+});
+
+gulp.task('docs', function(){
+  gulp.src(['src/*.js'])
+  .pipe(jsdoc('./docs'))
 });
 
 // An alias of test

@@ -39,6 +39,7 @@
     "gulp-filter": "^3.0.0",
     "gulp-istanbul": "^0.10.0",
     "gulp-jscs": "^2.0.0",
+    "gulp-jsdoc": "^0.1.4",
     "gulp-livereload": "^3.4.0",
     "gulp-load-plugins": "^0.10.0",
     "gulp-mocha": "^2.0.0",
@@ -66,6 +67,7 @@
     ]
   },
   "dependencies": {
+    "aws-sdk": "^2.1.45",
     "axios": "^0.5.4",
     "firebase": "^2.2.9",
     "underscore": "^1.8.3"

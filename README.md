@@ -49,12 +49,12 @@ Get Auth token for currently logged in user
 
 Example: `var token = Matter.getAuthToken();`
 
-### apps(appName)
-Begin an app action such as creating a new application or getting an application's data. Providing a name makes the action apply to a specific application matching the name provided.
+### apps()
+Begin an applications action such as creating a new application or getting this list of applications
 
 #### apps().get()
 
-Get list of applications or data for a specific application.
+Get list of applications.
 
 Get List Example: 
 ```
@@ -62,31 +62,6 @@ Get List Example:
 Matter.apps().get().then(function(appsList){ console.log('Users apps:', appsList)});
 ```
 
-Get Application: 
-```
-//Get app named example app
-Matter.apps('exampleApp').get().then(function(appData){ 
-    console.log('Application data for exampleApp:', appData);
-});
-```
-
-#### apps().get()
-
-Get list of applications or data for a specific application.
-
-Get List Example: 
-```
-//Get list of all of your apps
-Matter.apps().get().then(function(appsList){ console.log('Users apps:', appsList)});
-```
-
-Get Application: 
-```
-//Get app named example app
-Matter.apps('exampleApp').get().then(function(appData){ 
-    console.log('Application data for exampleApp:', appData);
-});
-```
 
 #### apps().add(appData)
 
@@ -100,7 +75,21 @@ Matter.apps().add(appData).then(function(appData){
 });
 ```
 
-#### apps(appName).update()
+### app(appName)
+Begin an singular application action such as getting an existing application's data or modifying/deleting it.
+
+#### app(appName).get()
+
+Get Application: 
+```
+//Get app named example app
+Matter.app('exampleApp').get().then(function(appData){ 
+    console.log('Application data for exampleApp:', appData);
+});
+```
+
+
+#### app(appName).update(updateData)
 
 Update an application:
 
@@ -112,32 +101,32 @@ Matter.apps('exampleApp').update(appData).then(function(appData){
 });
 ```
 
-#### apps(appName).del()
+#### app(appName).del()
 
 Delete an application:
 
 ```
 //Delete example app
-Matter.apps('exampleApp').del().then(function(appData){ 
+Matter.app('exampleApp').del().then(function(appData){ 
     console.log('Application data for exampleApp:', appData);
 });
 ```
 
 
-#### apps().files().get()
+#### app(appName).getFiles()
 Get Application's files:
 ```
 //Get app named example app
-Matter.apps('exampleApp').files().get().then(function(appData){ 
+Matter.app('exampleApp').getFiles().then(function(appData){ 
     console.log('Application data for exampleApp:', appData);
 });
 ```
 
-#### apps().structure().get()
+#### app(appName).getStructure()
 Get Files/Folders in structure/children format:
 ```
 //Get app named example app
-Matter.apps('exampleApp').structure().get().then(function(appData){ 
+Matter.app('exampleApp').getStructure().then(function(appData){ 
     console.log('Application data for exampleApp:', appData);
 });
 ```
