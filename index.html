@@ -4,11 +4,11 @@
   <meta charset='utf-8'>
   <title>Matter-Client | Tester</title>
   <script src="https://cdn.firebase.com/js/client/2.2.9/firebase.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
   <!-- Polyfill (required by Babel) -->
-  <script src='../src/lib/superagent.js'></script>
-
-  <script src='../dist/matter-client.js'></script>
+  <script src='src/lib/superagent.js'></script>
+  <script src='src/lib/aws-sdk-2.1.45.js'></script>
+  <script src='dist/matter-client.js'></script>
   <script>
     var matter = new MatterClient();
     console.log('matter:', matter);
@@ -27,8 +27,8 @@
     }
     function logout(){
       console.log('logout called');
-      matter.logout().then(function(loginInfo){
-        console.log('successful logout:', loginInfo);
+      matter.logout().then(function(){
+        console.log('successful logout');
         document.getElementById("status").innerHTML = "False";
       });   
     }
@@ -44,6 +44,13 @@
         document.getElementById("output").innerHTML = outHtml;
       });   
     }
+    function getStructure(){
+      console.log('getStructure called');
+      matter.app('exampleApp').getStructure().then(function(app){
+        console.log('apps list loaded:', app);
+        document.getElementById("output").innerHTML = JSON.stringify(app);
+      });   
+    }
   </script>
 
 </head>
@@ -57,6 +64,7 @@
       </p>
       <p>
         <button onclick="getApps()">Get Apps</button>
+        <button onclick="getStructure()">Get Structure</button>
       	<span id="output"></span>
       </p>
   </div>

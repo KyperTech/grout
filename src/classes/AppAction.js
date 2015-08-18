@@ -1,6 +1,7 @@
 import config from '../config';
 import request from '../utils/request';
 import Application from './Application';
+import AWS from 'aws-sdk';
 
 //Actions for specific application
 class AppAction {

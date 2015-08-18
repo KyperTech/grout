@@ -1,5 +1,7 @@
 import MatterClient from '../../src/matter-client';
 import request from '../../src/utils/request';
+import Firebase from 'firebase';
+
 let Matter = new MatterClient();
 let mockGet = sinon.stub(request, 'get', function() {
  console.log('mock get called with:', arguments);

@@ -33,7 +33,7 @@ class Application {
 	}
 	//Get files list from S3
 	getFiles() {
-		if (!this.frontend) {
+		if (!this.frontend || !this.frontend.bucketName) {
 			console.error('[Applicaiton.getFiles] Attempting to get objects for bucket without name.');
 			return Promise.reject({message: 'Bucket name required to get objects'});
 		} else {
@@ -43,15 +43,17 @@ class Application {
 				setAWSConfig();
 			}
 			var s3 = new AWS.S3();
-			var listParams = {Bucket: bucketName};
-			return s3.listObjects(listParams, function(err, data) {
-				if (!err) {
-					console.log('[Application.getObjects()] listObjects returned:', data);
-					return Promise.resolve(data.Contents);
-				} else {
-					console.error('[Application.getObjects()] Error listing objects:', err);
-					return Promise.reject(err);
-				}
+			var listParams = {Bucket: this.frontend.bucketName};
+			return new Promise((resolve, reject) => {
+				s3.listObjects(listParams, function(err, data) {
+					if (!err) {
+						console.log('[Application.getObjects()] listObjects returned:', data);
+						return resolve(data.Contents);
+					} else {
+						console.error('[Application.getObjects()] Error listing objects:', err);
+						return reject(err);
+					}
+				});
 			});
 		}
 	}
@@ -179,7 +181,7 @@ function buildStructureObject(file) {
 	}
 }
 //Recursivley combine children of object's that have the same names
-function combineLikeObjs() {
+function combineLikeObjs(mappedArray) {
 	var takenNames = [];
 	var finishedArray = [];
 	_.each(mappedArray, (obj, ind, list) => {

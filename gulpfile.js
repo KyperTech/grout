@@ -196,6 +196,13 @@ gulp.task('test-browser', ['build-in-sequence'], function() {
   return gulp.watch(otherWatchFiles, ['build-in-sequence']);
 });
 
+gulp.task('connect', function() {
+  $.connect.server({
+    root: '.',
+    livereload: true
+  });
+});
+
 gulp.task('docs', function(){
   gulp.src(['src/*.js'])
   .pipe(jsdoc('./docs'))

@@ -13,7 +13,7 @@ import Application from './classes/Application';
 let user;
 let token;
 
-libChecker(['Firebase', 'AWS', '_']);
+libChecker(['firebase', 'AWS', '_']);
 
 //Matter Client Class
 class MatterClient {
