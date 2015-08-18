@@ -1,38 +1,29 @@
 import MatterClient from '../../src/matter-client';
-import axios from 'axios';
+import request from '../../src/utils/request';
 let Matter = new MatterClient();
-let mockGet = sinon.stub(axios, 'get', function() {
+let mockGet = sinon.stub(request, 'get', function() {
  console.log('mock get called with:', arguments);
  return new Promise((resolve) => {
-   resolve({data: {}});
+   resolve({body: {}});
  });
 });
-let mockPut = sinon.stub(axios, 'put', function() {
+let mockPut = sinon.stub(request, 'put', function() {
  console.log('mock put called with:', arguments);
  return new Promise((resolve) => {
-   resolve({data: {}});
+   resolve({body: {}});
  });
 });
-let mockPost = sinon.stub(axios, 'post', function(url, postData) {
+let mockPost = sinon.stub(request, 'post', function(url, postData) {
  console.log('mock post called with:', arguments);
  return new Promise((resolve, reject) => {
    if (!postData || postData == {}) {
      reject({});
    }
-   resolve({data: {}});
+   resolve({body: {}});
  });
 });
-let mockAxiosInterceptor = sinon.stub(axios.interceptors.request,'use',function(config) {
- console.log('mock post called with:', arguments);
-});
+
 describe('Matter', () => {
- describe('auth interceptor', () => {
-   it('should have been run once', () => {
-     axios.interceptors.request.use(function(config) {
-       expect(config).to.be.an('object');
-     });
-   });
- });
  describe('Login method', () => {
    beforeEach(() => {
      spy(Matter, 'login');

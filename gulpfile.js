@@ -84,6 +84,7 @@ gulp.task('build', ['lint-src', 'clean'], function(done) {
       .pipe($.sourcemaps.write('./'))
       .pipe(gulp.dest(destinationFolder))
       .on('end', done);
+    
   })
   .catch(done);
 });
