@@ -105,7 +105,7 @@ class MatterClient {
 	}
 	//TODO: Use getter/setter to make this not a function
 	//Start a new AppsAction
-	apps() {
+	get apps() {
 		console.log('New AppsAction:', new AppsAction());
 		return new AppsAction();
 	}

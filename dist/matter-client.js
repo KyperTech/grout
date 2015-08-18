@@ -529,18 +529,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			//TODO: Use getter/setter to make this not a function
 			//Start a new AppsAction
 		}, {
-			key: 'apps',
-			value: function apps() {
-				console.log('New AppsAction:', new AppsAction());
-				return new AppsAction();
-			}
+			key: 'app',
 
 			//Start a new app action
-		}, {
-			key: 'app',
 			value: function app(appName) {
 				console.log('New AppAction:', new AppAction(appName));
 				return new AppAction(appName);
+			}
+		}, {
+			key: 'apps',
+			get: function get() {
+				console.log('New AppsAction:', new AppsAction());
+				return new AppsAction();
 			}
 		}]);
 

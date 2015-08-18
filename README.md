@@ -49,28 +49,28 @@ Get Auth token for currently logged in user
 
 Example: `var token = Matter.getAuthToken();`
 
-### apps()
+### apps
 Begin an applications action such as creating a new application or getting this list of applications
 
-#### apps().get()
+#### apps.get()
 
 Get list of applications.
 
 Get List Example: 
 ```
 //Get list of all of your apps
-Matter.apps().get().then(function(appsList){ console.log('Users apps:', appsList)});
+Matter.apps.get().then(function(appsList){ console.log('Users apps:', appsList)});
 ```
 
 
-#### apps().add(appData)
+#### apps.add(appData)
 
 Add a new application:
 
 ```
 //Delete example app
 var appData = {name:'newApp1', frontend:{bucket:{url:"", }}, collaborators:[]};
-Matter.apps().add(appData).then(function(appData){ 
+Matter.apps.add(appData).then(function(appData){ 
     console.log('Application data for exampleApp:', appData);
 });
 ```

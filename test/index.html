@@ -34,7 +34,7 @@
     }
     function getApps(){
       console.log('getApps called');
-      matter.apps().get().then(function(appsList){
+      matter.apps.get().then(function(appsList){
         console.log('apps list loaded:', appsList);
         var outHtml = '<ul>';
         appsList.forEach(function(app){
