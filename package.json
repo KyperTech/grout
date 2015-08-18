@@ -1,6 +1,6 @@
 {
   "name": "matter-client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Library to communicate with matter service",
   "main": "dist/matter-client.js",
   "scripts": {
@@ -14,7 +14,8 @@
     "url": "https://github.com/kypertech/matter-client.git"
   },
   "files": [
-    "app"
+    "src",
+    "dist"
   ],
   "keywords": [],
   "author": "Scott Prue <sprue.dev@gmail.com>",
