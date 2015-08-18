@@ -3,9 +3,25 @@ var _createClass = (function () { function defineProperties(target, props) { for
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('firebase'), require('aws-sdk'), require('superagent'), require('underscore')) : typeof define === 'function' && define.amd ? define(['firebase', 'aws-sdk', 'superagent', 'underscore'], factory) : global.MatterClient = factory(global.Firebase, global.AWS, global.superagent, global._);
-})(this, function (Firebase, AWS, superagent, _) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('firebase'), require('aws-sdk'), require('underscore'), require('superagent')) : typeof define === 'function' && define.amd ? define(['firebase', 'aws-sdk', 'underscore', 'superagent'], factory) : global.MatterClient = factory(global.Firebase, global.AWS, global._, global.superagent);
+})(this, function (Firebase, AWS, _, superagent) {
 	'use strict';
+
+	var libChecker = function libChecker(libsArray) {
+		libsArray.forEach(function (libName) {
+			var libRef = libName;
+			//Protect usage of eval
+			if (libName.length >= 20 || typeof libName != 'string') {
+				return;
+			}
+			if (typeof window != 'undefined') {
+				libRef = 'window.' + libName;
+			}
+			if (typeof eval(libRef) == 'undefined') {
+				console.error(libName + ' is required to use Matter');
+			}
+		});
+	};
 
 	var config__config = {
 		serverUrl: 'hypercube.elasticbeanstalk.com',
@@ -425,18 +441,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	var matter_client__user = undefined;
 	var matter_client__token = undefined;
 
-	if (typeof Firebase == 'undefined') {
-		console.error('Firebase is required to use Matter');
-	}
-	if (typeof AWS == 'undefined') {
-		console.error('AWS is required to use Matter');
-	}
-	if (typeof _ == 'undefined') {
-		console.error('Underscore is required to use Matter');
-	}
-	if (typeof request__default == 'undefined') {
-		console.error('Request is required to use Matter');
-	}
+	libChecker(['Firebase', 'AWS', '_']);
 
 	//Matter Client Class
 

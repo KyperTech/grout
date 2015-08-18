@@ -70,7 +70,6 @@ gulp.task('build', ['lint-src', 'clean'], function(done) {
       sourceMap: 'inline',
       name: config.mainVarName
     });
-
     $.file(exportFileName + '.js', res.code, { src: true })
       .pipe($.plumber())
       .pipe($.sourcemaps.init({ loadMaps: true }))
@@ -83,8 +82,24 @@ gulp.task('build', ['lint-src', 'clean'], function(done) {
       .pipe($.uglify())
       .pipe($.sourcemaps.write('./'))
       .pipe(gulp.dest(destinationFolder))
-      .on('end', done);
+      .on('end', function(){
+        $.file(exportFileName + '.js', res.code, { src: true })
+          .pipe($.plumber())
+          .pipe($.sourcemaps.init({ loadMaps: true }))
+          .pipe($.babel())
+          .pipe($.sourcemaps.write('./'))
+          .pipe(gulp.dest(destinationFolder))
+          .pipe($.filter(['*', '!**/*.js.map']))
+          .pipe($.rename(exportFileName + '.min.js'))
+          .pipe($.sourcemaps.init({ loadMaps: true }))
+          .pipe($.uglify())
+          .pipe($.sourcemaps.write('./'))
+          .pipe(gulp.dest(destinationFolder))
+          .on('end', done);
+      });
+
     
+
   })
   .catch(done);
 });

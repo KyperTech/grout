@@ -1,8 +1,10 @@
+import libChecker from './utils/libChecker';
 import Firebase from 'firebase';
 import AWS from 'aws-sdk';
-import request from './utils/request';
 import _ from 'underscore';
+
 import config from './config';
+import request from './utils/request';
 
 import AppsAction from './classes/AppsAction';
 import AppAction from './classes/AppAction';
@@ -11,18 +13,7 @@ import Application from './classes/Application';
 let user;
 let token;
 
-if (typeof Firebase == 'undefined') {
-	console.error('Firebase is required to use Matter');
-}
-if (typeof AWS == 'undefined') {
-	console.error('AWS is required to use Matter');
-}
-if (typeof _ == 'undefined') {
-	console.error('Underscore is required to use Matter');
-}
-if (typeof request == 'undefined') {
-	console.error('Request is required to use Matter');
-}
+libChecker(['Firebase', 'AWS', '_']);
 
 //Matter Client Class
 class MatterClient {
