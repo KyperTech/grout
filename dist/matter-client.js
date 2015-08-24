@@ -3,28 +3,15 @@ var _createClass = (function () { function defineProperties(target, props) { for
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('underscore'), require('aws-sdk'), require('superagent'), require('firebase')) : typeof define === 'function' && define.amd ? define(['underscore', 'aws-sdk', 'superagent', 'firebase'], factory) : global.MatterClient = factory(global._, global.AWS, global.superagent, global.Firebase);
-})(this, function (_, AWS, superagent, Firebase) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('underscore'), require('firebase'), require('superagent')) : typeof define === 'function' && define.amd ? define(['underscore', 'firebase', 'superagent'], factory) : global.MatterClient = factory(global._, global.Firebase, global.superagent);
+})(this, function (_, Firebase, superagent) {
 	'use strict';
 
-	var libChecker = function libChecker(libsArray) {
-		libsArray.forEach(function (libName) {
-			var libRef = libName;
-			//Protect usage of eval
-			if (libName.length >= 20 || typeof libName != 'string') {
-				return;
-			}
-			if (typeof window == 'undefined') {
-				libRef = 'window.' + libName;
-				return;
-			}
-			if (typeof eval(libName) == 'undefined' || typeof eval(libRef) == 'undefined') {
-				console.error(libName + ' is required to use Matter');
-			}
-		});
-	};
+	_ = 'default' in _ ? _['default'] : _;
+	Firebase = 'default' in Firebase ? Firebase['default'] : Firebase;
+	superagent = 'default' in superagent ? superagent['default'] : superagent;
 
-	var config__config = {
+	var config = {
 		serverUrl: 'hypercube.elasticbeanstalk.com',
 		tokenName: 'matter-client',
 		fbUrl: 'https://pruvit.firebaseio.com/',
@@ -40,11 +27,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	};
 	//Set server to local server if developing
 	if (typeof window != 'undefined' && (window.location.hostname == '' || window.location.hostname == 'localhost')) {
-		config__config.serverUrl = 'http://localhost:4000';
+		config.serverUrl = 'http://localhost:4000';
 	}
-	var config__default = config__config;
 
-	var browserStorage__storage = Object.defineProperties({
+	var storage = Object.defineProperties({
 		/**
    * @description
    * Safley sets item to session storage.
@@ -138,22 +124,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}
 	});
 
-	var browserStorage = browserStorage__storage;
-
-	var request__requester = undefined;
+	var requester = undefined;
 	if (typeof window == 'undefined') {
 		//Node Mode
-		request__requester = superagent;
+		requester = superagent;
 	} else if (typeof window.superagent == 'undefined') {
 		console.error('Superagent is required to use Matter');
 	} else {
 		//Browser mode
-		request__requester = window.superagent;
+		requester = window.superagent;
 	}
 
-	var request__request = {
+	var request = {
 		get: function get(endpoint, queryData) {
-			var req = request__requester.get(endpoint);
+			var req = requester.get(endpoint);
 			if (queryData) {
 				req.query(queryData);
 			}
@@ -161,24 +145,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			return handleResponse(req);
 		},
 		post: function post(endpoint, data) {
-			var req = request__requester.post(endpoint).send(data);
+			var req = requester.post(endpoint).send(data);
 			req = addAuthHeader(req);
 			return handleResponse(req);
 		},
 		put: function put(endpoint, data) {
-			var req = request__requester.put(endpoint).send(data);
+			var req = requester.put(endpoint).send(data);
 			req = addAuthHeader(req);
 			return handleResponse(req);
 		},
 		del: function del(endpoint, data) {
-			var req = request__requester.put(endpoint).send(data);
+			var req = requester.put(endpoint).send(data);
 			req = addAuthHeader(req);
 			return handleResponse(req);
 		}
 
 	};
-
-	var request__default = request__request;
 
 	function handleResponse(req) {
 		return new Promise(function (resolve, reject) {
@@ -196,61 +178,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		});
 	}
 	function addAuthHeader(req) {
-		if (browserStorage.getItem(config__default.tokenName)) {
-			req = req.set('Authorization', 'Bearer ' + browserStorage.getItem(config__default.tokenName));
+		if (storage.getItem(config.tokenName)) {
+			req = req.set('Authorization', 'Bearer ' + storage.getItem(config.tokenName));
 			console.log('Set auth header');
 		}
 		return req;
 	}
 
-	//Actions for applications list
+	/**
+  * Application class.
+  *
+  */
 
-	var AppsAction = (function () {
-		function AppsAction() {
-			_classCallCheck(this, AppsAction);
-
-			this.endpoint = config__default.serverUrl + '/apps';
-		}
-
-		/**
-   * Application class.
-   *
-   */
-
-		//Get applications or single application
-
-		_createClass(AppsAction, [{
-			key: 'get',
-			value: function get() {
-				return request__default.get(this.endpoint).then(function (response) {
-					console.log('[MatterClient.apps().get()] App(s) data loaded:', response);
-					return response;
-				})['catch'](function (errRes) {
-					console.error('[MatterClient.apps().get()] Error getting apps list: ', errRes);
-					return Promise.reject(errRes);
-				});
-			}
-
-			//Add an application
-		}, {
-			key: 'add',
-			value: function add(appData) {
-				return request__default.post(this.endpoint, appData).then(function (response) {
-					console.log('[MatterClient.apps().add()] Application added successfully: ', response);
-					return new Application(response);
-				})['catch'](function (errRes) {
-					console.error('[MatterClient.getApps()] Error adding application: ', errRes);
-					return Promise.reject(errRes);
-				});
-			}
-		}]);
-
-		return AppsAction;
-	})();
-
-	var Application__Application = (function () {
-		function Application__Application(appData) {
-			_classCallCheck(this, Application__Application);
+	var _Application = (function () {
+		function _Application(appData) {
+			_classCallCheck(this, _Application);
 
 			this.name = appData.name;
 			this.owner = appData.owner || null;
@@ -260,13 +202,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			this.frontend = appData.frontend || {};
 			this.backend = appData.backend || {};
 			if (Firebase) {
-				this.fbRef = new Firebase(config__default.fbUrl + appData.name);
+				this.fbRef = new Firebase(config.fbUrl + appData.name);
 			}
 		}
 
+		//------------------ Utility Functions ------------------//
+
+		// AWS Config
+
 		//Get files list and convert to structure
 
-		_createClass(Application__Application, [{
+		_createClass(_Application, [{
 			key: 'getStructure',
 			value: function getStructure() {
 				return this.getFiles().then(function (filesArray) {
@@ -335,10 +281,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'addStorage',
 			value: function addStorage() {
 				//TODO:Add storage bucket
-				var endpoint = config__default.serverUrl + '/apps/' + this.name + '/storage';
-				return request__default.post(endpoint, appData).then(function (response) {
+				var endpoint = config.serverUrl + '/apps/' + this.name + '/storage';
+				return request.post(endpoint, appData).then(function (response) {
 					console.log('[Application.addStorage()] Apps:', response);
-					return new Application__Application(response);
+					return new _Application(response);
 				})['catch'](function (errRes) {
 					console.error('[Application.addStorage()] Error getting apps list: ', errRes);
 					return Promise.reject(errRes);
@@ -347,7 +293,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'applyTemplate',
 			value: function applyTemplate() {
-				var endpoint = config__default.serverUrl + '/apps/' + this.name + '/template';
+				var endpoint = config.serverUrl + '/apps/' + this.name + '/template';
 				console.log('Applying templates to existing');
 				// return request.post(endpoint, appData).then(function(response) {
 				// 	console.log('[Application.addStorage()] Apps:', response);
@@ -362,20 +308,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			}
 		}]);
 
-		return Application__Application;
+		return _Application;
 	})();
 
-	var Application__default = Application__Application;
-
-	//------------------ Utility Functions ------------------//
-
-	// AWS Config
 	function setAWSConfig() {
 		AWS.config.update({
 			credentials: new AWS.CognitoIdentityCredentials({
-				IdentityPoolId: config__default.aws.cognito.poolId
+				IdentityPoolId: config.aws.cognito.poolId
 			}),
-			region: config__default.aws.region
+			region: config.aws.region
 		});
 	}
 
@@ -467,26 +408,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			if (appName) {
 				this.name = appName;
-				this.endpoint = config__default.serverUrl + '/apps/' + this.name;
+				this.endpoint = config.serverUrl + '/apps/' + this.name;
 			} else {
 				console.error('Application name is required to start an AppAction');
 				throw new Error('Application name is required to start an AppAction');
 			}
 		}
 
-		/**
-   * User class.
-   *
-   */
+		//Actions for applications list
 
 		//Get applications or single application
 
 		_createClass(AppAction, [{
 			key: 'get',
 			value: function get() {
-				return request__default.get(this.endpoint).then(function (response) {
+				return request.get(this.endpoint).then(function (response) {
 					console.log('[MatterClient.app().get()] App(s) data loaded:', response);
-					return new Application__default(response);
+					return new _Application(response);
 				})['catch'](function (errRes) {
 					console.error('[MatterClient.app().get()] Error getting apps list: ', errRes);
 					return Promise.reject(errRes);
@@ -497,9 +435,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'update',
 			value: function update(appData) {
-				return request__default.put(this.endpoint, appData).then(function (response) {
+				return request.put(this.endpoint, appData).then(function (response) {
 					console.log('[MatterClient.apps().update()] App:', response);
-					return new Application__default(response);
+					return new _Application(response);
 				})['catch'](function (errRes) {
 					console.error('[MatterClient.apps().update()] Error updating app: ', errRes);
 					return Promise.reject(errRes);
@@ -510,9 +448,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'del',
 			value: function del(appData) {
-				return request__default['delete'](this.endpoint, appData).then(function (response) {
+				return request['delete'](this.endpoint, appData).then(function (response) {
 					console.log('[MatterClient.apps().del()] Apps:', response);
-					return new Application__default(response);
+					return new _Application(response);
 				})['catch'](function (errRes) {
 					console.error('[MatterClient.apps().del()] Error deleting app: ', errRes);
 					return Promise.reject(errRes);
@@ -554,6 +492,49 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return AppAction;
 	})();
 
+	var AppsAction = (function () {
+		function AppsAction() {
+			_classCallCheck(this, AppsAction);
+
+			this.endpoint = config.serverUrl + '/apps';
+		}
+
+		/**
+   * User class.
+   *
+   */
+
+		//Get applications or single application
+
+		_createClass(AppsAction, [{
+			key: 'get',
+			value: function get() {
+				return request.get(this.endpoint).then(function (response) {
+					console.log('[MatterClient.apps().get()] App(s) data loaded:', response);
+					return response;
+				})['catch'](function (errRes) {
+					console.error('[MatterClient.apps().get()] Error getting apps list: ', errRes);
+					return Promise.reject(errRes);
+				});
+			}
+
+			//Add an application
+		}, {
+			key: 'add',
+			value: function add(appData) {
+				return request.post(this.endpoint, appData).then(function (response) {
+					console.log('[MatterClient.apps().add()] Application added successfully: ', response);
+					return new Application(response);
+				})['catch'](function (errRes) {
+					console.error('[MatterClient.getApps()] Error adding application: ', errRes);
+					return Promise.reject(errRes);
+				});
+			}
+		}]);
+
+		return AppsAction;
+	})();
+
 	var User = (function () {
 		function User(userData) {
 			_classCallCheck(this, User);
@@ -564,7 +545,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			this.updatedAt = userData.updatedAt;
 		}
 
-		//Actions for applications list
+		//Actions for specific user
 
 		_createClass(User, [{
 			key: 'app',
@@ -582,93 +563,27 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return User;
 	})();
 
-	var UsersAction = (function () {
-		function UsersAction() {
-			_classCallCheck(this, UsersAction);
-
-			this.endpoint = config__default.serverUrl + '/users';
-		}
-
-		//Actions for specific user
-
-		//Get applications or single application
-
-		_createClass(UsersAction, [{
-			key: 'get',
-			value: function get(query) {
-				var userEndpoint = this.endpoint;
-				if (query && !_.isString(query)) {
-					var msg = 'Get only handles username as a string';
-					console.error(msg);
-					return Promise.reject({ message: msg });
-				}
-				if (query) {
-					userEndpoint = userEndpoint + '/' + query;
-				}
-				return request__default.get(userEndpoint).then(function (response) {
-					console.log('[MatterClient.apps().get()] App(s) data loaded:', response);
-					return response;
-				})['catch'](function (errRes) {
-					console.error('[MatterClient.apps().get()] Error getting apps list: ', errRes);
-					return Promise.reject(errRes);
-				});
-			}
-
-			//Add an application
-		}, {
-			key: 'add',
-			value: function add(appData) {
-				return request__default.post(this.endpoint, appData).then(function (response) {
-					console.log('[MatterClient.apps().add()] Application added successfully: ', response);
-					return new Application(response);
-				})['catch'](function (errRes) {
-					console.error('[MatterClient.getApps()] Error adding application: ', errRes);
-					return Promise.reject(errRes);
-				});
-			}
-
-			//Search with partial of username
-		}, {
-			key: 'search',
-			value: function search(query) {
-				console.log('search called:', query);
-				var searchEndpoint = this.endpoint + '/search/';
-				if (query && _.isString(query)) {
-					searchEndpoint += query;
-				}
-				console.log('searchEndpoint:', searchEndpoint);
-				return request__default.get(searchEndpoint).then(function (response) {
-					console.log('[MatterClient.users().search()] Users(s) data loaded:', response);
-					return response;
-				})['catch'](function (errRes) {
-					console.error('[MatterClient.users().search()] Error getting apps list: ', errRes);
-					return Promise.reject(errRes);
-				});
-			}
-		}]);
-
-		return UsersAction;
-	})();
-
 	var UserAction = (function () {
 		function UserAction(userName) {
 			_classCallCheck(this, UserAction);
 
 			if (userName) {
 				this.name = userName;
-				this.endpoint = config__default.serverUrl + '/users/' + this.name;
+				this.endpoint = config.serverUrl + '/users/' + this.name;
 			} else {
 				console.error('Username is required to start an UserAction');
 				throw new Error('Username is required to start an UserAction');
 			}
 		}
 
+		//Actions for applications list
+
 		//Get userlications or single userlication
 
 		_createClass(UserAction, [{
 			key: 'get',
 			value: function get() {
-				return request__default.get(this.endpoint).then(function (response) {
+				return request.get(this.endpoint).then(function (response) {
 					console.log('[MatterClient.user().get()] App(s) data loaded:', response);
 					return new User(response);
 				})['catch'](function (errRes) {
@@ -681,7 +596,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'update',
 			value: function update(userData) {
-				return request__default.put(this.endpoint, userData).then(function (response) {
+				return request.put(this.endpoint, userData).then(function (response) {
 					console.log('[MatterClient.users().update()] App:', response);
 					return new User(response);
 				})['catch'](function (errRes) {
@@ -709,10 +624,74 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return UserAction;
 	})();
 
-	var matter_client__user = undefined;
-	var matter_client__token = undefined;
+	var UsersAction = (function () {
+		function UsersAction() {
+			_classCallCheck(this, UsersAction);
 
-	libChecker(['AWS', '_']);
+			this.endpoint = config.serverUrl + '/users';
+		}
+
+		//Get applications or single application
+
+		_createClass(UsersAction, [{
+			key: 'get',
+			value: function get(query) {
+				var userEndpoint = this.endpoint;
+				if (query && !_.isString(query)) {
+					var msg = 'Get only handles username as a string';
+					console.error(msg);
+					return Promise.reject({ message: msg });
+				}
+				if (query) {
+					userEndpoint = userEndpoint + '/' + query;
+				}
+				return request.get(userEndpoint).then(function (response) {
+					console.log('[MatterClient.apps().get()] App(s) data loaded:', response);
+					return response;
+				})['catch'](function (errRes) {
+					console.error('[MatterClient.apps().get()] Error getting apps list: ', errRes);
+					return Promise.reject(errRes);
+				});
+			}
+
+			//Add an application
+		}, {
+			key: 'add',
+			value: function add(appData) {
+				return request.post(this.endpoint, appData).then(function (response) {
+					console.log('[MatterClient.apps().add()] Application added successfully: ', response);
+					return new Application(response);
+				})['catch'](function (errRes) {
+					console.error('[MatterClient.getApps()] Error adding application: ', errRes);
+					return Promise.reject(errRes);
+				});
+			}
+
+			//Search with partial of username
+		}, {
+			key: 'search',
+			value: function search(query) {
+				console.log('search called:', query);
+				var searchEndpoint = this.endpoint + '/search/';
+				if (query && _.isString(query)) {
+					searchEndpoint += query;
+				}
+				console.log('searchEndpoint:', searchEndpoint);
+				return request.get(searchEndpoint).then(function (response) {
+					console.log('[MatterClient.users().search()] Users(s) data loaded:', response);
+					return response;
+				})['catch'](function (errRes) {
+					console.error('[MatterClient.users().search()] Error getting apps list: ', errRes);
+					return Promise.reject(errRes);
+				});
+			}
+		}]);
+
+		return UsersAction;
+	})();
+
+	var user = undefined;
+	var token = undefined;
 
 	//Matter Client Class
 
@@ -726,7 +705,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			//Signup a new user
 			value: function signup(signupData) {
-				return request__default.post(config__default.serverUrl + '/signup', signupData).then(function (response) {
+				return request.post(config.serverUrl + '/signup', signupData).then(function (response) {
 					console.log(response);
 					return response;
 				})['catch'](function (errRes) {
@@ -743,13 +722,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					console.error('Username/Email and Password are required to login.');
 					return Promise.reject({ message: 'Username/Email and Password are required to login.' });
 				}
-				return request__default.put(config__default.serverUrl + '/login', loginData).then(function (response) {
+				return request.put(config.serverUrl + '/login', loginData).then(function (response) {
 					//TODO: Save token locally
 					console.log('[MatterClient.login()]: Login response: ', response);
-					matter_client__token = response.token;
-					if (window.sessionStorage.getItem(config__default.tokenName) === null) {
-						window.sessionStorage.setItem(config__default.tokenName, response.token);
-						console.log('[MatterClient.login()]: token set to storage:', window.sessionStorage.getItem(config__default.tokenName));
+					token = response.token;
+					if (storage.getItem(config.tokenName) === null) {
+						storage.setItem(config.tokenName, response.token);
+						console.log('[MatterClient.login()]: token set to storage:', storage.getItem(config.tokenName));
 					}
 					return response;
 				})['catch'](function (errRes) {
@@ -760,18 +739,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'logout',
 			value: function logout() {
-				return request__default.put(config__default.serverUrl + '/logout', {}).then(function (response) {
+				return request.put(config.serverUrl + '/logout', {}).then(function (response) {
 					console.log('[MatterClient.logout()] Logout successful: ', response);
-					if (typeof window != 'undefined' && typeof window.sessionStorage.getItem(config__default.tokenName) != null) {
+					if (typeof window != 'undefined' && typeof storage.getItem(config.tokenName) != null) {
 						//Clear session storage
-						window.sessionStorage.clear();
+						storage.clear();
 					}
 					return response.body;
 				})['catch'](function (errRes) {
 					if (errRes.status && errRes.status == 401) {
-						if (typeof window != 'undefined' && window.sessionStorage.getItem(config__default.tokenName) != null) {
+						if (typeof window != 'undefined' && storage.getItem(config.tokenName) != null) {
 							//Clear session storage
-							window.sessionStorage.clear();
+							storage.clear();
 						}
 						return;
 					}
@@ -783,11 +762,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'getCurrentUser',
 			value: function getCurrentUser() {
 				//TODO: Check Current user variable
-				return request__default.get(config__default.serverUrl + '/user', {}).then(function (response) {
+				return request.get(config.serverUrl + '/user', {}).then(function (response) {
 					//TODO: Save user information locally
 					console.log('[MatterClient.getCurrentUser()] Current User:', response);
-					matter_client__user = response;
-					return matter_client__user;
+					user = response;
+					return user;
 				})['catch'](function (errRes) {
 					console.error('[MatterClient.getCurrentUser()] Error getting current user: ', errRes);
 					return Promise.reject(errRes);
@@ -796,10 +775,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'getAuthToken',
 			value: function getAuthToken() {
-				if (typeof window == 'undefined' || typeof window.sessionStorage.getItem(config__default.tokenName) == 'undefined') {
+				if (typeof window == 'undefined' || typeof storage.getItem(config.tokenName) == 'undefined') {
 					return null;
 				}
-				return window.sessionStorage.getItem(config__default.tokenName);
+				return storage.getItem(config.tokenName);
 			}
 
 			//TODO: Use getter/setter to make this not a function
@@ -813,8 +792,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				return new AppAction(appName);
 			}
 		}, {
-			key: 'matter_client__user',
-			value: function matter_client__user(username) {
+			key: 'user',
+			value: function user(username) {
 				return new UserAction(username);
 			}
 		}, {
@@ -835,8 +814,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	;
 
-	var matter_client = MatterClient;
-
-	return matter_client;
+	return MatterClient;
 });
 //# sourceMappingURL=matter-client.js.map

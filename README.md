@@ -7,7 +7,41 @@
 [![devDependency Status](https://david-dm.org/KyperTech/matter-client/dev-status.svg)](https://david-dm.org/KyperTech/matter-client#info=devDependencies)
 
 Client library to simplify communication with Matter application building service.
+## Getting Started
 
+Matter-client is isomorphic, so it can be used within a frontend or on a server. Below are setups for both:
+
+### Browser
+1. Run:
+    ```
+    npm install --save matter-client
+    ```
+2. Reference Library and Dependencies in `index.html` :
+    
+```html
+<script src="https://cdn.firebase.com/js/client/2.2.9/firebase.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.45.min.js"></script>
+<script src='node_modules/matter-client/src/lib/superagent.js'></script>
+<script src='node_modules/matter-client/dist/matter-client.js'></script>
+```
+
+### Node
+1. Run:
+    ```
+    npm install --save matter-client
+    ```
+2. Include and use matter-client
+
+    ```javascript
+    require('matter-client');
+    var matterClient = new MatterClient();
+    ```
+    **or in ES6:**
+    ```javascript
+        import matter from ('matter-client');
+        let matterClient = new MatterClient();
+    ```
 ## Documentation
 
 ### Logout()
