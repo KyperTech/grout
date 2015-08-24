@@ -9,7 +9,7 @@ class UsersAction {
 	}
 	//Get applications or single application
 	get(query) {
-		var userEndpoint = this.endpoint;
+		let userEndpoint = this.endpoint;
 		if (query && !_.isString(query)) {
 			const msg = 'Get only handles username as a string';
 			console.error(msg);
@@ -48,7 +48,7 @@ class UsersAction {
 			console.log('[MatterClient.users().search()] Users(s) data loaded:', response);
 			return response;
 		})['catch']((errRes) => {
-			console.error('[MatterClient.users().search()] Error getting apps list: ', JSON.stringify(errRes));
+			console.error('[MatterClient.users().search()] Error getting apps list: ', errRes);
 			return Promise.reject(errRes);
 		});
 	}

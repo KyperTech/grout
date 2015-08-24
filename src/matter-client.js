@@ -5,7 +5,7 @@ import AWS from 'aws-sdk';
 
 import config from './config';
 import request from './utils/request';
-
+import browserStorage from './utils/browserStorage';
 import AppsAction from './classes/AppsAction';
 import AppAction from './classes/AppAction';
 import Application from './classes/Application';
@@ -15,8 +15,6 @@ import UserAction from './classes/UserAction';
 
 let user;
 let token;
-
-libChecker(['AWS', '_']);
 
 //Matter Client Class
 class MatterClient {
@@ -44,9 +42,9 @@ class MatterClient {
 			//TODO: Save token locally
 			console.log('[MatterClient.login()]: Login response: ', response);
 			token = response.token;
-			if (window.sessionStorage.getItem(config.tokenName) === null) {
-				window.sessionStorage.setItem(config.tokenName, response.token);
-				console.log('[MatterClient.login()]: token set to storage:', window.sessionStorage.getItem(config.tokenName));
+			if (browserStorage.getItem(config.tokenName) === null) {
+				browserStorage.setItem(config.tokenName, response.token);
+				console.log('[MatterClient.login()]: token set to storage:', browserStorage.getItem(config.tokenName));
 			}
 			return response;
 		})['catch']((errRes) => {
@@ -59,16 +57,16 @@ class MatterClient {
 		return request.put(config.serverUrl + '/logout', {
 		}).then(function(response) {
 		  console.log('[MatterClient.logout()] Logout successful: ', response);
-		  if (typeof window != 'undefined' && typeof window.sessionStorage.getItem(config.tokenName) != null) {
+		  if (typeof window != 'undefined' && typeof browserStorage.getItem(config.tokenName) != null) {
 				//Clear session storage
-				window.sessionStorage.clear();
+				browserStorage.clear();
 			}
 			return response.body;
 		})['catch'](function(errRes) {
 			if (errRes.status && errRes.status == 401) {
-				if (typeof window != 'undefined' && window.sessionStorage.getItem(config.tokenName) != null) {
+				if (typeof window != 'undefined' && browserStorage.getItem(config.tokenName) != null) {
 					//Clear session storage
-					window.sessionStorage.clear();
+					browserStorage.clear();
 				}
 				return;
 			}
@@ -92,10 +90,10 @@ class MatterClient {
 	}
 
 	getAuthToken() {
-		if (typeof window == 'undefined' || typeof window.sessionStorage.getItem(config.tokenName) == 'undefined') {
+		if (typeof window == 'undefined' || typeof browserStorage.getItem(config.tokenName) == 'undefined') {
 			return null;
 		}
-		return window.sessionStorage.getItem(config.tokenName);
+		return browserStorage.getItem(config.tokenName);
 	}
 	//TODO: Use getter/setter to make this not a function
 	//Start a new AppsAction

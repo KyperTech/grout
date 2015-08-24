@@ -44,6 +44,102 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	}
 	var config__default = config__config;
 
+	var browserStorage__storage = Object.defineProperties({
+		/**
+   * @description
+   * Safley sets item to session storage.
+   *
+   * @param {String} itemName The items name
+   * @param {String} itemValue The items value
+   *
+   *  @private
+   */
+		setItem: function setItem(itemName, itemValue) {
+			//TODO: Handle itemValue being an object instead of a string
+			if (this.exists) {
+				window.sessionStorage.setItem(itemName, itemValue);
+			}
+		},
+		/**
+   * @description
+   * Safley gets an item from session storage.
+   *
+   * @param {String} itemName The items name
+   *
+   * @return {String}
+   *
+   */
+		getItem: function getItem(itemName) {
+			if (this.exists) {
+				console.log('item loaded from session');
+				return window.sessionStorage.getItem(itemName);
+			}
+			return null;
+		},
+		/**
+   * @description
+   * Safley removes item from session storage.
+   *
+   * @param {String} itemName - The items name
+   *
+   */
+		removeItem: function removeItem(itemName) {
+			//TODO: Only remove used items
+			if (this.exists) {
+				try {
+					//Clear session storage
+					window.sessionStorage.removeItem(itemName);
+				} catch (err) {
+					console.warn('Item could not be removed from session storage.', err);
+				}
+			}
+		},
+		/**
+   * @description
+   * Safley removes item from session storage.
+   *
+   * @param {String} itemName the items name
+   * @param {String} itemValue the items value
+   *
+   *  @private
+   */
+		clear: function clear() {
+			//TODO: Only remove used items
+			if (this.exists) {
+				try {
+					//Clear session storage
+					window.sessionStorage.clear();
+				} catch (err) {
+					console.warn('Session storage could not be cleared.', err);
+				}
+			}
+		}
+
+	}, {
+		exists: {
+			get: function get() {
+				var testKey = 'test';
+				console.log('storage exists called');
+				if (typeof window != 'undefined') {
+					try {
+						window.sessionStorage.setItem(testKey, '1');
+						window.sessionStorage.removeItem(testKey);
+						return true;
+					} catch (err) {
+						console.warn('Session storage does not exist.', err);
+						return false;
+					}
+				} else {
+					return false;
+				}
+			},
+			configurable: true,
+			enumerable: true
+		}
+	});
+
+	var browserStorage = browserStorage__storage;
+
 	var request__requester = undefined;
 	if (typeof window == 'undefined') {
 		//Node Mode
@@ -91,18 +187,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					// console.log('Response:', res);
 					return resolve(res.body);
 				} else {
+					if (err.status == 401) {
+						console.warn('Unauthorized. You must be signed into make this request.');
+					}
 					return reject(err);
 				}
 			});
 		});
 	}
 	function addAuthHeader(req) {
-		if (typeof window != 'undefined' && window.sessionStorage.getItem(config__default.tokenName)) {
-			req = req.set('Authorization', 'Bearer ' + sessionStorage.getItem(config__default.tokenName));
-			// console.log('Set auth header');
+		if (browserStorage.getItem(config__default.tokenName)) {
+			req = req.set('Authorization', 'Bearer ' + browserStorage.getItem(config__default.tokenName));
+			console.log('Set auth header');
 		}
 		return req;
 	}
+
+	//Actions for applications list
 
 	var AppsAction = (function () {
 		function AppsAction() {
@@ -110,6 +211,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			this.endpoint = config__default.serverUrl + '/apps';
 		}
+
+		/**
+   * Application class.
+   *
+   */
 
 		//Get applications or single application
 
@@ -353,6 +459,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return finishedArray;
 	}
 
+	//Actions for specific application
+
 	var AppAction = (function () {
 		function AppAction(appName) {
 			_classCallCheck(this, AppAction);
@@ -365,6 +473,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				throw new Error('Application name is required to start an AppAction');
 			}
 		}
+
+		/**
+   * User class.
+   *
+   */
 
 		//Get applications or single application
 
@@ -451,6 +564,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			this.updatedAt = userData.updatedAt;
 		}
 
+		//Actions for applications list
+
 		_createClass(User, [{
 			key: 'app',
 			value: function app(appName) {
@@ -473,6 +588,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			this.endpoint = config__default.serverUrl + '/users';
 		}
+
+		//Actions for specific user
 
 		//Get applications or single application
 

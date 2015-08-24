@@ -1,4 +1,5 @@
 import config from '../config';
+import browserStorage from './browserStorage';
 import superagent from 'superagent';
 
 let requester;
@@ -46,15 +47,18 @@ function handleResponse(req) {
 				// console.log('Response:', res);
 				return resolve(res.body);
 			} else {
+				if (err.status == 401) {
+					console.warn('Unauthorized. You must be signed into make this request.');
+				}
 				return reject(err);
 			}
 		});
 	});
 }
 function addAuthHeader(req) {
-	if (typeof window != 'undefined' && window.sessionStorage.getItem(config.tokenName)) {
-		req = req.set('Authorization', 'Bearer ' + sessionStorage.getItem(config.tokenName));
-		// console.log('Set auth header');
+	if (browserStorage.getItem(config.tokenName)) {
+		req = req.set('Authorization', 'Bearer ' + browserStorage.getItem(config.tokenName));
+		console.log('Set auth header');
 	}
 	return req;
 }
