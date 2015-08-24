@@ -1,6 +1,5 @@
 # matter-client
 
-
 [![Travis build status](https://travis-ci.org/KyperTech/matter-client.svg?branch=master)](https://travis-ci.org/KyperTech/matter-client)
 [![Code Climate](https://codeclimate.com/github/KyperTech/matter-client/badges/gpa.svg)](https://codeclimate.com/github/KyperTech/matter-client)
 [![Test Coverage](https://codeclimate.com/github/KyperTech/matter-client/badges/coverage.svg)](https://codeclimate.com/github/KyperTech/matter-client)

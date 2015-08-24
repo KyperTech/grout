@@ -1,7 +1,7 @@
 import libChecker from './utils/libChecker';
-import Firebase from 'firebase';
-import AWS from 'aws-sdk';
+// import Firebase from 'firebase';
 import _ from 'underscore';
+import AWS from 'aws-sdk';
 
 import config from './config';
 import request from './utils/request';
@@ -9,11 +9,14 @@ import request from './utils/request';
 import AppsAction from './classes/AppsAction';
 import AppAction from './classes/AppAction';
 import Application from './classes/Application';
+import User from './classes/User';
+import UsersAction from './classes/UsersAction';
+import UserAction from './classes/UserAction';
 
 let user;
 let token;
 
-libChecker(['firebase', 'AWS', '_']);
+libChecker(['AWS', '_']);
 
 //Matter Client Class
 class MatterClient {
@@ -104,6 +107,13 @@ class MatterClient {
 	app(appName) {
 		console.log('New AppAction:', new AppAction(appName));
 		return new AppAction(appName);
+	}
+
+	get users() {
+		return new UsersAction();
+	}
+	user(username) {
+		return new UserAction(username);
 	}
 };
 

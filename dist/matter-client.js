@@ -3,8 +3,8 @@ var _createClass = (function () { function defineProperties(target, props) { for
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('firebase'), require('aws-sdk'), require('underscore'), require('superagent')) : typeof define === 'function' && define.amd ? define(['firebase', 'aws-sdk', 'underscore', 'superagent'], factory) : global.MatterClient = factory(global.Firebase, global.AWS, global._, global.superagent);
-})(this, function (Firebase, AWS, _, superagent) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('underscore'), require('aws-sdk'), require('superagent'), require('firebase')) : typeof define === 'function' && define.amd ? define(['underscore', 'aws-sdk', 'superagent', 'firebase'], factory) : global.MatterClient = factory(global._, global.AWS, global.superagent, global.Firebase);
+})(this, function (_, AWS, superagent, Firebase) {
 	'use strict';
 
 	var libChecker = function libChecker(libsArray) {
@@ -14,8 +14,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			if (libName.length >= 20 || typeof libName != 'string') {
 				return;
 			}
-			if (typeof window != 'undefined') {
+			if (typeof window == 'undefined') {
 				libRef = 'window.' + libName;
+				return;
 			}
 			if (typeof eval(libName) == 'undefined' || typeof eval(libRef) == 'undefined') {
 				console.error(libName + ' is required to use Matter');
@@ -440,10 +441,161 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return AppAction;
 	})();
 
+	var User = (function () {
+		function User(userData) {
+			_classCallCheck(this, User);
+
+			this.name = userData.name;
+			this.username = userData.username;
+			this.createdAt = userData.createdAt;
+			this.updatedAt = userData.updatedAt;
+		}
+
+		_createClass(User, [{
+			key: 'app',
+			value: function app(appName) {
+				//TODO: Attach owner as well ?
+				return new AppAction(appName);
+			}
+		}, {
+			key: 'apps',
+			get: function get() {
+				return new AppsAction();
+			}
+		}]);
+
+		return User;
+	})();
+
+	var UsersAction = (function () {
+		function UsersAction() {
+			_classCallCheck(this, UsersAction);
+
+			this.endpoint = config__default.serverUrl + '/users';
+		}
+
+		//Get applications or single application
+
+		_createClass(UsersAction, [{
+			key: 'get',
+			value: function get(query) {
+				var userEndpoint = this.endpoint;
+				if (query && !_.isString(query)) {
+					var msg = 'Get only handles username as a string';
+					console.error(msg);
+					return Promise.reject({ message: msg });
+				}
+				if (query) {
+					userEndpoint = userEndpoint + '/' + query;
+				}
+				return request__default.get(userEndpoint).then(function (response) {
+					console.log('[MatterClient.apps().get()] App(s) data loaded:', response);
+					return response;
+				})['catch'](function (errRes) {
+					console.error('[MatterClient.apps().get()] Error getting apps list: ', errRes);
+					return Promise.reject(errRes);
+				});
+			}
+
+			//Add an application
+		}, {
+			key: 'add',
+			value: function add(appData) {
+				return request__default.post(this.endpoint, appData).then(function (response) {
+					console.log('[MatterClient.apps().add()] Application added successfully: ', response);
+					return new Application(response);
+				})['catch'](function (errRes) {
+					console.error('[MatterClient.getApps()] Error adding application: ', errRes);
+					return Promise.reject(errRes);
+				});
+			}
+
+			//Search with partial of username
+		}, {
+			key: 'search',
+			value: function search(query) {
+				console.log('search called:', query);
+				var searchEndpoint = this.endpoint + '/search/';
+				if (query && _.isString(query)) {
+					searchEndpoint += query;
+				}
+				console.log('searchEndpoint:', searchEndpoint);
+				return request__default.get(searchEndpoint).then(function (response) {
+					console.log('[MatterClient.users().search()] Users(s) data loaded:', response);
+					return response;
+				})['catch'](function (errRes) {
+					console.error('[MatterClient.users().search()] Error getting apps list: ', errRes);
+					return Promise.reject(errRes);
+				});
+			}
+		}]);
+
+		return UsersAction;
+	})();
+
+	var UserAction = (function () {
+		function UserAction(userName) {
+			_classCallCheck(this, UserAction);
+
+			if (userName) {
+				this.name = userName;
+				this.endpoint = config__default.serverUrl + '/users/' + this.name;
+			} else {
+				console.error('Username is required to start an UserAction');
+				throw new Error('Username is required to start an UserAction');
+			}
+		}
+
+		//Get userlications or single userlication
+
+		_createClass(UserAction, [{
+			key: 'get',
+			value: function get() {
+				return request__default.get(this.endpoint).then(function (response) {
+					console.log('[MatterClient.user().get()] App(s) data loaded:', response);
+					return new User(response);
+				})['catch'](function (errRes) {
+					console.error('[MatterClient.user().get()] Error getting users list: ', errRes);
+					return Promise.reject(errRes);
+				});
+			}
+
+			//Update an userlication
+		}, {
+			key: 'update',
+			value: function update(userData) {
+				return request__default.put(this.endpoint, userData).then(function (response) {
+					console.log('[MatterClient.users().update()] App:', response);
+					return new User(response);
+				})['catch'](function (errRes) {
+					console.error('[MatterClient.users().update()] Error updating user: ', errRes);
+					return Promise.reject(errRes);
+				});
+			}
+
+			//Delete an userlication
+			//TODO: Only do request if deleting personal account
+		}, {
+			key: 'del',
+			value: function del(userData) {
+				console.error('Deleting a user is currently disabled.');
+				// return request.delete(this.endpoint, userData).then((response) => {
+				// 	console.log('[MatterClient.users().del()] Apps:', response);
+				// 	return new User(response);
+				// })['catch']((errRes) => {
+				// 	console.error('[MatterClient.users().del()] Error deleting user: ', errRes);
+				// 	return Promise.reject(errRes);
+				// });
+			}
+		}]);
+
+		return UserAction;
+	})();
+
 	var matter_client__user = undefined;
 	var matter_client__token = undefined;
 
-	libChecker(['Firebase', 'AWS', '_']);
+	libChecker(['AWS', '_']);
 
 	//Matter Client Class
 
@@ -544,10 +696,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				return new AppAction(appName);
 			}
 		}, {
+			key: 'matter_client__user',
+			value: function matter_client__user(username) {
+				return new UserAction(username);
+			}
+		}, {
 			key: 'apps',
 			get: function get() {
 				console.log('New AppsAction:', new AppsAction());
 				return new AppsAction();
+			}
+		}, {
+			key: 'users',
+			get: function get() {
+				return new UsersAction();
 			}
 		}]);
 
