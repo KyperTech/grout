@@ -14,7 +14,6 @@ const rollup = require('rollup');
 const browserify = require('browserify');
 const runSequence = require('run-sequence');
 const source = require('vinyl-source-stream');
-const jsdoc = require("gulp-jsdoc");
 
 // Gather the library data from `package.json`
 const manifest = require('./package.json');
@@ -201,10 +200,10 @@ gulp.task('connect', function() {
   });
 });
 
-gulp.task('docs', function(){
-  gulp.src(['src/*.js'])
-  .pipe(jsdoc('./docs'))
-});
+// gulp.task('docs', function(){
+//   gulp.src(['src/*.js'])
+//   .pipe(jsdoc('./docs'))
+// });
 
 // An alias of test
 gulp.task('default', ['test']);

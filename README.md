@@ -1,20 +1,21 @@
-# matter-client
+# Grout
 
-[![Travis build status](https://travis-ci.org/KyperTech/matter-client.svg?branch=master)](https://travis-ci.org/KyperTech/matter-client)
-[![Code Climate](https://codeclimate.com/github/KyperTech/matter-client/badges/gpa.svg)](https://codeclimate.com/github/KyperTech/matter-client)
-[![Test Coverage](https://codeclimate.com/github/KyperTech/matter-client/badges/coverage.svg)](https://codeclimate.com/github/KyperTech/matter-client)
-[![Dependency Status](https://david-dm.org/KyperTech/matter-client.svg)](https://david-dm.org/KyperTech/matter-client)
-[![devDependency Status](https://david-dm.org/KyperTech/matter-client/dev-status.svg)](https://david-dm.org/KyperTech/matter-client#info=devDependencies)
+[![Travis build status](https://travis-ci.org/KyperTech/grout.svg?branch=master)](https://travis-ci.org/KyperTech/grout)
+[![Code Climate](https://codeclimate.com/github/KyperTech/grout/badges/gpa.svg)](https://codeclimate.com/github/KyperTech/grout)
+[![Test Coverage](https://codeclimate.com/github/KyperTech/grout/badges/coverage.svg)](https://codeclimate.com/github/KyperTech/grout)
+[![Dependency Status](https://david-dm.org/KyperTech/grout.svg)](https://david-dm.org/KyperTech/grout)
+[![devDependency Status](https://david-dm.org/KyperTech/grout/dev-status.svg)](https://david-dm.org/KyperTech/grout#info=devDependencies)
 
-Client library to simplify communication with Matter application building service.
+Client library to simplify communication with Tessellate application building service.
+
 ## Getting Started
 
-Matter-client is isomorphic, so it can be used within a frontend or on a server. Below are setups for both:
+Grout is isomorphic, so it can be used within a frontend or on a server. Below are setups for both:
 
 ### Browser
 1. Run:
     ```
-    npm install --save matter-client
+    npm install --save grout
     ```
 2. Reference Library and Dependencies in `index.html` :
     
@@ -22,25 +23,25 @@ Matter-client is isomorphic, so it can be used within a frontend or on a server.
 <script src="https://cdn.firebase.com/js/client/2.2.9/firebase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.45.min.js"></script>
-<script src='node_modules/matter-client/src/lib/superagent.js'></script>
-<script src='node_modules/matter-client/dist/matter-client.js'></script>
+<script src='node_modules/grout/src/lib/superagent.js'></script>
+<script src='node_modules/grout/dist/grout.js'></script>
 ```
 
 ### Node
 1. Run:
     ```
-    npm install --save matter-client
+    npm install --save kyper-grout
     ```
-2. Include and use matter-client
+2. Include and use grout
 
     ```javascript
-    require('matter-client');
-    var matterClient = new MatterClient();
+    require('grout');
+    var grout = new Grout();
     ```
     **or in ES6:**
     ```javascript
-        import matter from ('matter-client');
-        let matterClient = new MatterClient();
+        import matter from ('grout');
+        let grout = new Grout();
     ```
 ## Documentation
 
@@ -48,7 +49,7 @@ Matter-client is isomorphic, so it can be used within a frontend or on a server.
 Log current user out
 Example: 
 ```
-Matter.logout().then(function(){ console.log('User logged out')});}
+grout.logout().then(function(){ console.log('User logged out')});}
 ```
 
 ### Login()
@@ -56,7 +57,7 @@ Log user in provided username/email and password.
 
 Example: 
 ```
-Matter.login({username: 'test', password: 'test'})
+grout.login({username: 'test', password: 'test'})
 .then(function(){ console.log('User logged in')});
 ```
 
@@ -65,7 +66,7 @@ Create a new user and login
 
 Example: 
 ```
-Matter.signup({username: 'test', name:'Test User', password: 'test'})
+grout.signup({username: 'test', name:'Test User', password: 'test'})
 .then(function(){ console.log('User logged in')});
 ```
 
@@ -74,13 +75,13 @@ Get currently logged in user.
 
 Example: 
 ```
-Matter.getCurrentUser().then(function(){ console.log('User logged in')});
+grout.getCurrentUser().then(function(){ console.log('User logged in')});
 ```
 
 ###getAuthToken()
 Get Auth token for currently logged in user
 
-Example: `var token = Matter.getAuthToken();`
+Example: `var token = grout.getAuthToken();`
 
 ### apps
 Begin an applications action such as creating a new application or getting this list of applications
@@ -92,7 +93,7 @@ Get list of applications.
 Get List Example: 
 ```
 //Get list of all of your apps
-Matter.apps.get().then(function(appsList){ console.log('Users apps:', appsList)});
+grout.apps.get().then(function(appsList){ console.log('Users apps:', appsList)});
 ```
 
 
@@ -103,7 +104,7 @@ Add a new application:
 ```
 //Delete example app
 var appData = {name:'newApp1', frontend:{bucket:{url:"", }}, collaborators:[]};
-Matter.apps.add(appData).then(function(appData){ 
+grout.apps.add(appData).then(function(appData){ 
     console.log('Application data for exampleApp:', appData);
 });
 ```
@@ -116,7 +117,7 @@ Begin an singular application action such as getting an existing application's d
 Get Application: 
 ```
 //Get app named example app
-Matter.app('exampleApp').get().then(function(appData){ 
+grout.app('exampleApp').get().then(function(appData){ 
     console.log('Application data for exampleApp:', appData);
 });
 ```
@@ -129,7 +130,7 @@ Update an application:
 ```
 //Update exampleApp to the new name: newAppName
 var appData = {name:'newAppName'};
-Matter.apps('exampleApp').update(appData).then(function(appData){ 
+grout.apps('exampleApp').update(appData).then(function(appData){ 
     console.log('Application data for exampleApp:', appData);
 });
 ```
@@ -140,7 +141,7 @@ Delete an application:
 
 ```
 //Delete example app
-Matter.app('exampleApp').del().then(function(appData){ 
+grout.app('exampleApp').del().then(function(appData){ 
     console.log('Application data for exampleApp:', appData);
 });
 ```
@@ -150,7 +151,7 @@ Matter.app('exampleApp').del().then(function(appData){
 Get Application's files:
 ```
 //Get app named example app
-Matter.app('exampleApp').getFiles().then(function(appData){ 
+grout.app('exampleApp').getFiles().then(function(appData){ 
     console.log('Application data for exampleApp:', appData);
 });
 ```
@@ -159,7 +160,7 @@ Matter.app('exampleApp').getFiles().then(function(appData){
 Get Files/Folders in structure/children format:
 ```
 //Get app named example app
-Matter.app('exampleApp').getStructure().then(function(appData){ 
+grout.app('exampleApp').getStructure().then(function(appData){ 
     console.log('Application data for exampleApp:', appData);
 });
 ```

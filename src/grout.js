@@ -17,7 +17,7 @@ let user;
 let token;
 
 //Matter Client Class
-class MatterClient {
+class Grout {
 	//Signup a new user
 	signup(signupData) {
 		return request.post(config.serverUrl + '/signup', signupData)
@@ -26,7 +26,7 @@ class MatterClient {
 		  return response;
 		})
 		['catch']((errRes) => {
-		  console.error('[MatterClient.signup()] Error signing up:', errRes);
+		  console.error('[Grout.signup()] Error signing up:', errRes);
 		  return Promise.reject(errRes);
 		});
 	}
@@ -40,15 +40,15 @@ class MatterClient {
 		return request.put(config.serverUrl + '/login', loginData)
 		.then((response) => {
 			//TODO: Save token locally
-			console.log('[MatterClient.login()]: Login response: ', response);
+			console.log('[Grout.login()]: Login response: ', response);
 			token = response.token;
 			if (browserStorage.getItem(config.tokenName) === null) {
 				browserStorage.setItem(config.tokenName, response.token);
-				console.log('[MatterClient.login()]: token set to storage:', browserStorage.getItem(config.tokenName));
+				console.log('[Grout.login()]: token set to storage:', browserStorage.getItem(config.tokenName));
 			}
 			return response;
 		})['catch']((errRes) => {
-			console.error('[MatterClient.login()] Error logging in: ', errRes);
+			console.error('[Grout.login()] Error logging in: ', errRes);
 			return Promise.reject(errRes);
 		});
 	}
@@ -56,7 +56,7 @@ class MatterClient {
 	logout() {
 		return request.put(config.serverUrl + '/logout', {
 		}).then(function(response) {
-		  console.log('[MatterClient.logout()] Logout successful: ', response);
+		  console.log('[Grout.logout()] Logout successful: ', response);
 		  if (typeof window != 'undefined' && typeof browserStorage.getItem(config.tokenName) != null) {
 				//Clear session storage
 				browserStorage.clear();
@@ -70,7 +70,7 @@ class MatterClient {
 				}
 				return;
 			}
-			console.error('[MatterClient.logout()] Error logging out: ', errRes);
+			console.error('[Grout.logout()] Error logging out: ', errRes);
 			return Promise.reject(errRes);
 		});
 	}
@@ -80,11 +80,11 @@ class MatterClient {
 		return request.get(config.serverUrl + '/user', {
 		}).then(function(response) {
 			//TODO: Save user information locally
-			console.log('[MatterClient.getCurrentUser()] Current User:', response);
+			console.log('[Grout.getCurrentUser()] Current User:', response);
 			user = response;
 			return user;
 		})['catch'](function(errRes) {
-			console.error('[MatterClient.getCurrentUser()] Error getting current user: ', errRes);
+			console.error('[Grout.getCurrentUser()] Error getting current user: ', errRes);
 			return Promise.reject(errRes);
 		});
 	}
@@ -115,4 +115,4 @@ class MatterClient {
 	}
 };
 
-export default MatterClient;
+export default Grout;

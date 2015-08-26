@@ -2,39 +2,39 @@
 <html lang='en'>
 <head>
   <meta charset='utf-8'>
-  <title>Matter-Client | Tester</title>
+  <title>Grout Tester</title>
   <script src="https://cdn.firebase.com/js/client/2.2.9/firebase.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
   <!-- Polyfill (required by Babel) -->
   <script src='src/lib/superagent.js'></script>
   <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.45.min.js"></script>
-  <script src='dist/matter-client.js'></script>
+  <script src='dist/grout.js'></script>
   <script>
-    var matter = new MatterClient();
-    console.log('matter:', matter);
+    var grout = new Grout();
+    console.log('grout:', grout);
     document.addEventListener("DOMContentLoaded", function(event) { 
-      if(matter.getAuthToken()){
+      if(grout.getAuthToken()){
         document.getElementById("status").innerHTML = "True";
       }
     });
     
     function login(){
       console.log('login called');
-      matter.login({username:'test', password:'test'}).then(function(loginInfo){
+      grout.login({username:'test', password:'test'}).then(function(loginInfo){
         console.log('successful login:', loginInfo);
         document.getElementById("status").innerHTML = "True";
       });   
     }
     function logout(){
       console.log('logout called');
-      matter.logout().then(function(){
+      grout.logout().then(function(){
         console.log('successful logout');
         document.getElementById("status").innerHTML = "False";
       });   
     }
     function getApps(){
       console.log('getApps called');
-      matter.apps.get().then(function(appsList){
+      grout.apps.get().then(function(appsList){
         console.log('apps list loaded:', appsList);
         var outHtml = '<ul>';
         appsList.forEach(function(app){
@@ -46,21 +46,21 @@
     }
     function getStructure(){
       console.log('getStructure called');
-      matter.app('exampleApp').getStructure().then(function(app){
+      grout.app('exampleApp').getStructure().then(function(app){
         console.log('apps list loaded:', app);
         document.getElementById("output").innerHTML = JSON.stringify(app);
       });
     }
     function getUsers(){
       console.log('getUsers called');
-      matter.users.get().then(function(app){
+      grout.users.get().then(function(app){
         console.log('apps list loaded:', app);
         document.getElementById("output").innerHTML = JSON.stringify(app);
       });
     }
     function searchUsers(searchStr){
       console.log('getUsers called');
-      matter.users.search(searchStr).then(function(users){
+      grout.users.search(searchStr).then(function(users){
         console.log('search users loaded:', users);
         document.getElementById("output").innerHTML = JSON.stringify(users);
       });
@@ -70,7 +70,7 @@
 </head>
 <body>
   <div style="text-align:center;">
-    <h2>Matter Client Tester</h2>
+    <h2>Grout Library Tester</h2>
     <h4>Logged In: <span id='status'>False</span></h4>
       <p class="submit">
         <button onclick="login()">Login As Test User</button>

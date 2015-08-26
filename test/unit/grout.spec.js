@@ -1,8 +1,8 @@
-import MatterClient from '../../src/matter-client';
+import Grout from '../../src/grout';
 import request from '../../src/utils/request';
 import Firebase from 'firebase';
 
-let Matter = new MatterClient();
+let grout = new Grout();
 let mockGet = sinon.stub(request, 'get', function() {
  console.log('mock get called with:', arguments);
  return new Promise((resolve) => {
@@ -25,72 +25,72 @@ let mockPost = sinon.stub(request, 'post', function(url, postData) {
  });
 });
 
-describe('Matter', () => {
+describe('Grout', () => {
  describe('Login method', () => {
    beforeEach(() => {
-     spy(Matter, 'login');
+     spy(grout, 'login');
      spy(console, 'error');
    });
    it('handles no input', () => {
-     Matter.login();
-     expect(Matter.login).to.have.been.calledOnce;
+     grout.login();
+     expect(grout.login).to.have.been.calledOnce;
    });
    it('logs in user', () => {
      //window.sessionStorage.setItem();
-     Matter.login({username: 'test', password: 'test'});
-     expect(Matter.login).to.have.been.calledOnce;
+     grout.login({username: 'test', password: 'test'});
+     expect(grout.login).to.have.been.calledOnce;
    });
  });
  describe('Signup method', () => {
    beforeEach(() => {
-     spy(Matter, 'signup');
+     spy(grout, 'signup');
    });
    it('handles no input', () => {
-     Matter.signup();
-     expect(Matter.signup).to.have.been.calledOnce;
+     grout.signup();
+     expect(grout.signup).to.have.been.calledOnce;
    });
    it('signs up new user', () => {
-     Matter.signup({username: 'test', password: 'test'});
-     expect(Matter.signup).to.have.been.calledOnce;
+     grout.signup({username: 'test', password: 'test'});
+     expect(grout.signup).to.have.been.calledOnce;
    });
  });
  describe('Logout method', () => {
    beforeEach(() => {
-     spy(Matter, 'logout');
+     spy(grout, 'logout');
    });
 
     it('logs user', () => {
-     Matter.logout();
-     expect(Matter.logout).to.have.been.calledOnce;
+     grout.logout();
+     expect(grout.logout).to.have.been.calledOnce;
    });
     //TODO: Check that token is removed from local storage
  });
  describe('getCurrentUser method', () => {
    beforeEach(() => {
-     spy(Matter, 'getCurrentUser');
-     Matter.getCurrentUser();
+     spy(grout, 'getCurrentUser');
+     grout.getCurrentUser();
    });
 
    it('should have been run once', () => {
-     expect(Matter.getCurrentUser).to.have.been.calledOnce;
+     expect(grout.getCurrentUser).to.have.been.calledOnce;
    });
  });
  describe('getAuthToken method', () => {
    beforeEach(() => {
-     spy(Matter, 'getAuthToken');
+     spy(grout, 'getAuthToken');
    });
 
    it('should have been run once', () => {
-     Matter.getAuthToken();
-     expect(Matter.getAuthToken).to.have.been.calledOnce;
+     grout.getAuthToken();
+     expect(grout.getAuthToken).to.have.been.calledOnce;
    });
    it('get auth token', () => {
      window = {sessionStorage: {}};
      window.sessionStorage.getItem = () => {
        return '';
      };
-     Matter.getAuthToken();
-     expect(Matter.getAuthToken).to.have.been.calledOnce;
+     grout.getAuthToken();
+     expect(grout.getAuthToken).to.have.been.calledOnce;
    });
  });
 });

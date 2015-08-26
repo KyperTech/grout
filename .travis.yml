@@ -10,4 +10,4 @@ sudo: false
 script: "gulp coverage"
 after_success:
   - npm install -g codeclimate-test-reporter
-  - CODECLIMATE_REPO_TOKEN=df2b3e42fca948c2aa36732454d743cff99e68cbd062258a87b056b182471caf codeclimate-test-reporter < coverage/lcov.info
+  - codeclimate-test-reporter < coverage/lcov.info

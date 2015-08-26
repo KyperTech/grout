@@ -3,7 +3,7 @@ var _createClass = (function () { function defineProperties(target, props) { for
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('underscore'), require('firebase'), require('superagent')) : typeof define === 'function' && define.amd ? define(['underscore', 'firebase', 'superagent'], factory) : global.MatterClient = factory(global._, global.Firebase, global.superagent);
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('underscore'), require('firebase'), require('superagent')) : typeof define === 'function' && define.amd ? define(['underscore', 'firebase', 'superagent'], factory) : global.Grout = factory(global._, global.Firebase, global.superagent);
 })(this, function (_, Firebase, superagent) {
 	'use strict';
 
@@ -695,12 +695,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	//Matter Client Class
 
-	var MatterClient = (function () {
-		function MatterClient() {
-			_classCallCheck(this, MatterClient);
+	var Grout = (function () {
+		function Grout() {
+			_classCallCheck(this, Grout);
 		}
 
-		_createClass(MatterClient, [{
+		_createClass(Grout, [{
 			key: 'signup',
 
 			//Signup a new user
@@ -709,7 +709,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					console.log(response);
 					return response;
 				})['catch'](function (errRes) {
-					console.error('[MatterClient.signup()] Error signing up:', errRes);
+					console.error('[Grout.signup()] Error signing up:', errRes);
 					return Promise.reject(errRes);
 				});
 			}
@@ -724,15 +724,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				}
 				return request.put(config.serverUrl + '/login', loginData).then(function (response) {
 					//TODO: Save token locally
-					console.log('[MatterClient.login()]: Login response: ', response);
+					console.log('[Grout.login()]: Login response: ', response);
 					token = response.token;
 					if (storage.getItem(config.tokenName) === null) {
 						storage.setItem(config.tokenName, response.token);
-						console.log('[MatterClient.login()]: token set to storage:', storage.getItem(config.tokenName));
+						console.log('[Grout.login()]: token set to storage:', storage.getItem(config.tokenName));
 					}
 					return response;
 				})['catch'](function (errRes) {
-					console.error('[MatterClient.login()] Error logging in: ', errRes);
+					console.error('[Grout.login()] Error logging in: ', errRes);
 					return Promise.reject(errRes);
 				});
 			}
@@ -740,7 +740,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'logout',
 			value: function logout() {
 				return request.put(config.serverUrl + '/logout', {}).then(function (response) {
-					console.log('[MatterClient.logout()] Logout successful: ', response);
+					console.log('[Grout.logout()] Logout successful: ', response);
 					if (typeof window != 'undefined' && typeof storage.getItem(config.tokenName) != null) {
 						//Clear session storage
 						storage.clear();
@@ -754,7 +754,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						}
 						return;
 					}
-					console.error('[MatterClient.logout()] Error logging out: ', errRes);
+					console.error('[Grout.logout()] Error logging out: ', errRes);
 					return Promise.reject(errRes);
 				});
 			}
@@ -764,11 +764,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				//TODO: Check Current user variable
 				return request.get(config.serverUrl + '/user', {}).then(function (response) {
 					//TODO: Save user information locally
-					console.log('[MatterClient.getCurrentUser()] Current User:', response);
+					console.log('[Grout.getCurrentUser()] Current User:', response);
 					user = response;
 					return user;
 				})['catch'](function (errRes) {
-					console.error('[MatterClient.getCurrentUser()] Error getting current user: ', errRes);
+					console.error('[Grout.getCurrentUser()] Error getting current user: ', errRes);
 					return Promise.reject(errRes);
 				});
 			}
@@ -809,11 +809,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			}
 		}]);
 
-		return MatterClient;
+		return Grout;
 	})();
 
 	;
 
-	return MatterClient;
+	return Grout;
 });
-//# sourceMappingURL=matter-client.js.map
+//# sourceMappingURL=grout.js.map
