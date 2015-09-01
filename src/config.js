@@ -1,13 +1,14 @@
 let config = {
-	serverUrl: 'tessellate.elasticbeanstalk.com',
+	serverUrl: 'http://tessellate.elasticbeanstalk.com',
 	tokenName: 'grout-client',
 	fbUrl: 'https://pruvit.firebaseio.com/',
 	aws: {
 		region: 'us-east-1',
 		cognito: {
-			poolId: 'us-east-1:7f3bc1ff-8484-48dd-9e13-27e5cd3de982',
+			poolId: 'us-east-1:72a20ffd-c638-48b0-b234-3312b3e64b2e',
 			params: {
-				RoleArn: 'arn:aws:iam::823322155619:role/Cognito_HypercubeTestAuth_Role1'
+				AuthRoleArn: 'arn:aws:iam::823322155619:role/Cognito_TessellateUnauth_Role',
+				UnauthRoleArn: 'arn:aws:iam::823322155619:role/Cognito_TessellateAuth_Role'
 			}
 		}
 	}
