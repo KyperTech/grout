@@ -1,19 +1,9 @@
 import config from '../config';
 import browserStorage from './browserStorage';
 import superagent from 'superagent';
-
-let requester;
-if (typeof window == 'undefined') { //Node Mode
-	requester = superagent;
-} else if (typeof window.superagent == 'undefined') {
-	console.error('Superagent is required to use Matter');
-} else { //Browser mode
-	requester = window.superagent;
-}
-
 let request = {
 	get(endpoint, queryData) {
-		var req = requester.get(endpoint);
+		var req = superagent.get(endpoint);
 		if (queryData) {
 			req.query(queryData);
 		}
@@ -21,17 +11,17 @@ let request = {
 		return handleResponse(req);
 	},
 	post(endpoint, data) {
-		var req = requester.post(endpoint).send(data);
+		var req = superagent.post(endpoint).send(data);
 		req = addAuthHeader(req);
 		return handleResponse(req);
 	},
 	put(endpoint, data) {
-		var req = requester.put(endpoint).send(data);
+		var req = superagent.put(endpoint).send(data);
 		req = addAuthHeader(req);
 		return handleResponse(req);
 	},
 	del(endpoint, data) {
-		var req = requester.put(endpoint).send(data);
+		var req = superagent.put(endpoint).send(data);
 		req = addAuthHeader(req);
 		return handleResponse(req);
 	}

@@ -3,13 +3,13 @@ var _createClass = (function () { function defineProperties(target, props) { for
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('underscore'), require('firebase'), require('superagent')) : typeof define === 'function' && define.amd ? define(['underscore', 'firebase', 'superagent'], factory) : global.Grout = factory(global._, global.Firebase, global.superagent);
-})(this, function (_, Firebase, superagent) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('superagent'), require('underscore'), require('firebase')) : typeof define === 'function' && define.amd ? define(['superagent', 'underscore', 'firebase'], factory) : global.Grout = factory(global.superagent, global._, global.Firebase);
+})(this, function (superagent, _, Firebase) {
 	'use strict';
 
+	superagent = 'default' in superagent ? superagent['default'] : superagent;
 	_ = 'default' in _ ? _['default'] : _;
 	Firebase = 'default' in Firebase ? Firebase['default'] : Firebase;
-	superagent = 'default' in superagent ? superagent['default'] : superagent;
 
 	var config = {
 		serverUrl: 'hypercube.elasticbeanstalk.com',
@@ -57,7 +57,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
    */
 		getItem: function getItem(itemName) {
 			if (this.exists) {
-				console.log('item loaded from session');
 				return window.sessionStorage.getItem(itemName);
 			}
 			return null;
@@ -105,7 +104,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		exists: {
 			get: function get() {
 				var testKey = 'test';
-				console.log('storage exists called');
 				if (typeof window != 'undefined') {
 					try {
 						window.sessionStorage.setItem(testKey, '1');
@@ -124,20 +122,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}
 	});
 
-	var requester = undefined;
-	if (typeof window == 'undefined') {
-		//Node Mode
-		requester = superagent;
-	} else if (typeof window.superagent == 'undefined') {
-		console.error('Superagent is required to use Matter');
-	} else {
-		//Browser mode
-		requester = window.superagent;
-	}
-
 	var request = {
 		get: function get(endpoint, queryData) {
-			var req = requester.get(endpoint);
+			var req = superagent.get(endpoint);
 			if (queryData) {
 				req.query(queryData);
 			}
@@ -145,17 +132,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			return handleResponse(req);
 		},
 		post: function post(endpoint, data) {
-			var req = requester.post(endpoint).send(data);
+			var req = superagent.post(endpoint).send(data);
 			req = addAuthHeader(req);
 			return handleResponse(req);
 		},
 		put: function put(endpoint, data) {
-			var req = requester.put(endpoint).send(data);
+			var req = superagent.put(endpoint).send(data);
 			req = addAuthHeader(req);
 			return handleResponse(req);
 		},
 		del: function del(endpoint, data) {
-			var req = requester.put(endpoint).send(data);
+			var req = superagent.put(endpoint).send(data);
 			req = addAuthHeader(req);
 			return handleResponse(req);
 		}

@@ -13,19 +13,16 @@ Client library to simplify communication with Tessellate application building se
 Grout is isomorphic, so it can be used within a frontend or on a server. Below are setups for both:
 
 ### Browser
-1. Run:
-    ```
-    npm install --save grout
-    ```
-2. Reference Library and Dependencies in `index.html` :
+1. Include the Grout library using one of the following:
+  #### CDN
+  Add script tag to index.html:
     
-```html
-<script src="https://cdn.firebase.com/js/client/2.2.9/firebase.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-<script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.45.min.js"></script>
-<script src='node_modules/grout/src/lib/superagent.js'></script>
-<script src='node_modules/grout/dist/grout.js'></script>
-```
+    ```html
+    <script src="http://cdn.kyper.io/js/grout/0.0.1/grout.js"></script>
+    ```
+
+  #### Bower
+  Run `bower install --save kyper-grout`
 
 ### Node
 1. Run:
@@ -40,8 +37,8 @@ Grout is isomorphic, so it can be used within a frontend or on a server. Below a
     ```
     **or in ES6:**
     ```javascript
-        import matter from ('grout');
-        let grout = new Grout();
+    import matter from ('grout');
+    let grout = new Grout();
     ```
 ## Documentation
 

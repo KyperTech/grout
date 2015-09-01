@@ -1,6 +1,6 @@
 {
   "name": "kyper-grout",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "Library to communicate with tessellate application building/managing service.",
   "main": "dist/grout.js",
   "scripts": {
@@ -17,7 +17,15 @@
     "src",
     "dist"
   ],
-  "keywords": [],
+  "keywords": [
+    "kyper",
+    "grout",
+    "matter",
+    "tessellate",
+    "authentication",
+    "user management",
+    "application management"
+  ],
   "author": "Scott Prue <sprue.dev@gmail.com>",
   "license": "MIT",
   "bugs": {
