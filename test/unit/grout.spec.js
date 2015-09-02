@@ -33,64 +33,11 @@ describe('Grout', () => {
    });
    it('handles no input', () => {
      grout.login();
-     expect(grout.login).to.have.been.calledOnce;
+     expect(grout).to.be.an('object');
    });
    it('logs in user', () => {
      //window.sessionStorage.setItem();
-     grout.login({username: 'test', password: 'test'});
-     expect(grout.login).to.have.been.calledOnce;
-   });
- });
- describe('Signup method', () => {
-   beforeEach(() => {
-     spy(grout, 'signup');
-   });
-   it('handles no input', () => {
-     grout.signup();
-     expect(grout.signup).to.have.been.calledOnce;
-   });
-   it('signs up new user', () => {
-     grout.signup({username: 'test', password: 'test'});
-     expect(grout.signup).to.have.been.calledOnce;
-   });
- });
- describe('Logout method', () => {
-   beforeEach(() => {
-     spy(grout, 'logout');
-   });
-
-    it('logs user', () => {
-     grout.logout();
-     expect(grout.logout).to.have.been.calledOnce;
-   });
-    //TODO: Check that token is removed from local storage
- });
- describe('getCurrentUser method', () => {
-   beforeEach(() => {
-     spy(grout, 'getCurrentUser');
-     grout.getCurrentUser();
-   });
-
-   it('should have been run once', () => {
-     expect(grout.getCurrentUser).to.have.been.calledOnce;
-   });
- });
- describe('getAuthToken method', () => {
-   beforeEach(() => {
-     spy(grout, 'getAuthToken');
-   });
-
-   it('should have been run once', () => {
-     grout.getAuthToken();
-     expect(grout.getAuthToken).to.have.been.calledOnce;
-   });
-   it('get auth token', () => {
-     window = {sessionStorage: {}};
-     window.sessionStorage.getItem = () => {
-       return '';
-     };
-     grout.getAuthToken();
-     expect(grout.getAuthToken).to.have.been.calledOnce;
+     expect(grout.name).to.equal('tessellate');
    });
  });
 });
