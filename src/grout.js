@@ -1,16 +1,9 @@
 import config from './config';
-import request from './utils/request';
-import browserStorage from './utils/browserStorage';
 import AppsAction from './classes/AppsAction';
 import AppAction from './classes/AppAction';
-import Application from './classes/Application';
-import User from './classes/User';
 import UsersAction from './classes/UsersAction';
 import UserAction from './classes/UserAction';
 import Matter from 'kyper-matter';
-
-let user;
-let token;
 
 /**Grout Client Class
  * @ description Extending matter provides token storage and login/logout/signup capabilities

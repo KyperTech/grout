@@ -1,6 +1,8 @@
 import config from '../config';
-import browserStorage from './browserStorage';
+import Matter from 'kyper-matter';
 import superagent from 'superagent';
+let storage = new Matter('tesselate').storage;
+
 let request = {
 	get(endpoint, queryData) {
 		var req = superagent.get(endpoint);
@@ -46,8 +48,8 @@ function handleResponse(req) {
 	});
 }
 function addAuthHeader(req) {
-	if (browserStorage.getItem(config.tokenName)) {
-		req = req.set('Authorization', 'Bearer ' + browserStorage.getItem(config.tokenName));
+	if (storage.getItem(config.tokenName)) {
+		req = req.set('Authorization', 'Bearer ' + storage.getItem(config.tokenName));
 		console.log('Set auth header');
 	}
 	return req;

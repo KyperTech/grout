@@ -61,7 +61,7 @@ createLintTask('lint-test', ['test/**/*.js']);
 gulp.task('build', ['lint-src', 'clean'], function(done) {
   rollup.rollup({
     entry: config.entryFileName,
-    external:['underscore', 'firebase', 'superagent', 'Matter'],
+    external:['lodash', 'firebase', 'superagent', 'Matter', 'jwt-decode'],
   }).then(function(bundle) {
     var res = bundle.generate({
       // Don't worry about the fact that the source map is inlined at this step.
@@ -157,7 +157,7 @@ function addExternalModules(code) {
   // should individually load up pieces of our application.
   // We also include the browserify setup file.
   // Create our bundler, passing in the arguments required for watchify
-  var bundler = browserify(destinationFolder+'/' + exportFileName + '.js', {standalone:'Grout'});
+  var bundler = browserify('src/' + exportFileName + '.js', {standalone:'Grout'});
 
   // Watch the bundler, and re-bundle it whenever files change
   // bundler = watchify(bundler);
@@ -167,7 +167,7 @@ function addExternalModules(code) {
 
   // // Set up Babelify so that ES6 works in the tests
   bundler.transform(babelify.configure({
-    ignore: /(bower_components)|(node_modules)/,
+    ignore: /(bower_components)/,
     sourceMapRelative: __dirname + '/src',
     optional: ["es7.asyncFunctions"],
     stage:2

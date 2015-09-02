@@ -1,5 +1,5 @@
 import config from '../config';
-import _ from 'underscore';
+import _ from 'lodash';
 
 class Folder {
 	constructor(fileData) {

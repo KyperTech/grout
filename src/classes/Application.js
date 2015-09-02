@@ -1,7 +1,7 @@
 import config from '../config';
 import request from '../utils/request';
 import Firebase from 'firebase';
-import _ from 'underscore';
+import _ from 'lodash';
 
 /**
  * Application class.
