@@ -1,10 +1,30 @@
 # Grout
-
-[![Travis build status](https://travis-ci.org/KyperTech/grout.svg?branch=master)](https://travis-ci.org/KyperTech/grout)
-[![Code Climate](https://codeclimate.com/github/KyperTech/grout/badges/gpa.svg)](https://codeclimate.com/github/KyperTech/grout)
-[![Test Coverage](https://codeclimate.com/github/KyperTech/grout/badges/coverage.svg)](https://codeclimate.com/github/KyperTech/grout)
-[![Dependency Status](https://david-dm.org/KyperTech/grout.svg)](https://david-dm.org/KyperTech/grout)
-[![devDependency Status](https://david-dm.org/KyperTech/grout/dev-status.svg)](https://david-dm.org/KyperTech/grout#info=devDependencies)
+<p align="center">
+  <!-- Npm Version -->
+  <a href="https://npmjs.org/package/kyper-grout">
+    <img src="https://img.shields.io/npm/v/kyper-grout.svg" alt="npm version">
+  </a>
+  <!-- Build Status -->
+  <a href="https://travis-ci.org/KyperTech/grout">
+    <img src="http://img.shields.io/travis/KyperTech/grout.svg" alt="build status">
+  </a>
+  <!-- Dependency Status -->
+  <a href="https://david-dm.org/KyperTech/grout">
+    <img src="https://david-dm.org/KyperTech/grout.svg" alt="dependency status">
+  </a>
+  <!-- Codeclimate -->
+  <a href="https://codeclimate.com/github/kypertech/grout">
+    <img src="https://codeclimate.com/github/KyperTech/grout/badges/gpa.svg" alt="codeclimate">
+  </a>
+  <!-- Coverage -->
+  <a href="https://codeclimate.com/github/KyperTech/grout">
+    <img src="https://codeclimate.com/github/KyperTech/grout/badges/coverage.svg" alt="coverage">
+  </a>
+  <!-- License -->
+  <a href="https://github.com/KyperTech/grout/blob/master/LICENSE.md">
+    <img src="https://img.shields.io/npm/l/kyper-grout.svg" alt="license">
+  </a>
+</p>
 
 Client library to simplify communication with Tessellate application building service.
 
@@ -37,7 +57,7 @@ Grout is isomorphic, so it can be used within a frontend or on a server. Below a
     ```
     **or in ES6:**
     ```javascript
-    import matter from ('grout');
+    import Grout from ('grout');
     let grout = new Grout();
     ```
 ## Documentation
