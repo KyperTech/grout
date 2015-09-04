@@ -1,24 +1,19 @@
 import config from '../config';
-import request from '../utils/request';
 import _ from 'lodash';
+import Matter from 'kyper-matter';
 
-//Actions for applications list
-class UsersAction {
+//Actions for users list
+class UsersAction extends Matter {
 	constructor() {
-		this.endpoint = config.serverUrl + '/users';
+		//Call matter with name and settings
+		super(config.appName, config.matterOptions);
 	}
-	//Get applications or single application
+	get usersEndpoint() {
+		return `${this.endpoint}/users`;
+	}
+	//Get users or single application
 	get(query) {
-		let userEndpoint = this.endpoint;
-		if (query && !_.isString(query)) {
-			const msg = 'Get only handles username as a string';
-			console.error(msg);
-			return Promise.reject({message: msg});
-		}
-		if (query) {
-		 userEndpoint = userEndpoint + '/' + query;
-		}
-		return request.get(userEndpoint).then((response) => {
+		return this.utils.request.get(this.usersEndpoint).then((response) => {
 			console.log('[MatterClient.apps().get()] App(s) data loaded:', response);
 			return response;
 		})['catch']((errRes) => {
@@ -28,7 +23,7 @@ class UsersAction {
 	}
 	//Add an application
 	add(appData) {
-		return request.post(this.endpoint, appData).then((response) => {
+		return this.utils.request.post(this.usersEndpoint, appData).then((response) => {
 			console.log('[MatterClient.apps().add()] Application added successfully: ', response);
 			return new Application(response);
 		})['catch']((errRes) => {
@@ -39,12 +34,12 @@ class UsersAction {
 	//Search with partial of username
 	search(query) {
 		console.log('search called:', query);
-		var searchEndpoint = this.endpoint + '/search/';
+		var searchEndpoint = this.usersEndpoint + '/search/';
 		if (query && _.isString(query)) {
 			searchEndpoint += query;
 		}
 		console.log('searchEndpoint:', searchEndpoint);
-		return request.get(searchEndpoint).then((response) => {
+		return this.utils.request.get(searchEndpoint).then((response) => {
 			console.log('[MatterClient.users().search()] Users(s) data loaded:', response);
 			return response;
 		})['catch']((errRes) => {

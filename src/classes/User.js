@@ -1,6 +1,6 @@
 import config from '../config';
-import AppsAction from './AppsAction';
-import AppAction from './AppAction';
+import AppsAction from '../actions/AppsAction';
+import AppAction from '../actions/AppAction';
 
 /**
  * User class.

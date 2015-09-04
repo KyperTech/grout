@@ -1,14 +1,19 @@
 import config from '../config';
-import request from '../utils/request';
+import Matter from 'kyper-matter';
 
 //Actions for applications list
-class AppsAction {
+class AppsAction extends Matter {
 	constructor() {
-		this.endpoint = config.serverUrl + '/apps';
+		//Call matter with name and settings
+		super(config.appName, config.matterOptions);
+	}
+	get appsEndpoint() {
+		return `${this.endpoint}/apps`;
 	}
 	//Get applications or single application
 	get() {
-		return request.get(this.endpoint).then((response) => {
+		console.warn('this.utils:', this.endpoint);
+		return this.utils.request.get(this.appsEndpoint).then((response) => {
 			console.log('[MatterClient.apps().get()] App(s) data loaded:', response);
 			return response;
 		})['catch']((errRes) => {
@@ -18,7 +23,7 @@ class AppsAction {
 	}
 	//Add an application
 	add(appData) {
-		return request.post(this.endpoint, appData).then((response) => {
+		return this.utils.request.post(this.appsEndpoint, appData).then((response) => {
 			console.log('[MatterClient.apps().add()] Application added successfully: ', response);
 			return new Application(response);
 		})['catch']((errRes) => {

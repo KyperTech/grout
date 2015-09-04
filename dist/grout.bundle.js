@@ -9918,20 +9918,31 @@ function base64Slice (buf, start, end) {
 
 function utf8Slice (buf, start, end) {
   end = Math.min(buf.length, end)
+  var firstByte
+  var secondByte
+  var thirdByte
+  var fourthByte
+  var bytesPerSequence
+  var tempCodePoint
+  var codePoint
   var res = []
-
   var i = start
-  while (i < end) {
-    var firstByte = buf[i]
-    var codePoint = null
-    var bytesPerSequence = (firstByte > 0xEF) ? 4
-      : (firstByte > 0xDF) ? 3
-      : (firstByte > 0xBF) ? 2
-      : 1
+
+  for (; i < end; i += bytesPerSequence) {
+    firstByte = buf[i]
+    codePoint = 0xFFFD
+
+    if (firstByte > 0xEF) {
+      bytesPerSequence = 4
+    } else if (firstByte > 0xDF) {
+      bytesPerSequence = 3
+    } else if (firstByte > 0xBF) {
+      bytesPerSequence = 2
+    } else {
+      bytesPerSequence = 1
+    }
 
     if (i + bytesPerSequence <= end) {
-      var secondByte, thirdByte, fourthByte, tempCodePoint
-
       switch (bytesPerSequence) {
         case 1:
           if (firstByte < 0x80) {
@@ -9970,10 +9981,8 @@ function utf8Slice (buf, start, end) {
       }
     }
 
-    if (codePoint === null) {
-      // we did not generate a valid codePoint so insert a
-      // replacement char (U+FFFD) and advance only 1 byte
-      codePoint = 0xFFFD
+    if (codePoint === 0xFFFD) {
+      // we generated an invalid codePoint so make sure to only advance by 1 byte
       bytesPerSequence = 1
     } else if (codePoint > 0xFFFF) {
       // encode to utf16 (surrogate pair dance)
@@ -9983,33 +9992,9 @@ function utf8Slice (buf, start, end) {
     }
 
     res.push(codePoint)
-    i += bytesPerSequence
   }
 
-  return decodeCodePointsArray(res)
-}
-
-// Based on http://stackoverflow.com/a/22747272/680742, the browser with
-// the lowest limit is Chrome, with 0x10000 args.
-// We go 1 magnitude less, for safety
-var MAX_ARGUMENTS_LENGTH = 0x1000
-
-function decodeCodePointsArray (codePoints) {
-  var len = codePoints.length
-  if (len <= MAX_ARGUMENTS_LENGTH) {
-    return String.fromCharCode.apply(String, codePoints) // avoid extra slice()
-  }
-
-  // Decode in chunks to avoid "call stack size exceeded".
-  var res = ''
-  var i = 0
-  while (i < len) {
-    res += String.fromCharCode.apply(
-      String,
-      codePoints.slice(i, i += MAX_ARGUMENTS_LENGTH)
-    )
-  }
-  return res
+  return String.fromCharCode.apply(String, res)
 }
 
 function asciiSlice (buf, start, end) {
@@ -10728,6 +10713,7 @@ function utf8ToBytes (string, units) {
           // unexpected trail
           if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
           continue
+
         } else if (i + 1 === length) {
           // unpaired lead
           if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
@@ -10749,6 +10735,7 @@ function utf8ToBytes (string, units) {
 
       // valid surrogate pair
       codePoint = leadSurrogate - 0xD800 << 10 | codePoint - 0xDC00 | 0x10000
+
     } else if (leadSurrogate) {
       // valid bmp char, but last char was a lead
       if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD)
@@ -19555,29 +19542,12 @@ module.exports={
     "hash.js": "^1.0.0",
     "inherits": "^2.0.1"
   },
-  "gitHead": "d86cd2a8178f7e7cecbd6dd92eea084e2ab44c13",
+  "readme": "# Elliptic [![Build Status](https://secure.travis-ci.org/indutny/elliptic.png)](http://travis-ci.org/indutny/elliptic)\n\nFast elliptic-curve cryptography in a plain javascript implementation.\n\nNOTE: Please take a look at http://safecurves.cr.yp.to/ before choosing a curve\nfor your cryptography operations.\n\n## Incentive\n\nECC is much slower than regular RSA cryptography, the JS implementations are\neven more slower.\n\n## Benchmarks\n\n```bash\n$ node benchmarks/index.js\nBenchmarking: sign\nelliptic#sign x 262 ops/sec ±0.51% (177 runs sampled)\neccjs#sign x 55.91 ops/sec ±0.90% (144 runs sampled)\n------------------------\nFastest is elliptic#sign\n========================\nBenchmarking: verify\nelliptic#verify x 113 ops/sec ±0.50% (166 runs sampled)\neccjs#verify x 48.56 ops/sec ±0.36% (125 runs sampled)\n------------------------\nFastest is elliptic#verify\n========================\nBenchmarking: gen\nelliptic#gen x 294 ops/sec ±0.43% (176 runs sampled)\neccjs#gen x 62.25 ops/sec ±0.63% (129 runs sampled)\n------------------------\nFastest is elliptic#gen\n========================\nBenchmarking: ecdh\nelliptic#ecdh x 136 ops/sec ±0.85% (156 runs sampled)\n------------------------\nFastest is elliptic#ecdh\n========================\n```\n\n## API\n\n### ECDSA\n\n```javascript\nvar EC = require('elliptic').ec;\n\n// Create and initialize EC context\n// (better do it once and reuse it)\nvar ec = new EC('secp256k1');\n\n// Generate keys\nvar key = ec.genKeyPair();\n\n// Sign message (must be an array, or it'll be treated as a hex sequence)\nvar msg = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];\nvar signature = key.sign(msg);\n\n// Export DER encoded signature in Array\nvar derSign = signature.toDER();\n\n// Verify signature\nconsole.log(key.verify(msg, derSign));\n```\n\n### ECDH\n\n```javascript\n// Generate keys\nvar key1 = ec.genKeyPair();\nvar key2 = ec.genKeyPair();\n\nvar shared1 = key1.derive(key2.getPublic());\nvar shared2 = key2.derive(key1.getPublic());\n\nconsole.log('Both shared secrets are BN instances');\nconsole.log(shared1.toString(16));\nconsole.log(shared2.toString(16));\n```\n\nNOTE: `.derive()` returns a [BN][1] instance.\n\n## Supported curves\n\nElliptic.js support following curve types:\n\n* Short Weierstrass\n* Montgomery\n* Edwards\n* Twisted Edwards\n\nFollowing curve 'presets' are embedded into the library:\n\n* `secp256k1`\n* `p192`\n* `p224`\n* `p256`\n* `curve25519`\n* `ed25519`\n\nNOTE: That `curve25519` could not be used for ECDSA, use `ed25519` instead.\n\n### Implementation details\n\nECDSA is using deterministic `k` value generation as per [RFC6979][0]. Most of\nthe curve operations are performed on non-affine coordinates (either projective\nor extended), various windowing techniques are used for different cases.\n\nAll operations are performed in reduction context using [bn.js][1], hashing is\nprovided by [hash.js][2]\n\n### Related projects\n\n* [eccrypto][3]: isomorphic implementation of ECDSA, ECDH and ECIES for both\n  browserify and node (uses `elliptic` for browser and [secp256k1-node][4] for\n  node)\n\n#### LICENSE\n\nThis software is licensed under the MIT License.\n\nCopyright Fedor Indutny, 2014.\n\nPermission is hereby granted, free of charge, to any person obtaining a\ncopy of this software and associated documentation files (the\n\"Software\"), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to permit\npersons to whom the Software is furnished to do so, subject to the\nfollowing conditions:\n\nThe above copyright notice and this permission notice shall be included\nin all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS\nOR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN\nNO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,\nDAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR\nOTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE\nUSE OR OTHER DEALINGS IN THE SOFTWARE.\n\n[0]: http://tools.ietf.org/html/rfc6979\n[1]: https://github.com/indutny/bn.js\n[2]: https://github.com/indutny/hash.js\n[3]: https://github.com/bitchan/eccrypto\n[4]: https://github.com/wanderer/secp256k1-node\n",
+  "readmeFilename": "README.md",
   "_id": "elliptic@3.1.0",
   "_shasum": "c21682ef762769b56a74201609105da11d5f60cc",
-  "_from": "elliptic@>=3.0.0 <4.0.0",
-  "_npmVersion": "2.11.0",
-  "_nodeVersion": "2.2.1",
-  "_npmUser": {
-    "name": "indutny",
-    "email": "fedor@indutny.com"
-  },
-  "maintainers": [
-    {
-      "name": "indutny",
-      "email": "fedor@indutny.com"
-    }
-  ],
-  "dist": {
-    "shasum": "c21682ef762769b56a74201609105da11d5f60cc",
-    "tarball": "http://registry.npmjs.org/elliptic/-/elliptic-3.1.0.tgz"
-  },
-  "directories": {},
   "_resolved": "https://registry.npmjs.org/elliptic/-/elliptic-3.1.0.tgz",
-  "readme": "ERROR: No README data found!"
+  "_from": "elliptic@>=3.0.0 <4.0.0"
 }
 
 },{}],107:[function(require,module,exports){
@@ -29622,7 +29592,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	}
 
 	var data = {};
-	// TODO: Store objects within local storage.
 	var storage = Object.defineProperties({
 		/**
    * @description
@@ -29633,7 +29602,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
    *
    */
 		item: function item(itemName, itemValue) {
-			//TODO: Handle itemValue being an object instead of a string
 			return this.setItem(itemName, itemValue);
 		},
 		/**
@@ -29645,10 +29613,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
    *
    */
 		setItem: function setItem(itemName, itemValue) {
-			//TODO: Handle itemValue being an object instead of a string
-			// this.item(itemName) = itemValue;
 			data[itemName] = itemValue;
 			if (this.localExists) {
+				//Convert object to string
+				if (_.isObject(itemValue)) {
+					itemValue = JSON.stringify(itemValue);
+				}
 				window.sessionStorage.setItem(itemName, itemValue);
 			}
 		},
@@ -29666,7 +29636,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			if (data[itemName]) {
 				return data[itemName];
 			} else if (this.localExists) {
-				return window.sessionStorage.getItem(itemName);
+				var itemStr = window.sessionStorage.getItem(itemName);
+				//Check that str is not null before parsing
+				if (itemStr) {
+					var isObj = false;
+					var itemObj = null;
+					//Try parsing to object
+					try {
+						itemObj = JSON.parse(itemStr);
+						isObj = true;
+					} catch (err) {
+						// logger.log({message: 'String could not be parsed.', error: err, func: 'getItem', obj: 'storage'});
+						//Parsing failed, this must just be a string
+						isObj = false;
+					}
+					if (isObj) {
+						return itemObj;
+					}
+				}
+				return itemStr;
 			} else {
 				return null;
 			}
@@ -29742,7 +29730,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				tokenData = jwtDecode(tokenStr);
 			} catch (err) {
 				logger.error({ description: 'Error decoding token.', data: tokenData, error: err, func: 'decodeToken', file: 'token' });
-				throw new Error('Error decoding token.');
+				throw new Error('Invalid token string.');
 			}
 		}
 		return tokenData;
@@ -29753,6 +29741,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		},
 		'delete': function _delete() {
 			storage.removeItem(config.tokenName);
+			storage.removeItem(config.tokenDataName);
 			logger.log({ description: 'Token was removed.', func: 'delete', obj: 'token' });
 		}
 	}, {
@@ -29815,7 +29804,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			req = addAuthHeader(req);
 			return handleResponse(req);
 		}
-
 	};
 
 	function handleResponse(req) {
@@ -29910,7 +29898,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 							_this.token.string = response.token;
 						}
 						if (_.has(response, 'account')) {
-							_this.storage.setItem('currentUser');
+							_this.storage.setItem('currentUser', response.account);
 						}
 						return response.account;
 					}
@@ -29943,6 +29931,124 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				});
 			}
 		}, {
+			key: 'getCurrentUser',
+			value: function getCurrentUser() {
+				var _this3 = this;
+
+				if (this.storage.item('currentUser')) {
+					return Promise.resove(this.storage.item('currentUser'));
+				} else {
+					return request.get(this.endpoint + '/user').then(function (response) {
+						//TODO: Save user information locally
+						logger.log({ description: 'Current User Request responded.', responseData: response.data, func: 'currentUser', obj: 'Matter' });
+						_this3.currentUser = response.data;
+						return response.data;
+					})['catch'](function (errRes) {
+						logger.error({ description: 'Error requesting current user.', error: errRes, func: 'currentUser', obj: 'Matter' });
+						return Promise.reject(errRes);
+					});
+				}
+			}
+		}, {
+			key: 'updateProfile',
+
+			/** updateProfile
+    */
+			value: function updateProfile(updateData) {
+				var _this4 = this;
+
+				if (!this.isLoggedIn) {
+					logger.error({ description: 'No current user profile to update.', func: 'updateProfile', obj: 'Matter' });
+					return Promise.reject({ message: 'Must be logged in to update profile.' });
+				}
+				//Send update request
+				logger.warn({ description: 'Calling update endpoint.', endpoint: this.endpoint + '/user/' + this.token.data.username, func: 'updateProfile', obj: 'Matter' });
+				return request.put(this.endpoint + '/user/' + this.token.data.username, updateData).then(function (response) {
+					logger.log({ description: 'Update profile request responded.', responseData: response, func: 'updateProfile', obj: 'Matter' });
+					_this4.currentUser = response;
+					return response;
+				})['catch'](function (errRes) {
+					logger.error({ description: 'Error requesting current user.', error: errRes, func: 'updateProfile', obj: 'Matter' });
+					return Promise.reject(errRes);
+				});
+			}
+
+			/** updateProfile
+    */
+		}, {
+			key: 'isInGroup',
+
+			//Check that user is in a single group or in all of a list of groups
+			value: function isInGroup(checkGroups) {
+				var _this5 = this;
+
+				if (!this.isLoggedIn) {
+					logger.log({ description: 'No logged in user to check.', func: 'isInGroup', obj: 'Matter' });
+					return false;
+				}
+				//Check if user is
+				if (checkGroups && _.isString(checkGroups)) {
+					var _ret = (function () {
+						var groupName = checkGroups;
+						//Single role or string list of roles
+						var groupsArray = groupName.split(',');
+						if (groupsArray.length > 1) {
+							//String list of groupts
+							logger.info({ description: 'String list of groups.', list: groupsArray, func: 'isInGroup', obj: 'Matter' });
+							return {
+								v: _this5.isInGroups(groupsArray)
+							};
+						} else {
+							//Single group
+							var groups = _this5.token.data.groups || [];
+							logger.log({ description: 'Checking if user is in group.', group: groupName, userGroups: _this5.token.data.groups || [], func: 'isInGroup', obj: 'Matter' });
+							return {
+								v: _.any(groups, function (group) {
+									return groupName == group.name;
+								})
+							};
+						}
+					})();
+
+					if (typeof _ret === 'object') return _ret.v;
+				} else if (checkGroups && _.isArray(checkGroups)) {
+					//Array of roles
+					//Check that user is in every group
+					logger.info({ description: 'Array of groups.', list: checkGroups, func: 'isInGroup', obj: 'Matter' });
+					return this.isInGroups(checkGroups);
+				} else {
+					return false;
+				}
+				//TODO: Handle string and array inputs
+			}
+		}, {
+			key: 'isInGroups',
+			value: function isInGroups(checkGroups) {
+				var _this6 = this;
+
+				//Check if user is in any of the provided groups
+				if (checkGroups && _.isArray(checkGroups)) {
+					return _.map(checkGroups, function (group) {
+						if (_.isString(group)) {
+							//Group is string
+							return _this6.isInGroup(group);
+						} else {
+							//Group is object
+							return _this6.isInGroup(group.name);
+						}
+					});
+				} else if (checkGroups && _.isString(checkGroups)) {
+					//TODO: Handle spaces within string list
+					var groupsArray = checkGroups.split(',');
+					if (groupsArray.length > 1) {
+						return this.isInGroups(groupsArray);
+					}
+					return this.isInGroup(groupsArray[0]);
+				} else {
+					logger.error({ description: 'Invalid groups list.', func: 'isInGroups', obj: 'Matter' });
+				}
+			}
+		}, {
 			key: 'endpoint',
 			get: function get() {
 				var serverUrl = config.serverUrl;
@@ -29964,22 +30070,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			}
 		}, {
 			key: 'currentUser',
+			set: function set(userData) {
+				logger.log({ description: 'Current User Request responded.', user: userData, func: 'currentUser', obj: 'Matter' });
+				this.storage.setItem(userData);
+			},
 			get: function get() {
-				var _this3 = this;
-
-				if (this.storage.item('currentUser')) {
-					//TODO: Check to see if this comes back as a string
-					return Promise.resove(this.storage.item('currentUser'));
+				if (this.storage.getItem('currentUser')) {
+					return this.storage.getItem('currentUser');
 				} else {
-					return request.get(this.endpoint + '/user').then(function (response) {
-						//TODO: Save user information locally
-						logger.log({ description: 'Current User Request responded.', responseData: response.data, func: 'currentUser', obj: 'Matter' });
-						_this3.currentUser = response.data;
-						return response.data;
-					})['catch'](function (errRes) {
-						logger.error({ description: 'Error requesting current user.', error: errRes, func: 'currentUser', obj: 'Matter' });
-						return Promise.reject(errRes);
-					});
+					return null;
 				}
 			}
 		}, {
@@ -29987,10 +30086,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			get: function get() {
 				return storage;
 			}
+
+			/** updateProfile
+    */
 		}, {
 			key: 'token',
 			get: function get() {
 				return token;
+			}
+		}, {
+			key: 'utils',
+			get: function get() {
+				return { logger: logger, request: request, storage: storage };
 			}
 		}, {
 			key: 'isLoggedIn',
@@ -43809,49 +43916,56 @@ Object.defineProperty(exports, '__esModule', {
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var _config = require('../config');
 
 var _config2 = _interopRequireDefault(_config);
 
-var _utilsRequest = require('../utils/request');
+var _classesApplication = require('../classes/Application');
 
-var _utilsRequest2 = _interopRequireDefault(_utilsRequest);
-
-var _Application = require('./Application');
-
-var _Application2 = _interopRequireDefault(_Application);
+var _classesApplication2 = _interopRequireDefault(_classesApplication);
 
 var _awsSdk = require('aws-sdk');
 
 var _awsSdk2 = _interopRequireDefault(_awsSdk);
 
+var _kyperMatter = require('kyper-matter');
+
+var _kyperMatter2 = _interopRequireDefault(_kyperMatter);
+
 //Actions for specific application
 
-var AppAction = (function () {
+var AppAction = (function (_Matter) {
+	_inherits(AppAction, _Matter);
+
 	function AppAction(appName) {
 		_classCallCheck(this, AppAction);
 
+		//Call matter with name and settings
+		_get(Object.getPrototypeOf(AppAction.prototype), 'constructor', this).call(this, _config2['default'].appName, _config2['default'].matterOptions);
 		if (appName) {
 			this.name = appName;
-			this.endpoint = _config2['default'].serverUrl + '/apps/' + this.name;
 		} else {
 			console.error('Application name is required to start an AppAction');
 			throw new Error('Application name is required to start an AppAction');
 		}
 	}
 
-	//Get applications or single application
-
 	_createClass(AppAction, [{
 		key: 'get',
+
+		//Get applications or single application
 		value: function get() {
-			return _utilsRequest2['default'].get(this.endpoint).then(function (response) {
+			return this.utils.request.get(this.appEndpoint).then(function (response) {
 				console.log('[MatterClient.app().get()] App(s) data loaded:', response);
-				return new _Application2['default'](response);
+				return new _classesApplication2['default'](response);
 			})['catch'](function (errRes) {
 				console.error('[MatterClient.app().get()] Error getting apps list: ', errRes);
 				return Promise.reject(errRes);
@@ -43862,9 +43976,9 @@ var AppAction = (function () {
 	}, {
 		key: 'update',
 		value: function update(appData) {
-			return _utilsRequest2['default'].put(this.endpoint, appData).then(function (response) {
+			return this.utils.request.put(this.appEndpoint, appData).then(function (response) {
 				console.log('[MatterClient.apps().update()] App:', response);
-				return new _Application2['default'](response);
+				return new _classesApplication2['default'](response);
 			})['catch'](function (errRes) {
 				console.error('[MatterClient.apps().update()] Error updating app: ', errRes);
 				return Promise.reject(errRes);
@@ -43875,9 +43989,9 @@ var AppAction = (function () {
 	}, {
 		key: 'del',
 		value: function del(appData) {
-			return _utilsRequest2['default']['delete'](this.endpoint, appData).then(function (response) {
+			return this.utils.request['delete'](this.appEndpoint, appData).then(function (response) {
 				console.log('[MatterClient.apps().del()] Apps:', response);
-				return new _Application2['default'](response);
+				return new _classesApplication2['default'](response);
 			})['catch'](function (errRes) {
 				console.error('[MatterClient.apps().del()] Error deleting app: ', errRes);
 				return Promise.reject(errRes);
@@ -43914,32 +44028,308 @@ var AppAction = (function () {
 				return Promise.reject(err);
 			});
 		}
+	}, {
+		key: 'appEndpoint',
+		get: function get() {
+			return this.endpoint + '/app/' + this.name;
+		}
 	}]);
 
 	return AppAction;
-})();
+})(_kyperMatter2['default']);
 
 exports['default'] = AppAction;
 module.exports = exports['default'];
 
-},{"../config":247,"../utils/request":249,"./Application":242,"aws-sdk":1}],242:[function(require,module,exports){
+},{"../classes/Application":245,"../config":247,"aws-sdk":1,"kyper-matter":232}],242:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
 	value: true
 });
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var _config = require('../config');
 
 var _config2 = _interopRequireDefault(_config);
 
-var _utilsRequest = require('../utils/request');
+var _kyperMatter = require('kyper-matter');
 
-var _utilsRequest2 = _interopRequireDefault(_utilsRequest);
+var _kyperMatter2 = _interopRequireDefault(_kyperMatter);
+
+//Actions for applications list
+
+var AppsAction = (function (_Matter) {
+	_inherits(AppsAction, _Matter);
+
+	function AppsAction() {
+		_classCallCheck(this, AppsAction);
+
+		//Call matter with name and settings
+		_get(Object.getPrototypeOf(AppsAction.prototype), 'constructor', this).call(this, _config2['default'].appName, _config2['default'].matterOptions);
+	}
+
+	_createClass(AppsAction, [{
+		key: 'get',
+
+		//Get applications or single application
+		value: function get() {
+			console.warn('this.utils:', this.endpoint);
+			return this.utils.request.get(this.appsEndpoint).then(function (response) {
+				console.log('[MatterClient.apps().get()] App(s) data loaded:', response);
+				return response;
+			})['catch'](function (errRes) {
+				console.error('[MatterClient.apps().get()] Error getting apps list: ', errRes);
+				return Promise.reject(errRes);
+			});
+		}
+
+		//Add an application
+	}, {
+		key: 'add',
+		value: function add(appData) {
+			return this.utils.request.post(this.appsEndpoint, appData).then(function (response) {
+				console.log('[MatterClient.apps().add()] Application added successfully: ', response);
+				return new Application(response);
+			})['catch'](function (errRes) {
+				console.error('[MatterClient.getApps()] Error adding application: ', errRes);
+				return Promise.reject(errRes);
+			});
+		}
+	}, {
+		key: 'appsEndpoint',
+		get: function get() {
+			return this.endpoint + '/apps';
+		}
+	}]);
+
+	return AppsAction;
+})(_kyperMatter2['default']);
+
+exports['default'] = AppsAction;
+module.exports = exports['default'];
+
+},{"../config":247,"kyper-matter":232}],243:[function(require,module,exports){
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _config = require('../config');
+
+var _config2 = _interopRequireDefault(_config);
+
+var _classesUser = require('../classes/User');
+
+var _classesUser2 = _interopRequireDefault(_classesUser);
+
+var _kyperMatter = require('kyper-matter');
+
+var _kyperMatter2 = _interopRequireDefault(_kyperMatter);
+
+//Actions for specific user
+
+var UserAction = (function (_Matter) {
+	_inherits(UserAction, _Matter);
+
+	function UserAction(userName) {
+		_classCallCheck(this, UserAction);
+
+		//Call matter with name and settings
+		_get(Object.getPrototypeOf(UserAction.prototype), 'constructor', this).call(this, _config2['default'].appName, _config2['default'].matterOptions);
+		if (userName) {
+			this.username = userName;
+		} else {
+			console.error('Username is required to start an UserAction');
+			throw new Error('Username is required to start an UserAction');
+		}
+	}
+
+	_createClass(UserAction, [{
+		key: 'get',
+
+		//Get userlications or single userlication
+		value: function get() {
+			return this.utils.request.get(this.userEndpoint).then(function (response) {
+				console.log('[MatterClient.user().get()] App(s) data loaded:', response);
+				return new _classesUser2['default'](response);
+			})['catch'](function (errRes) {
+				console.error('[MatterClient.user().get()] Error getting users list: ', errRes);
+				return Promise.reject(errRes);
+			});
+		}
+
+		//Update an userlication
+	}, {
+		key: 'update',
+		value: function update(userData) {
+			return this.utils.request.put(this.userEndpoint, userData).then(function (response) {
+				console.log('[MatterClient.users().update()] App:', response);
+				return new _classesUser2['default'](response);
+			})['catch'](function (errRes) {
+				console.error('[MatterClient.users().update()] Error updating user: ', errRes);
+				return Promise.reject(errRes);
+			});
+		}
+
+		//Delete an userlication
+		//TODO: Only do this.utils.request if deleting personal account
+	}, {
+		key: 'del',
+		value: function del(userData) {
+			console.error('Deleting a user is currently disabled.');
+			// return this.utils.request.delete(this.endpoint, userData).then((response) => {
+			// 	console.log('[MatterClient.users().del()] Apps:', response);
+			// 	return new User(response);
+			// })['catch']((errRes) => {
+			// 	console.error('[MatterClient.users().del()] Error deleting user: ', errRes);
+			// 	return Promise.reject(errRes);
+			// });
+		}
+	}, {
+		key: 'userEndpoint',
+		get: function get() {
+			return this.endpoint + '/users/' + this.username;
+		}
+	}]);
+
+	return UserAction;
+})(_kyperMatter2['default']);
+
+exports['default'] = UserAction;
+module.exports = exports['default'];
+
+},{"../classes/User":246,"../config":247,"kyper-matter":232}],244:[function(require,module,exports){
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _config = require('../config');
+
+var _config2 = _interopRequireDefault(_config);
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _kyperMatter = require('kyper-matter');
+
+var _kyperMatter2 = _interopRequireDefault(_kyperMatter);
+
+//Actions for users list
+
+var UsersAction = (function (_Matter) {
+	_inherits(UsersAction, _Matter);
+
+	function UsersAction() {
+		_classCallCheck(this, UsersAction);
+
+		//Call matter with name and settings
+		_get(Object.getPrototypeOf(UsersAction.prototype), 'constructor', this).call(this, _config2['default'].appName, _config2['default'].matterOptions);
+	}
+
+	_createClass(UsersAction, [{
+		key: 'get',
+
+		//Get users or single application
+		value: function get(query) {
+			return this.utils.request.get(this.usersEndpoint).then(function (response) {
+				console.log('[MatterClient.apps().get()] App(s) data loaded:', response);
+				return response;
+			})['catch'](function (errRes) {
+				console.error('[MatterClient.apps().get()] Error getting apps list: ', errRes);
+				return Promise.reject(errRes);
+			});
+		}
+
+		//Add an application
+	}, {
+		key: 'add',
+		value: function add(appData) {
+			return this.utils.request.post(this.usersEndpoint, appData).then(function (response) {
+				console.log('[MatterClient.apps().add()] Application added successfully: ', response);
+				return new Application(response);
+			})['catch'](function (errRes) {
+				console.error('[MatterClient.getApps()] Error adding application: ', errRes);
+				return Promise.reject(errRes);
+			});
+		}
+
+		//Search with partial of username
+	}, {
+		key: 'search',
+		value: function search(query) {
+			console.log('search called:', query);
+			var searchEndpoint = this.usersEndpoint + '/search/';
+			if (query && _lodash2['default'].isString(query)) {
+				searchEndpoint += query;
+			}
+			console.log('searchEndpoint:', searchEndpoint);
+			return this.utils.request.get(searchEndpoint).then(function (response) {
+				console.log('[MatterClient.users().search()] Users(s) data loaded:', response);
+				return response;
+			})['catch'](function (errRes) {
+				console.error('[MatterClient.users().search()] Error getting apps list: ', errRes);
+				return Promise.reject(errRes);
+			});
+		}
+	}, {
+		key: 'usersEndpoint',
+		get: function get() {
+			return this.endpoint + '/users';
+		}
+	}]);
+
+	return UsersAction;
+})(_kyperMatter2['default']);
+
+exports['default'] = UsersAction;
+module.exports = exports['default'];
+
+},{"../config":247,"kyper-matter":232,"lodash":237}],245:[function(require,module,exports){
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _config = require('../config');
+
+var _config2 = _interopRequireDefault(_config);
 
 var _firebase = require('firebase');
 
@@ -43949,15 +44339,23 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _kyperMatter = require('kyper-matter');
+
+var _kyperMatter2 = _interopRequireDefault(_kyperMatter);
+
 /**
  * Application class.
  *
  */
 
-var Application = (function () {
+var Application = (function (_Matter) {
+	_inherits(Application, _Matter);
+
 	function Application(appData) {
 		_classCallCheck(this, Application);
 
+		//Call matter with name and settings
+		_get(Object.getPrototypeOf(Application.prototype), 'constructor', this).call(this, _config2['default'].appName, _config2['default'].matterOptions);
 		this.name = appData.name;
 		this.owner = appData.owner || null;
 		this.collaborators = appData.collaborators || [];
@@ -43995,7 +44393,7 @@ var Application = (function () {
 			} else {
 				//If AWS Credential do not exist, set them
 				if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
-					// console.info('AWS creds are being updated to make request');
+					// console.info('AWS creds are being updated to make this.utils.request');
 					setAWSConfig();
 				}
 				var s3 = new AWS.S3();
@@ -44042,7 +44440,7 @@ var Application = (function () {
 		value: function addStorage() {
 			//TODO:Add storage bucket
 			var endpoint = _config2['default'].serverUrl + '/apps/' + this.name + '/storage';
-			return _utilsRequest2['default'].post(endpoint, appData).then(function (response) {
+			return this.utils.request.post(endpoint, appData).then(function (response) {
 				console.log('[Application.addStorage()] Apps:', response);
 				return new Application(response);
 			})['catch'](function (errRes) {
@@ -44055,7 +44453,7 @@ var Application = (function () {
 		value: function applyTemplate() {
 			var endpoint = _config2['default'].serverUrl + '/apps/' + this.name + '/template';
 			console.log('Applying templates to existing');
-			// return request.post(endpoint, appData).then(function(response) {
+			// return this.utils.request.post(endpoint, appData).then(function(response) {
 			// 	console.log('[Application.addStorage()] Apps:', response);
 			// 	if (!apps.isList) {
 			// 		return new Application(response);
@@ -44069,7 +44467,7 @@ var Application = (function () {
 	}]);
 
 	return Application;
-})();
+})(_kyperMatter2['default']);
 
 exports['default'] = Application;
 
@@ -44166,7 +44564,7 @@ function combineLikeObjs(mappedArray) {
 }
 module.exports = exports['default'];
 
-},{"../config":247,"../utils/request":249,"firebase":231,"lodash":237}],243:[function(require,module,exports){
+},{"../config":247,"firebase":231,"kyper-matter":232,"lodash":237}],246:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
 	value: true
 });
@@ -44181,75 +44579,13 @@ var _config = require('../config');
 
 var _config2 = _interopRequireDefault(_config);
 
-var _utilsRequest = require('../utils/request');
+var _actionsAppsAction = require('../actions/AppsAction');
 
-var _utilsRequest2 = _interopRequireDefault(_utilsRequest);
+var _actionsAppsAction2 = _interopRequireDefault(_actionsAppsAction);
 
-//Actions for applications list
+var _actionsAppAction = require('../actions/AppAction');
 
-var AppsAction = (function () {
-	function AppsAction() {
-		_classCallCheck(this, AppsAction);
-
-		this.endpoint = _config2['default'].serverUrl + '/apps';
-	}
-
-	//Get applications or single application
-
-	_createClass(AppsAction, [{
-		key: 'get',
-		value: function get() {
-			return _utilsRequest2['default'].get(this.endpoint).then(function (response) {
-				console.log('[MatterClient.apps().get()] App(s) data loaded:', response);
-				return response;
-			})['catch'](function (errRes) {
-				console.error('[MatterClient.apps().get()] Error getting apps list: ', errRes);
-				return Promise.reject(errRes);
-			});
-		}
-
-		//Add an application
-	}, {
-		key: 'add',
-		value: function add(appData) {
-			return _utilsRequest2['default'].post(this.endpoint, appData).then(function (response) {
-				console.log('[MatterClient.apps().add()] Application added successfully: ', response);
-				return new Application(response);
-			})['catch'](function (errRes) {
-				console.error('[MatterClient.getApps()] Error adding application: ', errRes);
-				return Promise.reject(errRes);
-			});
-		}
-	}]);
-
-	return AppsAction;
-})();
-
-exports['default'] = AppsAction;
-module.exports = exports['default'];
-
-},{"../config":247,"../utils/request":249}],244:[function(require,module,exports){
-Object.defineProperty(exports, '__esModule', {
-	value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _config = require('../config');
-
-var _config2 = _interopRequireDefault(_config);
-
-var _AppsAction = require('./AppsAction');
-
-var _AppsAction2 = _interopRequireDefault(_AppsAction);
-
-var _AppAction = require('./AppAction');
-
-var _AppAction2 = _interopRequireDefault(_AppAction);
+var _actionsAppAction2 = _interopRequireDefault(_actionsAppAction);
 
 /**
  * User class.
@@ -44270,12 +44606,12 @@ var User = (function () {
 		key: 'app',
 		value: function app(appName) {
 			//TODO: Attach owner as well ?
-			return new _AppAction2['default'](appName);
+			return new _actionsAppAction2['default'](appName);
 		}
 	}, {
 		key: 'apps',
 		get: function get() {
-			return new _AppsAction2['default']();
+			return new _actionsAppsAction2['default']();
 		}
 	}]);
 
@@ -44285,188 +44621,7 @@ var User = (function () {
 exports['default'] = User;
 module.exports = exports['default'];
 
-},{"../config":247,"./AppAction":241,"./AppsAction":243}],245:[function(require,module,exports){
-Object.defineProperty(exports, '__esModule', {
-	value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _config = require('../config');
-
-var _config2 = _interopRequireDefault(_config);
-
-var _utilsRequest = require('../utils/request');
-
-var _utilsRequest2 = _interopRequireDefault(_utilsRequest);
-
-var _User = require('./User');
-
-var _User2 = _interopRequireDefault(_User);
-
-//Actions for specific user
-
-var UserAction = (function () {
-	function UserAction(userName) {
-		_classCallCheck(this, UserAction);
-
-		if (userName) {
-			this.name = userName;
-			this.endpoint = _config2['default'].serverUrl + '/users/' + this.name;
-		} else {
-			console.error('Username is required to start an UserAction');
-			throw new Error('Username is required to start an UserAction');
-		}
-	}
-
-	//Get userlications or single userlication
-
-	_createClass(UserAction, [{
-		key: 'get',
-		value: function get() {
-			return _utilsRequest2['default'].get(this.endpoint).then(function (response) {
-				console.log('[MatterClient.user().get()] App(s) data loaded:', response);
-				return new _User2['default'](response);
-			})['catch'](function (errRes) {
-				console.error('[MatterClient.user().get()] Error getting users list: ', errRes);
-				return Promise.reject(errRes);
-			});
-		}
-
-		//Update an userlication
-	}, {
-		key: 'update',
-		value: function update(userData) {
-			return _utilsRequest2['default'].put(this.endpoint, userData).then(function (response) {
-				console.log('[MatterClient.users().update()] App:', response);
-				return new _User2['default'](response);
-			})['catch'](function (errRes) {
-				console.error('[MatterClient.users().update()] Error updating user: ', errRes);
-				return Promise.reject(errRes);
-			});
-		}
-
-		//Delete an userlication
-		//TODO: Only do request if deleting personal account
-	}, {
-		key: 'del',
-		value: function del(userData) {
-			console.error('Deleting a user is currently disabled.');
-			// return request.delete(this.endpoint, userData).then((response) => {
-			// 	console.log('[MatterClient.users().del()] Apps:', response);
-			// 	return new User(response);
-			// })['catch']((errRes) => {
-			// 	console.error('[MatterClient.users().del()] Error deleting user: ', errRes);
-			// 	return Promise.reject(errRes);
-			// });
-		}
-	}]);
-
-	return UserAction;
-})();
-
-exports['default'] = UserAction;
-module.exports = exports['default'];
-
-},{"../config":247,"../utils/request":249,"./User":244}],246:[function(require,module,exports){
-Object.defineProperty(exports, '__esModule', {
-	value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _config = require('../config');
-
-var _config2 = _interopRequireDefault(_config);
-
-var _utilsRequest = require('../utils/request');
-
-var _utilsRequest2 = _interopRequireDefault(_utilsRequest);
-
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-//Actions for applications list
-
-var UsersAction = (function () {
-	function UsersAction() {
-		_classCallCheck(this, UsersAction);
-
-		this.endpoint = _config2['default'].serverUrl + '/users';
-	}
-
-	//Get applications or single application
-
-	_createClass(UsersAction, [{
-		key: 'get',
-		value: function get(query) {
-			var userEndpoint = this.endpoint;
-			if (query && !_lodash2['default'].isString(query)) {
-				var msg = 'Get only handles username as a string';
-				console.error(msg);
-				return Promise.reject({ message: msg });
-			}
-			if (query) {
-				userEndpoint = userEndpoint + '/' + query;
-			}
-			return _utilsRequest2['default'].get(userEndpoint).then(function (response) {
-				console.log('[MatterClient.apps().get()] App(s) data loaded:', response);
-				return response;
-			})['catch'](function (errRes) {
-				console.error('[MatterClient.apps().get()] Error getting apps list: ', errRes);
-				return Promise.reject(errRes);
-			});
-		}
-
-		//Add an application
-	}, {
-		key: 'add',
-		value: function add(appData) {
-			return _utilsRequest2['default'].post(this.endpoint, appData).then(function (response) {
-				console.log('[MatterClient.apps().add()] Application added successfully: ', response);
-				return new Application(response);
-			})['catch'](function (errRes) {
-				console.error('[MatterClient.getApps()] Error adding application: ', errRes);
-				return Promise.reject(errRes);
-			});
-		}
-
-		//Search with partial of username
-	}, {
-		key: 'search',
-		value: function search(query) {
-			console.log('search called:', query);
-			var searchEndpoint = this.endpoint + '/search/';
-			if (query && _lodash2['default'].isString(query)) {
-				searchEndpoint += query;
-			}
-			console.log('searchEndpoint:', searchEndpoint);
-			return _utilsRequest2['default'].get(searchEndpoint).then(function (response) {
-				console.log('[MatterClient.users().search()] Users(s) data loaded:', response);
-				return response;
-			})['catch'](function (errRes) {
-				console.error('[MatterClient.users().search()] Error getting apps list: ', errRes);
-				return Promise.reject(errRes);
-			});
-		}
-	}]);
-
-	return UsersAction;
-})();
-
-exports['default'] = UsersAction;
-module.exports = exports['default'];
-
-},{"../config":247,"../utils/request":249,"lodash":237}],247:[function(require,module,exports){
+},{"../actions/AppAction":241,"../actions/AppsAction":242,"../config":247}],247:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
 	value: true
 });
@@ -44474,6 +44629,10 @@ var config = {
 	serverUrl: 'http://tessellate.elasticbeanstalk.com',
 	tokenName: 'grout',
 	fbUrl: 'https://pruvit.firebaseio.com/',
+	appName: 'tessellate',
+	matterOptions: {
+		localServer: true
+	},
 	aws: {
 		region: 'us-east-1',
 		cognito: {
@@ -44511,25 +44670,25 @@ var _config = require('./config');
 
 var _config2 = _interopRequireDefault(_config);
 
-var _classesAppsAction = require('./classes/AppsAction');
-
-var _classesAppsAction2 = _interopRequireDefault(_classesAppsAction);
-
-var _classesAppAction = require('./classes/AppAction');
-
-var _classesAppAction2 = _interopRequireDefault(_classesAppAction);
-
-var _classesUsersAction = require('./classes/UsersAction');
-
-var _classesUsersAction2 = _interopRequireDefault(_classesUsersAction);
-
-var _classesUserAction = require('./classes/UserAction');
-
-var _classesUserAction2 = _interopRequireDefault(_classesUserAction);
-
 var _kyperMatter = require('kyper-matter');
 
 var _kyperMatter2 = _interopRequireDefault(_kyperMatter);
+
+var _actionsAppsAction = require('./actions/AppsAction');
+
+var _actionsAppsAction2 = _interopRequireDefault(_actionsAppsAction);
+
+var _actionsAppAction = require('./actions/AppAction');
+
+var _actionsAppAction2 = _interopRequireDefault(_actionsAppAction);
+
+var _actionsUsersAction = require('./actions/UsersAction');
+
+var _actionsUsersAction2 = _interopRequireDefault(_actionsUsersAction);
+
+var _actionsUserAction = require('./actions/UserAction');
+
+var _actionsUserAction2 = _interopRequireDefault(_actionsUserAction);
 
 /**Grout Client Class
  * @ description Extending matter provides token storage and login/logout/signup capabilities
@@ -44544,7 +44703,7 @@ var Grout = (function (_Matter) {
 		_classCallCheck(this, Grout);
 
 		//Call matter with tessellate
-		_get(Object.getPrototypeOf(Grout.prototype), 'constructor', this).call(this, 'tessellate', { localServer: true });
+		_get(Object.getPrototypeOf(Grout.prototype), 'constructor', this).call(this, _config2['default'].appName, _config2['default'].matterOptions);
 	}
 
 	//Start a new Apps Action
@@ -44554,8 +44713,8 @@ var Grout = (function (_Matter) {
 
 		//Start a new App action
 		value: function app(appName) {
-			console.log('New AppAction:', new _classesAppAction2['default'](appName));
-			return new _classesAppAction2['default'](appName);
+			console.log('New AppAction:', new _actionsAppAction2['default'](appName));
+			return new _actionsAppAction2['default'](appName);
 		}
 
 		//Start a new Users action
@@ -44564,18 +44723,18 @@ var Grout = (function (_Matter) {
 
 		//Start a new User action
 		value: function user(username) {
-			return new _classesUserAction2['default'](username);
+			return new _actionsUserAction2['default'](username);
 		}
 	}, {
 		key: 'apps',
 		get: function get() {
-			console.log('New AppsAction:', new _classesAppsAction2['default']());
-			return new _classesAppsAction2['default']();
+			console.log('New AppsAction:', new _actionsAppsAction2['default']());
+			return new _actionsAppsAction2['default']();
 		}
 	}, {
 		key: 'users',
 		get: function get() {
-			return new _classesUsersAction2['default']();
+			return new _actionsUsersAction2['default']();
 		}
 	}]);
 
@@ -44587,79 +44746,5 @@ var Grout = (function (_Matter) {
 exports['default'] = Grout;
 module.exports = exports['default'];
 
-},{"./classes/AppAction":241,"./classes/AppsAction":243,"./classes/UserAction":245,"./classes/UsersAction":246,"./config":247,"kyper-matter":232}],249:[function(require,module,exports){
-Object.defineProperty(exports, '__esModule', {
-	value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _config = require('../config');
-
-var _config2 = _interopRequireDefault(_config);
-
-var _kyperMatter = require('kyper-matter');
-
-var _kyperMatter2 = _interopRequireDefault(_kyperMatter);
-
-var _superagent = require('superagent');
-
-var _superagent2 = _interopRequireDefault(_superagent);
-
-var storage = new _kyperMatter2['default']('tesselate').storage;
-
-var request = {
-	get: function get(endpoint, queryData) {
-		var req = _superagent2['default'].get(endpoint);
-		if (queryData) {
-			req.query(queryData);
-		}
-		req = addAuthHeader(req);
-		return handleResponse(req);
-	},
-	post: function post(endpoint, data) {
-		var req = _superagent2['default'].post(endpoint).send(data);
-		req = addAuthHeader(req);
-		return handleResponse(req);
-	},
-	put: function put(endpoint, data) {
-		var req = _superagent2['default'].put(endpoint).send(data);
-		req = addAuthHeader(req);
-		return handleResponse(req);
-	},
-	del: function del(endpoint, data) {
-		var req = _superagent2['default'].put(endpoint).send(data);
-		req = addAuthHeader(req);
-		return handleResponse(req);
-	}
-
-};
-
-exports['default'] = request;
-
-function handleResponse(req) {
-	return new Promise(function (resolve, reject) {
-		req.end(function (err, res) {
-			if (!err) {
-				// console.log('Response:', res);
-				return resolve(res.body);
-			} else {
-				if (err.status == 401) {
-					console.warn('Unauthorized. You must be signed into make this request.');
-				}
-				return reject(err);
-			}
-		});
-	});
-}
-function addAuthHeader(req) {
-	if (storage.getItem(_config2['default'].tokenName)) {
-		req = req.set('Authorization', 'Bearer ' + storage.getItem(_config2['default'].tokenName));
-		console.log('Set auth header');
-	}
-	return req;
-}
-module.exports = exports['default'];
-
-},{"../config":247,"kyper-matter":232,"superagent":238}]},{},[248])(248)
+},{"./actions/AppAction":241,"./actions/AppsAction":242,"./actions/UserAction":243,"./actions/UsersAction":244,"./config":247,"kyper-matter":232}]},{},[248])(248)
 });

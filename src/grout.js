@@ -1,9 +1,9 @@
 import config from './config';
-import AppsAction from './classes/AppsAction';
-import AppAction from './classes/AppAction';
-import UsersAction from './classes/UsersAction';
-import UserAction from './classes/UserAction';
 import Matter from 'kyper-matter';
+import AppsAction from './actions/AppsAction';
+import AppAction from './actions/AppAction';
+import UsersAction from './actions/UsersAction';
+import UserAction from './actions/UserAction';
 
 /**Grout Client Class
  * @ description Extending matter provides token storage and login/logout/signup capabilities
@@ -12,7 +12,7 @@ class Grout extends Matter {
 	//TODO: Use getter/setter to make this not a function
 	constructor() {
 		//Call matter with tessellate
-		super('tessellate', {localServer: true});
+		super(config.appName, config.matterOptions);
 	}
 	//Start a new Apps Action
 	get apps() {

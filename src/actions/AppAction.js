@@ -1,22 +1,26 @@
 import config from '../config';
-import request from '../utils/request';
-import Application from './Application';
+import Application from '../classes/Application';
 import AWS from 'aws-sdk';
+import Matter from 'kyper-matter';
 
 //Actions for specific application
-class AppAction {
+class AppAction extends Matter {
 	constructor(appName) {
+		//Call matter with name and settings
+		super(config.appName, config.matterOptions);
 		if (appName) {
 			this.name = appName;
-			this.endpoint = `${config.serverUrl}/apps/${this.name}`;
 		} else {
 			console.error('Application name is required to start an AppAction');
 			throw new Error('Application name is required to start an AppAction');
 		}
 	}
+	get appEndpoint() {
+		return `${this.endpoint}/app/${this.name}`;
+	}
 	//Get applications or single application
 	get() {
-		return request.get(this.endpoint).then((response) => {
+		return this.utils.request.get(this.appEndpoint).then((response) => {
 			console.log('[MatterClient.app().get()] App(s) data loaded:', response);
 			return new Application(response);
 		})['catch']((errRes) => {
@@ -26,7 +30,7 @@ class AppAction {
 	}
 	//Update an application
 	update(appData) {
-		return request.put(this.endpoint, appData).then((response) => {
+		return this.utils.request.put(this.appEndpoint, appData).then((response) => {
 			console.log('[MatterClient.apps().update()] App:', response);
 			return new Application(response);
 		})['catch']((errRes) => {
@@ -36,7 +40,7 @@ class AppAction {
 	}
 	//Delete an application
 	del(appData) {
-		return request.delete(this.endpoint, appData).then((response) => {
+		return this.utils.request.delete(this.appEndpoint, appData).then((response) => {
 			console.log('[MatterClient.apps().del()] Apps:', response);
 			return new Application(response);
 		})['catch']((errRes) => {

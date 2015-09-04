@@ -2,6 +2,10 @@ let config = {
 	serverUrl: 'http://tessellate.elasticbeanstalk.com',
 	tokenName: 'grout',
 	fbUrl: 'https://pruvit.firebaseio.com/',
+	appName: 'tessellate',
+	matterOptions: {
+		localServer: true
+	},
 	aws: {
 		region: 'us-east-1',
 		cognito: {

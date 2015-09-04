@@ -63,11 +63,14 @@
       console.log('getApps called');
       grout.apps.get().then(function(appsList){
         console.log('apps list loaded:', appsList);
-        var outHtml = '<ul>';
-        appsList.forEach(function(app){
-        	outHtml += '<li>' + app.name + '</li></br>'
-        });
-        outHtml += '</ul>';
+        var outHtml = '<h2>No app data</h2>';
+        if (appsList) {
+          outHtml = '<ul>';
+          appsList.forEach(function(app){
+            outHtml += '<li>' + app.name + '</li></br>'
+          });
+          outHtml += '</ul>';
+        }
         document.getElementById("output").innerHTML = outHtml;
       });   
     }

@@ -1,14 +1,16 @@
 import config from '../config';
-import request from '../utils/request';
 import Firebase from 'firebase';
 import _ from 'lodash';
+import Matter from 'kyper-matter';
 
 /**
  * Application class.
  *
  */
-class Application {
+class Application extends Matter {
 	constructor(appData) {
+		//Call matter with name and settings
+		super(config.appName, config.matterOptions);
 		this.name = appData.name;
 		this.owner = appData.owner || null;
 		this.collaborators = appData.collaborators || [];
@@ -39,7 +41,7 @@ class Application {
 		} else {
 			//If AWS Credential do not exist, set them
 			if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
-				// console.info('AWS creds are being updated to make request');
+				// console.info('AWS creds are being updated to make this.utils.request');
 				setAWSConfig();
 			}
 			var s3 = new AWS.S3();
@@ -82,7 +84,7 @@ class Application {
 	addStorage() {
 		//TODO:Add storage bucket
 		var endpoint = config.serverUrl + '/apps/' + this.name + '/storage';
-		return request.post(endpoint, appData).then((response) => {
+		return this.utils.request.post(endpoint, appData).then((response) => {
 			console.log('[Application.addStorage()] Apps:', response);
 			return new Application(response);
 		})['catch']((errRes) => {
@@ -93,7 +95,7 @@ class Application {
 	applyTemplate() {
 		var endpoint = config.serverUrl + '/apps/' + this.name + '/template';
 		console.log('Applying templates to existing');
-		// return request.post(endpoint, appData).then(function(response) {
+		// return this.utils.request.post(endpoint, appData).then(function(response) {
 		// 	console.log('[Application.addStorage()] Apps:', response);
 		// 	if (!apps.isList) {
 		// 		return new Application(response);
