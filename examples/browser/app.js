@@ -88,6 +88,8 @@
       grout.users.get().then(function(app){
         console.log('apps list loaded:', app);
         document.getElementById("output").innerHTML = JSON.stringify(app);
+      }, function(err){
+        console.error('Error getting users:', err);
       });
     }
     //Search users based on a provided string

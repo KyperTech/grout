@@ -7,22 +7,23 @@ function _inherits(subClass, superClass) { if (typeof superClass !== 'function' 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('lodash'), require('firebase'), require('jwt-decode'), require('superagent')) : typeof define === 'function' && define.amd ? define(['lodash', 'firebase', 'jwt-decode', 'superagent'], factory) : global.Grout = factory(global._, global.Firebase, global.jwtDecode, global.superagent);
-})(this, function (_, Firebase, jwtDecode, superagent) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('lodash'), require('jwt-decode'), require('superagent'), require('firebase')) : typeof define === 'function' && define.amd ? define(['lodash', 'jwt-decode', 'superagent', 'firebase'], factory) : global.Grout = factory(global._, global.jwtDecode, global.superagent, global.Firebase);
+})(this, function (_, jwtDecode, superagent, Firebase) {
 	'use strict';
 
 	_ = 'default' in _ ? _['default'] : _;
-	Firebase = 'default' in Firebase ? Firebase['default'] : Firebase;
 	jwtDecode = 'default' in jwtDecode ? jwtDecode['default'] : jwtDecode;
 	superagent = 'default' in superagent ? superagent['default'] : superagent;
+	Firebase = 'default' in Firebase ? Firebase['default'] : Firebase;
 
 	var _config = {
 		serverUrl: 'http://tessellate.elasticbeanstalk.com',
 		tokenName: 'tessellate',
-		tokenDataName: 'tessellate-tokenData'
+		tokenDataName: 'tessellate-tokenData',
+		tokenUserDataName: 'tessellate-currentUser'
 	};
 
-	var logger = {
+	var ____logger = {
 		log: function log(logData) {
 			var msgArgs = buildMessageArgs(logData);
 			if (_config.envName == 'local') {
@@ -189,7 +190,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					//Clear session storage
 					window.sessionStorage.removeItem(itemName);
 				} catch (err) {
-					logger.error({ description: 'Error removing item from session storage', error: err, obj: 'storage', func: 'removeItem' });
+					____logger.error({ description: 'Error removing item from session storage', error: err, obj: 'storage', func: 'removeItem' });
 				}
 			}
 		},
@@ -209,7 +210,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					//Clear session storage
 					window.sessionStorage.clear();
 				} catch (err) {
-					logger.warn('Session storage could not be cleared.', err);
+					____logger.warn('Session storage could not be cleared.', err);
 				}
 			}
 		}
@@ -224,7 +225,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						window.sessionStorage.removeItem(testKey);
 						return true;
 					} catch (err) {
-						logger.error({ description: 'Error saving to session storage', error: err, obj: 'storage', func: 'localExists' });
+						____logger.error({ description: 'Error saving to session storage', error: err, obj: 'storage', func: 'localExists' });
 						return false;
 					}
 				} else {
@@ -242,7 +243,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			try {
 				tokenData = jwtDecode(tokenStr);
 			} catch (err) {
-				logger.error({ description: 'Error decoding token.', data: tokenData, error: err, func: 'decodeToken', file: 'token' });
+				____logger.error({ description: 'Error decoding token.', data: tokenData, error: err, func: 'decodeToken', file: 'token' });
 				throw new Error('Invalid token string.');
 			}
 		}
@@ -255,7 +256,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		'delete': function _delete() {
 			storage.removeItem(_config.tokenName);
 			storage.removeItem(_config.tokenDataName);
-			logger.log({ description: 'Token was removed.', func: 'delete', obj: 'token' });
+			____logger.log({ description: 'Token was removed.', func: 'delete', obj: 'token' });
 		}
 	}, {
 		string: {
@@ -263,7 +264,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				return storage.getItem(_config.tokenName);
 			},
 			set: function set(tokenStr) {
-				logger.log({ description: 'Token was set.', token: tokenStr, func: 'string', obj: 'token' });
+				____logger.log({ description: 'Token was set.', token: tokenStr, func: 'string', obj: 'token' });
 				this.data = jwtDecode(tokenStr);
 				storage.setItem(_config.tokenName, tokenStr);
 			},
@@ -282,9 +283,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				if (_.isString(tokenData)) {
 					var tokenStr = tokenData;
 					tokenData = decodeToken(tokenStr);
-					logger.info({ description: 'Token data was set as string. Decoding token.', token: tokenStr, tokenData: tokenData, func: 'data', obj: 'token' });
+					____logger.info({ description: 'Token data was set as string. Decoding token.', token: tokenStr, tokenData: tokenData, func: 'data', obj: 'token' });
 				} else {
-					logger.log({ description: 'Token data was set.', data: tokenData, func: 'data', obj: 'token' });
+					____logger.log({ description: 'Token data was set.', data: tokenData, func: 'data', obj: 'token' });
 					storage.setItem(_config.tokenDataName, tokenData);
 				}
 			},
@@ -293,7 +294,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}
 	});
 
-	var request = {
+	var __request = {
 		get: function get(endpoint, queryData) {
 			var req = superagent.get(endpoint);
 			if (queryData) {
@@ -327,7 +328,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					return resolve(res.body);
 				} else {
 					if (err.status == 401) {
-						logger.warn('Unauthorized. You must be signed into make this request.');
+						console.warn('Unauthorized. You must be signed into make this request.');
 					}
 					return reject(err);
 				}
@@ -337,7 +338,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	function addAuthHeader(req) {
 		if (token.string) {
 			req = req.set('Authorization', 'Bearer ' + token.string);
-			logger.info({ message: 'Set auth header', func: 'addAuthHeader', file: 'request' });
+			console.info({ message: 'Set auth header', func: 'addAuthHeader', file: 'request' });
 		}
 		return req;
 	}
@@ -351,7 +352,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			_classCallCheck(this, Matter);
 
 			if (!appName) {
-				logger.error({ description: 'Application name requires to use Matter.', func: 'constructor', obj: 'Matter' });
+				____logger.error({ description: 'Application name requires to use Matter.', func: 'constructor', obj: 'Matter' });
 				throw new Error('Application name is required to use Matter');
 			} else {
 				this.name = appName;
@@ -372,16 +373,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     *
     */
 			value: function signup(signupData) {
-				return request.post(this.endpoint + '/signup', signupData).then(function (response) {
-					logger.log({ description: 'Account request successful.', signupData: signupData, response: response, func: 'signup', obj: 'Matter' });
+				return __request.post(this.endpoint + '/signup', signupData).then(function (response) {
+					____logger.log({ description: 'Account request successful.', signupData: signupData, response: response, func: 'signup', obj: 'Matter' });
 					if (_.has(response, 'account')) {
 						return response.account;
 					} else {
-						logger.warn({ description: 'Account was not contained in signup response.', signupData: signupData, response: response, func: 'signup', obj: 'Matter' });
+						____logger.warn({ description: 'Account was not contained in signup response.', signupData: signupData, response: response, func: 'signup', obj: 'Matter' });
 						return response;
 					}
 				})['catch'](function (errRes) {
-					logger.error({ description: 'Error requesting signup.', signupData: signupData, error: errRes, func: 'signup', obj: 'Matter' });
+					____logger.error({ description: 'Error requesting signup.', signupData: signupData, error: errRes, func: 'signup', obj: 'Matter' });
 					return Promise.reject(errRes);
 				});
 			}
@@ -395,25 +396,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var _this = this;
 
 				if (!loginData || !loginData.password || !loginData.username) {
-					logger.error({ description: 'Username/Email and Password are required to login', func: 'login', obj: 'Matter' });
+					____logger.error({ description: 'Username/Email and Password are required to login', func: 'login', obj: 'Matter' });
 					return Promise.reject({ message: 'Username/Email and Password are required to login' });
 				}
-				return request.put(this.endpoint + '/login', loginData).then(function (response) {
+				return __request.put(this.endpoint + '/login', loginData).then(function (response) {
 					if (_.has(response, 'data') && _.has(response.data, 'status') && response.data.status == 409) {
-						logger.warn({ description: 'Account not found.', response: response, func: 'login', obj: 'Matter' });
+						____logger.warn({ description: 'Account not found.', response: response, func: 'login', obj: 'Matter' });
 						return Promise.reject(response.data);
 					} else {
-						logger.log({ description: 'Successful login.', response: response, func: 'login', obj: 'Matter' });
+						____logger.log({ description: 'Successful login.', response: response, func: 'login', obj: 'Matter' });
 						if (_.has(response, 'token')) {
 							_this.token.string = response.token;
 						}
 						if (_.has(response, 'account')) {
-							_this.storage.setItem('currentUser', response.account);
+							_this.storage.setItem(_config.tokenUserDataName, response.account);
 						}
 						return response.account;
 					}
 				})['catch'](function (errRes) {
-					logger.error({ description: 'Error requesting login.', error: errRes, status: errRes.status, func: 'login', obj: 'Matter' });
+					____logger.error({ description: 'Error requesting login.', error: errRes, status: errRes.status, func: 'login', obj: 'Matter' });
 					if (errRes.status == 409 || errRes.status == 400) {
 						errRes = errRes.response.text;
 					}
@@ -428,14 +429,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function logout() {
 				var _this2 = this;
 
-				return request.put(this.endpoint + '/logout').then(function (response) {
-					logger.log({ description: 'Logout successful.', response: response, func: 'logout', obj: 'Matter' });
-					_this2.storage.removeItem('currentUser');
+				return __request.put(this.endpoint + '/logout').then(function (response) {
+					____logger.log({ description: 'Logout successful.', response: response, func: 'logout', obj: 'Matter' });
+					_this2.currentUser = null;
 					_this2.token['delete']();
 					return response;
 				})['catch'](function (errRes) {
-					logger.error({ description: 'Error requesting log out: ', error: errRes, func: 'logout', obj: 'Matter' });
-					_this2.storage.removeItem('currentUser');
+					____logger.error({ description: 'Error requesting log out: ', error: errRes, func: 'logout', obj: 'Matter' });
+					_this2.storage.removeItem(_config.tokenUserDataName);
 					_this2.token['delete']();
 					return Promise.reject(errRes);
 				});
@@ -445,18 +446,27 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function getCurrentUser() {
 				var _this3 = this;
 
-				if (this.storage.item('currentUser')) {
-					return Promise.resove(this.storage.item('currentUser'));
+				if (this.storage.item(_config.tokenUserDataName)) {
+					return Promise.resove(this.storage.getItem(_config.tokenUserDataName));
 				} else {
-					return request.get(this.endpoint + '/user').then(function (response) {
-						//TODO: Save user information locally
-						logger.log({ description: 'Current User Request responded.', responseData: response.data, func: 'currentUser', obj: 'Matter' });
-						_this3.currentUser = response.data;
-						return response.data;
-					})['catch'](function (errRes) {
-						logger.error({ description: 'Error requesting current user.', error: errRes, func: 'currentUser', obj: 'Matter' });
-						return Promise.reject(errRes);
-					});
+					if (this.isLoggedIn) {
+						return __request.get(this.endpoint + '/user').then(function (response) {
+							//TODO: Save user information locally
+							____logger.log({ description: 'Current User Request responded.', responseData: response, func: 'currentUser', obj: 'Matter' });
+							_this3.currentUser = response;
+							return response;
+						})['catch'](function (errRes) {
+							if (err.status == 401) {
+								____logger.warn({ description: 'Called for current user without token.', error: errRes, func: 'currentUser', obj: 'Matter' });
+								return Promise.resolve(null);
+							} else {
+								____logger.error({ description: 'Error requesting current user.', error: errRes, func: 'currentUser', obj: 'Matter' });
+								return Promise.reject(errRes);
+							}
+						});
+					} else {
+						return Promise.resolve(null);
+					}
 				}
 			}
 		}, {
@@ -468,17 +478,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var _this4 = this;
 
 				if (!this.isLoggedIn) {
-					logger.error({ description: 'No current user profile to update.', func: 'updateProfile', obj: 'Matter' });
+					____logger.error({ description: 'No current user profile to update.', func: 'updateProfile', obj: 'Matter' });
 					return Promise.reject({ message: 'Must be logged in to update profile.' });
 				}
 				//Send update request
-				logger.warn({ description: 'Calling update endpoint.', endpoint: this.endpoint + '/user/' + this.token.data.username, func: 'updateProfile', obj: 'Matter' });
-				return request.put(this.endpoint + '/user/' + this.token.data.username, updateData).then(function (response) {
-					logger.log({ description: 'Update profile request responded.', responseData: response, func: 'updateProfile', obj: 'Matter' });
+				____logger.warn({ description: 'Calling update endpoint.', endpoint: this.endpoint + '/user/' + this.token.data.username, func: 'updateProfile', obj: 'Matter' });
+				return __request.put(this.endpoint + '/user/' + this.token.data.username, updateData).then(function (response) {
+					____logger.log({ description: 'Update profile request responded.', responseData: response, func: 'updateProfile', obj: 'Matter' });
 					_this4.currentUser = response;
 					return response;
 				})['catch'](function (errRes) {
-					logger.error({ description: 'Error requesting current user.', error: errRes, func: 'updateProfile', obj: 'Matter' });
+					____logger.error({ description: 'Error requesting current user.', error: errRes, func: 'updateProfile', obj: 'Matter' });
 					return Promise.reject(errRes);
 				});
 			}
@@ -493,7 +503,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var _this5 = this;
 
 				if (!this.isLoggedIn) {
-					logger.log({ description: 'No logged in user to check.', func: 'isInGroup', obj: 'Matter' });
+					____logger.log({ description: 'No logged in user to check.', func: 'isInGroup', obj: 'Matter' });
 					return false;
 				}
 				//Check if user is
@@ -504,14 +514,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						var groupsArray = groupName.split(',');
 						if (groupsArray.length > 1) {
 							//String list of groupts
-							logger.info({ description: 'String list of groups.', list: groupsArray, func: 'isInGroup', obj: 'Matter' });
+							____logger.info({ description: 'String list of groups.', list: groupsArray, func: 'isInGroup', obj: 'Matter' });
 							return {
 								v: _this5.isInGroups(groupsArray)
 							};
 						} else {
 							//Single group
 							var groups = _this5.token.data.groups || [];
-							logger.log({ description: 'Checking if user is in group.', group: groupName, userGroups: _this5.token.data.groups || [], func: 'isInGroup', obj: 'Matter' });
+							____logger.log({ description: 'Checking if user is in group.', group: groupName, userGroups: _this5.token.data.groups || [], func: 'isInGroup', obj: 'Matter' });
 							return {
 								v: _.any(groups, function (group) {
 									return groupName == group.name;
@@ -524,7 +534,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				} else if (checkGroups && _.isArray(checkGroups)) {
 					//Array of roles
 					//Check that user is in every group
-					logger.info({ description: 'Array of groups.', list: checkGroups, func: 'isInGroup', obj: 'Matter' });
+					____logger.info({ description: 'Array of groups.', list: checkGroups, func: 'isInGroup', obj: 'Matter' });
 					return this.isInGroups(checkGroups);
 				} else {
 					return false;
@@ -555,7 +565,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					}
 					return this.isInGroup(groupsArray[0]);
 				} else {
-					logger.error({ description: 'Invalid groups list.', func: 'isInGroups', obj: 'Matter' });
+					____logger.error({ description: 'Invalid groups list.', func: 'isInGroups', obj: 'Matter' });
 				}
 			}
 		}, {
@@ -564,29 +574,29 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var serverUrl = _config.serverUrl;
 				if (_.has(this, 'options') && this.options.localServer) {
 					serverUrl = 'http://localhost:4000';
-					logger.info({ description: 'LocalServer option was set to true. Now server url is local server.', url: serverUrl, func: 'endpoint', obj: 'Matter' });
+					____logger.info({ description: 'LocalServer option was set to true. Now server url is local server.', url: serverUrl, func: 'endpoint', obj: 'Matter' });
 				}
 				if (this.name == 'tessellate') {
 					//Remove url if host is server
 					if (window && _.has(window, 'location') && window.location.host == serverUrl) {
 						serverUrl = '';
-						logger.info({ description: 'Host is Server, serverUrl simplified!', url: serverUrl, func: 'endpoint', obj: 'Matter' });
+						____logger.info({ description: 'Host is Server, serverUrl simplified!', url: serverUrl, func: 'endpoint', obj: 'Matter' });
 					}
 				} else {
 					serverUrl = _config.serverUrl + '/apps/' + this.name;
-					logger.info({ description: 'Server url set.', url: serverUrl, func: 'endpoint', obj: 'Matter' });
+					____logger.info({ description: 'Server url set.', url: serverUrl, func: 'endpoint', obj: 'Matter' });
 				}
 				return serverUrl;
 			}
 		}, {
 			key: 'currentUser',
 			set: function set(userData) {
-				logger.log({ description: 'Current User Request responded.', user: userData, func: 'currentUser', obj: 'Matter' });
-				this.storage.setItem(userData);
+				____logger.log({ description: 'Current User set.', user: userData, func: 'currentUser', obj: 'Matter' });
+				this.storage.setItem(_config.tokenUserDataName, userData);
 			},
 			get: function get() {
-				if (this.storage.getItem('currentUser')) {
-					return this.storage.getItem('currentUser');
+				if (this.storage.getItem(_config.tokenUserDataName)) {
+					return this.storage.getItem(_config.tokenUserDataName);
 				} else {
 					return null;
 				}
@@ -607,7 +617,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'utils',
 			get: function get() {
-				return { logger: logger, request: request, storage: storage };
+				return { logger: ____logger, request: __request, storage: storage };
 			}
 		}, {
 			key: 'isLoggedIn',
@@ -639,19 +649,218 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}
 	};
 
-	/**
-  * Application class.
-  *
-  */
+	var matter = new Matter(config.appName, config.matterOptions);
 
-	var _Application = (function (_Matter) {
-		_inherits(_Application, _Matter);
+	//Actions for specific user
 
+	var GroupAction = (function () {
+		function GroupAction(userName) {
+			_classCallCheck(this, GroupAction);
+
+			//Call matter with name and settings
+			if (userName) {
+				this.username = userName;
+			} else {
+				console.error('Username is required to start an GroupAction');
+				throw new Error('Username is required to start an GroupAction');
+			}
+		}
+
+		_createClass(GroupAction, [{
+			key: 'get',
+
+			//Get userlications or single userlication
+			value: function get() {
+				return matter.utils.request.get(this.userEndpoint).then(function (response) {
+					console.log('[MatterClient.user().get()] App(s) data loaded:', response);
+					return response;
+				})['catch'](function (errRes) {
+					console.error('[MatterClient.user().get()] Error getting users list: ', errRes);
+					return Promise.reject(errRes);
+				});
+			}
+
+			//Update an userlication
+		}, {
+			key: 'update',
+			value: function update(userData) {
+				return matter.utils.request.put(this.userEndpoint, userData).then(function (response) {
+					console.log('[MatterClient.users().update()] App:', response);
+					return response;
+				})['catch'](function (errRes) {
+					console.error('[MatterClient.users().update()] Error updating user: ', errRes);
+					return Promise.reject(errRes);
+				});
+			}
+
+			//Delete an userlication
+			//TODO: Only do matter.utils.request if deleting personal account
+		}, {
+			key: 'del',
+			value: function del(userData) {
+				console.error('Deleting a user is currently disabled.');
+				// return matter.utils.request.delete(this.endpoint, userData).then((response) => {
+				// 	console.log('[MatterClient.users().del()] Apps:', response);
+				// 	return new User(response);
+				// })['catch']((errRes) => {
+				// 	console.error('[MatterClient.users().del()] Error deleting user: ', errRes);
+				// 	return Promise.reject(errRes);
+				// });
+			}
+		}, {
+			key: 'userEndpoint',
+			get: function get() {
+				return matter.endpoint + '/users/' + this.username;
+			}
+		}]);
+
+		return GroupAction;
+	})();
+
+	var ___logger = matter.utils.logger;
+	//Actions for users list
+
+	var GroupsAction = (function () {
+		function GroupsAction() {
+			_classCallCheck(this, GroupsAction);
+		}
+
+		_createClass(GroupsAction, [{
+			key: 'get',
+
+			//Get users or single application
+			value: function get() {
+				console.log({ description: 'Users get called.', func: 'get', obj: 'GroupsAction' });
+				return matter.utils.request.get(this.usersEndpoint).then(function (response) {
+					console.log('users loaded:', response);
+					return response;
+				})['catch'](function (errRes) {
+					console.error('error getting users');
+					return Promise.reject(errRes);
+				});
+			}
+
+			//Add an application
+		}, {
+			key: 'add',
+			value: function add(appData) {
+				return this.utils.request.post(this.usersEndpoint, appData).then(function (response) {
+					console.log('[MatterClient.users().add()] Application added successfully: ', response);
+					return new Application(response);
+				})['catch'](function (errRes) {
+					console.error('[MatterClient.getApps()] Error adding application: ', errRes);
+					return Promise.reject(errRes);
+				});
+			}
+
+			//Search with partial of username
+		}, {
+			key: 'search',
+			value: function search(query) {
+				console.log('search called:', query);
+				var searchEndpoint = this.usersEndpoint + '/search/';
+				if (query && _.isString(query)) {
+					searchEndpoint += query;
+				}
+				if (!query || query == '') {
+					___logger.log({ description: 'Null query, returning empty array.', func: 'search', obj: 'GroupsAction' });
+					return Promise.resolve([]);
+				}
+				return matter.utils.request.get(searchEndpoint).then(function (response) {
+					console.log('[MatterClient.users().search()] Users(s) data loaded:', response);
+					return response;
+				})['catch'](function (errRes) {
+					console.error('[MatterClient.users().search()] Error getting users list: ', errRes);
+					return Promise.reject(errRes);
+				});
+			}
+		}, {
+			key: 'usersEndpoint',
+			get: function get() {
+				return matter.endpoint + '/users';
+			}
+		}]);
+
+		return GroupsAction;
+	})();
+
+	var __logger = matter.utils.logger;
+	//Actions for users list
+
+	var UsersAction = (function () {
+		function UsersAction() {
+			_classCallCheck(this, UsersAction);
+		}
+
+		/**
+   * Application class.
+   *
+   */
+
+		_createClass(UsersAction, [{
+			key: 'get',
+
+			//Get users or single application
+			value: function get() {
+				console.log({ description: 'Users get called.', func: 'get', obj: 'UsersAction' });
+				return matter.utils.request.get(this.usersEndpoint).then(function (response) {
+					console.log('users loaded:', response);
+					return response;
+				})['catch'](function (errRes) {
+					console.error('error getting users');
+					return Promise.reject(errRes);
+				});
+			}
+
+			//Add an application
+		}, {
+			key: 'add',
+			value: function add(appData) {
+				return this.utils.request.post(this.usersEndpoint, appData).then(function (response) {
+					console.log('[MatterClient.users().add()] Application added successfully: ', response);
+					return new Application(response);
+				})['catch'](function (errRes) {
+					console.error('[MatterClient.getApps()] Error adding application: ', errRes);
+					return Promise.reject(errRes);
+				});
+			}
+
+			//Search with partial of username
+		}, {
+			key: 'search',
+			value: function search(query) {
+				console.log('search called:', query);
+				var searchEndpoint = this.usersEndpoint + '/search/';
+				if (query && _.isString(query)) {
+					searchEndpoint += query;
+				}
+				if (!query || query == '') {
+					__logger.log({ description: 'Null query, returning empty array.', func: 'search', obj: 'UsersAction' });
+					return Promise.resolve([]);
+				}
+				return matter.utils.request.get(searchEndpoint).then(function (response) {
+					console.log('[MatterClient.users().search()] Users(s) data loaded:', response);
+					return response;
+				})['catch'](function (errRes) {
+					console.error('[MatterClient.users().search()] Error getting users list: ', errRes);
+					return Promise.reject(errRes);
+				});
+			}
+		}, {
+			key: 'usersEndpoint',
+			get: function get() {
+				return matter.endpoint + '/users';
+			}
+		}]);
+
+		return UsersAction;
+	})();
+
+	var _Application = (function () {
 		function _Application(appData) {
 			_classCallCheck(this, _Application);
 
 			//Call matter with name and settings
-			_get(Object.getPrototypeOf(_Application.prototype), 'constructor', this).call(this, config.appName, config.matterOptions);
 			this.name = appData.name;
 			this.owner = appData.owner || null;
 			this.collaborators = appData.collaborators || [];
@@ -659,6 +868,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			this.updatedAt = appData.updatedAt;
 			this.frontend = appData.frontend || {};
 			this.backend = appData.backend || {};
+			this.groups = appData.groups || null;
+			this.directories = appData.directories || null;
 			if (Firebase) {
 				this.fbRef = new Firebase(config.fbUrl + appData.name);
 			}
@@ -693,7 +904,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				} else {
 					//If AWS Credential do not exist, set them
 					if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
-						// console.info('AWS creds are being updated to make this.utils.request');
+						// console.info('AWS creds are being updated to make matter.utils.request');
 						setAWSConfig();
 					}
 					var s3 = new AWS.S3();
@@ -740,7 +951,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function addStorage() {
 				//TODO:Add storage bucket
 				var endpoint = config.serverUrl + '/apps/' + this.name + '/storage';
-				return this.utils.request.post(endpoint, appData).then(function (response) {
+				return matter.utils.request.post(endpoint, appData).then(function (response) {
 					console.log('[Application.addStorage()] Apps:', response);
 					return new _Application(response);
 				})['catch'](function (errRes) {
@@ -753,7 +964,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function applyTemplate() {
 				var endpoint = config.serverUrl + '/apps/' + this.name + '/template';
 				console.log('Applying templates to existing');
-				// return this.utils.request.post(endpoint, appData).then(function(response) {
+				// return matter.utils.request.post(endpoint, appData).then(function(response) {
 				// 	console.log('[Application.addStorage()] Apps:', response);
 				// 	if (!apps.isList) {
 				// 		return new Application(response);
@@ -764,10 +975,35 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				// 	return Promise.reject(errRes);
 				// });
 			}
+		}, {
+			key: 'user',
+			value: function user(userData) {
+				//TODO: Handle userData being a string or object
+				//TODO: Handle this being an application's users action
+				return new UserAction(userData);
+			}
+		}, {
+			key: 'group',
+			value: function group(groupData) {
+				//TODO: Handle this being an application's group action
+				return new GroupAction(groupData);
+			}
+		}, {
+			key: 'users',
+			get: function get() {
+				//TODO: Handle this being an application's users action
+				return new UsersAction();
+			}
+		}, {
+			key: 'groups',
+			get: function get() {
+				//TODO: Handle this being an application's groups action
+				return new GroupsAction();
+			}
 		}]);
 
 		return _Application;
-	})(Matter);
+	})();
 
 	function setAWSConfig() {
 		AWS.config.update({
@@ -860,14 +1096,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	//Actions for specific application
 
-	var AppAction = (function (_Matter2) {
-		_inherits(AppAction, _Matter2);
-
+	var AppAction = (function () {
 		function AppAction(appName) {
 			_classCallCheck(this, AppAction);
 
 			//Call matter with name and settings
-			_get(Object.getPrototypeOf(AppAction.prototype), 'constructor', this).call(this, config.appName, config.matterOptions);
 			if (appName) {
 				this.name = appName;
 			} else {
@@ -883,7 +1116,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			//Get applications or single application
 			value: function get() {
-				return this.utils.request.get(this.appEndpoint).then(function (response) {
+				return matter.utils.request.get(this.appEndpoint).then(function (response) {
 					console.log('[MatterClient.app().get()] App(s) data loaded:', response);
 					return new _Application(response);
 				})['catch'](function (errRes) {
@@ -896,7 +1129,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'update',
 			value: function update(appData) {
-				return this.utils.request.put(this.appEndpoint, appData).then(function (response) {
+				return matter.utils.request.put(this.appEndpoint, appData).then(function (response) {
 					console.log('[MatterClient.apps().update()] App:', response);
 					return new _Application(response);
 				})['catch'](function (errRes) {
@@ -909,7 +1142,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'del',
 			value: function del(appData) {
-				return this.utils.request['delete'](this.appEndpoint, appData).then(function (response) {
+				return matter.utils.request['delete'](this.appEndpoint, appData).then(function (response) {
 					console.log('[MatterClient.apps().del()] Apps:', response);
 					return new _Application(response);
 				})['catch'](function (errRes) {
@@ -951,21 +1184,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'appEndpoint',
 			get: function get() {
-				return this.endpoint + '/app/' + this.name;
+				return matter.endpoint + '/apps/' + this.name;
 			}
 		}]);
 
 		return AppAction;
-	})(Matter);
+	})();
 
-	var AppsAction = (function (_Matter3) {
-		_inherits(AppsAction, _Matter3);
-
+	var AppsAction = (function () {
 		function AppsAction() {
 			_classCallCheck(this, AppsAction);
-
-			//Call matter with name and settings
-			_get(Object.getPrototypeOf(AppsAction.prototype), 'constructor', this).call(this, config.appName, config.matterOptions);
 		}
 
 		/**
@@ -978,8 +1206,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			//Get applications or single application
 			value: function get() {
-				console.warn('this.utils:', this.endpoint);
-				return this.utils.request.get(this.appsEndpoint).then(function (response) {
+				console.warn('matter.utils:', matter.utils);
+				return matter.utils.request.get(this.appsEndpoint).then(function (response) {
 					console.log('[MatterClient.apps().get()] App(s) data loaded:', response);
 					return response;
 				})['catch'](function (errRes) {
@@ -992,7 +1220,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'add',
 			value: function add(appData) {
-				return this.utils.request.post(this.appsEndpoint, appData).then(function (response) {
+				return matter.utils.request.post(this.appsEndpoint, appData).then(function (response) {
 					console.log('[MatterClient.apps().add()] Application added successfully: ', response);
 					return new Application(response);
 				})['catch'](function (errRes) {
@@ -1002,13 +1230,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			}
 		}, {
 			key: 'appsEndpoint',
+
+			//Call matter with name and settings
 			get: function get() {
-				return this.endpoint + '/apps';
+				console.log('matter.endpoint is currently:', matter.endpoint);
+				return matter.endpoint + '/apps';
 			}
 		}]);
 
 		return AppsAction;
-	})(Matter);
+	})();
 
 	var User = (function () {
 		function User(userData) {
@@ -1038,14 +1269,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return User;
 	})();
 
-	var UserAction = (function (_Matter4) {
-		_inherits(UserAction, _Matter4);
-
+	var UserAction = (function () {
 		function UserAction(userName) {
 			_classCallCheck(this, UserAction);
 
 			//Call matter with name and settings
-			_get(Object.getPrototypeOf(UserAction.prototype), 'constructor', this).call(this, config.appName, config.matterOptions);
 			if (userName) {
 				this.username = userName;
 			} else {
@@ -1054,14 +1282,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			}
 		}
 
-		//Actions for users list
-
 		_createClass(UserAction, [{
 			key: 'get',
 
 			//Get userlications or single userlication
 			value: function get() {
-				return this.utils.request.get(this.userEndpoint).then(function (response) {
+				return matter.utils.request.get(this.userEndpoint).then(function (response) {
 					console.log('[MatterClient.user().get()] App(s) data loaded:', response);
 					return new User(response);
 				})['catch'](function (errRes) {
@@ -1074,7 +1300,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'update',
 			value: function update(userData) {
-				return this.utils.request.put(this.userEndpoint, userData).then(function (response) {
+				return matter.utils.request.put(this.userEndpoint, userData).then(function (response) {
 					console.log('[MatterClient.users().update()] App:', response);
 					return new User(response);
 				})['catch'](function (errRes) {
@@ -1084,12 +1310,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			}
 
 			//Delete an userlication
-			//TODO: Only do this.utils.request if deleting personal account
+			//TODO: Only do matter.utils.request if deleting personal account
 		}, {
 			key: 'del',
 			value: function del(userData) {
 				console.error('Deleting a user is currently disabled.');
-				// return this.utils.request.delete(this.endpoint, userData).then((response) => {
+				// return matter.utils.request.delete(this.endpoint, userData).then((response) => {
 				// 	console.log('[MatterClient.users().del()] Apps:', response);
 				// 	return new User(response);
 				// })['catch']((errRes) => {
@@ -1100,37 +1326,109 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'userEndpoint',
 			get: function get() {
-				return this.endpoint + '/users/' + this.username;
+				return matter.endpoint + '/users/' + this.username;
 			}
 		}]);
 
 		return UserAction;
-	})(Matter);
+	})();
 
-	var UsersAction = (function (_Matter5) {
-		_inherits(UsersAction, _Matter5);
+	var _request = matter.utils.request;
+	var _logger = matter.utils.logger;
+	//Actions for specific user
 
-		function UsersAction() {
-			_classCallCheck(this, UsersAction);
+	var TemplateAction = (function () {
+		function TemplateAction(templateName) {
+			_classCallCheck(this, TemplateAction);
 
 			//Call matter with name and settings
-			_get(Object.getPrototypeOf(UsersAction.prototype), 'constructor', this).call(this, config.appName, config.matterOptions);
+			if (templateName) {
+				this.name = templateName;
+			} else {
+				_logger.error({ description: 'Template name is required to start a TemplateAction', func: 'construcotr', obj: '' });
+				throw new Error('Template name is required to start a TemplateAction');
+			}
+		}
+
+		_createClass(TemplateAction, [{
+			key: 'get',
+
+			//Get userlications or single userlication
+			value: function get() {
+				_logger.log({ description: 'Get template called.', name: this.name, func: 'get', obj: 'TemplateAction' });
+				return _request.get(this.templateEndpoint).then(function (response) {
+					_logger.log({ description: 'Get template responded.', response: response, func: 'get', obj: 'TemplateAction' });
+					return response;
+				})['catch'](function (errRes) {
+					_logger.error({ description: 'Error getting template.', error: errRes, func: 'get', obj: 'TemplateAction' });
+					return Promise.reject(errRes);
+				});
+			}
+
+			//Update an userlication
+		}, {
+			key: 'update',
+			value: function update(templateData) {
+				_logger.log({ description: 'Update template called.', templateData: templateData, func: 'update', obj: 'TemplateAction' });
+				return _request.put(this.templateEndpoint, templateData).then(function (response) {
+					_logger.log({ description: 'Update template responded.', response: response, templateData: templateData, func: 'update', obj: 'TemplateAction' });
+					//TODO: Return template object
+					return response;
+				})['catch'](function (errRes) {
+					_logger.error({ description: 'Error updating template.', error: errRes, func: 'update', obj: 'TemplateAction' });
+					return Promise.reject(errRes);
+				});
+			}
+
+			//Delete a template
+		}, {
+			key: 'del',
+			value: function del(templateData) {
+				_logger.log({ description: 'Delete template called.', templateData: templateData, func: 'del', obj: 'TemplateAction' });
+				return _request['delete'](this.endpoint, templateData).then(function (response) {
+					_logger.log({ description: 'Template deleted successfully.', response: response, func: 'del', obj: 'TemplateAction' });
+					//TODO: Return template object
+					return response;
+				})['catch'](function (errRes) {
+					_logger.error({ description: 'Error deleting template.', error: errRes, func: 'del', obj: 'TemplateAction' });
+					return Promise.reject(errRes);
+				});
+			}
+		}, {
+			key: 'templateEndpoint',
+			get: function get() {
+				return matter.endpoint + '/templates/' + this.name;
+			}
+		}]);
+
+		return TemplateAction;
+	})();
+
+	var logger = matter.utils.logger;
+	var request = matter.utils.request;
+
+	//Actions for templates list
+
+	var TemplatesAction = (function () {
+		function TemplatesAction() {
+			_classCallCheck(this, TemplatesAction);
 		}
 
 		/**Grout Client Class
    * @ description Extending matter provides token storage and login/logout/signup capabilities
    */
 
-		_createClass(UsersAction, [{
+		_createClass(TemplatesAction, [{
 			key: 'get',
 
-			//Get users or single application
-			value: function get(query) {
-				return this.utils.request.get(this.usersEndpoint).then(function (response) {
-					console.log('[MatterClient.apps().get()] App(s) data loaded:', response);
+			//Get templates or single application
+			value: function get() {
+				logger.log({ description: 'Get template called.', func: 'get', obj: 'TemplatesAction' });
+				return request.get(this.templatesEndpoint).then(function (response) {
+					logger.log({ description: 'Templates loaded.', response: response, func: 'get', obj: 'TemplatesAction' });
 					return response;
 				})['catch'](function (errRes) {
-					console.error('[MatterClient.apps().get()] Error getting apps list: ', errRes);
+					logger.error({ description: 'Error getting templates.', error: errRes, func: 'get', obj: 'TemplatesAction' });
 					return Promise.reject(errRes);
 				});
 			}
@@ -1139,11 +1437,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'add',
 			value: function add(appData) {
-				return this.utils.request.post(this.usersEndpoint, appData).then(function (response) {
-					console.log('[MatterClient.apps().add()] Application added successfully: ', response);
-					return new Application(response);
+				logger.log({ description: 'Add template called.', func: 'add', obj: 'TemplatesAction' });
+				return request.post(this.templatesEndpoint, appData).then(function (response) {
+					logger.log({ description: 'Templates added successfully.', func: 'add', obj: 'TemplatesAction' });
+					return response;
 				})['catch'](function (errRes) {
-					console.error('[MatterClient.getApps()] Error adding application: ', errRes);
+					logger.error({ description: 'Error adding template.', error: errRes, func: 'add', obj: 'TemplatesAction' });
 					return Promise.reject(errRes);
 				});
 			}
@@ -1152,32 +1451,32 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'search',
 			value: function search(query) {
-				console.log('search called:', query);
-				var searchEndpoint = this.usersEndpoint + '/search/';
+				logger.log({ description: 'Search template called.', query: query, func: 'search', obj: 'TemplatesAction' });
+				var searchEndpoint = this.templatesEndpoint + '/search/';
 				if (query && _.isString(query)) {
 					searchEndpoint += query;
 				}
-				console.log('searchEndpoint:', searchEndpoint);
-				return this.utils.request.get(searchEndpoint).then(function (response) {
-					console.log('[MatterClient.users().search()] Users(s) data loaded:', response);
+				logger.log({ description: 'Search endpoint created.', endpoint: searchEndpoint, func: 'search', obj: 'TemplatesAction' });
+				return request.get(searchEndpoint).then(function (response) {
+					logger.log({ description: 'Template(s) found successfully.', response: response, endpoint: searchEndpoint, func: 'search', obj: 'TemplatesAction' });
 					return response;
 				})['catch'](function (errRes) {
-					console.error('[MatterClient.users().search()] Error getting apps list: ', errRes);
+					logger.log({ description: 'Error searching for templates.', query: query, error: errRes, endpoint: searchEndpoint, func: 'search', obj: 'TemplatesAction' });
 					return Promise.reject(errRes);
 				});
 			}
 		}, {
-			key: 'usersEndpoint',
+			key: 'templatesEndpoint',
 			get: function get() {
-				return this.endpoint + '/users';
+				return matter.endpoint + '/templates';
 			}
 		}]);
 
-		return UsersAction;
-	})(Matter);
+		return TemplatesAction;
+	})();
 
-	var Grout = (function (_Matter6) {
-		_inherits(Grout, _Matter6);
+	var Grout = (function (_Matter) {
+		_inherits(Grout, _Matter);
 
 		//TODO: Use getter/setter to make this not a function
 
@@ -1199,6 +1498,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				return new AppAction(appName);
 			}
 
+			//Start a new Apps Action
+		}, {
+			key: 'template',
+
+			//Start a new App action
+			value: function template(appName) {
+				console.log('New TemplateAction:', new TemplateAction(appName));
+				return new TemplateAction(appName);
+			}
+
 			//Start a new Users action
 		}, {
 			key: 'user',
@@ -1210,8 +1519,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'apps',
 			get: function get() {
-				console.log('New AppsAction:', new AppsAction());
+				console.log('New AppsAction object:', new AppsAction());
 				return new AppsAction();
+			}
+		}, {
+			key: 'templates',
+			get: function get() {
+				console.log('New TemplatesAction object:', new TemplatesAction());
+				return new TemplatesAction();
 			}
 		}, {
 			key: 'users',

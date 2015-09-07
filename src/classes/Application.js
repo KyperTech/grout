@@ -1,16 +1,19 @@
 import config from '../config';
 import Firebase from 'firebase';
 import _ from 'lodash';
-import Matter from 'kyper-matter';
+import matter from '../classes/Matter';
+import GroupsAction from '../actions/GroupsAction';
+import GroupAction from '../actions/GroupAction';
+import UsersAction from '../actions/UsersAction';
+import UserAction from '../actions/UserAction';
 
 /**
  * Application class.
  *
  */
-class Application extends Matter {
+class Application {
 	constructor(appData) {
 		//Call matter with name and settings
-		super(config.appName, config.matterOptions);
 		this.name = appData.name;
 		this.owner = appData.owner || null;
 		this.collaborators = appData.collaborators || [];
@@ -18,6 +21,8 @@ class Application extends Matter {
 		this.updatedAt = appData.updatedAt;
 		this.frontend = appData.frontend || {};
 		this.backend = appData.backend || {};
+		this.groups = appData.groups || null;
+		this.directories = appData.directories || null;
 		if (Firebase) {
 			this.fbRef = new Firebase(config.fbUrl + appData.name);
 		}
@@ -41,7 +46,7 @@ class Application extends Matter {
 		} else {
 			//If AWS Credential do not exist, set them
 			if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
-				// console.info('AWS creds are being updated to make this.utils.request');
+				// console.info('AWS creds are being updated to make matter.utils.request');
 				setAWSConfig();
 			}
 			var s3 = new AWS.S3();
@@ -84,7 +89,7 @@ class Application extends Matter {
 	addStorage() {
 		//TODO:Add storage bucket
 		var endpoint = config.serverUrl + '/apps/' + this.name + '/storage';
-		return this.utils.request.post(endpoint, appData).then((response) => {
+		return matter.utils.request.post(endpoint, appData).then((response) => {
 			console.log('[Application.addStorage()] Apps:', response);
 			return new Application(response);
 		})['catch']((errRes) => {
@@ -95,7 +100,7 @@ class Application extends Matter {
 	applyTemplate() {
 		var endpoint = config.serverUrl + '/apps/' + this.name + '/template';
 		console.log('Applying templates to existing');
-		// return this.utils.request.post(endpoint, appData).then(function(response) {
+		// return matter.utils.request.post(endpoint, appData).then(function(response) {
 		// 	console.log('[Application.addStorage()] Apps:', response);
 		// 	if (!apps.isList) {
 		// 		return new Application(response);
@@ -106,6 +111,24 @@ class Application extends Matter {
 		// 	return Promise.reject(errRes);
 		// });
 	}
+	get users() {
+		//TODO: Handle this being an application's users action
+		return new UsersAction();
+	}
+	user(userData) {
+		//TODO: Handle userData being a string or object
+		//TODO: Handle this being an application's users action
+		return new UserAction(userData);
+	}
+	get groups() {
+		//TODO: Handle this being an application's groups action
+		return new GroupsAction();
+	}
+	group(groupData) {
+		//TODO: Handle this being an application's group action
+		return new GroupAction(groupData);
+	}
+
 }
 
 export default Application;

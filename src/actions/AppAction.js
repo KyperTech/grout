@@ -1,13 +1,12 @@
 import config from '../config';
 import Application from '../classes/Application';
 import AWS from 'aws-sdk';
-import Matter from 'kyper-matter';
+import matter from '../classes/Matter';
 
 //Actions for specific application
-class AppAction extends Matter {
+class AppAction {
 	constructor(appName) {
 		//Call matter with name and settings
-		super(config.appName, config.matterOptions);
 		if (appName) {
 			this.name = appName;
 		} else {
@@ -16,11 +15,11 @@ class AppAction extends Matter {
 		}
 	}
 	get appEndpoint() {
-		return `${this.endpoint}/app/${this.name}`;
+		return `${matter.endpoint}/apps/${this.name}`;
 	}
 	//Get applications or single application
 	get() {
-		return this.utils.request.get(this.appEndpoint).then((response) => {
+		return matter.utils.request.get(this.appEndpoint).then((response) => {
 			console.log('[MatterClient.app().get()] App(s) data loaded:', response);
 			return new Application(response);
 		})['catch']((errRes) => {
@@ -30,7 +29,7 @@ class AppAction extends Matter {
 	}
 	//Update an application
 	update(appData) {
-		return this.utils.request.put(this.appEndpoint, appData).then((response) => {
+		return matter.utils.request.put(this.appEndpoint, appData).then((response) => {
 			console.log('[MatterClient.apps().update()] App:', response);
 			return new Application(response);
 		})['catch']((errRes) => {
@@ -40,7 +39,7 @@ class AppAction extends Matter {
 	}
 	//Delete an application
 	del(appData) {
-		return this.utils.request.delete(this.appEndpoint, appData).then((response) => {
+		return matter.utils.request.delete(this.appEndpoint, appData).then((response) => {
 			console.log('[MatterClient.apps().del()] Apps:', response);
 			return new Application(response);
 		})['catch']((errRes) => {

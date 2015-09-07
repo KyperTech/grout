@@ -3,13 +3,13 @@ import _ from 'lodash';
 import matter from '../classes/Matter';
 let logger = matter.utils.logger;
 //Actions for users list
-class UsersAction {
+class GroupsAction {
 	get usersEndpoint() {
 		return `${matter.endpoint}/users`;
 	}
 	//Get users or single application
 	get() {
-		console.log({description: 'Users get called.', func: 'get', obj: 'UsersAction'});
+		console.log({description: 'Users get called.', func: 'get', obj: 'GroupsAction'});
 		return matter.utils.request.get(this.usersEndpoint).then((response) => {
 			console.log('users loaded:', response);
 			return response;
@@ -36,7 +36,7 @@ class UsersAction {
 			searchEndpoint += query;
 		}
 		if (!query || query == '') {
-			logger.log({description: 'Null query, returning empty array.', func: 'search', obj: 'UsersAction'});
+			logger.log({description: 'Null query, returning empty array.', func: 'search', obj: 'GroupsAction'});
 			return Promise.resolve([]);
 		}
 		return matter.utils.request.get(searchEndpoint).then((response) => {
@@ -48,4 +48,4 @@ class UsersAction {
 		});
 	}
 }
-export default UsersAction;
+export default GroupsAction;

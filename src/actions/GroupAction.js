@@ -1,16 +1,15 @@
 import config from '../config';
-import User from '../classes/User';
 import matter from '../classes/Matter';
 
 //Actions for specific user
-class UserAction {
+class GroupAction {
 	constructor(userName) {
 		//Call matter with name and settings
 		if (userName) {
 			this.username = userName;
 		} else {
-			console.error('Username is required to start an UserAction');
-			throw new Error('Username is required to start an UserAction');
+			console.error('Username is required to start an GroupAction');
+			throw new Error('Username is required to start an GroupAction');
 		}
 	}
 	get userEndpoint() {
@@ -20,7 +19,7 @@ class UserAction {
 	get() {
 		return matter.utils.request.get(this.userEndpoint).then((response) => {
 			console.log('[MatterClient.user().get()] App(s) data loaded:', response);
-			return new User(response);
+			return response;
 		})['catch']((errRes) => {
 			console.error('[MatterClient.user().get()] Error getting users list: ', errRes);
 			return Promise.reject(errRes);
@@ -30,7 +29,7 @@ class UserAction {
 	update(userData) {
 		return matter.utils.request.put(this.userEndpoint, userData).then((response) => {
 			console.log('[MatterClient.users().update()] App:', response);
-			return new User(response);
+			return response;
 		})['catch']((errRes) => {
 			console.error('[MatterClient.users().update()] Error updating user: ', errRes);
 			return Promise.reject(errRes);
@@ -50,4 +49,4 @@ class UserAction {
 	}
 }
 
-export default UserAction;
+export default GroupAction;

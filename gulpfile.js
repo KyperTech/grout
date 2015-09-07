@@ -21,7 +21,6 @@ const config = manifest.babelBoilerplateOptions;
 const mainFile = manifest.main;
 const destinationFolder = path.dirname(mainFile);
 const exportFileName = path.basename(mainFile, path.extname(mainFile));
-
 // Remove the built files
 gulp.task('clean', function(cb) {
   del([destinationFolder], cb);
@@ -57,7 +56,6 @@ createLintTask('lint-src', ['src/**/*.js', '!src/lib/*.js']);
 // Lint our test code
 createLintTask('lint-test', ['test/**/*.js']);
 
-// Build two versions of the library
 gulp.task('build', ['lint-src', 'clean'], function(done) {
   rollup.rollup({
     entry: config.entryFileName,
@@ -82,21 +80,12 @@ gulp.task('build', ['lint-src', 'clean'], function(done) {
       .pipe($.uglify())
       .pipe($.sourcemaps.write('./'))
       .pipe(gulp.dest(destinationFolder))
-      .on('end', function(){
-        $.file(exportFileName + '.js', res.code, { src: true })
-          .pipe($.plumber())
-          .pipe($.sourcemaps.init({ loadMaps: true }))
-          .pipe($.babel())
-          .pipe($.sourcemaps.write('./'))
-          .pipe(gulp.dest(destinationFolder))
-          .pipe($.filter(['*', '!**/*.js.map']))
-          .pipe($.rename(exportFileName + '.min.js'))
-          .pipe($.sourcemaps.init({ loadMaps: true }))
-          .pipe($.uglify())
-          .pipe($.sourcemaps.write('./'))
-          .pipe(gulp.dest(destinationFolder))
-          .on('end', done);
-      });
+      .on('error', function(e) {
+        console.log('>>> ERROR', e);
+        // emit here
+        this.emit('end');
+      })
+      .on('end', done);
   })
   .catch(done);
 });
@@ -167,7 +156,7 @@ function addExternalModules(code) {
 
   // // Set up Babelify so that ES6 works in the tests
   bundler.transform(babelify.configure({
-    ignore: /(bower_components)/,
+    ignore: /(bower_components)|(node_modules)/,
     sourceMapRelative: __dirname + '/src',
     optional: ["es7.asyncFunctions"],
     stage:2
@@ -178,7 +167,7 @@ gulp.task('addExternals', function() {
   return bundle(addExternalModules());
 });
 gulp.task('build-bundle', function(callback) {
-  runSequence(['build'], 'addExternals', callback);
+  runSequence(['build'], 'addExternals', 'watch', callback);
 });
 // Build the unit test suite for running tests
 // in the browser
@@ -224,7 +213,7 @@ const otherWatchFiles = ['package.json', '**/.eslintrc', '.jscsrc'];
 // Run the headless unit tests as you make changes.
 gulp.task('watch', function() {
   const watchFiles = jsWatchFiles.concat(otherWatchFiles);
-  gulp.watch(watchFiles, ['test']);
+  gulp.watch(watchFiles, ['test', 'build-bundle']);
 });
 
 // Set up a livereload environment for our spec runner
