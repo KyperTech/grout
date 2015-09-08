@@ -1,11 +1,16 @@
 import config from './config';
 import Matter from 'kyper-matter';
 import AppsAction from './actions/AppsAction';
-import AppAction from './actions/AppAction';
+import App from './classes/Application';
 import UsersAction from './actions/UsersAction';
-import UserAction from './actions/UserAction';
+import User from './classes/User';
+import GroupsAction from './actions/GroupsAction';
+import Group from './classes/Group';
+import Directories from './actions/DirectoriesAction';
+import Directory from './classes/Directory';
 import TemplatesAction from './actions/TemplatesAction';
-import TemplateAction from './actions/TemplateAction';
+import Template from './classes/Template';
+
 /**Grout Client Class
  * @ description Extending matter provides token storage and login/logout/signup capabilities
  */
@@ -17,32 +22,55 @@ class Grout extends Matter {
 	}
 	//Start a new Apps Action
 	get apps() {
-		console.log('New AppsAction object:', new AppsAction());
+		this.utils.logger.debug({description: 'Apps Action called.', action: new AppsAction(), func: 'apps', obj: 'Grout'});
 		return new AppsAction();
 	}
 	//Start a new App action
 	app(appName) {
-		console.log('New AppAction:', new AppAction(appName));
-		return new AppAction(appName);
+		this.utils.logger.debug({description: 'Templates Action called.', appName: appName, template: new App(appName), func: 'app', obj: 'Grout'});
+		return new App(appName);
 	}
 	//Start a new Apps Action
 	get templates() {
-		console.log('New TemplatesAction object:', new TemplatesAction());
+		this.utils.logger.debug({description: 'Templates Action called.', action: new TemplatesAction(), func: 'templates', obj: 'Grout'});
 		return new TemplatesAction();
 	}
 	//Start a new App action
-	template(appName) {
-		console.log('New TemplateAction:', new TemplateAction(appName));
-		return new TemplateAction(appName);
+	template(templateData) {
+		this.utils.logger.debug({description: 'Template Action called.', templateData: templateData, template: new Template(templateData), func: 'template', obj: 'Grout'});
+		return new Template(templateData);
 	}
 	//Start a new Users action
 	get users() {
+		this.utils.logger.debug({description: 'Users Action called.', action: new UsersAction(), func: 'users', obj: 'Grout'});
 		return new UsersAction();
 	}
 	//Start a new User action
-	user(username) {
-		return new UserAction(username);
+	user(userData) {
+		this.utils.logger.debug({description: 'User Action called.', userData: userData, user: new User(userData), func: 'user', obj: 'Grout'});
+		return new User(userData);
 	}
+	//Start a new Groups action
+	get groups() {
+		this.utils.logger.debug({description: 'Groups Action called.', action: new GroupsAction(), func: 'groups', obj: 'Grout'});
+		return new GroupsAction();
+	}
+	//Start a new Group action
+	group(groupData) {
+		this.utils.logger.debug({description: 'Group Action called.', groupData: groupData, action: new Group(groupData), func: 'group', obj: 'Grout'});
+		return new Group(groupData);
+	}
+	//Start a new Directories action
+	get directories() {
+		this.utils.logger.debug({description: 'Directories Action called.', action: new DirectoriesAction(), func: 'directories', obj: 'Grout'});
+		return new UsersAction();
+	}
+	//Start a new Group action
+	directory(directoryData) {
+		this.utils.logger.debug({description: 'Directory Action called.', directoryData: directoryData, action: new Directory(directoryData), func: 'directory', obj: 'Grout'});
+		return new Directory(directoryData);
+	}
+
 };
 
 export default Grout;

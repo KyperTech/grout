@@ -1,11 +1,25 @@
+//Internal libs and config
 import config from '../config';
-import Firebase from 'firebase';
 import _ from 'lodash';
-import matter from '../classes/Matter';
+import matter from './Matter';
+
+//Actions and Classes
 import GroupsAction from '../actions/GroupsAction';
-import GroupAction from '../actions/GroupAction';
+import Group from './Group';
+import DirectoriesAction from '../actions/DirectoriesAction';
+import Directory from './Directory';
 import UsersAction from '../actions/UsersAction';
-import UserAction from '../actions/UserAction';
+import User from './User';
+import Files from './Files';
+import File from './File';
+
+//External Libs
+import Firebase from 'firebase';
+import AWS from 'aws-sdk';
+
+//Convenience vars
+let request = matter.utils.request;
+let logger = matter.utils.logger;
 
 /**
  * Application class.
@@ -13,213 +27,104 @@ import UserAction from '../actions/UserAction';
  */
 class Application {
 	constructor(appData) {
-		//Call matter with name and settings
-		this.name = appData.name;
-		this.owner = appData.owner || null;
-		this.collaborators = appData.collaborators || [];
-		this.createdAt = appData.createdAt;
-		this.updatedAt = appData.updatedAt;
-		this.frontend = appData.frontend || {};
-		this.backend = appData.backend || {};
-		this.groups = appData.groups || null;
-		this.directories = appData.directories || null;
+		//Setup application data based on input
+		if (appData && _.isObject(appData)) {
+			this.name = appData.name;
+			this.owner = appData.owner || null;
+			this.collaborators = appData.collaborators || [];
+			this.createdAt = appData.createdAt;
+			this.updatedAt = appData.updatedAt;
+			this.frontend = appData.frontend || {};
+			this.backend = appData.backend || {};
+			this.groups = appData.groups || null;
+			this.directories = appData.directories || null;
+		} else if (appData && _.isString(appData)) {
+			this.name = appData;
+		}
 		if (Firebase) {
 			this.fbRef = new Firebase(config.fbUrl + appData.name);
 		}
+		logger.debug({description: 'Application object created.', application: this, func: 'constructor', obj: 'Application'});
 	}
-	//Get files list and convert to structure
-	getStructure() {
-		return this.getFiles().then((filesArray) => {
-			const childStruct = childrenStructureFromArray(filesArray);
-			console.log('Child struct from array:', childStruct);
-			return childStruct;
-		}, (err) => {
-			console.error('[Application.getStructure] Error getting files: ', err);
-			return Promise.reject({message: 'Error getting files.', error: err});
-		});
+	get appEndpoint() {
+		return `${matter.endpoint}/apps/${this.name}`;
 	}
-	//Get files list from S3
-	getFiles() {
-		if (!this.frontend || !this.frontend.bucketName) {
-			console.error('[Applicaiton.getFiles] Attempting to get objects for bucket without name.');
-			return Promise.reject({message: 'Bucket name required to get objects'});
-		} else {
-			//If AWS Credential do not exist, set them
-			if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
-				// console.info('AWS creds are being updated to make matter.utils.request');
-				setAWSConfig();
-			}
-			var s3 = new AWS.S3();
-			var listParams = {Bucket: this.frontend.bucketName};
-			return new Promise((resolve, reject) => {
-				s3.listObjects(listParams, function(err, data) {
-					if (!err) {
-						console.log('[Application.getObjects()] listObjects returned:', data);
-						return resolve(data.Contents);
-					} else {
-						console.error('[Application.getObjects()] Error listing objects:', err);
-						return reject(err);
-					}
-				});
-			});
-		}
-	}
-	publishFile(fileData) {
-		if (!this.frontend) {
-			console.error('Frontend data not available. Make sure to call .get().');
-			return Promise.reject({message: 'Front end data is required to publish file.'});
-		}
-		var saveParams = {Bucket: this.frontent.bucketName, Key: fileData.key,  Body: fileData.content, ACL: 'public-read'};
-		//Set contentType from fileData to ContentType parameter of new object
-		if (fileData.contentType) {
-			saveParams.ContentType = fileData.contentType;
-		}
-		// console.log('[$aws.$saveFiles] saveParams:', saveParams);
-		return s3.putObject(saveParams, function(err, data) {
-			//[TODO] Add putting object ACL (make public)
-			if (!err) {
-				console.log('[Application.publishFile()] file saved successfully. Returning:', data);
-				return data;
-			}	else {
-				console.error('[Application.publishFile()] Error saving file:', err);
-				return Promise.reject(err);
-			}
-		});
-	}
-	addStorage() {
-		//TODO:Add storage bucket
-		var endpoint = config.serverUrl + '/apps/' + this.name + '/storage';
-		return matter.utils.request.post(endpoint, appData).then((response) => {
-			console.log('[Application.addStorage()] Apps:', response);
+	//Get applications or single application
+	get() {
+		logger.debug({description: 'Application get called.', func: 'get', obj: 'Application'});
+		return request.get(this.appEndpoint).then((response) => {
+			logger.info({description: 'Application loaded successfully.', response: response, application: new Application(response), func: 'get', obj: 'Application'});
 			return new Application(response);
 		})['catch']((errRes) => {
-			console.error('[Application.addStorage()] Error getting apps list: ', errRes);
+			logger.error({description: 'Error getting Application.', error: errRes, func: 'get', obj: 'Application'});
+			return Promise.reject(errRes);
+		});
+	}
+	//Update an application
+	update(appData) {
+		logger.debug({description: 'Application update called.', func: 'update', obj: 'Application'});
+		return request.put(this.appEndpoint, appData).then((response) => {
+			logger.info({description: 'Application updated successfully.', response: response, func: 'update', obj: 'Application'});
+			return new Application(response);
+		})['catch']((errRes) => {
+			logger.error({description: 'Error updating application.', error: errRes, func: 'update', obj: 'Application'});
+			return Promise.reject(errRes);
+		});
+	}
+
+	addStorage() {
+		logger.debug({description: 'Application add storage called.', application: this, func: 'addStorage', obj: 'Application'});
+		return request.post(`${this.appEndpoint}/storage`, appData).then((response) => {
+			logger.info({description: 'Storage successfully added to application.', response: response, application: new Application(response), func: 'addStorage', obj: 'Application'});
+			return new Application(response);
+		})['catch']((errRes) => {
+			logger.error({description: 'Error adding storage to application.', error: errRes, func: 'addStorage', obj: 'Application'});
 			return Promise.reject(errRes);
 		});
 	}
 	applyTemplate() {
-		var endpoint = config.serverUrl + '/apps/' + this.name + '/template';
-		console.log('Applying templates to existing');
-		// return matter.utils.request.post(endpoint, appData).then(function(response) {
-		// 	console.log('[Application.addStorage()] Apps:', response);
-		// 	if (!apps.isList) {
-		// 		return new Application(response);
-		// 	}
-		// 	return response;
-		// })['catch'](function(errRes) {
-		// 	console.error('[Application.addStorage()] Error getting apps list: ', errRes);
-		// 	return Promise.reject(errRes);
-		// });
+		logger.error({description: 'Applying templates to existing applications is not currently supported.', func: 'applyTemplate', obj: 'Application'});
+		return request.post(endpoint, appData).then((response) => {
+			logger.info({description: 'Template successfully applied to application.', response: response, application: this, func: 'applyTemplate', obj: 'Application'});
+			return new Application(response);
+		})['catch']((errRes) => {
+			logger.error({description: 'Error applying template to application.', error: errRes, application: this, func: 'applyTemplate', obj: 'Application'});
+			return Promise.reject(errRes);
+		});
+	}
+	//Files object that contains files methods
+	get files() {
+		logger.debug({description: 'Applications files action called.', application: this, func: 'files', obj: 'Application'});
+		return new Files(this);
+	}
+	file(fileData) {
+		logger.debug({description: 'Applications file action called.', fileData: fileData, application: this, func: 'file', obj: 'Application'});
+		return new File(fileData);
 	}
 	get users() {
-		//TODO: Handle this being an application's users action
+		logger.debug({description: 'Applications users action called.', application: this, func: 'user', obj: 'Application'});
 		return new UsersAction();
 	}
 	user(userData) {
-		//TODO: Handle userData being a string or object
-		//TODO: Handle this being an application's users action
-		return new UserAction(userData);
+		logger.debug({description: 'Applications user action called.', userData: userData, application: this, func: 'user', obj: 'Application'});
+		return new User(userData);
 	}
 	get groups() {
-		//TODO: Handle this being an application's groups action
+		logger.debug({description: 'Applications groups action called.', application: this, func: 'groups', obj: 'Application'});
 		return new GroupsAction();
 	}
 	group(groupData) {
-		//TODO: Handle this being an application's group action
-		return new GroupAction(groupData);
+		logger.debug({description: 'Applications group action called.', groupData: groupData, application: this, func: 'group', obj: 'Application'});
+		return new Group(groupData);
 	}
-
+	get directories() {
+		logger.debug({description: 'Applications directories action called.', application: this, func: 'directories', obj: 'Application'});
+		return new DirectoriesAction();
+	}
+	directory(directoryData) {
+		logger.debug({description: 'Applications directory action called.', directoryData: directoryData, application: this, func: 'directory', obj: 'Application'});
+		return new Directory(directoryData);
+	}
 }
 
 export default Application;
-
-//------------------ Utility Functions ------------------//
-
-// AWS Config
-function setAWSConfig() {
-	AWS.config.update({
-	  credentials: new AWS.CognitoIdentityCredentials({
-	  IdentityPoolId: config.aws.cognito.poolId
-	  }),
-	  region: config.aws.region
-	});
-}
-
-//Convert from array file structure (from S3) to 'children' structure used in Editor GUI (angular-tree-control)
-//Examples for two files (index.html and /testFolder/file.js):
-//Array structure: [{path:'index.html'}, {path:'testFolder/file.js'}]
-//Children Structure [{type:'folder', name:'testfolder', children:[{path:'testFolder/file.js', name:'file.js', filetype:'javascript', contentType:'application/javascript'}]}]
-function childrenStructureFromArray(fileArray) {
-	// console.log('childStructureFromArray called:', fileArray);
-	//Create a object for each file that stores the file in the correct 'children' level
-	var mappedStructure = fileArray.map(function(file) {
-		return buildStructureObject(file);
-	});
-	return combineLikeObjs(mappedStructure);
-}
-//Convert file with key into a folder/file children object
-function buildStructureObject(file) {
-	var pathArray;
-	// console.log('buildStructureObject with:', file);
-	if (_.has(file, 'path')) {
-		//Coming from files already having path (structure)
-		pathArray = file.path.split('/');
-	} else {
-		//Coming from aws
-		pathArray = file.Key.split('/');
-		// console.log('file before pick:', file);
-		file = _.pick(file, 'Key');
-		file.path = file.Key;
-		file.name = file.Key;
-	}
-	var currentObj = file;
-	if (pathArray.length == 1) {
-		currentObj.name = pathArray[0];
-		if (!_.has(currentObj,'type')) {
-			currentObj.type = 'file';
-		}
-		currentObj.path = pathArray[0];
-		return currentObj;
-	} else {
-		var finalObj = {};
-		_.each(pathArray, (loc, ind, list) => {
-			if (ind != list.length - 1) {//Not the last loc
-				currentObj.name = loc;
-				currentObj.path = _.first(list, ind + 1).join('/');
-				currentObj.type = 'folder';
-				currentObj.children = [{}];
-				//TODO: Find out why this works
-				if (ind == 0) {
-					finalObj = currentObj;
-				}
-				currentObj = currentObj.children[0];
-			} else {
-				currentObj.type = 'file';
-				currentObj.name = loc;
-				currentObj.path = pathArray.join('/');
-				if (file.$id) {
-					currentObj.$id = file.$id;
-				}
-			}
-		});
-		return finalObj;
-	}
-}
-//Recursivley combine children of object's that have the same names
-function combineLikeObjs(mappedArray) {
-	var takenNames = [];
-	var finishedArray = [];
-	_.each(mappedArray, (obj, ind, list) => {
-		if (takenNames.indexOf(obj.name) == -1) {
-			takenNames.push(obj.name);
-			finishedArray.push(obj);
-		} else {
-			var likeObj = _.findWhere(mappedArray, {name: obj.name});
-			//Combine children of like objects
-			likeObj.children = _.union(obj.children, likeObj.children);
-			likeObj.children = combineLikeObjs(likeObj.children);
-			// console.log('extended obj:',likeObj);
-		}
-	});
-	return finishedArray;
-}

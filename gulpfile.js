@@ -59,7 +59,7 @@ createLintTask('lint-test', ['test/**/*.js']);
 gulp.task('build', ['lint-src', 'clean'], function(done) {
   rollup.rollup({
     entry: config.entryFileName,
-    external:['lodash', 'firebase', 'superagent', 'Matter', 'jwt-decode'],
+    external:['lodash', 'firebase', 'superagent', 'Matter', 'jwt-decode', 'aws-sdk'],
   }).then(function(bundle) {
     var res = bundle.generate({
       // Don't worry about the fact that the source map is inlined at this step.

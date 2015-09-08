@@ -1,33 +1,36 @@
 import config from '../config';
 import matter from '../classes/Matter';
 
+let request = matter.utils.request;
+let logger = matter.utils.logger;
+
 //Actions for applications list
 class AppsAction {
 	constructor() {
 		//Call matter with name and settings
 	}
 	get appsEndpoint() {
-		console.log('matter.endpoint is currently:', matter.endpoint);
 		return `${matter.endpoint}/apps`;
 	}
 	//Get applications or single application
 	get() {
-		console.warn('matter.utils:', matter.utils);
-		return matter.utils.request.get(this.appsEndpoint).then((response) => {
-			console.log('[MatterClient.apps().get()] App(s) data loaded:', response);
+		logger.debug({description: 'Apps get called.', action: this, func: 'get', obj: 'AppsAction'});
+		return request.get(this.appsEndpoint).then((response) => {
+			logger.info({description: 'Apps data loaded successfully.', response: response, func: 'get', obj: 'AppsAction'});
 			return response;
 		})['catch']((errRes) => {
-			console.error('[MatterClient.apps().get()] Error getting apps list: ', errRes);
+			logger.error({description: 'Error getting apps data.', error: errRes, func: 'get', obj: 'AppsAction'});
 			return Promise.reject(errRes);
 		});
 	}
 	//Add an application
 	add(appData) {
+		logger.debug({description: 'Application added called.', appData: appData, func: 'add', obj: 'AppsAction'});
 		return matter.utils.request.post(this.appsEndpoint, appData).then((response) => {
-			console.log('[MatterClient.apps().add()] Application added successfully: ', response);
+			logger.info({description: 'Application added successfully.', response: response, func: 'add', obj: 'AppsAction'});
 			return new Application(response);
 		})['catch']((errRes) => {
-			console.error('[MatterClient.getApps()] Error adding application: ', errRes);
+			logger.error({description: 'Error adding app.', error: errRes, func: 'add', obj: 'AppsAction'});
 			return Promise.reject(errRes);
 		});
 	}
