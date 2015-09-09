@@ -8,16 +8,20 @@ let logger = matter.utils.logger;
 class GroupsAction {
 	constructor(actionData) {
 		//Check to see if action is for a specific app
-		if (actionData && _.isObject(actionData) && _.has(actionData, 'appName')) {
-			this.appName = actionData.appName;
+		if (actionData && _.isObject(actionData) && _.has(actionData, 'app')) {
+			this.app = actionData.app;
+			logger.log({description: 'Provided app data set to app parameter.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction'});
 		} else if (actionData && _.isString(actionData)) {
-			this.appName = actionData;
+			this.app = {name: actionData};
+		} else {
+			logger.error({description: 'New groups action.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction'});
 		}
+		logger.log({description: 'New groups action.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction'});
 	}
 	get groupsEndpoint() {
 		//Check for app groups action
-		if (this.appName) {
-			return `${matter.endpoint}/apps/${this.appName}/groups`;
+		if (_.has(this, 'app') && _.has(this.app, 'name')) {
+			return `${matter.endpoint}/apps/${this.app.name}/groups`;
 		}
 		return `${matter.endpoint}/groups`;
 	}
@@ -25,7 +29,7 @@ class GroupsAction {
 	get() {
 		logger.debug({description: 'Get group called.', func: 'get', obj: 'GroupsAction'});
 		return request.get(this.groupsEndpoint).then((response) => {
-			logger.info({description: 'Groups loaded successfully.', func: 'get', obj: 'GroupsAction'});
+			logger.info({description: 'Groups loaded successfully.', response: response, func: 'get', obj: 'GroupsAction'});
 			return response;
 		})['catch']((errRes) => {
 			logger.info({description: 'Error getting groups.', error: errRes, func: 'get', obj: 'GroupsAction'});
@@ -34,9 +38,15 @@ class GroupsAction {
 	}
 	//Add an application
 	add(groupData) {
+		var newGroupData = groupData;
 		logger.debug({description: 'Add group called.', groupData: groupData, func: 'add', obj: 'GroupsAction'});
-		return request.post(this.groupsEndpoint, groupData).then((response) => {
-			logger.log({description: 'Application added successfully.', response: response, func: 'add', obj: 'GroupsAction'});
+		if (_.isString(groupData)) {
+			//Group data is string
+			newGroupData = {name: groupData};
+		}
+		logger.debug({description: 'Add group called.', newGroupData: newGroupData, func: 'add', obj: 'GroupsAction'});
+		return request.post(this.groupsEndpoint, newGroupData).then((response) => {
+			logger.log({description: 'Group added to application successfully.', response: response, func: 'add', obj: 'GroupsAction'});
 			//TODO: Return list of group objects
 			return response;
 		})['catch']((errRes) => {

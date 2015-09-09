@@ -29,10 +29,10 @@ class Group {
 	//Get userlications or single userlication
 	get() {
 		return request.get(this.groupEndpoint).then((response) => {
-			logger.info({description: 'Group data loaded successfully.', groupData: groupData, response: response, func: 'get', obj: 'Group'});
+			logger.info({description: 'Group data loaded successfully.', response: response, func: 'get', obj: 'Group'});
 			return response;
 		})['catch']((errRes) => {
-			logger.info({description: 'Error getting group.', groupData: groupData, error: errRes, func: 'get', obj: 'Group'});
+			logger.info({description: 'Error getting group.', error: errRes, func: 'get', obj: 'Group'});
 			return Promise.reject(errRes);
 		});
 	}

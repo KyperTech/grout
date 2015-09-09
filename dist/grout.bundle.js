@@ -42056,11 +42056,15 @@ var GroupsAction = (function () {
 		_classCallCheck(this, GroupsAction);
 
 		//Check to see if action is for a specific app
-		if (actionData && _lodash2['default'].isObject(actionData) && _lodash2['default'].has(actionData, 'appName')) {
-			this.appName = actionData.appName;
+		if (actionData && _lodash2['default'].isObject(actionData) && _lodash2['default'].has(actionData, 'app')) {
+			this.app = actionData.app;
+			logger.log({ description: 'Provided app data set to app parameter.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
 		} else if (actionData && _lodash2['default'].isString(actionData)) {
-			this.appName = actionData;
+			this.app = { name: actionData };
+		} else {
+			logger.error({ description: 'New groups action.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
 		}
+		logger.log({ description: 'New groups action.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
 	}
 
 	_createClass(GroupsAction, [{
@@ -42070,7 +42074,7 @@ var GroupsAction = (function () {
 		value: function get() {
 			logger.debug({ description: 'Get group called.', func: 'get', obj: 'GroupsAction' });
 			return request.get(this.groupsEndpoint).then(function (response) {
-				logger.info({ description: 'Groups loaded successfully.', func: 'get', obj: 'GroupsAction' });
+				logger.info({ description: 'Groups loaded successfully.', response: response, func: 'get', obj: 'GroupsAction' });
 				return response;
 			})['catch'](function (errRes) {
 				logger.info({ description: 'Error getting groups.', error: errRes, func: 'get', obj: 'GroupsAction' });
@@ -42082,9 +42086,15 @@ var GroupsAction = (function () {
 	}, {
 		key: 'add',
 		value: function add(groupData) {
+			var newGroupData = groupData;
 			logger.debug({ description: 'Add group called.', groupData: groupData, func: 'add', obj: 'GroupsAction' });
-			return request.post(this.groupsEndpoint, groupData).then(function (response) {
-				logger.log({ description: 'Application added successfully.', response: response, func: 'add', obj: 'GroupsAction' });
+			if (_lodash2['default'].isString(groupData)) {
+				//Group data is string
+				newGroupData = { name: groupData };
+			}
+			logger.debug({ description: 'Add group called.', newGroupData: newGroupData, func: 'add', obj: 'GroupsAction' });
+			return request.post(this.groupsEndpoint, newGroupData).then(function (response) {
+				logger.log({ description: 'Group added to application successfully.', response: response, func: 'add', obj: 'GroupsAction' });
 				//TODO: Return list of group objects
 				return response;
 			})['catch'](function (errRes) {
@@ -42116,8 +42126,8 @@ var GroupsAction = (function () {
 		key: 'groupsEndpoint',
 		get: function get() {
 			//Check for app groups action
-			if (this.appName) {
-				return _classesMatter2['default'].endpoint + '/apps/' + this.appName + '/groups';
+			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
+				return _classesMatter2['default'].endpoint + '/apps/' + this.app.name + '/groups';
 			}
 			return _classesMatter2['default'].endpoint + '/groups';
 		}
@@ -42414,7 +42424,7 @@ var Application = (function () {
 		if (_firebase2['default']) {
 			this.fbRef = new _firebase2['default'](_config2['default'].fbUrl + appData.name);
 		}
-		logger.debug({ description: 'Application object created.', application: this, func: 'constructor', obj: 'Application' });
+		// logger.debug({description: 'Application object created.', application: this, func: 'constructor', obj: 'Application'});
 	}
 
 	_createClass(Application, [{
@@ -42518,7 +42528,7 @@ var Application = (function () {
 		key: 'groups',
 		get: function get() {
 			logger.debug({ description: 'Applications groups action called.', application: this, func: 'groups', obj: 'Application' });
-			return new _actionsGroupsAction2['default']();
+			return new _actionsGroupsAction2['default']({ app: this });
 		}
 	}, {
 		key: 'directories',
@@ -43074,10 +43084,10 @@ var Group = (function () {
 		//Get userlications or single userlication
 		value: function get() {
 			return request.get(this.groupEndpoint).then(function (response) {
-				logger.info({ description: 'Group data loaded successfully.', groupData: groupData, response: response, func: 'get', obj: 'Group' });
+				logger.info({ description: 'Group data loaded successfully.', response: response, func: 'get', obj: 'Group' });
 				return response;
 			})['catch'](function (errRes) {
-				logger.info({ description: 'Error getting group.', groupData: groupData, error: errRes, func: 'get', obj: 'Group' });
+				logger.info({ description: 'Error getting group.', error: errRes, func: 'get', obj: 'Group' });
 				return Promise.reject(errRes);
 			});
 		}
@@ -43491,8 +43501,8 @@ var Grout = (function (_Matter) {
 
 		//Start a new Group action
 		value: function group(groupData) {
-			this.utils.logger.debug({ description: 'Group Action called.', groupData: groupData, action: new _classesGroup2['default'](groupData), func: 'group', obj: 'Grout' });
-			return new _classesGroup2['default'](groupData);
+			this.utils.logger.debug({ description: 'Group Action called.', groupData: groupData, action: new _classesGroup2['default']({ app: this, groupData: groupData }), func: 'group', obj: 'Grout' });
+			return new _classesGroup2['default']({ app: this, groupData: groupData });
 		}
 
 		//Start a new Directories action
@@ -43520,19 +43530,19 @@ var Grout = (function (_Matter) {
 		key: 'users',
 		get: function get() {
 			this.utils.logger.debug({ description: 'Users Action called.', action: new _actionsUsersAction2['default'](), func: 'users', obj: 'Grout' });
-			return new _actionsUsersAction2['default']();
+			return new _actionsUsersAction2['default']({ app: this });
 		}
 	}, {
 		key: 'groups',
 		get: function get() {
-			this.utils.logger.debug({ description: 'Groups Action called.', action: new _actionsGroupsAction2['default'](), func: 'groups', obj: 'Grout' });
-			return new _actionsGroupsAction2['default']();
+			this.utils.logger.debug({ description: 'Groups Action called.', action: new _actionsGroupsAction2['default']({ app: this }), func: 'groups', obj: 'Grout' });
+			return new _actionsGroupsAction2['default']({ app: this });
 		}
 	}, {
 		key: 'directories',
 		get: function get() {
-			this.utils.logger.debug({ description: 'Directories Action called.', action: new DirectoriesAction(), func: 'directories', obj: 'Grout' });
-			return new _actionsUsersAction2['default']();
+			this.utils.logger.debug({ description: 'Directories Action called.', action: new DirectoriesAction({ app: this }), func: 'directories', obj: 'Grout' });
+			return new DirectoriesAction({ app: this });
 		}
 	}]);
 

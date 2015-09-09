@@ -43,7 +43,7 @@ class Grout extends Matter {
 	//Start a new Users action
 	get users() {
 		this.utils.logger.debug({description: 'Users Action called.', action: new UsersAction(), func: 'users', obj: 'Grout'});
-		return new UsersAction();
+		return new UsersAction({app: this});
 	}
 	//Start a new User action
 	user(userData) {
@@ -52,18 +52,18 @@ class Grout extends Matter {
 	}
 	//Start a new Groups action
 	get groups() {
-		this.utils.logger.debug({description: 'Groups Action called.', action: new GroupsAction(), func: 'groups', obj: 'Grout'});
-		return new GroupsAction();
+		this.utils.logger.debug({description: 'Groups Action called.', action: new GroupsAction({app: this}), func: 'groups', obj: 'Grout'});
+		return new GroupsAction({app: this});
 	}
 	//Start a new Group action
 	group(groupData) {
-		this.utils.logger.debug({description: 'Group Action called.', groupData: groupData, action: new Group(groupData), func: 'group', obj: 'Grout'});
-		return new Group(groupData);
+		this.utils.logger.debug({description: 'Group Action called.', groupData: groupData, action: new Group({app: this, groupData: groupData}), func: 'group', obj: 'Grout'});
+		return new Group({app: this, groupData: groupData});
 	}
 	//Start a new Directories action
 	get directories() {
-		this.utils.logger.debug({description: 'Directories Action called.', action: new DirectoriesAction(), func: 'directories', obj: 'Grout'});
-		return new UsersAction();
+		this.utils.logger.debug({description: 'Directories Action called.', action: new DirectoriesAction({app: this}), func: 'directories', obj: 'Grout'});
+		return new DirectoriesAction({app: this});
 	}
 	//Start a new Group action
 	directory(directoryData) {

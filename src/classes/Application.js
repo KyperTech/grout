@@ -44,7 +44,7 @@ class Application {
 		if (Firebase) {
 			this.fbRef = new Firebase(config.fbUrl + appData.name);
 		}
-		logger.debug({description: 'Application object created.', application: this, func: 'constructor', obj: 'Application'});
+		// logger.debug({description: 'Application object created.', application: this, func: 'constructor', obj: 'Application'});
 	}
 	get appEndpoint() {
 		return `${matter.endpoint}/apps/${this.name}`;
@@ -111,7 +111,7 @@ class Application {
 	}
 	get groups() {
 		logger.debug({description: 'Applications groups action called.', application: this, func: 'groups', obj: 'Application'});
-		return new GroupsAction();
+		return new GroupsAction({app: this});
 	}
 	group(groupData) {
 		logger.debug({description: 'Applications group action called.', groupData: groupData, application: this, func: 'group', obj: 'Application'});

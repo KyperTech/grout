@@ -739,7 +739,254 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return Directory;
 	})();
 
+	var _________request = matter.utils.request;
 	var __________logger = matter.utils.logger;
+
+	//Actions for specific user
+
+	var Group = (function () {
+		function Group(actionData) {
+			_classCallCheck(this, Group);
+
+			//Call matter with name and settings
+			if (actionData && _.isObject(actionData) && _.has(actionData, 'groupName')) {
+				//Data is object containing group data
+				this.name = actionData.groupName;
+				if (_.has(actionData, 'appName')) {
+					this.appName = actionData.appName;
+				}
+			} else if (actionData && _.isString(actionData)) {
+				//Data is string name
+				this.name = actionData;
+			} else {
+				__________logger.error({ description: 'Action data is required to start a Group Action.', func: 'constructor', obj: 'Group' });
+				throw new Error('Username is required to start an Group');
+			}
+		}
+
+		_createClass(Group, [{
+			key: 'get',
+
+			//Get userlications or single userlication
+			value: function get() {
+				return _________request.get(this.groupEndpoint).then(function (response) {
+					__________logger.info({ description: 'Group data loaded successfully.', response: response, func: 'get', obj: 'Group' });
+					return response;
+				})['catch'](function (errRes) {
+					__________logger.info({ description: 'Error getting group.', error: errRes, func: 'get', obj: 'Group' });
+					return Promise.reject(errRes);
+				});
+			}
+
+			//Update an Group
+		}, {
+			key: 'update',
+			value: function update(groupData) {
+				__________logger.log({ description: 'Group updated called.', groupData: groupData, func: 'update', obj: 'Group' });
+				return matter.utils.request.put(this.groupEndpoint, groupData).then(function (response) {
+					__________logger.info({ description: 'Group updated successfully.', groupData: groupData, response: response, func: 'update', obj: 'Group' });
+					return response;
+				})['catch'](function (errRes) {
+					__________logger.error({ description: 'Error updating group.', groupData: groupData, error: errRes, func: 'update', obj: 'Group' });
+					return Promise.reject(errRes);
+				});
+			}
+
+			//Delete an Group
+		}, {
+			key: 'del',
+			value: function del(groupData) {
+				__________logger.log({ description: 'Delete group called.', groupData: groupData, func: 'del', obj: 'Group' });
+				return _________request['delete'](this.groupEndpoint, userData).then(function (response) {
+					__________logger.info({ description: 'Group deleted successfully.', groupData: groupData, func: 'del', obj: 'Group' });
+					return response;
+				})['catch'](function (errRes) {
+					__________logger.error({ description: 'Error deleting group.', groupData: groupData, error: errRes, func: 'del', obj: 'Group' });
+					return Promise.reject(errRes);
+				});
+			}
+		}, {
+			key: 'groupEndpoint',
+			get: function get() {
+				if (_.has(this, 'appName')) {
+					return matter.endpoint + '/' + this.appName + '/groups/' + this.name;
+				}
+				return matter.endpoint + '/groups/' + this.name;
+			}
+		}]);
+
+		return Group;
+	})();
+
+	var ________request = matter.utils.request;
+	var _________logger = matter.utils.logger;
+
+	//Actions for users list
+
+	var GroupsAction = (function () {
+		function GroupsAction(actionData) {
+			_classCallCheck(this, GroupsAction);
+
+			//Check to see if action is for a specific app
+			if (actionData && _.isObject(actionData) && _.has(actionData, 'app')) {
+				this.app = actionData.app;
+				_________logger.log({ description: 'Provided app data set to app parameter.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
+			} else if (actionData && _.isString(actionData)) {
+				this.app = { name: actionData };
+			} else {
+				_________logger.error({ description: 'New groups action.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
+			}
+			_________logger.log({ description: 'New groups action.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
+		}
+
+		_createClass(GroupsAction, [{
+			key: 'get',
+
+			//Get users or single application
+			value: function get() {
+				_________logger.debug({ description: 'Get group called.', func: 'get', obj: 'GroupsAction' });
+				return ________request.get(this.groupsEndpoint).then(function (response) {
+					_________logger.info({ description: 'Groups loaded successfully.', response: response, func: 'get', obj: 'GroupsAction' });
+					return response;
+				})['catch'](function (errRes) {
+					_________logger.info({ description: 'Error getting groups.', error: errRes, func: 'get', obj: 'GroupsAction' });
+					return Promise.reject(errRes);
+				});
+			}
+
+			//Add an application
+		}, {
+			key: 'add',
+			value: function add(groupData) {
+				var newGroupData = groupData;
+				_________logger.debug({ description: 'Add group called.', groupData: groupData, func: 'add', obj: 'GroupsAction' });
+				if (_.isString(groupData)) {
+					//Group data is string
+					newGroupData = { name: groupData };
+				}
+				_________logger.debug({ description: 'Add group called.', newGroupData: newGroupData, func: 'add', obj: 'GroupsAction' });
+				return ________request.post(this.groupsEndpoint, newGroupData).then(function (response) {
+					_________logger.log({ description: 'Group added to application successfully.', response: response, func: 'add', obj: 'GroupsAction' });
+					//TODO: Return list of group objects
+					return response;
+				})['catch'](function (errRes) {
+					_________logger.error({ description: 'Error adding group.', error: errRes, func: 'add', obj: 'GroupsAction' });
+					return Promise.reject(errRes);
+				});
+			}
+
+			//Search with partial of username
+		}, {
+			key: 'search',
+			value: function search(query) {
+				_________logger.debug({ description: 'Add group called.', groupData: groupData, func: 'search', obj: 'GroupsAction' });
+				if (!query || query == '' || !_.isString(query)) {
+					_________logger.log({ description: 'Null or invalid query, returning empty array.', func: 'search', obj: 'GroupsAction' });
+					return Promise.resolve([]);
+				}
+				var searchEndpoint = this.groupsEndpoint + '/search/' + query;
+				_________logger.debug({ description: 'Search endpoint created.', endpoint: searchEndpoint, func: 'search', obj: 'GroupsAction' });
+				return ________request.get(searchEndpoint).then(function (response) {
+					_________logger.log({ description: 'Found groups based on search.', response: response, func: 'search', obj: 'GroupsAction' });
+					return response;
+				})['catch'](function (errRes) {
+					_________logger.error({ description: 'Error searching groups.', error: errRes, func: 'search', obj: 'GroupsAction' });
+					return Promise.reject(errRes);
+				});
+			}
+		}, {
+			key: 'groupsEndpoint',
+			get: function get() {
+				//Check for app groups action
+				if (_.has(this, 'app') && _.has(this.app, 'name')) {
+					return matter.endpoint + '/apps/' + this.app.name + '/groups';
+				}
+				return matter.endpoint + '/groups';
+			}
+		}]);
+
+		return GroupsAction;
+	})();
+
+	var _______request = matter.utils.request;
+	var ________logger = matter.utils.logger;
+
+	//Actions for specific user
+
+	var User = (function () {
+		function User(userData) {
+			_classCallCheck(this, User);
+
+			//Call matter with name and settings
+			if (userData && _.isObject(userData) && _.has(userData, 'username')) {
+				_.extend(this, userData);
+			} else if (userData && _.isString(userData)) {
+				this.username = userData;
+			} else {
+				________logger.error({ description: 'Userdata is required to start an UserAction', func: 'constructor', obj: 'User' });
+				throw new Error('Username is required to start an UserAction');
+			}
+		}
+
+		//Build endpoint based on userData
+
+		_createClass(User, [{
+			key: 'get',
+
+			//Get a user
+			value: function get() {
+				________logger.debug({ description: 'User data loaded successfully.', func: 'get', obj: 'User' });
+				return _______request.get(this.userEndpoint).then(function (response) {
+					________logger.info({ description: 'User data loaded successfully.', response: response, func: 'get', obj: 'User' });
+					return new User(response);
+				})['catch'](function (errRes) {
+					________logger.error({ description: 'Error getting user.', error: errRes, func: 'get', obj: 'User' });
+					return Promise.reject(errRes);
+				});
+			}
+
+			//Update a User
+		}, {
+			key: 'update',
+			value: function update(userData) {
+				________logger.debug({ description: 'Update user called.', userData: userData, func: 'update', obj: 'User' });
+				return _______request.put(this.userEndpoint, userData).then(function (response) {
+					________logger.info({ description: 'User updated successfully.', func: 'update', obj: 'User' });
+					//TODO: Extend this with current info before returning
+					return new User(response);
+				})['catch'](function (errRes) {
+					________logger.error({ description: 'Error updating user.', func: 'update', obj: 'User' });
+					return Promise.reject(errRes);
+				});
+			}
+
+			//Delete a User
+		}, {
+			key: 'del',
+			value: function del(userData) {
+				________logger.debug({ description: 'Delete user called.', func: 'del', obj: 'User' });
+				return _______request['delete'](this.endpoint, userData).then(function (response) {
+					________logger.info({ description: 'Delete user successful.', response: response, func: 'del', obj: 'User' });
+					return new User(response);
+				})['catch'](function (errRes) {
+					________logger.error({ description: 'Error deleting user.', userData: userData, error: errRes, func: 'del', obj: 'User' });
+					return Promise.reject(errRes);
+				});
+			}
+		}, {
+			key: 'userEndpoint',
+			get: function get() {
+				if (_.has(this, 'appName')) {
+					return matter.endpoint + '/apps/' + this.appName + '/users/' + this.username;
+				}
+				return matter.endpoint + '/users/' + this.username;
+			}
+		}]);
+
+		return User;
+	})();
+
+	var _______logger = matter.utils.logger;
 	//Actions for users list
 
 	var UsersAction = (function () {
@@ -785,7 +1032,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					searchEndpoint += query;
 				}
 				if (!query || query == '') {
-					__________logger.log({ description: 'Null query, returning empty array.', func: 'search', obj: 'UsersAction' });
+					_______logger.log({ description: 'Null query, returning empty array.', func: 'search', obj: 'UsersAction' });
 					return Promise.resolve([]);
 				}
 				return matter.utils.request.get(searchEndpoint).then(function (response) {
@@ -804,243 +1051,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}]);
 
 		return UsersAction;
-	})();
-
-	var _________request = matter.utils.request;
-	var _________logger = matter.utils.logger;
-
-	//Actions for specific user
-
-	var Group = (function () {
-		function Group(actionData) {
-			_classCallCheck(this, Group);
-
-			//Call matter with name and settings
-			if (actionData && _.isObject(actionData) && _.has(actionData, 'groupName')) {
-				//Data is object containing group data
-				this.name = actionData.groupName;
-				if (_.has(actionData, 'appName')) {
-					this.appName = actionData.appName;
-				}
-			} else if (actionData && _.isString(actionData)) {
-				//Data is string name
-				this.name = actionData;
-			} else {
-				_________logger.error({ description: 'Action data is required to start a Group Action.', func: 'constructor', obj: 'Group' });
-				throw new Error('Username is required to start an Group');
-			}
-		}
-
-		_createClass(Group, [{
-			key: 'get',
-
-			//Get userlications or single userlication
-			value: function get() {
-				return _________request.get(this.groupEndpoint).then(function (response) {
-					_________logger.info({ description: 'Group data loaded successfully.', groupData: groupData, response: response, func: 'get', obj: 'Group' });
-					return response;
-				})['catch'](function (errRes) {
-					_________logger.info({ description: 'Error getting group.', groupData: groupData, error: errRes, func: 'get', obj: 'Group' });
-					return Promise.reject(errRes);
-				});
-			}
-
-			//Update an Group
-		}, {
-			key: 'update',
-			value: function update(groupData) {
-				_________logger.log({ description: 'Group updated called.', groupData: groupData, func: 'update', obj: 'Group' });
-				return matter.utils.request.put(this.groupEndpoint, groupData).then(function (response) {
-					_________logger.info({ description: 'Group updated successfully.', groupData: groupData, response: response, func: 'update', obj: 'Group' });
-					return response;
-				})['catch'](function (errRes) {
-					_________logger.error({ description: 'Error updating group.', groupData: groupData, error: errRes, func: 'update', obj: 'Group' });
-					return Promise.reject(errRes);
-				});
-			}
-
-			//Delete an Group
-		}, {
-			key: 'del',
-			value: function del(groupData) {
-				_________logger.log({ description: 'Delete group called.', groupData: groupData, func: 'del', obj: 'Group' });
-				return _________request['delete'](this.groupEndpoint, userData).then(function (response) {
-					_________logger.info({ description: 'Group deleted successfully.', groupData: groupData, func: 'del', obj: 'Group' });
-					return response;
-				})['catch'](function (errRes) {
-					_________logger.error({ description: 'Error deleting group.', groupData: groupData, error: errRes, func: 'del', obj: 'Group' });
-					return Promise.reject(errRes);
-				});
-			}
-		}, {
-			key: 'groupEndpoint',
-			get: function get() {
-				if (_.has(this, 'appName')) {
-					return matter.endpoint + '/' + this.appName + '/groups/' + this.name;
-				}
-				return matter.endpoint + '/groups/' + this.name;
-			}
-		}]);
-
-		return Group;
-	})();
-
-	var ________request = matter.utils.request;
-	var ________logger = matter.utils.logger;
-
-	//Actions for users list
-
-	var GroupsAction = (function () {
-		function GroupsAction(actionData) {
-			_classCallCheck(this, GroupsAction);
-
-			//Check to see if action is for a specific app
-			if (actionData && _.isObject(actionData) && _.has(actionData, 'appName')) {
-				this.appName = actionData.appName;
-			} else if (actionData && _.isString(actionData)) {
-				this.appName = actionData;
-			}
-		}
-
-		_createClass(GroupsAction, [{
-			key: 'get',
-
-			//Get users or single application
-			value: function get() {
-				________logger.debug({ description: 'Get group called.', func: 'get', obj: 'GroupsAction' });
-				return ________request.get(this.groupsEndpoint).then(function (response) {
-					________logger.info({ description: 'Groups loaded successfully.', func: 'get', obj: 'GroupsAction' });
-					return response;
-				})['catch'](function (errRes) {
-					________logger.info({ description: 'Error getting groups.', error: errRes, func: 'get', obj: 'GroupsAction' });
-					return Promise.reject(errRes);
-				});
-			}
-
-			//Add an application
-		}, {
-			key: 'add',
-			value: function add(groupData) {
-				________logger.debug({ description: 'Add group called.', groupData: groupData, func: 'add', obj: 'GroupsAction' });
-				return ________request.post(this.groupsEndpoint, groupData).then(function (response) {
-					________logger.log({ description: 'Application added successfully.', response: response, func: 'add', obj: 'GroupsAction' });
-					//TODO: Return list of group objects
-					return response;
-				})['catch'](function (errRes) {
-					________logger.error({ description: 'Error adding group.', error: errRes, func: 'add', obj: 'GroupsAction' });
-					return Promise.reject(errRes);
-				});
-			}
-
-			//Search with partial of username
-		}, {
-			key: 'search',
-			value: function search(query) {
-				________logger.debug({ description: 'Add group called.', groupData: groupData, func: 'search', obj: 'GroupsAction' });
-				if (!query || query == '' || !_.isString(query)) {
-					________logger.log({ description: 'Null or invalid query, returning empty array.', func: 'search', obj: 'GroupsAction' });
-					return Promise.resolve([]);
-				}
-				var searchEndpoint = this.groupsEndpoint + '/search/' + query;
-				________logger.debug({ description: 'Search endpoint created.', endpoint: searchEndpoint, func: 'search', obj: 'GroupsAction' });
-				return ________request.get(searchEndpoint).then(function (response) {
-					________logger.log({ description: 'Found groups based on search.', response: response, func: 'search', obj: 'GroupsAction' });
-					return response;
-				})['catch'](function (errRes) {
-					________logger.error({ description: 'Error searching groups.', error: errRes, func: 'search', obj: 'GroupsAction' });
-					return Promise.reject(errRes);
-				});
-			}
-		}, {
-			key: 'groupsEndpoint',
-			get: function get() {
-				//Check for app groups action
-				if (this.appName) {
-					return matter.endpoint + '/apps/' + this.appName + '/groups';
-				}
-				return matter.endpoint + '/groups';
-			}
-		}]);
-
-		return GroupsAction;
-	})();
-
-	var _______request = matter.utils.request;
-	var _______logger = matter.utils.logger;
-
-	//Actions for specific user
-
-	var User = (function () {
-		function User(userData) {
-			_classCallCheck(this, User);
-
-			//Call matter with name and settings
-			if (userData && _.isObject(userData) && _.has(userData, 'username')) {
-				_.extend(this, userData);
-			} else if (userData && _.isString(userData)) {
-				this.username = userData;
-			} else {
-				_______logger.error({ description: 'Userdata is required to start an UserAction', func: 'constructor', obj: 'User' });
-				throw new Error('Username is required to start an UserAction');
-			}
-		}
-
-		//Build endpoint based on userData
-
-		_createClass(User, [{
-			key: 'get',
-
-			//Get a user
-			value: function get() {
-				_______logger.debug({ description: 'User data loaded successfully.', func: 'get', obj: 'User' });
-				return _______request.get(this.userEndpoint).then(function (response) {
-					_______logger.info({ description: 'User data loaded successfully.', response: response, func: 'get', obj: 'User' });
-					return new User(response);
-				})['catch'](function (errRes) {
-					_______logger.error({ description: 'Error getting user.', error: errRes, func: 'get', obj: 'User' });
-					return Promise.reject(errRes);
-				});
-			}
-
-			//Update a User
-		}, {
-			key: 'update',
-			value: function update(userData) {
-				_______logger.debug({ description: 'Update user called.', userData: userData, func: 'update', obj: 'User' });
-				return _______request.put(this.userEndpoint, userData).then(function (response) {
-					_______logger.info({ description: 'User updated successfully.', func: 'update', obj: 'User' });
-					//TODO: Extend this with current info before returning
-					return new User(response);
-				})['catch'](function (errRes) {
-					_______logger.error({ description: 'Error updating user.', func: 'update', obj: 'User' });
-					return Promise.reject(errRes);
-				});
-			}
-
-			//Delete a User
-		}, {
-			key: 'del',
-			value: function del(userData) {
-				_______logger.debug({ description: 'Delete user called.', func: 'del', obj: 'User' });
-				return _______request['delete'](this.endpoint, userData).then(function (response) {
-					_______logger.info({ description: 'Delete user successful.', response: response, func: 'del', obj: 'User' });
-					return new User(response);
-				})['catch'](function (errRes) {
-					_______logger.error({ description: 'Error deleting user.', userData: userData, error: errRes, func: 'del', obj: 'User' });
-					return Promise.reject(errRes);
-				});
-			}
-		}, {
-			key: 'userEndpoint',
-			get: function get() {
-				if (_.has(this, 'appName')) {
-					return matter.endpoint + '/apps/' + this.appName + '/users/' + this.username;
-				}
-				return matter.endpoint + '/users/' + this.username;
-			}
-		}]);
-
-		return User;
 	})();
 
 	var ______request = matter.utils.request;
@@ -1612,7 +1622,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			if (Firebase) {
 				this.fbRef = new Firebase(config.fbUrl + appData.name);
 			}
-			_logger.debug({ description: 'Application object created.', application: this, func: 'constructor', obj: 'Application' });
+			// logger.debug({description: 'Application object created.', application: this, func: 'constructor', obj: 'Application'});
 		}
 
 		_createClass(_Application, [{
@@ -1716,7 +1726,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'groups',
 			get: function get() {
 				_logger.debug({ description: 'Applications groups action called.', application: this, func: 'groups', obj: 'Application' });
-				return new GroupsAction();
+				return new GroupsAction({ app: this });
 			}
 		}, {
 			key: 'directories',
@@ -1832,8 +1842,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			//Start a new Group action
 			value: function group(groupData) {
-				this.utils.logger.debug({ description: 'Group Action called.', groupData: groupData, action: new Group(groupData), func: 'group', obj: 'Grout' });
-				return new Group(groupData);
+				this.utils.logger.debug({ description: 'Group Action called.', groupData: groupData, action: new Group({ app: this, groupData: groupData }), func: 'group', obj: 'Grout' });
+				return new Group({ app: this, groupData: groupData });
 			}
 
 			//Start a new Directories action
@@ -1861,19 +1871,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'users',
 			get: function get() {
 				this.utils.logger.debug({ description: 'Users Action called.', action: new UsersAction(), func: 'users', obj: 'Grout' });
-				return new UsersAction();
+				return new UsersAction({ app: this });
 			}
 		}, {
 			key: 'groups',
 			get: function get() {
-				this.utils.logger.debug({ description: 'Groups Action called.', action: new GroupsAction(), func: 'groups', obj: 'Grout' });
-				return new GroupsAction();
+				this.utils.logger.debug({ description: 'Groups Action called.', action: new GroupsAction({ app: this }), func: 'groups', obj: 'Grout' });
+				return new GroupsAction({ app: this });
 			}
 		}, {
 			key: 'directories',
 			get: function get() {
-				this.utils.logger.debug({ description: 'Directories Action called.', action: new DirectoriesAction(), func: 'directories', obj: 'Grout' });
-				return new UsersAction();
+				this.utils.logger.debug({ description: 'Directories Action called.', action: new DirectoriesAction({ app: this }), func: 'directories', obj: 'Grout' });
+				return new DirectoriesAction({ app: this });
 			}
 		}]);
 
