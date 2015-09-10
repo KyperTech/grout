@@ -25,7 +25,7 @@ class AppsAction {
 	}
 	//Add an application
 	add(appData) {
-		logger.debug({description: 'Application added called.', appData: appData, func: 'add', obj: 'AppsAction'});
+		logger.debug({description: 'Application add called.', appData: appData, func: 'add', obj: 'AppsAction'});
 		return matter.utils.request.post(this.appsEndpoint, appData).then((response) => {
 			logger.info({description: 'Application added successfully.', response: response, func: 'add', obj: 'AppsAction'});
 			return new Application(response);

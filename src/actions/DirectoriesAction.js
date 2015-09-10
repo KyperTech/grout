@@ -8,18 +8,26 @@ let logger = matter.utils.logger;
 class DirectoriesAction {
 	constructor(actionData) {
 		//Check to see if action is for a specific app
-		if (actionData && _.isObject(actionData) && _.has(actionData, 'appName')) {
-			this.appName = actionData.appName;
+		if (actionData && _.isObject(actionData) && _.has(actionData, 'app')) {
+			this.app = actionData.app;
+			logger.log({description: 'Provided app data set to app parameter.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction'});
 		} else if (actionData && _.isString(actionData)) {
-			this.appName = actionData;
+			this.app = {name: actionData};
+			logger.log({description: 'App name provided as string was set.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction'});
+		} else {
+			logger.error({description: 'Error creating directories action.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction'});
 		}
 	}
 	get directoriesEndpoint() {
+		let endpointArray = [matter.endpoint, 'directories'];
 		//Check for app groups action
-		if (this.appName) {
-			return `${matter.endpoint}/apps/${this.appName}/groups`;
+		if (_.has(this, 'app') && _.has(this.app, 'name')) {
+			endpointArray.splice(1, 0, ['apps', this.app.name]);
 		}
-		return `${matter.endpoint}/groups`;
+		//Create string from endpointArray
+		let endpointStr = endpointArray.join('/');
+		logger.log({description: 'Directories endpoint built.', endpoint: endpointStr, func: 'directoriesEndpoint', obj: 'DirectoriesAction'});
+		return endpointStr;
 	}
 	//Get users or single application
 	get() {
@@ -44,7 +52,7 @@ class DirectoriesAction {
 			return Promise.reject(errRes);
 		});
 	}
-	//Search with partial of username
+	//Search with partial of directory name
 	search(query) {
 		var searchEndpoint = this.directoriesEndpoint + '/search/';
 		if (query && _.isString(query)) {
@@ -55,10 +63,10 @@ class DirectoriesAction {
 			return Promise.resolve([]);
 		}
 		return request.get(searchEndpoint).then((response) => {
-			logger.log({description: 'Found groups based on search.', response: response, func: 'search', obj: 'DirectoriesAction'});
+			logger.log({description: 'Found directories based on search.', response: response, func: 'search', obj: 'DirectoriesAction'});
 			return response;
 		})['catch']((errRes) => {
-			logger.error({description: 'Error searching groups.', error: errRes, func: 'search', obj: 'DirectoriesAction'});
+			logger.error({description: 'Error searching directories.', error: errRes, func: 'search', obj: 'DirectoriesAction'});
 			return Promise.reject(errRes);
 		});
 	}

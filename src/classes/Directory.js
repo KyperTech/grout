@@ -20,10 +20,15 @@ class Directory {
 		}
 	}
 	get directoryEndpoint() {
-		if (_.has(this, 'appName')) {
-			return `${matter.endpoint}/${this.appName}/directorys/${this.name}`;
+		let endpointArray = [matter.endpoint, 'directories', this.name];
+		//Check for app account action
+		if (_.has(this, 'app') && _.has(this.app, 'name')) {
+			endpointArray.splice(1, 0, ['apps', this.app.name]);
 		}
-		return `${matter.endpoint}/directorys/${this.name}`;
+		//Create string from endpointArray
+		let endpointStr = endpointArray.join('/');
+		logger.log({description: 'Directory endpoint built.', endpoint: endpointStr, func: 'directoryEndpoint', obj: 'Directory'});
+		return endpointStr;
 	}
 	//Get userlications or single userlication
 	get() {

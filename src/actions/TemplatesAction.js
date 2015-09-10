@@ -7,7 +7,16 @@ let request = matter.utils.request;
 //Actions for templates list
 class TemplatesAction {
 	get templatesEndpoint() {
-		return `${matter.endpoint}/templates`;
+		let endpointArray = [matter.endpoint, 'templates'];
+		//Check for app groups action
+		if (_.has(this, 'app') && _.has(this.app, 'name')) {
+			// endpointArray.splice(1, 0, ['apps', this.app.name]);
+			logger.log({description: 'Templates action is not currently supported for a specific application.', func: 'accountsEndpoint', obj: 'AccountsAction'});
+		}
+		//Create string from endpointArray
+		let endpointStr = endpointArray.join('/');
+		logger.log({description: 'Templates endpoint built.', endpoint: endpointStr, func: 'templatesEndpoint', obj: 'TemplatesAction'});
+		return endpointStr;
 	}
 	//Get templates or single application
 	get() {

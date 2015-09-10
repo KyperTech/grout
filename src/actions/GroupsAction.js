@@ -13,17 +13,21 @@ class GroupsAction {
 			logger.log({description: 'Provided app data set to app parameter.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction'});
 		} else if (actionData && _.isString(actionData)) {
 			this.app = {name: actionData};
+			logger.log({description: 'App name provided as string was set.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction'});
 		} else {
-			logger.error({description: 'New groups action.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction'});
+			logger.error({description: 'Error creating new Groups action.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction'});
 		}
-		logger.log({description: 'New groups action.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction'});
 	}
 	get groupsEndpoint() {
+		let endpointArray = [matter.endpoint, 'groups'];
 		//Check for app groups action
 		if (_.has(this, 'app') && _.has(this.app, 'name')) {
-			return `${matter.endpoint}/apps/${this.app.name}/groups`;
+			endpointArray.splice(1, 0, ['apps', this.app.name]);
 		}
-		return `${matter.endpoint}/groups`;
+		//Create string from endpointArray
+		let endpointStr = endpointArray.join('/');
+		logger.log({description: 'Groups Endpoint built.', endpoint: endpointStr, func: 'groupsEndpoint', obj: 'GroupsAction'});
+		return endpointStr;
 	}
 	//Get users or single application
 	get() {

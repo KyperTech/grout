@@ -8,8 +8,8 @@ import GroupsAction from '../actions/GroupsAction';
 import Group from './Group';
 import DirectoriesAction from '../actions/DirectoriesAction';
 import Directory from './Directory';
-import UsersAction from '../actions/UsersAction';
-import User from './User';
+import AccountsAction from '../actions/AccountsAction';
+import Account from './Account';
 import Files from './Files';
 import File from './File';
 
@@ -95,19 +95,19 @@ class Application {
 	//Files object that contains files methods
 	get files() {
 		logger.debug({description: 'Applications files action called.', application: this, func: 'files', obj: 'Application'});
-		return new Files(this);
+		return new Files({app: this});
 	}
 	file(fileData) {
 		logger.debug({description: 'Applications file action called.', fileData: fileData, application: this, func: 'file', obj: 'Application'});
-		return new File(fileData);
+		return new File({app: this, fileData: fileData});
 	}
 	get users() {
 		logger.debug({description: 'Applications users action called.', application: this, func: 'user', obj: 'Application'});
-		return new UsersAction();
+		return new AccountsAction({app: this});
 	}
 	user(userData) {
 		logger.debug({description: 'Applications user action called.', userData: userData, application: this, func: 'user', obj: 'Application'});
-		return new User(userData);
+		return new Account({app: this, userData: userData});
 	}
 	get groups() {
 		logger.debug({description: 'Applications groups action called.', application: this, func: 'groups', obj: 'Application'});
@@ -115,15 +115,15 @@ class Application {
 	}
 	group(groupData) {
 		logger.debug({description: 'Applications group action called.', groupData: groupData, application: this, func: 'group', obj: 'Application'});
-		return new Group(groupData);
+		return new Group({app: this, groupData: groupData});
 	}
 	get directories() {
 		logger.debug({description: 'Applications directories action called.', application: this, func: 'directories', obj: 'Application'});
-		return new DirectoriesAction();
+		return new DirectoriesAction({app: this});
 	}
 	directory(directoryData) {
 		logger.debug({description: 'Applications directory action called.', directoryData: directoryData, application: this, func: 'directory', obj: 'Application'});
-		return new Directory(directoryData);
+		return new Directory({app: this, directoryData: directoryData});
 	}
 }
 

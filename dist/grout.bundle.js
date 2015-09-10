@@ -41859,6 +41859,123 @@ var _config = require('../config');
 
 var _config2 = _interopRequireDefault(_config);
 
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _classesMatter = require('../classes/Matter');
+
+var _classesMatter2 = _interopRequireDefault(_classesMatter);
+
+var _classesAccount = require('../classes/Account');
+
+var _classesAccount2 = _interopRequireDefault(_classesAccount);
+
+var logger = _classesMatter2['default'].utils.logger;
+//Actions for accounts list
+
+var AccountsAction = (function () {
+	function AccountsAction(actionData) {
+		_classCallCheck(this, AccountsAction);
+
+		//Check to see if action is for a specific app
+		if (actionData && _lodash2['default'].isObject(actionData) && _lodash2['default'].has(actionData, 'app')) {
+			this.app = actionData.app;
+			logger.log({ description: 'Provided app data set to app parameter.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction' });
+		} else if (actionData && _lodash2['default'].isString(actionData)) {
+			this.app = { name: actionData };
+			logger.log({ description: 'App name provided as string was set.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction' });
+		} else {
+			logger.error({ description: 'New Accounts action.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction' });
+		}
+	}
+
+	_createClass(AccountsAction, [{
+		key: 'get',
+
+		//Get accounts or single application
+		value: function get() {
+			logger.log({ description: 'Accounts get called.', func: 'get', obj: 'AccountsAction' });
+			return _classesMatter2['default'].utils.request.get(this.accountsEndpoint).then(function (response) {
+				logger.info({ description: 'Accounts loaded successfully.', func: 'get', obj: 'AccountsAction' });
+				return response;
+			})['catch'](function (errRes) {
+				logger.info({ description: 'Error getting accounts.', error: errRes, func: 'get', obj: 'AccountsAction' });
+				return Promise.reject(errRes.message || 'Error getting accounts.');
+			});
+		}
+
+		//Add an application
+	}, {
+		key: 'add',
+		value: function add(accountData) {
+			logger.info({ description: 'Account add called.', accountData: accountData, func: 'add', obj: 'AccountsAction' });
+			return this.utils.request.post(this.accountsEndpoint, accountData).then(function (response) {
+				logger.info({ description: 'Account added successfully.', response: response, newAccount: new _classesAccount2['default'](response), func: 'add', obj: 'AccountsAction' });
+				return new _classesAccount2['default'](response);
+			})['catch'](function (errRes) {
+				logger.error({ description: 'Account add called.', error: errRes, accountData: accountData, func: 'add', obj: 'AccountsAction' });
+				return Promise.reject(errRes.message || 'Error adding account.');
+			});
+		}
+
+		//Search with partial of accountname
+	}, {
+		key: 'search',
+		value: function search(query) {
+			logger.log({ description: 'Accounts search called.', query: query, func: 'search', obj: 'AccountsAction' });
+			var searchEndpoint = this.accountsEndpoint + '/search/';
+			if (query && _lodash2['default'].isString(query)) {
+				searchEndpoint += query;
+			}
+			if (!query || query == '') {
+				logger.log({ description: 'Null query, returning empty array.', func: 'search', obj: 'AccountsAction' });
+				return Promise.resolve([]);
+			}
+			return _classesMatter2['default'].utils.request.get(searchEndpoint).then(function (response) {
+				logger.log({ description: 'Accounts search responded.', response: response, query: query, func: 'search', obj: 'AccountsAction' });
+				return response;
+			})['catch'](function (errRes) {
+				logger.error({ description: 'Error searching Accounts.', error: errRes, query: query, func: 'search', obj: 'AccountsAction' });
+				return Promise.reject(errRes.message || 'Error searching accounts.');
+			});
+		}
+	}, {
+		key: 'accountsEndpoint',
+		get: function get() {
+			var endpointArray = [_classesMatter2['default'].endpoint, 'accounts'];
+			//Check for app account action
+			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
+				endpointArray.splice(1, 0, ['apps', this.app.name]);
+			}
+			//Create string from endpointArray
+			var endpointStr = endpointArray.join('/');
+			logger.log({ description: 'Accounts Endpoint built.', endpoint: endpointStr, func: 'accountsEndpoint', obj: 'AccountsAction' });
+			return endpointStr;
+		}
+	}]);
+
+	return AccountsAction;
+})();
+
+exports['default'] = AccountsAction;
+module.exports = exports['default'];
+
+},{"../classes/Account":238,"../classes/Matter":244,"../config":246,"lodash":232}],234:[function(require,module,exports){
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _config = require('../config');
+
+var _config2 = _interopRequireDefault(_config);
+
 var _classesMatter = require('../classes/Matter');
 
 var _classesMatter2 = _interopRequireDefault(_classesMatter);
@@ -41892,7 +42009,7 @@ var AppsAction = (function () {
 	}, {
 		key: 'add',
 		value: function add(appData) {
-			logger.debug({ description: 'Application added called.', appData: appData, func: 'add', obj: 'AppsAction' });
+			logger.debug({ description: 'Application add called.', appData: appData, func: 'add', obj: 'AppsAction' });
 			return _classesMatter2['default'].utils.request.post(this.appsEndpoint, appData).then(function (response) {
 				logger.info({ description: 'Application added successfully.', response: response, func: 'add', obj: 'AppsAction' });
 				return new Application(response);
@@ -41916,7 +42033,7 @@ var AppsAction = (function () {
 exports['default'] = AppsAction;
 module.exports = exports['default'];
 
-},{"../classes/Matter":243,"../config":246}],234:[function(require,module,exports){
+},{"../classes/Matter":244,"../config":246}],235:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
 	value: true
 });
@@ -41949,10 +42066,14 @@ var DirectoriesAction = (function () {
 		_classCallCheck(this, DirectoriesAction);
 
 		//Check to see if action is for a specific app
-		if (actionData && _lodash2['default'].isObject(actionData) && _lodash2['default'].has(actionData, 'appName')) {
-			this.appName = actionData.appName;
+		if (actionData && _lodash2['default'].isObject(actionData) && _lodash2['default'].has(actionData, 'app')) {
+			this.app = actionData.app;
+			logger.log({ description: 'Provided app data set to app parameter.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction' });
 		} else if (actionData && _lodash2['default'].isString(actionData)) {
-			this.appName = actionData;
+			this.app = { name: actionData };
+			logger.log({ description: 'App name provided as string was set.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction' });
+		} else {
+			logger.error({ description: 'Error creating directories action.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction' });
 		}
 	}
 
@@ -41986,7 +42107,7 @@ var DirectoriesAction = (function () {
 			});
 		}
 
-		//Search with partial of username
+		//Search with partial of directory name
 	}, {
 		key: 'search',
 		value: function search(query) {
@@ -41999,21 +42120,25 @@ var DirectoriesAction = (function () {
 				return Promise.resolve([]);
 			}
 			return request.get(searchEndpoint).then(function (response) {
-				logger.log({ description: 'Found groups based on search.', response: response, func: 'search', obj: 'DirectoriesAction' });
+				logger.log({ description: 'Found directories based on search.', response: response, func: 'search', obj: 'DirectoriesAction' });
 				return response;
 			})['catch'](function (errRes) {
-				logger.error({ description: 'Error searching groups.', error: errRes, func: 'search', obj: 'DirectoriesAction' });
+				logger.error({ description: 'Error searching directories.', error: errRes, func: 'search', obj: 'DirectoriesAction' });
 				return Promise.reject(errRes);
 			});
 		}
 	}, {
 		key: 'directoriesEndpoint',
 		get: function get() {
+			var endpointArray = [_classesMatter2['default'].endpoint, 'directories'];
 			//Check for app groups action
-			if (this.appName) {
-				return _classesMatter2['default'].endpoint + '/apps/' + this.appName + '/groups';
+			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
+				endpointArray.splice(1, 0, ['apps', this.app.name]);
 			}
-			return _classesMatter2['default'].endpoint + '/groups';
+			//Create string from endpointArray
+			var endpointStr = endpointArray.join('/');
+			logger.log({ description: 'Directories endpoint built.', endpoint: endpointStr, func: 'directoriesEndpoint', obj: 'DirectoriesAction' });
+			return endpointStr;
 		}
 	}]);
 
@@ -42023,7 +42148,7 @@ var DirectoriesAction = (function () {
 exports['default'] = DirectoriesAction;
 module.exports = exports['default'];
 
-},{"../classes/Matter":243,"../config":246,"lodash":232}],235:[function(require,module,exports){
+},{"../classes/Matter":244,"../config":246,"lodash":232}],236:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
 	value: true
 });
@@ -42061,10 +42186,10 @@ var GroupsAction = (function () {
 			logger.log({ description: 'Provided app data set to app parameter.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
 		} else if (actionData && _lodash2['default'].isString(actionData)) {
 			this.app = { name: actionData };
+			logger.log({ description: 'App name provided as string was set.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
 		} else {
-			logger.error({ description: 'New groups action.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
+			logger.error({ description: 'Error creating new Groups action.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
 		}
-		logger.log({ description: 'New groups action.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
 	}
 
 	_createClass(GroupsAction, [{
@@ -42125,11 +42250,15 @@ var GroupsAction = (function () {
 	}, {
 		key: 'groupsEndpoint',
 		get: function get() {
+			var endpointArray = [_classesMatter2['default'].endpoint, 'groups'];
 			//Check for app groups action
 			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
-				return _classesMatter2['default'].endpoint + '/apps/' + this.app.name + '/groups';
+				endpointArray.splice(1, 0, ['apps', this.app.name]);
 			}
-			return _classesMatter2['default'].endpoint + '/groups';
+			//Create string from endpointArray
+			var endpointStr = endpointArray.join('/');
+			logger.log({ description: 'Groups Endpoint built.', endpoint: endpointStr, func: 'groupsEndpoint', obj: 'GroupsAction' });
+			return endpointStr;
 		}
 	}]);
 
@@ -42139,7 +42268,7 @@ var GroupsAction = (function () {
 exports['default'] = GroupsAction;
 module.exports = exports['default'];
 
-},{"../classes/Matter":243,"../config":246,"lodash":232}],236:[function(require,module,exports){
+},{"../classes/Matter":244,"../config":246,"lodash":232}],237:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
 	value: true
 });
@@ -42222,7 +42351,16 @@ var TemplatesAction = (function () {
 	}, {
 		key: 'templatesEndpoint',
 		get: function get() {
-			return _classesMatter2['default'].endpoint + '/templates';
+			var endpointArray = [_classesMatter2['default'].endpoint, 'templates'];
+			//Check for app groups action
+			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
+				// endpointArray.splice(1, 0, ['apps', this.app.name]);
+				logger.log({ description: 'Templates action is not currently supported for a specific application.', func: 'accountsEndpoint', obj: 'AccountsAction' });
+			}
+			//Create string from endpointArray
+			var endpointStr = endpointArray.join('/');
+			logger.log({ description: 'Templates endpoint built.', endpoint: endpointStr, func: 'templatesEndpoint', obj: 'TemplatesAction' });
+			return endpointStr;
 		}
 	}]);
 
@@ -42232,7 +42370,7 @@ var TemplatesAction = (function () {
 exports['default'] = TemplatesAction;
 module.exports = exports['default'];
 
-},{"../classes/Matter":243,"../config":246,"lodash":232}],237:[function(require,module,exports){
+},{"../classes/Matter":244,"../config":246,"lodash":232}],238:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
 	value: true
 });
@@ -42247,85 +42385,101 @@ var _config = require('../config');
 
 var _config2 = _interopRequireDefault(_config);
 
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
 var _classesMatter = require('../classes/Matter');
 
 var _classesMatter2 = _interopRequireDefault(_classesMatter);
 
-var logger = _classesMatter2['default'].utils.logger;
-//Actions for users list
+var _lodash = require('lodash');
 
-var UsersAction = (function () {
-	function UsersAction() {
-		_classCallCheck(this, UsersAction);
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var request = _classesMatter2['default'].utils.request;
+var logger = _classesMatter2['default'].utils.logger;
+
+//Actions for specific user
+
+var Account = (function () {
+	function Account(accountData) {
+		_classCallCheck(this, Account);
+
+		//Call matter with name and settings
+		if (accountData && _lodash2['default'].isObject(accountData) && _lodash2['default'].has(accountData, 'username')) {
+			_lodash2['default'].extend(this, accountData);
+		} else if (accountData && _lodash2['default'].isString(accountData)) {
+			this.username = accountData;
+		} else {
+			logger.error({ description: 'AccountData is required to start an AccountAction', func: 'constructor', obj: 'Account' });
+			throw new Error('username is required to start an AccountAction');
+		}
 	}
 
-	_createClass(UsersAction, [{
+	//Build endpoint based on accountData
+
+	_createClass(Account, [{
 		key: 'get',
 
-		//Get users or single application
+		//Get a user
 		value: function get() {
-			console.log({ description: 'Users get called.', func: 'get', obj: 'UsersAction' });
-			return _classesMatter2['default'].utils.request.get(this.usersEndpoint).then(function (response) {
-				console.log('users loaded:', response);
-				return response;
+			logger.debug({ description: 'Account data loaded successfully.', func: 'get', obj: 'Account' });
+			return request.get(this.accountEndpoint).then(function (response) {
+				logger.info({ description: 'Account data loaded successfully.', response: response, func: 'get', obj: 'Account' });
+				return new Account(response);
 			})['catch'](function (errRes) {
-				console.error('error getting users');
+				logger.error({ description: 'Error getting user.', error: errRes, func: 'get', obj: 'Account' });
 				return Promise.reject(errRes);
 			});
 		}
 
-		//Add an application
+		//Update a Account
 	}, {
-		key: 'add',
-		value: function add(appData) {
-			return this.utils.request.post(this.usersEndpoint, appData).then(function (response) {
-				console.log('[MatterClient.users().add()] Application added successfully: ', response);
-				return new Application(response);
+		key: 'update',
+		value: function update(accountData) {
+			logger.debug({ description: 'Update user called.', accountData: accountData, func: 'update', obj: 'Account' });
+			return request.put(this.accountEndpoint, accountData).then(function (response) {
+				logger.info({ description: 'Account updated successfully.', func: 'update', obj: 'Account' });
+				//TODO: Extend this with current info before returning
+				return new Account(response);
 			})['catch'](function (errRes) {
-				console.error('[MatterClient.getApps()] Error adding application: ', errRes);
+				logger.error({ description: 'Error updating user.', func: 'update', obj: 'Account' });
 				return Promise.reject(errRes);
 			});
 		}
 
-		//Search with partial of username
+		//Delete a Account
 	}, {
-		key: 'search',
-		value: function search(query) {
-			console.log('search called:', query);
-			var searchEndpoint = this.usersEndpoint + '/search/';
-			if (query && _lodash2['default'].isString(query)) {
-				searchEndpoint += query;
-			}
-			if (!query || query == '') {
-				logger.log({ description: 'Null query, returning empty array.', func: 'search', obj: 'UsersAction' });
-				return Promise.resolve([]);
-			}
-			return _classesMatter2['default'].utils.request.get(searchEndpoint).then(function (response) {
-				console.log('[MatterClient.users().search()] Users(s) data loaded:', response);
-				return response;
+		key: 'del',
+		value: function del(accountData) {
+			logger.debug({ description: 'Delete user called.', func: 'del', obj: 'Account' });
+			return request['delete'](this.accountEndpoint, accountData).then(function (response) {
+				logger.info({ description: 'Delete user successful.', response: response, func: 'del', obj: 'Account' });
+				return new Account(response);
 			})['catch'](function (errRes) {
-				console.error('[MatterClient.users().search()] Error getting users list: ', errRes);
+				logger.error({ description: 'Error deleting user.', accountData: accountData, error: errRes, func: 'del', obj: 'Account' });
 				return Promise.reject(errRes);
 			});
 		}
 	}, {
-		key: 'usersEndpoint',
+		key: 'accountEndpoint',
 		get: function get() {
-			return _classesMatter2['default'].endpoint + '/users';
+			var endpointArray = [_classesMatter2['default'].endpoint, 'users', this.username];
+			//Check for app account action
+			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
+				endpointArray.splice(1, 0, ['apps', this.app.name]);
+			}
+			//Create string from endpointArray
+			var endpointStr = endpointArray.join('/');
+			logger.log({ description: 'Account Endpoint built.', endpoint: endpointStr, func: 'accountEndpoint', obj: 'Account' });
+			return endpointStr;
 		}
 	}]);
 
-	return UsersAction;
+	return Account;
 })();
 
-exports['default'] = UsersAction;
+exports['default'] = Account;
 module.exports = exports['default'];
 
-},{"../classes/Matter":243,"../config":246,"lodash":232}],238:[function(require,module,exports){
+},{"../classes/Matter":244,"../config":246,"lodash":232}],239:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
 	value: true
 });
@@ -42368,13 +42522,13 @@ var _Directory = require('./Directory');
 
 var _Directory2 = _interopRequireDefault(_Directory);
 
-var _actionsUsersAction = require('../actions/UsersAction');
+var _actionsAccountsAction = require('../actions/AccountsAction');
 
-var _actionsUsersAction2 = _interopRequireDefault(_actionsUsersAction);
+var _actionsAccountsAction2 = _interopRequireDefault(_actionsAccountsAction);
 
-var _User = require('./User');
+var _Account = require('./Account');
 
-var _User2 = _interopRequireDefault(_User);
+var _Account2 = _interopRequireDefault(_Account);
 
 var _Files = require('./Files');
 
@@ -42487,25 +42641,25 @@ var Application = (function () {
 		key: 'file',
 		value: function file(fileData) {
 			logger.debug({ description: 'Applications file action called.', fileData: fileData, application: this, func: 'file', obj: 'Application' });
-			return new _File2['default'](fileData);
+			return new _File2['default']({ app: this, fileData: fileData });
 		}
 	}, {
 		key: 'user',
 		value: function user(userData) {
 			logger.debug({ description: 'Applications user action called.', userData: userData, application: this, func: 'user', obj: 'Application' });
-			return new _User2['default'](userData);
+			return new _Account2['default']({ app: this, userData: userData });
 		}
 	}, {
 		key: 'group',
 		value: function group(groupData) {
 			logger.debug({ description: 'Applications group action called.', groupData: groupData, application: this, func: 'group', obj: 'Application' });
-			return new _Group2['default'](groupData);
+			return new _Group2['default']({ app: this, groupData: groupData });
 		}
 	}, {
 		key: 'directory',
 		value: function directory(directoryData) {
 			logger.debug({ description: 'Applications directory action called.', directoryData: directoryData, application: this, func: 'directory', obj: 'Application' });
-			return new _Directory2['default'](directoryData);
+			return new _Directory2['default']({ app: this, directoryData: directoryData });
 		}
 	}, {
 		key: 'appEndpoint',
@@ -42516,13 +42670,13 @@ var Application = (function () {
 		key: 'files',
 		get: function get() {
 			logger.debug({ description: 'Applications files action called.', application: this, func: 'files', obj: 'Application' });
-			return new _Files2['default'](this);
+			return new _Files2['default']({ app: this });
 		}
 	}, {
 		key: 'users',
 		get: function get() {
 			logger.debug({ description: 'Applications users action called.', application: this, func: 'user', obj: 'Application' });
-			return new _actionsUsersAction2['default']();
+			return new _actionsAccountsAction2['default']({ app: this });
 		}
 	}, {
 		key: 'groups',
@@ -42534,7 +42688,7 @@ var Application = (function () {
 		key: 'directories',
 		get: function get() {
 			logger.debug({ description: 'Applications directories action called.', application: this, func: 'directories', obj: 'Application' });
-			return new _actionsDirectoriesAction2['default']();
+			return new _actionsDirectoriesAction2['default']({ app: this });
 		}
 	}]);
 
@@ -42544,7 +42698,7 @@ var Application = (function () {
 exports['default'] = Application;
 module.exports = exports['default'];
 
-},{"../actions/DirectoriesAction":234,"../actions/GroupsAction":235,"../actions/UsersAction":237,"../config":246,"./Directory":239,"./File":240,"./Files":241,"./Group":242,"./Matter":243,"./User":245,"aws-sdk":1,"firebase":231,"lodash":232}],239:[function(require,module,exports){
+},{"../actions/AccountsAction":233,"../actions/DirectoriesAction":235,"../actions/GroupsAction":236,"../config":246,"./Account":238,"./Directory":240,"./File":241,"./Files":242,"./Group":243,"./Matter":244,"aws-sdk":1,"firebase":231,"lodash":232}],240:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
 	value: true
 });
@@ -42635,10 +42789,15 @@ var Directory = (function () {
 	}, {
 		key: 'directoryEndpoint',
 		get: function get() {
-			if (_lodash2['default'].has(this, 'appName')) {
-				return _Matter2['default'].endpoint + '/' + this.appName + '/directorys/' + this.name;
+			var endpointArray = [_Matter2['default'].endpoint, 'directories', this.name];
+			//Check for app account action
+			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
+				endpointArray.splice(1, 0, ['apps', this.app.name]);
 			}
-			return _Matter2['default'].endpoint + '/directorys/' + this.name;
+			//Create string from endpointArray
+			var endpointStr = endpointArray.join('/');
+			logger.log({ description: 'Directory endpoint built.', endpoint: endpointStr, func: 'directoryEndpoint', obj: 'Directory' });
+			return endpointStr;
 		}
 	}]);
 
@@ -42648,7 +42807,7 @@ var Directory = (function () {
 exports['default'] = Directory;
 module.exports = exports['default'];
 
-},{"../config":246,"./Matter":243,"lodash":232}],240:[function(require,module,exports){
+},{"../config":246,"./Matter":244,"lodash":232}],241:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
 	value: true
 });
@@ -42816,7 +42975,7 @@ function setAWSConfig() {
 }
 module.exports = exports['default'];
 
-},{"../config":246,"./Matter":243,"aws-sdk":1,"lodash":232}],241:[function(require,module,exports){
+},{"../config":246,"./Matter":244,"aws-sdk":1,"lodash":232}],242:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
 	value: true
 });
@@ -43030,7 +43189,7 @@ function combineLikeObjs(mappedArray) {
 }
 module.exports = exports['default'];
 
-},{"../config":246,"./Matter":243,"aws-sdk":1,"lodash":232}],242:[function(require,module,exports){
+},{"../config":246,"./Matter":244,"aws-sdk":1,"lodash":232}],243:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
 	value: true
 });
@@ -43063,11 +43222,11 @@ var Group = (function () {
 		_classCallCheck(this, Group);
 
 		//Call matter with name and settings
-		if (actionData && _lodash2['default'].isObject(actionData) && _lodash2['default'].has(actionData, 'groupName')) {
+		if (actionData && _lodash2['default'].isObject(actionData) && _lodash2['default'].has(actionData, 'groupData')) {
 			//Data is object containing group data
-			this.name = actionData.groupName;
-			if (_lodash2['default'].has(actionData, 'appName')) {
-				this.appName = actionData.appName;
+			this.name = _lodash2['default'].isObject(actionData.groupData) ? actionData.groupData.name : actionData.groupData;
+			if (_lodash2['default'].has(actionData, 'app')) {
+				this.app = actionData.app;
 			}
 		} else if (actionData && _lodash2['default'].isString(actionData)) {
 			//Data is string name
@@ -43088,7 +43247,7 @@ var Group = (function () {
 				return response;
 			})['catch'](function (errRes) {
 				logger.info({ description: 'Error getting group.', error: errRes, func: 'get', obj: 'Group' });
-				return Promise.reject(errRes);
+				return Promise.reject(errRes.response.text || errRes.response);
 			});
 		}
 
@@ -43102,7 +43261,7 @@ var Group = (function () {
 				return response;
 			})['catch'](function (errRes) {
 				logger.error({ description: 'Error updating group.', groupData: groupData, error: errRes, func: 'update', obj: 'Group' });
-				return Promise.reject(errRes);
+				return Promise.reject(errRes.response.text || errRes.response);
 			});
 		}
 
@@ -43111,21 +43270,51 @@ var Group = (function () {
 		key: 'del',
 		value: function del(groupData) {
 			logger.log({ description: 'Delete group called.', groupData: groupData, func: 'del', obj: 'Group' });
-			return request['delete'](this.groupEndpoint, userData).then(function (response) {
+			return request.del(this.groupEndpoint, {}).then(function (response) {
 				logger.info({ description: 'Group deleted successfully.', groupData: groupData, func: 'del', obj: 'Group' });
 				return response;
 			})['catch'](function (errRes) {
-				logger.error({ description: 'Error deleting group.', groupData: groupData, error: errRes, func: 'del', obj: 'Group' });
-				return Promise.reject(errRes);
+				logger.error({ description: 'Error deleting group.', error: errRes, text: errRes.response.text, groupData: groupData, func: 'del', obj: 'Group' });
+				return Promise.reject(errRes.response.text || errRes.response);
+			});
+		}
+
+		//Update an Group
+	}, {
+		key: 'addAccounts',
+		value: function addAccounts(accountsData) {
+			logger.log({ description: 'Group updated called.', accountsData: accountsData, func: 'update', obj: 'Group' });
+			var accountsArray = accountsData;
+			//Handle provided data being a string list
+			if (_lodash2['default'].isString(accountsData)) {
+				accountsArray = accountsData.split(',');
+			}
+			//Check item in array to see if it is a string (username) instead of _id
+			if (_lodash2['default'].isString(accountsArray[0])) {
+				logger.error({ description: 'Accounts array only currently supports account._id not account.username.', accountsData: accountsData, func: 'update', obj: 'Group' });
+				return Promise.reject({ message: 'Accounts array only currently supports account._id not account.username.' });
+			}
+			logger.log({ description: 'Updating group with accounts array.', accountsArray: accountsArray, func: 'update', obj: 'Group' });
+			return this.update({ accounts: accountsArray }).then(function (response) {
+				logger.info({ description: 'Account(s) added to group successfully.', response: response, func: 'addAccounts', obj: 'Group' });
+				return response;
+			})['catch'](function (errRes) {
+				logger.error({ description: 'Error addAccountseting group.', error: errRes, func: 'addAccounts', obj: 'Group' });
+				return Promise.reject(errRes.response.text || errRes.response);
 			});
 		}
 	}, {
 		key: 'groupEndpoint',
 		get: function get() {
-			if (_lodash2['default'].has(this, 'appName')) {
-				return _Matter2['default'].endpoint + '/' + this.appName + '/groups/' + this.name;
+			var endpointArray = [_Matter2['default'].endpoint, 'groups', this.name];
+			//Check for app account action
+			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
+				endpointArray.splice(1, 0, ['apps', this.app.name]);
 			}
-			return _Matter2['default'].endpoint + '/groups/' + this.name;
+			//Create string from endpointArray
+			var endpointStr = endpointArray.join('/');
+			logger.log({ description: 'Group Endpoint built.', endpoint: endpointStr, func: 'groupEndpoint', obj: 'Group' });
+			return endpointStr;
 		}
 	}]);
 
@@ -43135,7 +43324,7 @@ var Group = (function () {
 exports['default'] = Group;
 module.exports = exports['default'];
 
-},{"../config":246,"./Matter":243,"lodash":232}],243:[function(require,module,exports){
+},{"../config":246,"./Matter":244,"lodash":232}],244:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
@@ -43154,7 +43343,7 @@ var matter = new _kyperMatter2['default'](_config2['default'].appName, _config2[
 exports['default'] = matter;
 module.exports = exports['default'];
 
-},{"../config":246,"kyper-matter":248}],244:[function(require,module,exports){
+},{"../config":246,"kyper-matter":248}],245:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
 	value: true
 });
@@ -43251,111 +43440,7 @@ var Template = (function () {
 exports['default'] = Template;
 module.exports = exports['default'];
 
-},{"../config":246,"./Matter":243,"lodash":232}],245:[function(require,module,exports){
-Object.defineProperty(exports, '__esModule', {
-	value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _config = require('../config');
-
-var _config2 = _interopRequireDefault(_config);
-
-var _classesMatter = require('../classes/Matter');
-
-var _classesMatter2 = _interopRequireDefault(_classesMatter);
-
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-var request = _classesMatter2['default'].utils.request;
-var logger = _classesMatter2['default'].utils.logger;
-
-//Actions for specific user
-
-var User = (function () {
-	function User(userData) {
-		_classCallCheck(this, User);
-
-		//Call matter with name and settings
-		if (userData && _lodash2['default'].isObject(userData) && _lodash2['default'].has(userData, 'username')) {
-			_lodash2['default'].extend(this, userData);
-		} else if (userData && _lodash2['default'].isString(userData)) {
-			this.username = userData;
-		} else {
-			logger.error({ description: 'Userdata is required to start an UserAction', func: 'constructor', obj: 'User' });
-			throw new Error('Username is required to start an UserAction');
-		}
-	}
-
-	//Build endpoint based on userData
-
-	_createClass(User, [{
-		key: 'get',
-
-		//Get a user
-		value: function get() {
-			logger.debug({ description: 'User data loaded successfully.', func: 'get', obj: 'User' });
-			return request.get(this.userEndpoint).then(function (response) {
-				logger.info({ description: 'User data loaded successfully.', response: response, func: 'get', obj: 'User' });
-				return new User(response);
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error getting user.', error: errRes, func: 'get', obj: 'User' });
-				return Promise.reject(errRes);
-			});
-		}
-
-		//Update a User
-	}, {
-		key: 'update',
-		value: function update(userData) {
-			logger.debug({ description: 'Update user called.', userData: userData, func: 'update', obj: 'User' });
-			return request.put(this.userEndpoint, userData).then(function (response) {
-				logger.info({ description: 'User updated successfully.', func: 'update', obj: 'User' });
-				//TODO: Extend this with current info before returning
-				return new User(response);
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error updating user.', func: 'update', obj: 'User' });
-				return Promise.reject(errRes);
-			});
-		}
-
-		//Delete a User
-	}, {
-		key: 'del',
-		value: function del(userData) {
-			logger.debug({ description: 'Delete user called.', func: 'del', obj: 'User' });
-			return request['delete'](this.endpoint, userData).then(function (response) {
-				logger.info({ description: 'Delete user successful.', response: response, func: 'del', obj: 'User' });
-				return new User(response);
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error deleting user.', userData: userData, error: errRes, func: 'del', obj: 'User' });
-				return Promise.reject(errRes);
-			});
-		}
-	}, {
-		key: 'userEndpoint',
-		get: function get() {
-			if (_lodash2['default'].has(this, 'appName')) {
-				return _classesMatter2['default'].endpoint + '/apps/' + this.appName + '/users/' + this.username;
-			}
-			return _classesMatter2['default'].endpoint + '/users/' + this.username;
-		}
-	}]);
-
-	return User;
-})();
-
-exports['default'] = User;
-module.exports = exports['default'];
-
-},{"../classes/Matter":243,"../config":246,"lodash":232}],246:[function(require,module,exports){
+},{"../config":246,"./Matter":244,"lodash":232}],246:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
 	value: true
 });
@@ -43416,13 +43501,13 @@ var _classesApplication = require('./classes/Application');
 
 var _classesApplication2 = _interopRequireDefault(_classesApplication);
 
-var _actionsUsersAction = require('./actions/UsersAction');
+var _actionsAccountsAction = require('./actions/AccountsAction');
 
-var _actionsUsersAction2 = _interopRequireDefault(_actionsUsersAction);
+var _actionsAccountsAction2 = _interopRequireDefault(_actionsAccountsAction);
 
-var _classesUser = require('./classes/User');
+var _classesAccount = require('./classes/Account');
 
-var _classesUser2 = _interopRequireDefault(_classesUser);
+var _classesAccount2 = _interopRequireDefault(_classesAccount);
 
 var _actionsGroupsAction = require('./actions/GroupsAction');
 
@@ -43485,14 +43570,24 @@ var Grout = (function (_Matter) {
 			return new _classesTemplate2['default'](templateData);
 		}
 
-		//Start a new Users action
+		//Start a new Accounts action
+	}, {
+		key: 'account',
+
+		//Start a new Account action
+		value: function account(userData) {
+			this.utils.logger.debug({ description: 'Account Action called.', userData: userData, user: new _classesAccount2['default'](userData), func: 'user', obj: 'Grout' });
+			return new _classesAccount2['default'](userData);
+		}
+
+		//Start a new Accounts action
 	}, {
 		key: 'user',
 
-		//Start a new User action
+		//Start a new Account action
 		value: function user(userData) {
-			this.utils.logger.debug({ description: 'User Action called.', userData: userData, user: new _classesUser2['default'](userData), func: 'user', obj: 'Grout' });
-			return new _classesUser2['default'](userData);
+			this.utils.logger.debug({ description: 'Account Action called.', userData: userData, user: new _classesAccount2['default'](userData), func: 'user', obj: 'Grout' });
+			return new _classesAccount2['default'](userData);
 		}
 
 		//Start a new Groups action
@@ -43502,7 +43597,7 @@ var Grout = (function (_Matter) {
 		//Start a new Group action
 		value: function group(groupData) {
 			this.utils.logger.debug({ description: 'Group Action called.', groupData: groupData, action: new _classesGroup2['default']({ app: this, groupData: groupData }), func: 'group', obj: 'Grout' });
-			return new _classesGroup2['default']({ app: this, groupData: groupData });
+			return new _classesGroup2['default'](groupData);
 		}
 
 		//Start a new Directories action
@@ -43527,22 +43622,28 @@ var Grout = (function (_Matter) {
 			return new _actionsTemplatesAction2['default']();
 		}
 	}, {
+		key: 'accounts',
+		get: function get() {
+			this.utils.logger.debug({ description: 'Account Action called.', action: new _actionsAccountsAction2['default'](), func: 'users', obj: 'Grout' });
+			return new _actionsAccountsAction2['default']({ app: this });
+		}
+	}, {
 		key: 'users',
 		get: function get() {
-			this.utils.logger.debug({ description: 'Users Action called.', action: new _actionsUsersAction2['default'](), func: 'users', obj: 'Grout' });
-			return new _actionsUsersAction2['default']({ app: this });
+			this.utils.logger.debug({ description: 'Accounts Action called.', action: new _actionsAccountsAction2['default'](), func: 'users', obj: 'Grout' });
+			return new _actionsAccountsAction2['default']({ app: this });
 		}
 	}, {
 		key: 'groups',
 		get: function get() {
-			this.utils.logger.debug({ description: 'Groups Action called.', action: new _actionsGroupsAction2['default']({ app: this }), func: 'groups', obj: 'Grout' });
-			return new _actionsGroupsAction2['default']({ app: this });
+			this.utils.logger.debug({ description: 'Groups Action called.', action: new _actionsGroupsAction2['default'](), func: 'groups', obj: 'Grout' });
+			return new _actionsGroupsAction2['default']();
 		}
 	}, {
 		key: 'directories',
 		get: function get() {
-			this.utils.logger.debug({ description: 'Directories Action called.', action: new DirectoriesAction({ app: this }), func: 'directories', obj: 'Grout' });
-			return new DirectoriesAction({ app: this });
+			this.utils.logger.debug({ description: 'Directories Action called.', action: new DirectoriesAction(), func: 'directories', obj: 'Grout' });
+			return new DirectoriesAction();
 		}
 	}]);
 
@@ -43554,7 +43655,7 @@ var Grout = (function (_Matter) {
 exports['default'] = Grout;
 module.exports = exports['default'];
 
-},{"./actions/AppsAction":233,"./actions/DirectoriesAction":234,"./actions/GroupsAction":235,"./actions/TemplatesAction":236,"./actions/UsersAction":237,"./classes/Application":238,"./classes/Directory":239,"./classes/Group":242,"./classes/Template":244,"./classes/User":245,"./config":246,"kyper-matter":248}],248:[function(require,module,exports){
+},{"./actions/AccountsAction":233,"./actions/AppsAction":234,"./actions/DirectoriesAction":235,"./actions/GroupsAction":236,"./actions/TemplatesAction":237,"./classes/Account":238,"./classes/Application":239,"./classes/Directory":240,"./classes/Group":243,"./classes/Template":245,"./config":246,"kyper-matter":248}],248:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () {

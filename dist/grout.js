@@ -729,10 +729,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'directoryEndpoint',
 			get: function get() {
-				if (_.has(this, 'appName')) {
-					return matter.endpoint + '/' + this.appName + '/directorys/' + this.name;
+				var endpointArray = [matter.endpoint, 'directories', this.name];
+				//Check for app account action
+				if (_.has(this, 'app') && _.has(this.app, 'name')) {
+					endpointArray.splice(1, 0, ['apps', this.app.name]);
 				}
-				return matter.endpoint + '/directorys/' + this.name;
+				//Create string from endpointArray
+				var endpointStr = endpointArray.join('/');
+				___________logger.log({ description: 'Directory endpoint built.', endpoint: endpointStr, func: 'directoryEndpoint', obj: 'Directory' });
+				return endpointStr;
 			}
 		}]);
 
@@ -749,11 +754,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			_classCallCheck(this, Group);
 
 			//Call matter with name and settings
-			if (actionData && _.isObject(actionData) && _.has(actionData, 'groupName')) {
+			if (actionData && _.isObject(actionData) && _.has(actionData, 'groupData')) {
 				//Data is object containing group data
-				this.name = actionData.groupName;
-				if (_.has(actionData, 'appName')) {
-					this.appName = actionData.appName;
+				this.name = _.isObject(actionData.groupData) ? actionData.groupData.name : actionData.groupData;
+				if (_.has(actionData, 'app')) {
+					this.app = actionData.app;
 				}
 			} else if (actionData && _.isString(actionData)) {
 				//Data is string name
@@ -774,7 +779,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					return response;
 				})['catch'](function (errRes) {
 					__________logger.info({ description: 'Error getting group.', error: errRes, func: 'get', obj: 'Group' });
-					return Promise.reject(errRes);
+					return Promise.reject(errRes.response.text || errRes.response);
 				});
 			}
 
@@ -788,7 +793,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					return response;
 				})['catch'](function (errRes) {
 					__________logger.error({ description: 'Error updating group.', groupData: groupData, error: errRes, func: 'update', obj: 'Group' });
-					return Promise.reject(errRes);
+					return Promise.reject(errRes.response.text || errRes.response);
 				});
 			}
 
@@ -797,21 +802,51 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'del',
 			value: function del(groupData) {
 				__________logger.log({ description: 'Delete group called.', groupData: groupData, func: 'del', obj: 'Group' });
-				return _________request['delete'](this.groupEndpoint, userData).then(function (response) {
+				return _________request.del(this.groupEndpoint, {}).then(function (response) {
 					__________logger.info({ description: 'Group deleted successfully.', groupData: groupData, func: 'del', obj: 'Group' });
 					return response;
 				})['catch'](function (errRes) {
-					__________logger.error({ description: 'Error deleting group.', groupData: groupData, error: errRes, func: 'del', obj: 'Group' });
-					return Promise.reject(errRes);
+					__________logger.error({ description: 'Error deleting group.', error: errRes, text: errRes.response.text, groupData: groupData, func: 'del', obj: 'Group' });
+					return Promise.reject(errRes.response.text || errRes.response);
+				});
+			}
+
+			//Update an Group
+		}, {
+			key: 'addAccounts',
+			value: function addAccounts(accountsData) {
+				__________logger.log({ description: 'Group updated called.', accountsData: accountsData, func: 'update', obj: 'Group' });
+				var accountsArray = accountsData;
+				//Handle provided data being a string list
+				if (_.isString(accountsData)) {
+					accountsArray = accountsData.split(',');
+				}
+				//Check item in array to see if it is a string (username) instead of _id
+				if (_.isString(accountsArray[0])) {
+					__________logger.error({ description: 'Accounts array only currently supports account._id not account.username.', accountsData: accountsData, func: 'update', obj: 'Group' });
+					return Promise.reject({ message: 'Accounts array only currently supports account._id not account.username.' });
+				}
+				__________logger.log({ description: 'Updating group with accounts array.', accountsArray: accountsArray, func: 'update', obj: 'Group' });
+				return this.update({ accounts: accountsArray }).then(function (response) {
+					__________logger.info({ description: 'Account(s) added to group successfully.', response: response, func: 'addAccounts', obj: 'Group' });
+					return response;
+				})['catch'](function (errRes) {
+					__________logger.error({ description: 'Error addAccountseting group.', error: errRes, func: 'addAccounts', obj: 'Group' });
+					return Promise.reject(errRes.response.text || errRes.response);
 				});
 			}
 		}, {
 			key: 'groupEndpoint',
 			get: function get() {
-				if (_.has(this, 'appName')) {
-					return matter.endpoint + '/' + this.appName + '/groups/' + this.name;
+				var endpointArray = [matter.endpoint, 'groups', this.name];
+				//Check for app account action
+				if (_.has(this, 'app') && _.has(this.app, 'name')) {
+					endpointArray.splice(1, 0, ['apps', this.app.name]);
 				}
-				return matter.endpoint + '/groups/' + this.name;
+				//Create string from endpointArray
+				var endpointStr = endpointArray.join('/');
+				__________logger.log({ description: 'Group Endpoint built.', endpoint: endpointStr, func: 'groupEndpoint', obj: 'Group' });
+				return endpointStr;
 			}
 		}]);
 
@@ -833,10 +868,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				_________logger.log({ description: 'Provided app data set to app parameter.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
 			} else if (actionData && _.isString(actionData)) {
 				this.app = { name: actionData };
+				_________logger.log({ description: 'App name provided as string was set.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
 			} else {
-				_________logger.error({ description: 'New groups action.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
+				_________logger.error({ description: 'Error creating new Groups action.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
 			}
-			_________logger.log({ description: 'New groups action.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
 		}
 
 		_createClass(GroupsAction, [{
@@ -897,11 +932,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'groupsEndpoint',
 			get: function get() {
+				var endpointArray = [matter.endpoint, 'groups'];
 				//Check for app groups action
 				if (_.has(this, 'app') && _.has(this.app, 'name')) {
-					return matter.endpoint + '/apps/' + this.app.name + '/groups';
+					endpointArray.splice(1, 0, ['apps', this.app.name]);
 				}
-				return matter.endpoint + '/groups';
+				//Create string from endpointArray
+				var endpointStr = endpointArray.join('/');
+				_________logger.log({ description: 'Groups Endpoint built.', endpoint: endpointStr, func: 'groupsEndpoint', obj: 'GroupsAction' });
+				return endpointStr;
 			}
 		}]);
 
@@ -913,144 +952,169 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	//Actions for specific user
 
-	var User = (function () {
-		function User(userData) {
-			_classCallCheck(this, User);
+	var Account = (function () {
+		function Account(accountData) {
+			_classCallCheck(this, Account);
 
 			//Call matter with name and settings
-			if (userData && _.isObject(userData) && _.has(userData, 'username')) {
-				_.extend(this, userData);
-			} else if (userData && _.isString(userData)) {
-				this.username = userData;
+			if (accountData && _.isObject(accountData) && _.has(accountData, 'username')) {
+				_.extend(this, accountData);
+			} else if (accountData && _.isString(accountData)) {
+				this.username = accountData;
 			} else {
-				________logger.error({ description: 'Userdata is required to start an UserAction', func: 'constructor', obj: 'User' });
-				throw new Error('Username is required to start an UserAction');
+				________logger.error({ description: 'AccountData is required to start an AccountAction', func: 'constructor', obj: 'Account' });
+				throw new Error('username is required to start an AccountAction');
 			}
 		}
 
-		//Build endpoint based on userData
+		//Build endpoint based on accountData
 
-		_createClass(User, [{
+		_createClass(Account, [{
 			key: 'get',
 
 			//Get a user
 			value: function get() {
-				________logger.debug({ description: 'User data loaded successfully.', func: 'get', obj: 'User' });
-				return _______request.get(this.userEndpoint).then(function (response) {
-					________logger.info({ description: 'User data loaded successfully.', response: response, func: 'get', obj: 'User' });
-					return new User(response);
+				________logger.debug({ description: 'Account data loaded successfully.', func: 'get', obj: 'Account' });
+				return _______request.get(this.accountEndpoint).then(function (response) {
+					________logger.info({ description: 'Account data loaded successfully.', response: response, func: 'get', obj: 'Account' });
+					return new Account(response);
 				})['catch'](function (errRes) {
-					________logger.error({ description: 'Error getting user.', error: errRes, func: 'get', obj: 'User' });
+					________logger.error({ description: 'Error getting user.', error: errRes, func: 'get', obj: 'Account' });
 					return Promise.reject(errRes);
 				});
 			}
 
-			//Update a User
+			//Update a Account
 		}, {
 			key: 'update',
-			value: function update(userData) {
-				________logger.debug({ description: 'Update user called.', userData: userData, func: 'update', obj: 'User' });
-				return _______request.put(this.userEndpoint, userData).then(function (response) {
-					________logger.info({ description: 'User updated successfully.', func: 'update', obj: 'User' });
+			value: function update(accountData) {
+				________logger.debug({ description: 'Update user called.', accountData: accountData, func: 'update', obj: 'Account' });
+				return _______request.put(this.accountEndpoint, accountData).then(function (response) {
+					________logger.info({ description: 'Account updated successfully.', func: 'update', obj: 'Account' });
 					//TODO: Extend this with current info before returning
-					return new User(response);
+					return new Account(response);
 				})['catch'](function (errRes) {
-					________logger.error({ description: 'Error updating user.', func: 'update', obj: 'User' });
+					________logger.error({ description: 'Error updating user.', func: 'update', obj: 'Account' });
 					return Promise.reject(errRes);
 				});
 			}
 
-			//Delete a User
+			//Delete a Account
 		}, {
 			key: 'del',
-			value: function del(userData) {
-				________logger.debug({ description: 'Delete user called.', func: 'del', obj: 'User' });
-				return _______request['delete'](this.endpoint, userData).then(function (response) {
-					________logger.info({ description: 'Delete user successful.', response: response, func: 'del', obj: 'User' });
-					return new User(response);
+			value: function del(accountData) {
+				________logger.debug({ description: 'Delete user called.', func: 'del', obj: 'Account' });
+				return _______request['delete'](this.accountEndpoint, accountData).then(function (response) {
+					________logger.info({ description: 'Delete user successful.', response: response, func: 'del', obj: 'Account' });
+					return new Account(response);
 				})['catch'](function (errRes) {
-					________logger.error({ description: 'Error deleting user.', userData: userData, error: errRes, func: 'del', obj: 'User' });
+					________logger.error({ description: 'Error deleting user.', accountData: accountData, error: errRes, func: 'del', obj: 'Account' });
 					return Promise.reject(errRes);
 				});
 			}
 		}, {
-			key: 'userEndpoint',
+			key: 'accountEndpoint',
 			get: function get() {
-				if (_.has(this, 'appName')) {
-					return matter.endpoint + '/apps/' + this.appName + '/users/' + this.username;
+				var endpointArray = [matter.endpoint, 'users', this.username];
+				//Check for app account action
+				if (_.has(this, 'app') && _.has(this.app, 'name')) {
+					endpointArray.splice(1, 0, ['apps', this.app.name]);
 				}
-				return matter.endpoint + '/users/' + this.username;
+				//Create string from endpointArray
+				var endpointStr = endpointArray.join('/');
+				________logger.log({ description: 'Account Endpoint built.', endpoint: endpointStr, func: 'accountEndpoint', obj: 'Account' });
+				return endpointStr;
 			}
 		}]);
 
-		return User;
+		return Account;
 	})();
 
 	var _______logger = matter.utils.logger;
-	//Actions for users list
+	//Actions for accounts list
 
-	var UsersAction = (function () {
-		function UsersAction() {
-			_classCallCheck(this, UsersAction);
+	var AccountsAction = (function () {
+		function AccountsAction(actionData) {
+			_classCallCheck(this, AccountsAction);
+
+			//Check to see if action is for a specific app
+			if (actionData && _.isObject(actionData) && _.has(actionData, 'app')) {
+				this.app = actionData.app;
+				_______logger.log({ description: 'Provided app data set to app parameter.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction' });
+			} else if (actionData && _.isString(actionData)) {
+				this.app = { name: actionData };
+				_______logger.log({ description: 'App name provided as string was set.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction' });
+			} else {
+				_______logger.error({ description: 'New Accounts action.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction' });
+			}
 		}
 
-		_createClass(UsersAction, [{
+		_createClass(AccountsAction, [{
 			key: 'get',
 
-			//Get users or single application
+			//Get accounts or single application
 			value: function get() {
-				console.log({ description: 'Users get called.', func: 'get', obj: 'UsersAction' });
-				return matter.utils.request.get(this.usersEndpoint).then(function (response) {
-					console.log('users loaded:', response);
+				_______logger.log({ description: 'Accounts get called.', func: 'get', obj: 'AccountsAction' });
+				return matter.utils.request.get(this.accountsEndpoint).then(function (response) {
+					_______logger.info({ description: 'Accounts loaded successfully.', func: 'get', obj: 'AccountsAction' });
 					return response;
 				})['catch'](function (errRes) {
-					console.error('error getting users');
-					return Promise.reject(errRes);
+					_______logger.info({ description: 'Error getting accounts.', error: errRes, func: 'get', obj: 'AccountsAction' });
+					return Promise.reject(errRes.message || 'Error getting accounts.');
 				});
 			}
 
 			//Add an application
 		}, {
 			key: 'add',
-			value: function add(appData) {
-				return this.utils.request.post(this.usersEndpoint, appData).then(function (response) {
-					console.log('[MatterClient.users().add()] Application added successfully: ', response);
-					return new Application(response);
+			value: function add(accountData) {
+				_______logger.info({ description: 'Account add called.', accountData: accountData, func: 'add', obj: 'AccountsAction' });
+				return this.utils.request.post(this.accountsEndpoint, accountData).then(function (response) {
+					_______logger.info({ description: 'Account added successfully.', response: response, newAccount: new Account(response), func: 'add', obj: 'AccountsAction' });
+					return new Account(response);
 				})['catch'](function (errRes) {
-					console.error('[MatterClient.getApps()] Error adding application: ', errRes);
-					return Promise.reject(errRes);
+					_______logger.error({ description: 'Account add called.', error: errRes, accountData: accountData, func: 'add', obj: 'AccountsAction' });
+					return Promise.reject(errRes.message || 'Error adding account.');
 				});
 			}
 
-			//Search with partial of username
+			//Search with partial of accountname
 		}, {
 			key: 'search',
 			value: function search(query) {
-				console.log('search called:', query);
-				var searchEndpoint = this.usersEndpoint + '/search/';
+				_______logger.log({ description: 'Accounts search called.', query: query, func: 'search', obj: 'AccountsAction' });
+				var searchEndpoint = this.accountsEndpoint + '/search/';
 				if (query && _.isString(query)) {
 					searchEndpoint += query;
 				}
 				if (!query || query == '') {
-					_______logger.log({ description: 'Null query, returning empty array.', func: 'search', obj: 'UsersAction' });
+					_______logger.log({ description: 'Null query, returning empty array.', func: 'search', obj: 'AccountsAction' });
 					return Promise.resolve([]);
 				}
 				return matter.utils.request.get(searchEndpoint).then(function (response) {
-					console.log('[MatterClient.users().search()] Users(s) data loaded:', response);
+					_______logger.log({ description: 'Accounts search responded.', response: response, query: query, func: 'search', obj: 'AccountsAction' });
 					return response;
 				})['catch'](function (errRes) {
-					console.error('[MatterClient.users().search()] Error getting users list: ', errRes);
-					return Promise.reject(errRes);
+					_______logger.error({ description: 'Error searching Accounts.', error: errRes, query: query, func: 'search', obj: 'AccountsAction' });
+					return Promise.reject(errRes.message || 'Error searching accounts.');
 				});
 			}
 		}, {
-			key: 'usersEndpoint',
+			key: 'accountsEndpoint',
 			get: function get() {
-				return matter.endpoint + '/users';
+				var endpointArray = [matter.endpoint, 'accounts'];
+				//Check for app account action
+				if (_.has(this, 'app') && _.has(this.app, 'name')) {
+					endpointArray.splice(1, 0, ['apps', this.app.name]);
+				}
+				//Create string from endpointArray
+				var endpointStr = endpointArray.join('/');
+				_______logger.log({ description: 'Accounts Endpoint built.', endpoint: endpointStr, func: 'accountsEndpoint', obj: 'AccountsAction' });
+				return endpointStr;
 			}
 		}]);
 
-		return UsersAction;
+		return AccountsAction;
 	})();
 
 	var ______request = matter.utils.request;
@@ -1184,7 +1248,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'templatesEndpoint',
 			get: function get() {
-				return matter.endpoint + '/templates';
+				var endpointArray = [matter.endpoint, 'templates'];
+				//Check for app groups action
+				if (_.has(this, 'app') && _.has(this.app, 'name')) {
+					// endpointArray.splice(1, 0, ['apps', this.app.name]);
+					_____logger.log({ description: 'Templates action is not currently supported for a specific application.', func: 'accountsEndpoint', obj: 'AccountsAction' });
+				}
+				//Create string from endpointArray
+				var endpointStr = endpointArray.join('/');
+				_____logger.log({ description: 'Templates endpoint built.', endpoint: endpointStr, func: 'templatesEndpoint', obj: 'TemplatesAction' });
+				return endpointStr;
 			}
 		}]);
 
@@ -1201,10 +1274,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			_classCallCheck(this, _DirectoriesAction);
 
 			//Check to see if action is for a specific app
-			if (actionData && _.isObject(actionData) && _.has(actionData, 'appName')) {
-				this.appName = actionData.appName;
+			if (actionData && _.isObject(actionData) && _.has(actionData, 'app')) {
+				this.app = actionData.app;
+				____logger.log({ description: 'Provided app data set to app parameter.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction' });
 			} else if (actionData && _.isString(actionData)) {
-				this.appName = actionData;
+				this.app = { name: actionData };
+				____logger.log({ description: 'App name provided as string was set.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction' });
+			} else {
+				____logger.error({ description: 'Error creating directories action.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction' });
 			}
 		}
 
@@ -1238,7 +1315,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				});
 			}
 
-			//Search with partial of username
+			//Search with partial of directory name
 		}, {
 			key: 'search',
 			value: function search(query) {
@@ -1251,21 +1328,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					return Promise.resolve([]);
 				}
 				return ____request.get(searchEndpoint).then(function (response) {
-					____logger.log({ description: 'Found groups based on search.', response: response, func: 'search', obj: 'DirectoriesAction' });
+					____logger.log({ description: 'Found directories based on search.', response: response, func: 'search', obj: 'DirectoriesAction' });
 					return response;
 				})['catch'](function (errRes) {
-					____logger.error({ description: 'Error searching groups.', error: errRes, func: 'search', obj: 'DirectoriesAction' });
+					____logger.error({ description: 'Error searching directories.', error: errRes, func: 'search', obj: 'DirectoriesAction' });
 					return Promise.reject(errRes);
 				});
 			}
 		}, {
 			key: 'directoriesEndpoint',
 			get: function get() {
+				var endpointArray = [matter.endpoint, 'directories'];
 				//Check for app groups action
-				if (this.appName) {
-					return matter.endpoint + '/apps/' + this.appName + '/groups';
+				if (_.has(this, 'app') && _.has(this.app, 'name')) {
+					endpointArray.splice(1, 0, ['apps', this.app.name]);
 				}
-				return matter.endpoint + '/groups';
+				//Create string from endpointArray
+				var endpointStr = endpointArray.join('/');
+				____logger.log({ description: 'Directories endpoint built.', endpoint: endpointStr, func: 'directoriesEndpoint', obj: 'DirectoriesAction' });
+				return endpointStr;
 			}
 		}]);
 
@@ -1685,25 +1766,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'file',
 			value: function file(fileData) {
 				_logger.debug({ description: 'Applications file action called.', fileData: fileData, application: this, func: 'file', obj: 'Application' });
-				return new File(fileData);
+				return new File({ app: this, fileData: fileData });
 			}
 		}, {
 			key: 'user',
 			value: function user(userData) {
 				_logger.debug({ description: 'Applications user action called.', userData: userData, application: this, func: 'user', obj: 'Application' });
-				return new User(userData);
+				return new Account({ app: this, userData: userData });
 			}
 		}, {
 			key: 'group',
 			value: function group(groupData) {
 				_logger.debug({ description: 'Applications group action called.', groupData: groupData, application: this, func: 'group', obj: 'Application' });
-				return new Group(groupData);
+				return new Group({ app: this, groupData: groupData });
 			}
 		}, {
 			key: 'directory',
 			value: function directory(directoryData) {
 				_logger.debug({ description: 'Applications directory action called.', directoryData: directoryData, application: this, func: 'directory', obj: 'Application' });
-				return new Directory(directoryData);
+				return new Directory({ app: this, directoryData: directoryData });
 			}
 		}, {
 			key: 'appEndpoint',
@@ -1714,13 +1795,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'files',
 			get: function get() {
 				_logger.debug({ description: 'Applications files action called.', application: this, func: 'files', obj: 'Application' });
-				return new Files(this);
+				return new Files({ app: this });
 			}
 		}, {
 			key: 'users',
 			get: function get() {
 				_logger.debug({ description: 'Applications users action called.', application: this, func: 'user', obj: 'Application' });
-				return new UsersAction();
+				return new AccountsAction({ app: this });
 			}
 		}, {
 			key: 'groups',
@@ -1732,7 +1813,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'directories',
 			get: function get() {
 				_logger.debug({ description: 'Applications directories action called.', application: this, func: 'directories', obj: 'Application' });
-				return new _DirectoriesAction();
+				return new _DirectoriesAction({ app: this });
 			}
 		}]);
 
@@ -1772,7 +1853,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'add',
 			value: function add(appData) {
-				logger.debug({ description: 'Application added called.', appData: appData, func: 'add', obj: 'AppsAction' });
+				logger.debug({ description: 'Application add called.', appData: appData, func: 'add', obj: 'AppsAction' });
 				return matter.utils.request.post(this.appsEndpoint, appData).then(function (response) {
 					logger.info({ description: 'Application added successfully.', response: response, func: 'add', obj: 'AppsAction' });
 					return new Application(response);
@@ -1826,14 +1907,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				return new Template(templateData);
 			}
 
-			//Start a new Users action
+			//Start a new Accounts action
+		}, {
+			key: 'account',
+
+			//Start a new Account action
+			value: function account(userData) {
+				this.utils.logger.debug({ description: 'Account Action called.', userData: userData, user: new Account(userData), func: 'user', obj: 'Grout' });
+				return new Account(userData);
+			}
+
+			//Start a new Accounts action
 		}, {
 			key: 'user',
 
-			//Start a new User action
+			//Start a new Account action
 			value: function user(userData) {
-				this.utils.logger.debug({ description: 'User Action called.', userData: userData, user: new User(userData), func: 'user', obj: 'Grout' });
-				return new User(userData);
+				this.utils.logger.debug({ description: 'Account Action called.', userData: userData, user: new Account(userData), func: 'user', obj: 'Grout' });
+				return new Account(userData);
 			}
 
 			//Start a new Groups action
@@ -1843,7 +1934,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			//Start a new Group action
 			value: function group(groupData) {
 				this.utils.logger.debug({ description: 'Group Action called.', groupData: groupData, action: new Group({ app: this, groupData: groupData }), func: 'group', obj: 'Grout' });
-				return new Group({ app: this, groupData: groupData });
+				return new Group(groupData);
 			}
 
 			//Start a new Directories action
@@ -1868,22 +1959,28 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				return new TemplatesAction();
 			}
 		}, {
+			key: 'accounts',
+			get: function get() {
+				this.utils.logger.debug({ description: 'Account Action called.', action: new AccountsAction(), func: 'users', obj: 'Grout' });
+				return new AccountsAction({ app: this });
+			}
+		}, {
 			key: 'users',
 			get: function get() {
-				this.utils.logger.debug({ description: 'Users Action called.', action: new UsersAction(), func: 'users', obj: 'Grout' });
-				return new UsersAction({ app: this });
+				this.utils.logger.debug({ description: 'Accounts Action called.', action: new AccountsAction(), func: 'users', obj: 'Grout' });
+				return new AccountsAction({ app: this });
 			}
 		}, {
 			key: 'groups',
 			get: function get() {
-				this.utils.logger.debug({ description: 'Groups Action called.', action: new GroupsAction({ app: this }), func: 'groups', obj: 'Grout' });
-				return new GroupsAction({ app: this });
+				this.utils.logger.debug({ description: 'Groups Action called.', action: new GroupsAction(), func: 'groups', obj: 'Grout' });
+				return new GroupsAction();
 			}
 		}, {
 			key: 'directories',
 			get: function get() {
-				this.utils.logger.debug({ description: 'Directories Action called.', action: new DirectoriesAction({ app: this }), func: 'directories', obj: 'Grout' });
-				return new DirectoriesAction({ app: this });
+				this.utils.logger.debug({ description: 'Directories Action called.', action: new DirectoriesAction(), func: 'directories', obj: 'Grout' });
+				return new DirectoriesAction();
 			}
 		}]);
 
