@@ -41886,7 +41886,7 @@ var AccountsAction = (function () {
 			this.app = { name: actionData };
 			logger.log({ description: 'App name provided as string was set.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction' });
 		} else {
-			logger.error({ description: 'New Accounts action.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction' });
+			logger.log({ description: 'New Accounts action.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction' });
 		}
 	}
 
@@ -41946,7 +41946,8 @@ var AccountsAction = (function () {
 			var endpointArray = [_classesMatter2['default'].endpoint, 'accounts'];
 			//Check for app account action
 			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
-				endpointArray.splice(1, 0, ['apps', this.app.name]);
+				//Splice apps, appName into index 1
+				endpointArray.splice(1, 0, 'apps', this.app.name);
 			}
 			//Create string from endpointArray
 			var endpointStr = endpointArray.join('/');
@@ -42072,9 +42073,8 @@ var DirectoriesAction = (function () {
 		} else if (actionData && _lodash2['default'].isString(actionData)) {
 			this.app = { name: actionData };
 			logger.log({ description: 'App name provided as string was set.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction' });
-		} else {
-			logger.error({ description: 'Error creating directories action.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction' });
 		}
+		logger.info({ description: 'New directories action.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction' });
 	}
 
 	_createClass(DirectoriesAction, [{
@@ -42133,7 +42133,7 @@ var DirectoriesAction = (function () {
 			var endpointArray = [_classesMatter2['default'].endpoint, 'directories'];
 			//Check for app groups action
 			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
-				endpointArray.splice(1, 0, ['apps', this.app.name]);
+				endpointArray = endpointArray.splice(1, 0, 'apps', this.app.name);
 			}
 			//Create string from endpointArray
 			var endpointStr = endpointArray.join('/');
@@ -42253,7 +42253,7 @@ var GroupsAction = (function () {
 			var endpointArray = [_classesMatter2['default'].endpoint, 'groups'];
 			//Check for app groups action
 			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
-				endpointArray.splice(1, 0, ['apps', this.app.name]);
+				endpointArray = endpointArray.splice(1, 0, 'apps', this.app.name);
 			}
 			//Create string from endpointArray
 			var endpointStr = endpointArray.join('/');
@@ -42354,7 +42354,7 @@ var TemplatesAction = (function () {
 			var endpointArray = [_classesMatter2['default'].endpoint, 'templates'];
 			//Check for app groups action
 			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
-				// endpointArray.splice(1, 0, ['apps', this.app.name]);
+				// endpointArray.splice(1, 0, 'apps', this.app.name);
 				logger.log({ description: 'Templates action is not currently supported for a specific application.', func: 'accountsEndpoint', obj: 'AccountsAction' });
 			}
 			//Create string from endpointArray
@@ -42464,7 +42464,7 @@ var Account = (function () {
 			var endpointArray = [_classesMatter2['default'].endpoint, 'users', this.username];
 			//Check for app account action
 			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
-				endpointArray.splice(1, 0, ['apps', this.app.name]);
+				endpointArray.splice(1, 0, 'apps', this.app.name);
 			}
 			//Create string from endpointArray
 			var endpointStr = endpointArray.join('/');
@@ -42792,7 +42792,7 @@ var Directory = (function () {
 			var endpointArray = [_Matter2['default'].endpoint, 'directories', this.name];
 			//Check for app account action
 			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
-				endpointArray.splice(1, 0, ['apps', this.app.name]);
+				endpointArray.splice(1, 0, 'apps', this.app.name);
 			}
 			//Create string from endpointArray
 			var endpointStr = endpointArray.join('/');
@@ -43308,8 +43308,9 @@ var Group = (function () {
 		get: function get() {
 			var endpointArray = [_Matter2['default'].endpoint, 'groups', this.name];
 			//Check for app account action
+
 			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
-				endpointArray.splice(1, 0, ['apps', this.app.name]);
+				endpointArray.splice(1, 0, 'apps', this.app.name);
 			}
 			//Create string from endpointArray
 			var endpointStr = endpointArray.join('/');
@@ -43625,13 +43626,13 @@ var Grout = (function (_Matter) {
 		key: 'accounts',
 		get: function get() {
 			this.utils.logger.debug({ description: 'Account Action called.', action: new _actionsAccountsAction2['default'](), func: 'users', obj: 'Grout' });
-			return new _actionsAccountsAction2['default']({ app: this });
+			return new _actionsAccountsAction2['default']();
 		}
 	}, {
 		key: 'users',
 		get: function get() {
 			this.utils.logger.debug({ description: 'Accounts Action called.', action: new _actionsAccountsAction2['default'](), func: 'users', obj: 'Grout' });
-			return new _actionsAccountsAction2['default']({ app: this });
+			return new _actionsAccountsAction2['default']();
 		}
 	}, {
 		key: 'groups',

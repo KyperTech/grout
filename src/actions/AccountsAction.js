@@ -14,15 +14,15 @@ class AccountsAction {
 		} else if (actionData && _.isString(actionData)) {
 			this.app = {name: actionData};
 			logger.log({description: 'App name provided as string was set.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction'});
-		} else {
-			logger.error({description: 'New Accounts action.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction'});
 		}
+		logger.info({description: 'New Accounts action.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction'});
 	}
 	get accountsEndpoint() {
 		let endpointArray = [matter.endpoint, 'accounts'];
 		//Check for app account action
 		if (_.has(this, 'app') && _.has(this.app, 'name')) {
-			endpointArray.splice(1, 0, ['apps', this.app.name]);
+			//Splice apps, appName into index 1
+			endpointArray.splice(1, 0, 'apps', this.app.name);
 		}
 		//Create string from endpointArray
 		let endpointStr = endpointArray.join('/');

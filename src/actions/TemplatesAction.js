@@ -10,7 +10,7 @@ class TemplatesAction {
 		let endpointArray = [matter.endpoint, 'templates'];
 		//Check for app groups action
 		if (_.has(this, 'app') && _.has(this.app, 'name')) {
-			// endpointArray.splice(1, 0, ['apps', this.app.name]);
+			// endpointArray.splice(1, 0, 'apps', this.app.name);
 			logger.log({description: 'Templates action is not currently supported for a specific application.', func: 'accountsEndpoint', obj: 'AccountsAction'});
 		}
 		//Create string from endpointArray

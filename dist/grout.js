@@ -732,7 +732,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var endpointArray = [matter.endpoint, 'directories', this.name];
 				//Check for app account action
 				if (_.has(this, 'app') && _.has(this.app, 'name')) {
-					endpointArray.splice(1, 0, ['apps', this.app.name]);
+					endpointArray.splice(1, 0, 'apps', this.app.name);
 				}
 				//Create string from endpointArray
 				var endpointStr = endpointArray.join('/');
@@ -840,8 +840,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			get: function get() {
 				var endpointArray = [matter.endpoint, 'groups', this.name];
 				//Check for app account action
+
 				if (_.has(this, 'app') && _.has(this.app, 'name')) {
-					endpointArray.splice(1, 0, ['apps', this.app.name]);
+					endpointArray.splice(1, 0, 'apps', this.app.name);
 				}
 				//Create string from endpointArray
 				var endpointStr = endpointArray.join('/');
@@ -935,7 +936,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var endpointArray = [matter.endpoint, 'groups'];
 				//Check for app groups action
 				if (_.has(this, 'app') && _.has(this.app, 'name')) {
-					endpointArray.splice(1, 0, ['apps', this.app.name]);
+					endpointArray = endpointArray.splice(1, 0, 'apps', this.app.name);
 				}
 				//Create string from endpointArray
 				var endpointStr = endpointArray.join('/');
@@ -1018,7 +1019,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var endpointArray = [matter.endpoint, 'users', this.username];
 				//Check for app account action
 				if (_.has(this, 'app') && _.has(this.app, 'name')) {
-					endpointArray.splice(1, 0, ['apps', this.app.name]);
+					endpointArray.splice(1, 0, 'apps', this.app.name);
 				}
 				//Create string from endpointArray
 				var endpointStr = endpointArray.join('/');
@@ -1045,7 +1046,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				this.app = { name: actionData };
 				_______logger.log({ description: 'App name provided as string was set.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction' });
 			} else {
-				_______logger.error({ description: 'New Accounts action.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction' });
+				_______logger.log({ description: 'New Accounts action.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction' });
 			}
 		}
 
@@ -1105,7 +1106,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var endpointArray = [matter.endpoint, 'accounts'];
 				//Check for app account action
 				if (_.has(this, 'app') && _.has(this.app, 'name')) {
-					endpointArray.splice(1, 0, ['apps', this.app.name]);
+					//Splice apps, appName into index 1
+					endpointArray.splice(1, 0, 'apps', this.app.name);
 				}
 				//Create string from endpointArray
 				var endpointStr = endpointArray.join('/');
@@ -1251,7 +1253,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var endpointArray = [matter.endpoint, 'templates'];
 				//Check for app groups action
 				if (_.has(this, 'app') && _.has(this.app, 'name')) {
-					// endpointArray.splice(1, 0, ['apps', this.app.name]);
+					// endpointArray.splice(1, 0, 'apps', this.app.name);
 					_____logger.log({ description: 'Templates action is not currently supported for a specific application.', func: 'accountsEndpoint', obj: 'AccountsAction' });
 				}
 				//Create string from endpointArray
@@ -1280,9 +1282,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			} else if (actionData && _.isString(actionData)) {
 				this.app = { name: actionData };
 				____logger.log({ description: 'App name provided as string was set.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction' });
-			} else {
-				____logger.error({ description: 'Error creating directories action.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction' });
 			}
+			____logger.info({ description: 'New directories action.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction' });
 		}
 
 		_createClass(_DirectoriesAction, [{
@@ -1341,7 +1342,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var endpointArray = [matter.endpoint, 'directories'];
 				//Check for app groups action
 				if (_.has(this, 'app') && _.has(this.app, 'name')) {
-					endpointArray.splice(1, 0, ['apps', this.app.name]);
+					endpointArray = endpointArray.splice(1, 0, 'apps', this.app.name);
 				}
 				//Create string from endpointArray
 				var endpointStr = endpointArray.join('/');
@@ -1962,13 +1963,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'accounts',
 			get: function get() {
 				this.utils.logger.debug({ description: 'Account Action called.', action: new AccountsAction(), func: 'users', obj: 'Grout' });
-				return new AccountsAction({ app: this });
+				return new AccountsAction();
 			}
 		}, {
 			key: 'users',
 			get: function get() {
 				this.utils.logger.debug({ description: 'Accounts Action called.', action: new AccountsAction(), func: 'users', obj: 'Grout' });
-				return new AccountsAction({ app: this });
+				return new AccountsAction();
 			}
 		}, {
 			key: 'groups',

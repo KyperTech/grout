@@ -23,7 +23,7 @@ class Directory {
 		let endpointArray = [matter.endpoint, 'directories', this.name];
 		//Check for app account action
 		if (_.has(this, 'app') && _.has(this.app, 'name')) {
-			endpointArray.splice(1, 0, ['apps', this.app.name]);
+			endpointArray.splice(1, 0, 'apps', this.app.name);
 		}
 		//Create string from endpointArray
 		let endpointStr = endpointArray.join('/');

@@ -14,15 +14,14 @@ class GroupsAction {
 		} else if (actionData && _.isString(actionData)) {
 			this.app = {name: actionData};
 			logger.log({description: 'App name provided as string was set.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction'});
-		} else {
-			logger.error({description: 'Error creating new Groups action.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction'});
 		}
+		logger.info({description: 'New Groups action.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction'});
 	}
 	get groupsEndpoint() {
 		let endpointArray = [matter.endpoint, 'groups'];
 		//Check for app groups action
 		if (_.has(this, 'app') && _.has(this.app, 'name')) {
-			endpointArray.splice(1, 0, ['apps', this.app.name]);
+			endpointArray = endpointArray.splice(1, 0, 'apps', this.app.name);
 		}
 		//Create string from endpointArray
 		let endpointStr = endpointArray.join('/');

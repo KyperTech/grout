@@ -43,7 +43,7 @@ class Grout extends Matter {
 	//Start a new Accounts action
 	get accounts() {
 		this.utils.logger.debug({description: 'Account Action called.', action: new AccountsAction(), func: 'users', obj: 'Grout'});
-		return new AccountsAction({app: this});
+		return new AccountsAction();
 	}
 	//Start a new Account action
 	account(userData) {
@@ -53,7 +53,7 @@ class Grout extends Matter {
 	//Start a new Accounts action
 	get users() {
 		this.utils.logger.debug({description: 'Accounts Action called.', action: new AccountsAction(), func: 'users', obj: 'Grout'});
-		return new AccountsAction({app: this});
+		return new AccountsAction();
 	}
 	//Start a new Account action
 	user(userData) {

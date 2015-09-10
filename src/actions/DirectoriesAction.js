@@ -14,15 +14,14 @@ class DirectoriesAction {
 		} else if (actionData && _.isString(actionData)) {
 			this.app = {name: actionData};
 			logger.log({description: 'App name provided as string was set.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction'});
-		} else {
-			logger.error({description: 'Error creating directories action.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction'});
 		}
+		logger.info({description: 'New directories action.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction'});
 	}
 	get directoriesEndpoint() {
 		let endpointArray = [matter.endpoint, 'directories'];
 		//Check for app groups action
 		if (_.has(this, 'app') && _.has(this.app, 'name')) {
-			endpointArray.splice(1, 0, ['apps', this.app.name]);
+			endpointArray = endpointArray.splice(1, 0, 'apps', this.app.name);
 		}
 		//Create string from endpointArray
 		let endpointStr = endpointArray.join('/');
