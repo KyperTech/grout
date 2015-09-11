@@ -41885,9 +41885,8 @@ var AccountsAction = (function () {
 		} else if (actionData && _lodash2['default'].isString(actionData)) {
 			this.app = { name: actionData };
 			logger.log({ description: 'App name provided as string was set.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction' });
-		} else {
-			logger.log({ description: 'New Accounts action.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction' });
 		}
+		logger.info({ description: 'New Accounts action.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction' });
 	}
 
 	_createClass(AccountsAction, [{
@@ -42133,7 +42132,7 @@ var DirectoriesAction = (function () {
 			var endpointArray = [_classesMatter2['default'].endpoint, 'directories'];
 			//Check for app groups action
 			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
-				endpointArray = endpointArray.splice(1, 0, 'apps', this.app.name);
+				endpointArray.splice(1, 0, 'apps', this.app.name);
 			}
 			//Create string from endpointArray
 			var endpointStr = endpointArray.join('/');
@@ -42187,9 +42186,8 @@ var GroupsAction = (function () {
 		} else if (actionData && _lodash2['default'].isString(actionData)) {
 			this.app = { name: actionData };
 			logger.log({ description: 'App name provided as string was set.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
-		} else {
-			logger.error({ description: 'Error creating new Groups action.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
 		}
+		logger.info({ description: 'New Groups action.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
 	}
 
 	_createClass(GroupsAction, [{
@@ -42253,7 +42251,7 @@ var GroupsAction = (function () {
 			var endpointArray = [_classesMatter2['default'].endpoint, 'groups'];
 			//Check for app groups action
 			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
-				endpointArray = endpointArray.splice(1, 0, 'apps', this.app.name);
+				endpointArray.splice(1, 0, 'apps', this.app.name);
 			}
 			//Create string from endpointArray
 			var endpointStr = endpointArray.join('/');
@@ -42510,33 +42508,33 @@ var _actionsGroupsAction = require('../actions/GroupsAction');
 
 var _actionsGroupsAction2 = _interopRequireDefault(_actionsGroupsAction);
 
-var _Group = require('./Group');
+var _Group2 = require('./Group');
 
-var _Group2 = _interopRequireDefault(_Group);
+var _Group3 = _interopRequireDefault(_Group2);
 
 var _actionsDirectoriesAction = require('../actions/DirectoriesAction');
 
 var _actionsDirectoriesAction2 = _interopRequireDefault(_actionsDirectoriesAction);
 
-var _Directory = require('./Directory');
+var _Directory2 = require('./Directory');
 
-var _Directory2 = _interopRequireDefault(_Directory);
+var _Directory3 = _interopRequireDefault(_Directory2);
 
 var _actionsAccountsAction = require('../actions/AccountsAction');
 
 var _actionsAccountsAction2 = _interopRequireDefault(_actionsAccountsAction);
 
-var _Account = require('./Account');
+var _Account2 = require('./Account');
 
-var _Account2 = _interopRequireDefault(_Account);
+var _Account3 = _interopRequireDefault(_Account2);
 
 var _Files = require('./Files');
 
 var _Files2 = _interopRequireDefault(_Files);
 
-var _File = require('./File');
+var _File2 = require('./File');
 
-var _File2 = _interopRequireDefault(_File);
+var _File3 = _interopRequireDefault(_File2);
 
 //External Libs
 
@@ -42591,8 +42589,8 @@ var Application = (function () {
 				logger.info({ description: 'Application loaded successfully.', response: response, application: new Application(response), func: 'get', obj: 'Application' });
 				return new Application(response);
 			})['catch'](function (errRes) {
-				logger.error({ description: 'Error getting Application.', error: errRes, func: 'get', obj: 'Application' });
-				return Promise.reject(errRes);
+				logger.error({ description: 'Error getting Application.', message: errRes.response.text, error: errRes, func: 'get', obj: 'Application' });
+				return Promise.reject(errRes.response.text || errRes.response);
 			});
 		}
 
@@ -42606,7 +42604,7 @@ var Application = (function () {
 				return new Application(response);
 			})['catch'](function (errRes) {
 				logger.error({ description: 'Error updating application.', error: errRes, func: 'update', obj: 'Application' });
-				return Promise.reject(errRes);
+				return Promise.reject(errRes.response.text || errRes.response);
 			});
 		}
 	}, {
@@ -42618,7 +42616,7 @@ var Application = (function () {
 				return new Application(response);
 			})['catch'](function (errRes) {
 				logger.error({ description: 'Error adding storage to application.', error: errRes, func: 'addStorage', obj: 'Application' });
-				return Promise.reject(errRes);
+				return Promise.reject(errRes.response.text || errRes.response);
 			});
 		}
 	}, {
@@ -42632,34 +42630,40 @@ var Application = (function () {
 				return new Application(response);
 			})['catch'](function (errRes) {
 				logger.error({ description: 'Error applying template to application.', error: errRes, application: _this, func: 'applyTemplate', obj: 'Application' });
-				return Promise.reject(errRes);
+				return Promise.reject(errRes.response.text || errRes.response);
 			});
 		}
 
 		//Files object that contains files methods
 	}, {
-		key: 'file',
-		value: function file(fileData) {
+		key: 'File',
+		value: function File(fileData) {
 			logger.debug({ description: 'Applications file action called.', fileData: fileData, application: this, func: 'file', obj: 'Application' });
-			return new _File2['default']({ app: this, fileData: fileData });
+			return new _File3['default']({ app: this, fileData: fileData });
 		}
 	}, {
-		key: 'user',
-		value: function user(userData) {
+		key: 'User',
+		value: function User(userData) {
 			logger.debug({ description: 'Applications user action called.', userData: userData, application: this, func: 'user', obj: 'Application' });
-			return new _Account2['default']({ app: this, userData: userData });
+			return new _Account3['default']({ app: this, userData: userData });
 		}
 	}, {
-		key: 'group',
-		value: function group(groupData) {
+		key: 'Account',
+		value: function Account(userData) {
+			logger.debug({ description: 'Applications account action called.', userData: userData, application: this, func: 'user', obj: 'Application' });
+			return new _Account3['default']({ app: this, userData: userData });
+		}
+	}, {
+		key: 'Group',
+		value: function Group(groupData) {
 			logger.debug({ description: 'Applications group action called.', groupData: groupData, application: this, func: 'group', obj: 'Application' });
-			return new _Group2['default']({ app: this, groupData: groupData });
+			return new _Group3['default']({ app: this, groupData: groupData });
 		}
 	}, {
-		key: 'directory',
-		value: function directory(directoryData) {
+		key: 'Directory',
+		value: function Directory(directoryData) {
 			logger.debug({ description: 'Applications directory action called.', directoryData: directoryData, application: this, func: 'directory', obj: 'Application' });
-			return new _Directory2['default']({ app: this, directoryData: directoryData });
+			return new _Directory3['default']({ app: this, directoryData: directoryData });
 		}
 	}, {
 		key: 'appEndpoint',
@@ -42667,25 +42671,31 @@ var Application = (function () {
 			return _Matter2['default'].endpoint + '/apps/' + this.name;
 		}
 	}, {
-		key: 'files',
+		key: 'Files',
 		get: function get() {
 			logger.debug({ description: 'Applications files action called.', application: this, func: 'files', obj: 'Application' });
 			return new _Files2['default']({ app: this });
 		}
 	}, {
-		key: 'users',
+		key: 'Users',
 		get: function get() {
 			logger.debug({ description: 'Applications users action called.', application: this, func: 'user', obj: 'Application' });
 			return new _actionsAccountsAction2['default']({ app: this });
 		}
 	}, {
-		key: 'groups',
+		key: 'Accounts',
+		get: function get() {
+			logger.debug({ description: 'Applications account action called.', application: this, func: 'user', obj: 'Application' });
+			return new _actionsAccountsAction2['default']({ app: this });
+		}
+	}, {
+		key: 'Groups',
 		get: function get() {
 			logger.debug({ description: 'Applications groups action called.', application: this, func: 'groups', obj: 'Application' });
 			return new _actionsGroupsAction2['default']({ app: this });
 		}
 	}, {
-		key: 'directories',
+		key: 'Directories',
 		get: function get() {
 			logger.debug({ description: 'Applications directories action called.', application: this, func: 'directories', obj: 'Application' });
 			return new _actionsDirectoriesAction2['default']({ app: this });
@@ -43078,17 +43088,24 @@ var Files = (function () {
 			//TODO: Delete a file from files list
 		}
 	}, {
-		key: 'structure',
-		get: function get() {
-			logger.debug({ description: 'Structure called.', func: 'getStructure', obj: 'Application' });
+		key: 'buildStructure',
+		value: function buildStructure() {
+			logger.debug({ description: 'Build Structure called.', func: 'buildStructure', obj: 'Application' });
 			return this.get().then(function (filesArray) {
 				var childStruct = childrenStructureFromArray(filesArray);
-				logger.log({ description: 'Child struct from array.', childStructure: childStruct, func: 'getStructure', obj: 'Application' });
+				logger.log({ description: 'Child struct from array.', childStructure: childStruct, func: 'buildStructure', obj: 'Application' });
 				return childStruct;
 			}, function (err) {
-				logger.error({ description: 'Error getting application files.', error: err, func: 'getStructure', obj: 'Application' });
+				logger.error({ description: 'Error getting application files.', error: err, func: 'buildStructure', obj: 'Application' });
 				return Promise.reject({ message: 'Error getting files.', error: err });
 			});
+		}
+
+		//ALIAS FOR buildStructure
+	}, {
+		key: 'structure',
+		get: function get() {
+			return this.buildStructure();
 		}
 	}]);
 
@@ -43553,95 +43570,97 @@ var Grout = (function (_Matter) {
 	//Start a new Apps Action
 
 	_createClass(Grout, [{
-		key: 'app',
+		key: 'App',
 
 		//Start a new App action
-		value: function app(appName) {
-			this.utils.logger.debug({ description: 'Templates Action called.', appName: appName, template: new _classesApplication2['default'](appName), func: 'app', obj: 'Grout' });
+		value: function App(appName) {
+			this.utils.logger.debug({ description: 'Templates Action called.', appName: appName, template: new _classesApplication2['default'](appName), func: 'App', obj: 'Grout' });
 			return new _classesApplication2['default'](appName);
 		}
 
 		//Start a new Apps Action
 	}, {
-		key: 'template',
+		key: 'Template',
 
 		//Start a new App action
-		value: function template(templateData) {
-			this.utils.logger.debug({ description: 'Template Action called.', templateData: templateData, template: new _classesTemplate2['default'](templateData), func: 'template', obj: 'Grout' });
+		value: function Template(templateData) {
+			this.utils.logger.debug({ description: 'Template Action called.', templateData: templateData, template: new _classesTemplate2['default'](templateData), func: 'Template', obj: 'Grout' });
 			return new _classesTemplate2['default'](templateData);
 		}
 
 		//Start a new Accounts action
 	}, {
-		key: 'account',
+		key: 'Account',
 
 		//Start a new Account action
-		value: function account(userData) {
+		value: function Account(userData) {
 			this.utils.logger.debug({ description: 'Account Action called.', userData: userData, user: new _classesAccount2['default'](userData), func: 'user', obj: 'Grout' });
 			return new _classesAccount2['default'](userData);
 		}
 
+		//ALIAS OF ACCOUNTS
 		//Start a new Accounts action
 	}, {
-		key: 'user',
+		key: 'User',
 
+		//ALIAS OF ACCOUNT
 		//Start a new Account action
-		value: function user(userData) {
+		value: function User(userData) {
 			this.utils.logger.debug({ description: 'Account Action called.', userData: userData, user: new _classesAccount2['default'](userData), func: 'user', obj: 'Grout' });
 			return new _classesAccount2['default'](userData);
 		}
 
 		//Start a new Groups action
 	}, {
-		key: 'group',
+		key: 'Group',
 
 		//Start a new Group action
-		value: function group(groupData) {
+		value: function Group(groupData) {
 			this.utils.logger.debug({ description: 'Group Action called.', groupData: groupData, action: new _classesGroup2['default']({ app: this, groupData: groupData }), func: 'group', obj: 'Grout' });
 			return new _classesGroup2['default'](groupData);
 		}
 
 		//Start a new Directories action
 	}, {
-		key: 'directory',
+		key: 'Directory',
 
 		//Start a new Group action
-		value: function directory(directoryData) {
+		value: function Directory(directoryData) {
 			this.utils.logger.debug({ description: 'Directory Action called.', directoryData: directoryData, action: new _classesDirectory2['default'](directoryData), func: 'directory', obj: 'Grout' });
 			return new _classesDirectory2['default'](directoryData);
 		}
 	}, {
-		key: 'apps',
+		key: 'Apps',
 		get: function get() {
-			this.utils.logger.debug({ description: 'Apps Action called.', action: new _actionsAppsAction2['default'](), func: 'apps', obj: 'Grout' });
+			this.utils.logger.debug({ description: 'Apps Action called.', action: new _actionsAppsAction2['default'](), func: 'Apps', obj: 'Grout' });
 			return new _actionsAppsAction2['default']();
 		}
 	}, {
-		key: 'templates',
+		key: 'Templates',
 		get: function get() {
-			this.utils.logger.debug({ description: 'Templates Action called.', action: new _actionsTemplatesAction2['default'](), func: 'templates', obj: 'Grout' });
+			this.utils.logger.debug({ description: 'Templates Action called.', action: new _actionsTemplatesAction2['default'](), func: 'Templates', obj: 'Grout' });
 			return new _actionsTemplatesAction2['default']();
 		}
 	}, {
-		key: 'accounts',
+		key: 'Accounts',
 		get: function get() {
 			this.utils.logger.debug({ description: 'Account Action called.', action: new _actionsAccountsAction2['default'](), func: 'users', obj: 'Grout' });
 			return new _actionsAccountsAction2['default']();
 		}
 	}, {
-		key: 'users',
+		key: 'Users',
 		get: function get() {
-			this.utils.logger.debug({ description: 'Accounts Action called.', action: new _actionsAccountsAction2['default'](), func: 'users', obj: 'Grout' });
+			this.utils.logger.debug({ description: 'Accounts Action called.', action: new _actionsAccountsAction2['default'](), func: 'Users', obj: 'Grout' });
 			return new _actionsAccountsAction2['default']();
 		}
 	}, {
-		key: 'groups',
+		key: 'Groups',
 		get: function get() {
 			this.utils.logger.debug({ description: 'Groups Action called.', action: new _actionsGroupsAction2['default'](), func: 'groups', obj: 'Grout' });
 			return new _actionsGroupsAction2['default']();
 		}
 	}, {
-		key: 'directories',
+		key: 'Directories',
 		get: function get() {
 			this.utils.logger.debug({ description: 'Directories Action called.', action: new DirectoriesAction(), func: 'directories', obj: 'Grout' });
 			return new DirectoriesAction();
