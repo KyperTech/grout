@@ -29,15 +29,7 @@ class Application {
 	constructor(appData) {
 		//Setup application data based on input
 		if (appData && _.isObject(appData)) {
-			this.name = appData.name;
-			this.owner = appData.owner || null;
-			this.collaborators = appData.collaborators || [];
-			this.createdAt = appData.createdAt;
-			this.updatedAt = appData.updatedAt;
-			this.frontend = appData.frontend || {};
-			this.backend = appData.backend || {};
-			this.groups = appData.groups || null;
-			this.directories = appData.directories || null;
+			_.extend(this, appData);
 		} else if (appData && _.isString(appData)) {
 			this.name = appData;
 		}
