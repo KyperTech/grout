@@ -44733,7 +44733,7 @@ var Account = (function () {
 		key: 'del',
 		value: function del(accountData) {
 			logger.debug({ description: 'Delete user called.', func: 'del', obj: 'Account' });
-			return request['delete'](this.accountEndpoint, accountData).then(function (response) {
+			return request.del(this.accountEndpoint, accountData).then(function (response) {
 				logger.info({ description: 'Delete user successful.', response: response, func: 'del', obj: 'Account' });
 				return new Account(response);
 			})['catch'](function (errRes) {
@@ -44744,7 +44744,7 @@ var Account = (function () {
 	}, {
 		key: 'accountEndpoint',
 		get: function get() {
-			var endpointArray = [_classesMatter2['default'].endpoint, 'users', this.username];
+			var endpointArray = [_classesMatter2['default'].endpoint, 'accounts', this.username];
 			//Check for app account action
 			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
 				endpointArray.splice(1, 0, 'apps', this.app.name);
@@ -45297,16 +45297,16 @@ var Files = (function () {
 	function Files(filesData) {
 		_classCallCheck(this, Files);
 
-		if (filesData && _lodash2['default'].isObject(filesData) && (_lodash2['default'].has(filesData, 'appName') || _lodash2['default'].has(filesData, 'name'))) {
+		if (filesData && _lodash2['default'].isObject(filesData) && _lodash2['default'].has(filesData, 'app')) {
 			//Data is object containing directory data
-			this.app = filesData.filesData;
+			this.app = filesData.app;
 		} else if (filesData && _lodash2['default'].isString(filesData)) {
 			//Data is string name
 			this.app = { name: filesData };
 		} else if (filesData && _lodash2['default'].isArray(filesData)) {
 			//TODO: Handle an array of files being passed as data
 			logger.error({ description: 'Action data object with name is required to start a Files Action.', func: 'constructor', obj: 'Files' });
-			throw new Error('Files Data object with name is required to start a Files action.');
+			throw new Error('Files Data object with application is required to start a Files action.');
 		} else {
 			logger.error({ description: 'Action data object with name is required to start a Files Action.', func: 'constructor', obj: 'Files' });
 			throw new Error('Files Data object with name is required to start a Files action.');
@@ -45324,9 +45324,16 @@ var Files = (function () {
 		value: function get() {
 			var _this = this;
 
-			if (!this.app || !this.app.frontend || !this.app.frontend.bucketName) {
-				logger.error({ description: 'Application Frontend data not available. Make sure to call .get().', func: 'get', obj: 'Files' });
-				return Promise.reject({ message: 'Bucket name required to get objects' });
+			if (!this.app.frontend || !this.app.frontend.bucketName) {
+				logger.warn({ description: 'Application Frontend data not available. Calling .get().', app: this.app, func: 'get', obj: 'Files' });
+				return this.app.get().then(function (applicationData) {
+					logger.warn({ description: 'Get returned', data: applicationData, func: 'get', obj: 'Files' });
+					_this.app = applicationData;
+					return _this.get();
+				}, function (err) {
+					logger.error({ description: 'Application Frontend data not available. Make sure to call .get().', func: 'get', obj: 'Files' });
+					return Promise.reject({ message: 'Bucket name required to get objects' });
+				});
 			} else {
 				var _ret = (function () {
 					//If AWS Credential do not exist, set them
@@ -45379,11 +45386,9 @@ var Files = (function () {
 		}
 
 		//ALIAS FOR buildStructure
-	}, {
-		key: 'structure',
-		get: function get() {
-			return this.buildStructure();
-		}
+		// get structure() {
+		// 	return this.buildStructure();
+		// }
 	}]);
 
 	return Files;
@@ -45443,7 +45448,7 @@ function buildStructureObject(file) {
 			if (ind != list.length - 1) {
 				//Not the last loc
 				currentObj.name = loc;
-				currentObj.path = _lodash2['default'].first(list, ind + 1).join('/');
+				currentObj.path = _lodash2['default'].take(list, ind + 1).join('/');
 				currentObj.type = 'folder';
 				currentObj.children = [{}];
 				//TODO: Find out why this works
@@ -45851,7 +45856,7 @@ var Grout = (function (_Matter) {
 
 		//Start a new App action
 		value: function App(appName) {
-			this.utils.logger.debug({ description: 'Templates Action called.', appName: appName, template: new _classesApplication2['default'](appName), func: 'App', obj: 'Grout' });
+			this.utils.logger.debug({ description: 'Application action called.', appName: appName, template: new _classesApplication2['default'](appName), func: 'App', obj: 'Grout' });
 			return new _classesApplication2['default'](appName);
 		}
 
