@@ -792,7 +792,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				}
 				if (this.name == 'tessellate') {
 					//Remove url if host is server
-					if (typeof window != 'undefined' && _.has(window, 'location') && window.location.host == serverUrl) {
+					if (window && _.has(window, 'location') && window.location.host == serverUrl) {
 						serverUrl = '';
 						____________logger.info({ description: 'Host is Server, serverUrl simplified!', url: serverUrl, func: 'endpoint', obj: 'Matter' });
 					}
@@ -953,9 +953,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	//Actions for directories list
 
-	var _DirectoriesAction = (function () {
-		function _DirectoriesAction(actionData) {
-			_classCallCheck(this, _DirectoriesAction);
+	var DirectoriesAction = (function () {
+		function DirectoriesAction(actionData) {
+			_classCallCheck(this, DirectoriesAction);
 
 			//Check to see if action is for a specific app
 			if (actionData && _.isObject(actionData) && _.has(actionData, 'app')) {
@@ -968,7 +968,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			__________logger.info({ description: 'New directories action.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction' });
 		}
 
-		_createClass(_DirectoriesAction, [{
+		_createClass(DirectoriesAction, [{
 			key: 'get',
 
 			//Get users or single application
@@ -1033,7 +1033,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			}
 		}]);
 
-		return _DirectoriesAction;
+		return DirectoriesAction;
 	})();
 
 	var ________request = matter.utils.request;
@@ -1902,8 +1902,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			} else if (appData && _.isString(appData)) {
 				this.name = appData;
 			}
-			if (Firebase) {
-				this.fbRef = new Firebase(config.fbUrl + appData.name);
+			if (Firebase && _.has(config, 'fbUrl') && _.has(this, 'name')) {
+				this.fbRef = new Firebase(config.fbUrl + this.name);
 			}
 			// logger.debug({description: 'Application object created.', application: this, func: 'constructor', obj: 'Application'});
 		}
@@ -1954,7 +1954,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var _this11 = this;
 
 				_logger.error({ description: 'Applying templates to existing applications is not currently supported.', func: 'applyTemplate', obj: 'Application' });
-				return _request.post(endpoint, appData).then(function (response) {
+				return _request.post(this.appEndpoint, appData).then(function (response) {
 					_logger.info({ description: 'Template successfully applied to application.', response: response, application: _this11, func: 'applyTemplate', obj: 'Application' });
 					return new _Application(response);
 				})['catch'](function (errRes) {
@@ -2027,7 +2027,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'Directories',
 			get: function get() {
 				_logger.debug({ description: 'Applications directories action called.', application: this, func: 'directories', obj: 'Application' });
-				return new _DirectoriesAction({ app: this });
+				return new DirectoriesAction({ app: this });
 			}
 		}]);
 
@@ -2196,7 +2196,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'Directories',
 			get: function get() {
 				this.utils.logger.debug({ description: 'Directories Action called.', action: new DirectoriesAction(), func: 'directories', obj: 'Grout' });
-				return new _DirectoriesAction();
+				return new DirectoriesAction();
 			}
 		}]);
 
