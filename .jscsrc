@@ -7,5 +7,6 @@
   	"checkAnnotations":"jsdoc3"
   },
   "disallowMixedSpacesAndTabs":"smart",
+  "disallowMultipleVarDecl":{"allExcept":["undefined"]},
   "requireDotNotation": null //For ['catch'] for ie compadability
 }

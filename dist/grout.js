@@ -1699,16 +1699,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		function Files(filesData) {
 			_classCallCheck(this, Files);
 
-			if (filesData && _.isObject(filesData) && (_.has(filesData, 'appName') || _.has(filesData, 'name'))) {
+			if (filesData && _.isObject(filesData) && _.has(filesData, 'app')) {
 				//Data is object containing directory data
-				this.app = filesData.filesData;
+				this.app = filesData.app;
 			} else if (filesData && _.isString(filesData)) {
 				//Data is string name
 				this.app = { name: filesData };
 			} else if (filesData && _.isArray(filesData)) {
 				//TODO: Handle an array of files being passed as data
 				__logger.error({ description: 'Action data object with name is required to start a Files Action.', func: 'constructor', obj: 'Files' });
-				throw new Error('Files Data object with name is required to start a Files action.');
+				throw new Error('Files Data object with application is required to start a Files action.');
 			} else {
 				__logger.error({ description: 'Action data object with name is required to start a Files Action.', func: 'constructor', obj: 'Files' });
 				throw new Error('Files Data object with name is required to start a Files action.');
@@ -1730,9 +1730,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function get() {
 				var _this10 = this;
 
-				if (!this.app || !this.app.frontend || !this.app.frontend.bucketName) {
-					__logger.error({ description: 'Application Frontend data not available. Make sure to call .get().', func: 'get', obj: 'Files' });
-					return Promise.reject({ message: 'Bucket name required to get objects' });
+				if (!this.app.frontend || !this.app.frontend.bucketName) {
+					__logger.warn({ description: 'Application Frontend data not available. Calling .get().', app: this.app, func: 'get', obj: 'Files' });
+					return this.app.get().then(function (applicationData) {
+						__logger.warn({ description: 'Get returned', data: applicationData, func: 'get', obj: 'Files' });
+						_this10.app = applicationData;
+						return _this10.get();
+					}, function (err) {
+						__logger.error({ description: 'Application Frontend data not available. Make sure to call .get().', func: 'get', obj: 'Files' });
+						return Promise.reject({ message: 'Bucket name required to get objects' });
+					});
 				} else {
 					var _ret2 = (function () {
 						//If AWS Credential do not exist, set them
@@ -1785,11 +1792,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			}
 
 			//ALIAS FOR buildStructure
-		}, {
-			key: 'structure',
-			get: function get() {
-				return this.buildStructure();
-			}
+			// get structure() {
+			// 	return this.buildStructure();
+			// }
 		}]);
 
 		return Files;
@@ -1844,7 +1849,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				if (ind != list.length - 1) {
 					//Not the last loc
 					currentObj.name = loc;
-					currentObj.path = _.first(list, ind + 1).join('/');
+					currentObj.path = _.take(list, ind + 1).join('/');
 					currentObj.type = 'folder';
 					currentObj.children = [{}];
 					//TODO: Find out why this works

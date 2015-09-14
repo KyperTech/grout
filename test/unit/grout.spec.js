@@ -4,44 +4,52 @@ import Firebase from 'firebase';
 import Matter from 'kyper-matter';
 
 let grout = new Grout();
+let mockGet, mockPut, mockPost, mockLog, mockDebug, mockWarn, mockInfo, mockError;
 
-let mockGet = sinon.stub(grout.utils.request, 'get', function() {
- console.log('mock get called with:', arguments);
- return new Promise((resolve) => {
-   resolve({body: {}});
- });
-});
-let mockPut = sinon.stub(grout.utils.request, 'put', function() {
- console.log('mock put called with:', arguments);
- return new Promise((resolve) => {
-   resolve({body: {}});
- });
-});
-let mockPost = sinon.stub(grout.utils.request, 'post', function(url, postData) {
- console.log('mock post called with:', arguments);
- return new Promise((resolve, reject) => {
-   if (!postData || postData == {}) {
-     reject({});
-   }
-   resolve({body: {}});
- });
-});
-let mockLog = sinon.stub(grout.utils.logger, 'log', function() {
-
-});
-let mockDebug = sinon.stub(grout.utils.logger, 'debug', function() {
-
-});
-let mockWarn = sinon.stub(grout.utils.logger, 'warn', function() {
-
-});
-let mockInfo = sinon.stub(grout.utils.logger, 'info', function() {
-
-});
-let mockError = sinon.stub(grout.utils.logger, 'error', function() {
-
-});
 describe('Grout', () => {
+  beforeEach(() => {
+    mockGet = sinon.stub(grout.utils.request, 'get', function() {
+     console.log('mock get called with:', arguments);
+     return new Promise((resolve) => {
+       resolve({body: {}});
+     });
+    });
+    mockPut = sinon.stub(grout.utils.request, 'put', function() {
+     console.log('mock put called with:', arguments);
+     return new Promise((resolve) => {
+       resolve({body: {}});
+     });
+    });
+    mockPost = sinon.stub(grout.utils.request, 'post', function(url, postData) {
+     console.log('mock post called with:', arguments);
+     return new Promise((resolve, reject) => {
+       if (!postData || postData == {}) {
+         reject({});
+       }
+       resolve({body: {}});
+     });
+    });
+    mockLog = sinon.stub(grout.utils.logger, 'log', function() {
+    });
+    mockDebug = sinon.stub(grout.utils.logger, 'debug', function() {
+    });
+    mockWarn = sinon.stub(grout.utils.logger, 'warn', function() {
+    });
+    mockInfo = sinon.stub(grout.utils.logger, 'info', function() {
+    });
+    mockError = sinon.stub(grout.utils.logger, 'error', function() {
+    });
+  });
+  afterEach(() => {
+    mockGet.restore();
+    mockPost.restore();
+    mockPut.restore();
+    mockLog.restore();
+    mockDebug.restore();
+    mockWarn.restore();
+    mockInfo.restore();
+    mockError.restore();
+  });
   describe('Config', () => {
     it('has the app name "tessellate"', () => {
       expect(grout.name).to.equal('tessellate');
