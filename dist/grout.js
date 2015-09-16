@@ -444,36 +444,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}
 
 		_createClass(ProviderAuth, [{
-			key: 'login',
-			value: function login() {
-				var _this = this;
-
-				//Initalize Hello
-				return this.initHello.then(function () {
-					if (window) {
-						return window.hello.login(_this.provider);
-					}
-				});
-			}
-		}, {
-			key: 'signup',
-			value: function signup() {
-				var _this2 = this;
-
-				//Initalize Hello
-				if (!_.has(clientIds, this.provider)) {
-					____________logger.error({ description: this.provider + ' is not setup as a provider on Tessellate. Please visit tessellate.kyper.io to enter your provider information.', provider: this.provider, clientIds: clientIds, func: 'login', obj: 'ProviderAuth' });
-					return Promise.reject();
-				}
-				return this.initHello.then(function () {
-					if (window) {
-						return window.hello.login(_this2.provider);
-					}
-				});
-			}
-		}, {
 			key: 'loadHello',
-			get: function get() {
+			value: function loadHello() {
 				//Load hellojs script
 				//TODO: Replace this with es6ified version
 				if (window && !window.hello) {
@@ -484,7 +456,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			}
 		}, {
 			key: 'helloLoginListener',
-			get: function get() {
+			value: function helloLoginListener() {
 				//Login Listener
 				window.hello.on('auth.login', function (auth) {
 					____________logger.info({ description: 'User logged in to google.', func: 'loadHello', obj: 'Google' });
@@ -507,26 +479,54 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			}
 		}, {
 			key: 'initHello',
-			get: function get() {
-				var _this3 = this;
+			value: function initHello() {
+				var _this = this;
 
-				return this.loadHello.then(function () {
-					return ___________request.get(_this3.app.endpoint).then(function (response) {
+				return this.loadHello().then(function () {
+					return ___________request.get(_this.app.endpoint).then(function (response) {
 						____________logger.log({ description: 'Provider request successful.', response: response, func: 'signup', obj: 'ProviderAuth' });
-						var provider = _.findWhere(response.providers, { name: _this3.provider });
+						var provider = _.findWhere(response.providers, { name: _this.provider });
 						____________logger.warn({ description: 'Provider found', findWhere: provider, func: 'login', obj: 'ProviderAuth' });
 						if (!provider) {
-							____________logger.error({ description: 'Provider is not setup. Visit tessellate.kyper.io to enter your client id for ' + _this3.provider, provider: _this3.provider, clientIds: clientIds, func: 'login', obj: 'ProviderAuth' });
+							____________logger.error({ description: 'Provider is not setup. Visit tessellate.kyper.io to enter your client id for ' + _this.provider, provider: _this.provider, clientIds: clientIds, func: 'login', obj: 'ProviderAuth' });
 							return Promise.reject({ message: 'Provider is not setup.' });
 						}
 						var providersConfig = {};
 						providersConfig[provider.name] = provider.clientId;
 						____________logger.warn({ description: 'Providers config built', providersConfig: providersConfig, func: 'login', obj: 'ProviderAuth' });
-						return window.hello.init(providersConfig, { redirect_uri: _this3.redirectUri });
+						return window.hello.init(providersConfig, { redirect_uri: _this.redirectUri });
 					})['catch'](function (errRes) {
 						____________logger.error({ description: 'Getting application data.', error: errRes, func: 'signup', obj: 'Matter' });
 						return Promise.reject(errRes);
 					});
+				});
+			}
+		}, {
+			key: 'login',
+			value: function login() {
+				var _this2 = this;
+
+				//Initalize Hello
+				return this.initHello().then(function () {
+					if (window) {
+						return window.hello.login(_this2.provider);
+					}
+				});
+			}
+		}, {
+			key: 'signup',
+			value: function signup() {
+				var _this3 = this;
+
+				//Initalize Hello
+				if (!_.has(clientIds, this.provider)) {
+					____________logger.error({ description: this.provider + ' is not setup as a provider on Tessellate. Please visit tessellate.kyper.io to enter your provider information.', provider: this.provider, clientIds: clientIds, func: 'login', obj: 'ProviderAuth' });
+					return Promise.reject();
+				}
+				return this.initHello().then(function () {
+					if (window) {
+						return window.hello.login(_this3.provider);
+					}
 				});
 			}
 		}]);
@@ -792,7 +792,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				}
 				if (this.name == 'tessellate') {
 					//Remove url if host is server
-					if (window && _.has(window, 'location') && window.location.host == serverUrl) {
+					if (typeof window !== 'undefined' && _.has(window, 'location') && window.location.host === serverUrl) {
 						serverUrl = '';
 						____________logger.info({ description: 'Host is Server, serverUrl simplified!', url: serverUrl, func: 'endpoint', obj: 'Matter' });
 					}
@@ -1296,7 +1296,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'del',
 			value: function del(accountData) {
 				_______logger.debug({ description: 'Delete user called.', func: 'del', obj: 'Account' });
-				return ______request['delete'](this.accountEndpoint, accountData).then(function (response) {
+				return ______request.del(this.accountEndpoint, accountData).then(function (response) {
 					_______logger.info({ description: 'Delete user successful.', response: response, func: 'del', obj: 'Account' });
 					return new _Account(response);
 				})['catch'](function (errRes) {
@@ -1307,7 +1307,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'accountEndpoint',
 			get: function get() {
-				var endpointArray = [matter.endpoint, 'users', this.username];
+				var endpointArray = [matter.endpoint, 'accounts', this.username];
 				//Check for app account action
 				if (_.has(this, 'app') && _.has(this.app, 'name')) {
 					endpointArray.splice(1, 0, 'apps', this.app.name);
@@ -2112,7 +2112,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			//Start a new App action
 			value: function App(appName) {
-				this.utils.logger.debug({ description: 'Templates Action called.', appName: appName, template: new _Application(appName), func: 'App', obj: 'Grout' });
+				this.utils.logger.debug({ description: 'Application action called.', appName: appName, template: new _Application(appName), func: 'App', obj: 'Grout' });
 				return new _Application(appName);
 			}
 
