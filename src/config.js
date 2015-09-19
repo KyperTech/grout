@@ -4,7 +4,7 @@ let config = {
 	fbUrl: 'https://kyper-tech.firebaseio.com/tessellate',
 	appName: 'tessellate',
 	matterOptions: {
-		localServer: true
+		localServer: false
 	},
 	aws: {
 		region: 'us-east-1',
