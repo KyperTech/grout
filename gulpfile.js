@@ -28,10 +28,11 @@ const _ = require('lodash');
 const shell = require('gulp-shell');
 
 // JS files that should be watched
-const jsWatchFiles = ['src/**/*', 'test/**/*'];
+const mainFiles = ['src/**/*'];
 
-// These are files other than JS files which are to be watched.
-const otherWatchFiles = ['package.json', '**/.eslintrc', '.jscsrc'];
+// Locations/Files to watch along with main files
+const watchFiles = ['package.json', '**/.eslintrc', '.jscsrc', 'test/**/*'];
+const ignoreFiles = ['dist/**/*.js', 'examples/**', 'node_modules/**'].map(function(location){return '!' + location;});
 
 //Create CDN Publisher
 var publisher = CDNPublisher();
@@ -88,6 +89,18 @@ gulp.task('test', function (done) {
     singleRun: true
   }, done).start();
 });
+//Run test with mocha and generate code coverage with istanbul
+gulp.task('coverage', ['lint-src', 'lint-test'], function(done) {
+  require('babel-core/register');
+  gulp.src(['src/**/*.js', '!gulpfile.js', '!dist/**/*.js', '!examples/**', '!node_modules/**'])
+    .pipe($.istanbul({ instrumenter: isparta.Instrumenter }))
+    .pipe($.istanbul.hookRequire())
+    .on('finish', function() {
+      return test()
+        .pipe($.istanbul.writeReports())
+        .on('end', done);
+    });
+});
 
 // Release a new version of the package
 gulp.task('release', function(callback) {
@@ -113,8 +126,9 @@ gulp.task('bump', function(){
 
 //Watch files and trigger a rebuild on change
 gulp.task('watch', function() {
-  const watchFiles = jsWatchFiles.concat(otherWatchFiles);
-  gulp.watch(watchFiles, ['build']);
+  const watchCollection = mainFiles.concat(watchFiles).concat(ignoreFiles);
+  console.log('watching collection:', watchCollection);
+  gulp.watch(watchCollection, ['build']);
 });
 
 //Upload to both locations of CDN
@@ -200,7 +214,6 @@ function buildLinkCommands(linkAction){
       }
     });
   });
-  console.log('Returning link commands:', commands);
   return commands;
 }
 function CDNPublisher () {
@@ -263,4 +276,10 @@ function createLintTask(taskName, files) {
       .pipe($.jscs())
       .pipe($.notify(jscsNotify));
   });
+}
+
+//Run tests sepeartley with mocha (for coverage)
+function test() {
+  return gulp.src(['test/setup/node.js', 'test/unit/**/*.js'], {read: false})
+    .pipe($.mocha({reporter: 'dot', globals: config.mochaGlobals}));
 }
