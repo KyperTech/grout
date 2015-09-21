@@ -186,15 +186,18 @@ function buildLinkCommands(linkAction){
   const messageCommand = 'echo ' + linkAction + 'ing local modules';
   var commands = [messageCommand];
   //Each type of packages to link
-  _.each(linkTypes, function (type){
+  _.each(linkTypes, function (packageType){
     //Check that package link patter is supported
-    // if(!_.contains(allowedPackageLinkTypes, type)){
-    //   console.error('Invalid package link type');
+    // if(!_.contains(allowedPackageLinkTypes, packageType)){
+    //   console.error('Invalid package link packageType');
     //   return;
     // }
-    //Each package of that type
-    _.each(conf.linkedModules[type], function (packageName){
-      commands.push(type + ' ' + linkAction  + ' ' + packageName);
+    //Each package of that packageType
+    _.each(conf.linkedModules[packageType], function (packageName){
+      commands.push(packageType + ' ' + linkAction  + ' ' + packageName);
+      if(linkAction === 'unlink'){
+        commands.push(packageType + ' install ' + packageName);
+      }
     });
   });
   console.log('Returning link commands:', commands);
@@ -226,13 +229,13 @@ function bundle(bundler) {
 }
 function browserifyAndWatchBundler(code) {
   // Create our bundler, passing in the arguments required for watchify
-  var bundler = browserify('src/' + exportFileName + '.js', {standalone:'Matter'});
+  var bundler = browserify('src/' + exportFileName + '.js', {standalone:'Grout'});
 
   // Watch the bundler, and re-bundle it whenever files change
-  bundler = watchify(bundler);
-  bundler.on('update', function() {
-    bundle(bundler);
-  });
+  // bundler = watchify(bundler);
+  // bundler.on('update', function() {
+  //   bundle(bundler);
+  // });
 
   // // Set up Babelify so that ES6 works in the tests
   bundler.transform(babelify.configure({

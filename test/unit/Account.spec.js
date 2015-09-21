@@ -11,21 +11,21 @@ let exampleAccount;
 describe('Application model', () => {
   beforeEach(() => {
     exampleAccount = grout.Account('exampleUser');
-    console.log('exampleAccount', exampleAccount);
+    // console.log('exampleAccount', exampleAccount);
     mockGet = sinon.stub(grout.utils.request, 'get', function() {
-     console.log('mock get called with:', arguments);
+     // console.log('mock get called with:', arguments);
      return new Promise((resolve) => {
        resolve({body: {}});
      });
     });
     mockPut = sinon.stub(grout.utils.request, 'put', function() {
-     console.log('mock put called with:', arguments);
+     // console.log('mock put called with:', arguments);
      return new Promise((resolve) => {
        resolve({body: {}});
      });
     });
     mockPost = sinon.stub(grout.utils.request, 'post', function(url, postData) {
-     console.log('mock post called with:', arguments);
+     // console.log('mock post called with:', arguments);
      return new Promise((resolve, reject) => {
        if (!postData || postData == {}) {
          reject({});
@@ -34,7 +34,7 @@ describe('Application model', () => {
      });
     });
     mockDel = sinon.stub(grout.utils.request, 'del', function(url, postData) {
-     console.log('mock post called with:', arguments);
+     // console.log('mock post called with:', arguments);
      return new Promise((resolve, reject) => {
        if (!postData || postData == {}) {
          reject({});
@@ -42,15 +42,15 @@ describe('Application model', () => {
        resolve({body: {}});
      });
     });
-    mockLog = sinon.stub(matter.utils.logger, 'log', function() {
+    mockLog = sinon.stub(grout.utils.logger, 'log', function() {
     });
-    mockDebug = sinon.stub(matter.utils.logger, 'debug', function() {
+    mockDebug = sinon.stub(grout.utils.logger, 'debug', function() {
     });
-    mockWarn = sinon.stub(matter.utils.logger, 'warn', function() {
+    mockWarn = sinon.stub(grout.utils.logger, 'warn', function() {
     });
-    mockInfo = sinon.stub(matter.utils.logger, 'info', function() {
+    mockInfo = sinon.stub(grout.utils.logger, 'info', function() {
     });
-    mockError = sinon.stub(matter.utils.logger, 'error', function() {
+    mockError = sinon.stub(grout.utils.logger, 'error', function() {
     });
   });
   afterEach(() => {

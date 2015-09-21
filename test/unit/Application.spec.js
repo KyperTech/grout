@@ -11,19 +11,19 @@ describe('Application model', () => {
   beforeEach(() => {
     exampleApp = grout.App('exampleApp');
     mockGet = sinon.stub(grout.utils.request, 'get', function() {
-     console.log('mock get called with:', arguments);
+     // console.log('mock get called with:', arguments);
      return new Promise((resolve) => {
        resolve({body: {}});
      });
     });
     mockPut = sinon.stub(grout.utils.request, 'put', function() {
-     console.log('mock put called with:', arguments);
+     // console.log('mock put called with:', arguments);
      return new Promise((resolve) => {
        resolve({body: {}});
      });
     });
     mockPost = sinon.stub(grout.utils.request, 'post', function(url, postData) {
-     console.log('mock post called with:', arguments);
+     // console.log('mock post called with:', arguments);
      return new Promise((resolve, reject) => {
        if (!postData || postData == {}) {
          reject({});
