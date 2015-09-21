@@ -3,5 +3,8 @@
 	"cdn":{
 		"bucketName":"kyper-cdn",
 		"path":"js/grout"
+	},
+	"linkedModules":{
+		"npm": ["kyper-matter"]
 	}
 }
