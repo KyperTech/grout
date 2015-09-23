@@ -36,9 +36,9 @@ Grout is isomorphic, so it can be used within a frontend or on a server. Below a
 1. Include the Grout library using one of the following:
   #### CDN
   Add script tag to index.html:
-    
+
     ```html
-    <script src="http://cdn.kyper.io/js/grout/0.0.6/grout.js"></script>
+    <script src="http://cdn.kyper.io/js/grout/0.0.8/grout.js"></script>
     ```
 
   #### Bower
@@ -52,13 +52,13 @@ Grout is isomorphic, so it can be used within a frontend or on a server. Below a
 2. Include and use grout
 
     ```javascript
-    require('grout');
-    var grout = new Grout();
+    var Grout = require('grout');
+  var grout = new Grout();
     ```
     **or in ES6:**
     ```javascript
     import Grout from ('grout');
-    let grout = new Grout();
+  let grout = new Grout();
     ```
 
 ## Documentation

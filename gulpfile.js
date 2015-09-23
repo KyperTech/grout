@@ -28,7 +28,7 @@ const _ = require('lodash');
 const shell = require('gulp-shell');
 
 // JS files that should be watched
-const mainFiles = ['src/**/*'];
+const mainFiles = ['src/**/*.js', 'src/classes/**/*.js'];
 
 // Locations/Files to watch along with main files
 const watchFiles = ['package.json', '**/.eslintrc', '.jscsrc', 'test/**/*'];
@@ -116,8 +116,8 @@ gulp.task('release', function(callback) {
   runSequence('bump', 'unlink', 'build', 'upload',  shell.task([tagCreate, tagPush]), callback);
 });
 
-// Basic usage: 
-// Will patch the version 
+// Basic usage:
+// Will patch the version
 gulp.task('bump', function(){
   gulp.src('./component.json')
   .pipe(bump())
@@ -127,7 +127,7 @@ gulp.task('bump', function(){
 //Watch files and trigger a rebuild on change
 gulp.task('watch', function() {
   const watchCollection = mainFiles.concat(watchFiles).concat(ignoreFiles);
-  console.log('watching collection:', watchCollection);
+  // console.log('watching collection:', watchCollection);
   gulp.watch(watchCollection, ['build']);
 });
 
