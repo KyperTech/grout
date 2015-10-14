@@ -1,6 +1,5 @@
 import config from './config';
 import Matter from 'kyper-matter';
-import matter from './classes/Matter';
 import AppsAction from './actions/AppsAction';
 import App from './classes/Application';
 import AccountsAction from './actions/AccountsAction';
@@ -11,19 +10,17 @@ import DirectoriesAction from './actions/DirectoriesAction';
 import Directory from './classes/Directory';
 import TemplatesAction from './actions/TemplatesAction';
 import Template from './classes/Template';
-let matter = new Matter(config.appName, config.matterOptions);
-export function matter(n) {
-  return matter;
-}
+import MatterLib from 'kyper-matter';
+import Matter from './classes/Matter';
+
 /**Grout Client Class
  * @ description Extending matter provides token storage and login/logout/signup capabilities
  */
-class Grout extends Matter {
-	//TODO: Use getter/setter to make this not a function
+class Grout extends MatterLib {
 	constructor(options) {
 		//Call matter with tessellate
 		super(config.appName, options);
-		matter = new Matter(config.appName, options);
+    this.matter = new Matter(config.appName, options);
 	}
 	//Start a new Apps Action
 	get Apps() {
