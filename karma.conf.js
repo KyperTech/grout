@@ -12,9 +12,15 @@ module.exports = function(config) {
       'test/**/*.js': 'browserify'
     },
     browserify : {
-      transform : ['babelify']
+      debug: true,
+      transform: ['babelify',['browserify-istanbul', {instrumenter: require('isparta')}]]
     },
-    reporters: ['progress'],
+    reporters: ['progress', 'coverage'],
+    coverageReporter: {
+      reporters: [
+        { type: 'html' }
+      ]
+    },
     // web server port
     port: 9876,
     // enable / disable colors in the output (reporters and logs)

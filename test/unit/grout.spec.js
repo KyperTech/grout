@@ -54,9 +54,9 @@ describe('Grout', () => {
     it('has the app name "tessellate"', () => {
       expect(grout.name).to.equal('tessellate');
     });
-    it('does not have localServer mode enabled', () => {
-      expect(grout.options.localServer).to.equal(false);
-    });
+    // it('does not have localServer mode enabled', () => {
+    //   expect(grout.options.localServer).to.equal(false);
+    // });
   });
   describe('Matter', () => {
     it('main methods exist', () => {
