@@ -1,5 +1,5 @@
 import config from '../config';
-import matter from './Matter';
+import matter from '../helpers/matter';
 import _ from 'lodash';
 let request = matter.utils.request;
 let logger = matter.utils.logger;

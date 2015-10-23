@@ -1,6 +1,6 @@
 import config from '../config';
 import _ from 'lodash';
-import matter from '../classes/Matter';
+import matter from '../helpers/matter';
 let logger = matter.utils.logger;
 let request = matter.utils.request;
 

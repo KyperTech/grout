@@ -1,6 +1,6 @@
 import config from '../config';
 import _ from 'lodash';
-import matter from './Matter';
+import matter from '../helpers/matter';
 
 import AWS from 'aws-sdk';
 //Convenience vars

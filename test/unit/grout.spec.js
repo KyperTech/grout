@@ -1,7 +1,6 @@
 import config from '../../src/config';
 import Grout from '../../src/grout';
 import Firebase from 'firebase';
-import Matter from 'kyper-matter';
 
 let grout = new Grout();
 let mockGet, mockPut, mockPost, mockLog, mockDebug, mockWarn, mockInfo, mockError;

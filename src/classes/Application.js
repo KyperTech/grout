@@ -1,7 +1,7 @@
 //Internal libs and config
 import config from '../config';
 import _ from 'lodash';
-import matter from './Matter';
+import matter from '../helpers/matter';
 
 //Actions and Classes
 import GroupsAction from '../actions/GroupsAction';

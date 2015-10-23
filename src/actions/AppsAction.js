@@ -1,5 +1,5 @@
 import config from '../config';
-import matter from '../classes/Matter';
+import matter from '../helpers/matter';
 import Application from '../classes/Application';
 
 let request = matter.utils.request;

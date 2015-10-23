@@ -1,4 +1,8 @@
-let config = {
+import merge from 'lodash/object/merge';
+import has from 'lodash/object/has';
+import matter from './helpers/matter';
+
+let defaultConfig = {
 	serverUrl: 'http://tessellate.elasticbeanstalk.com',
 	tokenName: 'grout',
 	fbUrl: 'https://kyper-tech.firebaseio.com/tessellate',
@@ -21,4 +25,17 @@ let config = {
 // if (typeof window != 'undefined' && (window.location.hostname == '' || window.location.hostname == 'localhost')) {
 // 	config.serverUrl = 'http://localhost:4000';
 // }
+let configInstance = null;
+let envName = 'prod';
+class Config {
+	constructor() {
+		if (!configInstance) {
+      configInstance = this;
+    }
+		// console.log({description: 'Config object created.', config: merge(this, defaultConfig), func: 'constructor', obj: 'Config'});
+		return merge(configInstance, defaultConfig);
+	}
+}
+let config = new Config();
+
 export default config;
