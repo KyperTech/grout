@@ -1690,25 +1690,44 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						return Promise.reject({ message: 'Front end data is required to get file.' });
 					});
 				} else {
-					var saveParams = {
-						Bucket: this.app.frontend.bucketName,
-						Key: this.path
-					};
-					//Set contentType from actionData to ContentType parameter of new object
-					if (this.contentType) {
-						saveParams.ContentType = this.contentType;
-					}
-					___logger.debug({ description: 'File get params built.', saveParams: saveParams, fileData: fileData, func: 'get', obj: 'File' });
-					return s3.getObject(saveParams, function (err, data) {
-						//[TODO] Add putting object ACL (make public)
-						if (!err) {
-							___logger.error({ description: 'File loaded successfully.', fileData: data, func: 'get', obj: 'File' });
-							return data;
-						} else {
-							___logger.error({ description: 'Error loading file from S3.', error: err, func: 'get', obj: 'File' });
-							return Promise.reject(err);
+					var _ret2 = (function () {
+						//If AWS Credential do not exist, set them
+						if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
+							___logger.debug({ description: 'AWS creds do not exist, so they are being set.', func: 'publish', obj: 'File' });
+							_setAWSConfig();
 						}
-					});
+						var s3 = new AWS.S3();
+						var saveParams = {
+							Bucket: _this10.app.frontend.bucketName,
+							Key: _this10.path
+						};
+						//Set contentType from actionData to ContentType parameter of new object
+						if (_this10.contentType) {
+							saveParams.ContentType = _this10.contentType;
+						}
+						___logger.debug({ description: 'File get params built.', saveParams: saveParams, file: _this10, func: 'get', obj: 'File' });
+						return {
+							v: new Promise(function (resolve, reject) {
+								s3.getObject(saveParams, function (err, data) {
+									//[TODO] Add putting object ACL (make public)
+									if (!err) {
+										___logger.info({ description: 'File loaded successfully.', fileData: data, func: 'get', obj: 'File' });
+										if (_.has(data, 'Body')) {
+											___logger.info({ description: 'File has content.', fileData: data.Body.toString(), func: 'get', obj: 'File' });
+											resolve(data.Body.toString());
+										} else {
+											resolve(data);
+										}
+									} else {
+										___logger.error({ description: 'Error loading file from S3.', error: err, func: 'get', obj: 'File' });
+										return reject(err);
+									}
+								});
+							})
+						};
+					})();
+
+					if (typeof _ret2 === 'object') return _ret2.v;
 				}
 			}
 
@@ -1721,42 +1740,112 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'publish',
 			value: function publish(fileData) {
+				var _this11 = this;
+
 				//TODO: Publish file to application
 				___logger.debug({ description: 'File publish called.', file: this, fileData: fileData, func: 'publish', obj: 'File' });
 				if (!this.app.frontend) {
 					___logger.error({ description: 'Application Frontend data not available. Make sure to call .get().', func: 'publish', obj: 'File' });
 					return Promise.reject({ message: 'Front end data is required to publish file.' });
 				} else {
-					if (!_.has(fileData, ['content', 'path'])) {
-						___logger.error({ description: 'File data including path and content required to publish.', func: 'publish', obj: 'File' });
-						return Promise.reject({ message: 'File data including path and content required to publish.' });
-					}
-					var saveParams = {
-						Bucket: this.app.frontend.bucketName,
-						Key: fileData.path,
-						Body: fileData.content,
-						ACL: 'public-read'
-					};
-					//Set contentType from fileData to ContentType parameter of new object
-					if (fileData.contentType) {
-						saveParams.ContentType = fileData.contentType;
-					}
-					//If AWS Credential do not exist, set them
-					if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
-						___logger.debug({ description: 'AWS creds do not exist, so they are being set.', func: 'publish', obj: 'File' });
-						_setAWSConfig();
-					}
-					___logger.debug({ description: 'File publish params built.', saveParams: saveParams, fileData: fileData, func: 'publish', obj: 'File' });
-					return s3.putObject(saveParams, function (err, data) {
-						//[TODO] Add putting object ACL (make public)
-						if (!err) {
-							___logger.error({ description: 'File saved successfully.', fileData: data, func: 'publish', obj: 'File' });
-							return data;
-						} else {
-							___logger.error({ description: 'Error saving file to S3.', error: err, func: 'publish', obj: 'File' });
-							return Promise.reject(err);
+					var _ret3 = (function () {
+						if (!_.has(fileData, ['content', 'path'])) {
+							___logger.error({ description: 'File data including path and content required to publish.', func: 'publish', obj: 'File' });
+							return {
+								v: Promise.reject({ message: 'File data including path and content required to publish.' })
+							};
 						}
+						var saveParams = {
+							Bucket: _this11.app.frontend.bucketName,
+							Key: fileData.path,
+							Body: fileData.content,
+							ACL: 'public-read'
+						};
+						//Set contentType from fileData to ContentType parameter of new object
+						if (_this11.contentType) {
+							saveParams.ContentType = _this11.contentType;
+						}
+						//If AWS Credential do not exist, set them
+						if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
+							___logger.debug({ description: 'AWS creds do not exist, so they are being set.', func: 'publish', obj: 'File' });
+							_setAWSConfig();
+						}
+						var s3 = new AWS.S3();
+
+						___logger.debug({ description: 'File publish params built.', saveParams: saveParams, fileData: _this11, func: 'publish', obj: 'File' });
+						return {
+							v: new Promise(function (resolve, reject) {
+								s3.putObject(saveParams, function (err, data) {
+									//[TODO] Add putting object ACL (make public)
+									if (!err) {
+										___logger.log({ description: 'File saved successfully.', response: data, func: 'publish', obj: 'File' });
+										resolve(data);
+									} else {
+										___logger.error({ description: 'Error saving file to S3.', error: err, func: 'publish', obj: 'File' });
+										reject(err);
+									}
+								});
+							})
+						};
+					})();
+
+					if (typeof _ret3 === 'object') return _ret3.v;
+				}
+			}
+		}, {
+			key: 'del',
+			value: function del() {
+				var _this12 = this;
+
+				if (!this.app || !this.app.frontend) {
+					___logger.log({ description: 'Application Frontend data not available. Calling applicaiton get.', func: 'get', obj: 'File' });
+					return this.app.get().then(function (appData) {
+						_this12.app = appData;
+						___logger.log({ description: 'Application get successful. Getting file.', app: appData, func: 'get', obj: 'File' });
+						return _this12.get();
+					}, function (err) {
+						___logger.error({ description: 'Application Frontend data not available. Make sure to call .get().', error: err, func: 'get', obj: 'File' });
+						return Promise.reject({ message: 'Front end data is required to get file.' });
 					});
+				} else {
+					var _ret4 = (function () {
+						//If AWS Credential do not exist, set them
+						if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
+							___logger.debug({ description: 'AWS creds do not exist, so they are being set.', func: 'publish', obj: 'File' });
+							_setAWSConfig();
+						}
+						var s3 = new AWS.S3();
+						var saveParams = {
+							Bucket: _this12.app.frontend.bucketName,
+							Key: _this12.path
+						};
+						//Set contentType from actionData to ContentType parameter of new object
+						if (_this12.contentType) {
+							saveParams.ContentType = _this12.contentType;
+						}
+						___logger.debug({ description: 'File get params built.', saveParams: saveParams, file: _this12, func: 'get', obj: 'File' });
+						return {
+							v: new Promise(function (resolve, reject) {
+								s3.deleteObject(saveParams, function (err, data) {
+									//[TODO] Add putting object ACL (make public)
+									if (!err) {
+										___logger.info({ description: 'File loaded successfully.', fileData: data, func: 'get', obj: 'File' });
+										if (_.has(data, 'Body')) {
+											___logger.info({ description: 'File has content.', fileData: data.Body.toString(), func: 'get', obj: 'File' });
+											resolve(data.Body.toString());
+										} else {
+											resolve(data);
+										}
+									} else {
+										___logger.error({ description: 'Error loading file from S3.', error: err, func: 'get', obj: 'File' });
+										return reject(err);
+									}
+								});
+							})
+						};
+					})();
+
+					if (typeof _ret4 === 'object') return _ret4.v;
 				}
 			}
 		}, {
@@ -1829,15 +1918,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'get',
 			value: function get() {
-				var _this11 = this;
+				var _this13 = this;
 
 				if (!this.app.frontend || !this.app.frontend.bucketName) {
 					__logger.warn({ description: 'Application Frontend data not available. Calling .get().', app: this.app, func: 'get', obj: 'Files' });
 					return this.app.get().then(function (applicationData) {
 						__logger.log({ description: 'Application get returned.', data: applicationData, func: 'get', obj: 'Files' });
-						_this11.app = applicationData;
+						_this13.app = applicationData;
 						if (_.has(applicationData, 'frontend')) {
-							return _this11.get();
+							return _this13.get();
 						} else {
 							__logger.error({ description: 'Application does not have Frontend to get files from.', func: 'get', obj: 'Files' });
 							return Promise.reject({ message: 'Application does not have frontend to get files from.' });
@@ -1847,14 +1936,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						return Promise.reject({ message: 'Bucket name required to get objects' });
 					});
 				} else {
-					var _ret2 = (function () {
+					var _ret5 = (function () {
 						//If AWS Credential do not exist, set them
 						if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
 							// logger.info('AWS creds are being updated to make request');
 							setAWSConfig();
 						}
 						var s3 = new AWS.S3();
-						var listParams = { Bucket: _this11.app.frontend.bucketName };
+						var listParams = { Bucket: _this13.app.frontend.bucketName };
 						return {
 							v: new Promise(function (resolve, reject) {
 								s3.listObjects(listParams, function (err, data) {
@@ -1870,7 +1959,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						};
 					})();
 
-					if (typeof _ret2 === 'object') return _ret2.v;
+					if (typeof _ret5 === 'object') return _ret5.v;
 				}
 			}
 		}, {
@@ -1889,6 +1978,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				__logger.debug({ description: 'Build Structure called.', func: 'buildStructure', obj: 'Application' });
 				return this.get().then(function (filesArray) {
 					var childStruct = childrenStructureFromArray(filesArray);
+					//TODO: have child objects have correct classes (file/folder)
 					__logger.log({ description: 'Child struct from array.', childStructure: childStruct, func: 'buildStructure', obj: 'Application' });
 					return childStruct;
 				}, function (err) {
@@ -2062,14 +2152,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'applyTemplate',
 			value: function applyTemplate() {
-				var _this12 = this;
+				var _this14 = this;
 
 				_logger.error({ description: 'Applying templates to existing applications is not currently supported.', func: 'applyTemplate', obj: 'Application' });
 				return _request.post(this.appEndpoint, appData).then(function (response) {
-					_logger.info({ description: 'Template successfully applied to application.', response: response, application: _this12, func: 'applyTemplate', obj: 'Application' });
+					_logger.info({ description: 'Template successfully applied to application.', response: response, application: _this14, func: 'applyTemplate', obj: 'Application' });
 					return new Application(response);
 				})['catch'](function (errRes) {
-					_logger.error({ description: 'Error applying template to application.', error: errRes, application: _this12, func: 'applyTemplate', obj: 'Application' });
+					_logger.error({ description: 'Error applying template to application.', error: errRes, application: _this14, func: 'applyTemplate', obj: 'Application' });
 					return Promise.reject(errRes.response.text || errRes.response);
 				});
 			}
