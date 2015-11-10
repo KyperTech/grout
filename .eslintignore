@@ -1,1 +1,1 @@
-["src/lib/**/*.js"]
+["src/lib/**/*.js", "test/unit/**/*.js"]

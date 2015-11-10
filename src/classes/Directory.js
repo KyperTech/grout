@@ -1,4 +1,3 @@
-import config from '../config';
 import matter from './Matter';
 import _ from 'lodash';
 let request = matter.utils.request;
@@ -15,7 +14,10 @@ class Directory {
 		} else if (actionData && _.isString(actionData)) { //Data is string name
 			this.name = actionData;
 		} else {
-			logger.error({description: 'Action data object with name is required to start a Directory Action.', func: 'constructor', obj: 'Directory'});
+			logger.error({
+				description: 'Action data object with name is required to start a Directory Action.',
+				func: 'constructor', obj: 'Directory'
+			});
 			throw new Error('Directory Data object with name is required to start a Directory action.');
 		}
 	}
@@ -27,38 +29,68 @@ class Directory {
 		}
 		//Create string from endpointArray
 		let endpointStr = endpointArray.join('/');
-		logger.log({description: 'Directory endpoint built.', endpoint: endpointStr, func: 'directoryEndpoint', obj: 'Directory'});
+		logger.log({
+			description: 'Directory endpoint built.',
+			endpoint: endpointStr, func: 'directoryEndpoint',
+			obj: 'Directory'
+		});
 		return endpointStr;
 	}
 	//Get userlications or single userlication
 	get() {
 		return request.get(this.directoryEndpoint).then((response) => {
-			logger.info({description: 'Directory data loaded successfully.', directoryData: directoryData, response: response, func: 'get', obj: 'Directory'});
+			logger.info({
+				description: 'Directory data loaded successfully.',
+				response: response, func: 'get', obj: 'Directory'
+			});
 			return response;
 		})['catch']((errRes) => {
-			logger.info({description: 'Error getting directory.', directoryData: directoryData, error: errRes, func: 'get', obj: 'Directory'});
+			logger.info({
+				description: 'Error getting directory.',
+				error: errRes, func: 'get', obj: 'Directory'
+			});
 			return Promise.reject(errRes);
 		});
 	}
 	//Update an Directory
 	update(directoryData) {
-		logger.debug({description: 'Directory updated called.', directoryData: directoryData, func: 'update', obj: 'Directory'});
+		logger.debug({
+			description: 'Directory updated called.',
+			directoryData: directoryData, func: 'update', obj: 'Directory'
+		});
 		return matter.utils.request.put(this.directoryEndpoint, directoryData).then((response) => {
-			logger.info({description: 'Directory updated successfully.', directoryData: directoryData, response: response, func: 'update', obj: 'Directory'});
+			logger.info({
+				description: 'Directory updated successfully.',
+				directoryData: directoryData, response: response,
+				func: 'update', obj: 'Directory'
+			});
 			return response;
 		})['catch']((errRes) => {
-			logger.error({description: 'Error updating directory.', directoryData: directoryData, error: errRes, func: 'update', obj: 'Directory'});
+			logger.error({
+				description: 'Error updating directory.',
+				directoryData: directoryData, error: errRes,
+				func: 'update', obj: 'Directory'
+			});
 			return Promise.reject(errRes);
 		});
 	}
 	//Delete an Directory
 	del(directoryData) {
-		logger.debug({description: 'Delete directory called.', directoryData: directoryData, func: 'del', obj: 'Directory'});
-		return request.delete(this.directoryEndpoint, userData).then((response) => {
-			logger.info({description: 'Directory deleted successfully.', directoryData: directoryData, func: 'del', obj: 'Directory'});
+		logger.debug({
+			description: 'Delete directory called.',
+			directoryData: directoryData, func: 'del', obj: 'Directory'
+		});
+		return request.delete(this.directoryEndpoint, directoryData).then((response) => {
+			logger.info({
+				description: 'Directory deleted successfully.',
+				directoryData: directoryData, func: 'del', obj: 'Directory'
+			});
 			return response;
 		})['catch']((errRes) => {
-			logger.error({description: 'Error deleting directory.', directoryData: directoryData, error: errRes, func: 'del', obj: 'Directory'});
+			logger.error({
+				description: 'Error deleting directory.',
+				error: errRes, func: 'del', obj: 'Directory'
+			});
 			return Promise.reject(errRes);
 		});
 	}

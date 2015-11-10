@@ -1,5 +1,5 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Grout = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-// AWS SDK for JavaScript v2.2.4
+// AWS SDK for JavaScript v2.2.15
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // License at https://sdk.amazonaws.com/js/BUNDLE_LICENSE.txt
 var AWS = require('./core');
@@ -34,15 +34,15 @@ AWS.apiLoader.services['cognitoidentity'] = {};
 AWS.CognitoIdentity = AWS.Service.defineService('cognitoidentity', [ '2014-06-30' ]);
 require('./services/cognitoidentity');
 
-AWS.apiLoader.services['cognitoidentity']['2014-06-30'] = {"version":"2.0","metadata":{"apiVersion":"2014-06-30","endpointPrefix":"cognito-identity","jsonVersion":"1.1","serviceFullName":"Amazon Cognito Identity","signatureVersion":"v4","targetPrefix":"AWSCognitoIdentityService","protocol":"json"},"operations":{"CreateIdentityPool":{"input":{"type":"structure","required":["IdentityPoolName","AllowUnauthenticatedIdentities"],"members":{"IdentityPoolName":{},"AllowUnauthenticatedIdentities":{"type":"boolean"},"SupportedLoginProviders":{"shape":"S4"},"DeveloperProviderName":{},"OpenIdConnectProviderARNs":{"shape":"S8"}}},"output":{"shape":"Sa"},"http":{}},"DeleteIdentities":{"input":{"type":"structure","required":["IdentityIdsToDelete"],"members":{"IdentityIdsToDelete":{"type":"list","member":{}}}},"output":{"type":"structure","members":{"UnprocessedIdentityIds":{"type":"list","member":{"type":"structure","members":{"IdentityId":{},"ErrorCode":{}}}}}},"http":{}},"DeleteIdentityPool":{"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{}}},"http":{}},"DescribeIdentity":{"input":{"type":"structure","required":["IdentityId"],"members":{"IdentityId":{}}},"output":{"shape":"Sl"},"http":{}},"DescribeIdentityPool":{"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{}}},"output":{"shape":"Sa"},"http":{}},"GetCredentialsForIdentity":{"input":{"type":"structure","required":["IdentityId"],"members":{"IdentityId":{},"Logins":{"shape":"Sq"}}},"output":{"type":"structure","members":{"IdentityId":{},"Credentials":{"type":"structure","members":{"AccessKeyId":{},"SecretKey":{},"SessionToken":{},"Expiration":{"type":"timestamp"}}}}},"http":{}},"GetId":{"input":{"type":"structure","required":["IdentityPoolId"],"members":{"AccountId":{},"IdentityPoolId":{},"Logins":{"shape":"Sq"}}},"output":{"type":"structure","members":{"IdentityId":{}}},"http":{}},"GetIdentityPoolRoles":{"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{}}},"output":{"type":"structure","members":{"IdentityPoolId":{},"Roles":{"shape":"S12"}}},"http":{}},"GetOpenIdToken":{"input":{"type":"structure","required":["IdentityId"],"members":{"IdentityId":{},"Logins":{"shape":"Sq"}}},"output":{"type":"structure","members":{"IdentityId":{},"Token":{}}},"http":{}},"GetOpenIdTokenForDeveloperIdentity":{"input":{"type":"structure","required":["IdentityPoolId","Logins"],"members":{"IdentityPoolId":{},"IdentityId":{},"Logins":{"shape":"Sq"},"TokenDuration":{"type":"long"}}},"output":{"type":"structure","members":{"IdentityId":{},"Token":{}}},"http":{}},"ListIdentities":{"input":{"type":"structure","required":["IdentityPoolId","MaxResults"],"members":{"IdentityPoolId":{},"MaxResults":{"type":"integer"},"NextToken":{},"HideDisabled":{"type":"boolean"}}},"output":{"type":"structure","members":{"IdentityPoolId":{},"Identities":{"type":"list","member":{"shape":"Sl"}},"NextToken":{}}},"http":{}},"ListIdentityPools":{"input":{"type":"structure","required":["MaxResults"],"members":{"MaxResults":{"type":"integer"},"NextToken":{}}},"output":{"type":"structure","members":{"IdentityPools":{"type":"list","member":{"type":"structure","members":{"IdentityPoolId":{},"IdentityPoolName":{}}}},"NextToken":{}}},"http":{}},"LookupDeveloperIdentity":{"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{},"IdentityId":{},"DeveloperUserIdentifier":{},"MaxResults":{"type":"integer"},"NextToken":{}}},"output":{"type":"structure","members":{"IdentityId":{},"DeveloperUserIdentifierList":{"type":"list","member":{}},"NextToken":{}}},"http":{}},"MergeDeveloperIdentities":{"input":{"type":"structure","required":["SourceUserIdentifier","DestinationUserIdentifier","DeveloperProviderName","IdentityPoolId"],"members":{"SourceUserIdentifier":{},"DestinationUserIdentifier":{},"DeveloperProviderName":{},"IdentityPoolId":{}}},"output":{"type":"structure","members":{"IdentityId":{}}},"http":{}},"SetIdentityPoolRoles":{"input":{"type":"structure","required":["IdentityPoolId","Roles"],"members":{"IdentityPoolId":{},"Roles":{"shape":"S12"}}},"http":{}},"UnlinkDeveloperIdentity":{"input":{"type":"structure","required":["IdentityId","IdentityPoolId","DeveloperProviderName","DeveloperUserIdentifier"],"members":{"IdentityId":{},"IdentityPoolId":{},"DeveloperProviderName":{},"DeveloperUserIdentifier":{}}},"http":{}},"UnlinkIdentity":{"input":{"type":"structure","required":["IdentityId","Logins","LoginsToRemove"],"members":{"IdentityId":{},"Logins":{"shape":"Sq"},"LoginsToRemove":{"shape":"Sm"}}},"http":{}},"UpdateIdentityPool":{"input":{"shape":"Sa"},"output":{"shape":"Sa"},"http":{}}},"shapes":{"S4":{"type":"map","key":{},"value":{}},"S8":{"type":"list","member":{}},"Sa":{"type":"structure","required":["IdentityPoolId","IdentityPoolName","AllowUnauthenticatedIdentities"],"members":{"IdentityPoolId":{},"IdentityPoolName":{},"AllowUnauthenticatedIdentities":{"type":"boolean"},"SupportedLoginProviders":{"shape":"S4"},"DeveloperProviderName":{},"OpenIdConnectProviderARNs":{"shape":"S8"}}},"Sl":{"type":"structure","members":{"IdentityId":{},"Logins":{"shape":"Sm"},"CreationDate":{"type":"timestamp"},"LastModifiedDate":{"type":"timestamp"}}},"Sm":{"type":"list","member":{}},"Sq":{"type":"map","key":{},"value":{}},"S12":{"type":"map","key":{},"value":{}}}};
+AWS.apiLoader.services['cognitoidentity']['2014-06-30'] = {"version":"2.0","metadata":{"apiVersion":"2014-06-30","endpointPrefix":"cognito-identity","jsonVersion":"1.1","serviceFullName":"Amazon Cognito Identity","signatureVersion":"v4","targetPrefix":"AWSCognitoIdentityService","protocol":"json"},"operations":{"CreateIdentityPool":{"input":{"type":"structure","required":["IdentityPoolName","AllowUnauthenticatedIdentities"],"members":{"IdentityPoolName":{},"AllowUnauthenticatedIdentities":{"type":"boolean"},"SupportedLoginProviders":{"shape":"S4"},"DeveloperProviderName":{},"OpenIdConnectProviderARNs":{"shape":"S8"}}},"output":{"shape":"Sa"},"http":{}},"DeleteIdentities":{"input":{"type":"structure","required":["IdentityIdsToDelete"],"members":{"IdentityIdsToDelete":{"type":"list","member":{}}}},"output":{"type":"structure","members":{"UnprocessedIdentityIds":{"type":"list","member":{"type":"structure","members":{"IdentityId":{},"ErrorCode":{}}}}}},"http":{}},"DeleteIdentityPool":{"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{}}},"http":{}},"DescribeIdentity":{"input":{"type":"structure","required":["IdentityId"],"members":{"IdentityId":{}}},"output":{"shape":"Sl"},"http":{}},"DescribeIdentityPool":{"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{}}},"output":{"shape":"Sa"},"http":{}},"GetCredentialsForIdentity":{"input":{"type":"structure","required":["IdentityId"],"members":{"IdentityId":{},"Logins":{"shape":"Sq"}}},"output":{"type":"structure","members":{"IdentityId":{},"Credentials":{"type":"structure","members":{"AccessKeyId":{},"SecretKey":{},"SessionToken":{},"Expiration":{"type":"timestamp"}}}}},"http":{}},"GetId":{"input":{"type":"structure","required":["IdentityPoolId"],"members":{"AccountId":{},"IdentityPoolId":{},"Logins":{"shape":"Sq"}}},"output":{"type":"structure","members":{"IdentityId":{}}},"http":{}},"GetIdentityPoolRoles":{"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{}}},"output":{"type":"structure","members":{"IdentityPoolId":{},"Roles":{"shape":"S12"}}},"http":{}},"GetOpenIdToken":{"input":{"type":"structure","required":["IdentityId"],"members":{"IdentityId":{},"Logins":{"shape":"Sq"}}},"output":{"type":"structure","members":{"IdentityId":{},"Token":{}}},"http":{}},"GetOpenIdTokenForDeveloperIdentity":{"input":{"type":"structure","required":["IdentityPoolId","Logins"],"members":{"IdentityPoolId":{},"IdentityId":{},"Logins":{"shape":"Sq"},"TokenDuration":{"type":"long"}}},"output":{"type":"structure","members":{"IdentityId":{},"Token":{}}},"http":{}},"ListIdentities":{"input":{"type":"structure","required":["IdentityPoolId","MaxResults"],"members":{"IdentityPoolId":{},"MaxResults":{"type":"integer"},"NextToken":{},"HideDisabled":{"type":"boolean"}}},"output":{"type":"structure","members":{"IdentityPoolId":{},"Identities":{"type":"list","member":{"shape":"Sl"}},"NextToken":{}}},"http":{}},"ListIdentityPools":{"input":{"type":"structure","required":["MaxResults"],"members":{"MaxResults":{"type":"integer"},"NextToken":{}}},"output":{"type":"structure","members":{"IdentityPools":{"type":"list","member":{"type":"structure","members":{"IdentityPoolId":{},"IdentityPoolName":{}}}},"NextToken":{}}},"http":{}},"LookupDeveloperIdentity":{"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{},"IdentityId":{},"DeveloperUserIdentifier":{},"MaxResults":{"type":"integer"},"NextToken":{}}},"output":{"type":"structure","members":{"IdentityId":{},"DeveloperUserIdentifierList":{"type":"list","member":{}},"NextToken":{}}},"http":{}},"MergeDeveloperIdentities":{"input":{"type":"structure","required":["SourceUserIdentifier","DestinationUserIdentifier","DeveloperProviderName","IdentityPoolId"],"members":{"SourceUserIdentifier":{},"DestinationUserIdentifier":{},"DeveloperProviderName":{},"IdentityPoolId":{}}},"output":{"type":"structure","members":{"IdentityId":{}}},"http":{}},"SetIdentityPoolRoles":{"input":{"type":"structure","required":["IdentityPoolId","Roles"],"members":{"IdentityPoolId":{},"Roles":{"shape":"S12"}}},"http":{}},"UnlinkDeveloperIdentity":{"input":{"type":"structure","required":["IdentityId","IdentityPoolId","DeveloperProviderName","DeveloperUserIdentifier"],"members":{"IdentityId":{},"IdentityPoolId":{},"DeveloperProviderName":{},"DeveloperUserIdentifier":{}}},"http":{}},"UnlinkIdentity":{"input":{"type":"structure","required":["IdentityId","Logins","LoginsToRemove"],"members":{"IdentityId":{},"Logins":{"shape":"Sq"},"LoginsToRemove":{"shape":"Sm"}}},"http":{}},"UpdateIdentityPool":{"input":{"shape":"Sa"},"output":{"shape":"Sa"},"http":{}}},"shapes":{"S4":{"type":"map","key":{},"value":{}},"S8":{"type":"list","member":{}},"Sa":{"type":"structure","required":["IdentityPoolId","IdentityPoolName","AllowUnauthenticatedIdentities"],"members":{"IdentityPoolId":{},"IdentityPoolName":{},"AllowUnauthenticatedIdentities":{"type":"boolean"},"SupportedLoginProviders":{"shape":"S4"},"DeveloperProviderName":{},"OpenIdConnectProviderARNs":{"shape":"S8"}}},"Sl":{"type":"structure","members":{"IdentityId":{},"Logins":{"shape":"Sm"},"CreationDate":{"type":"timestamp"},"LastModifiedDate":{"type":"timestamp"}}},"Sm":{"type":"list","member":{}},"Sq":{"type":"map","key":{},"value":{}},"S12":{"type":"map","key":{},"value":{}}},"examples":{}};
 AWS.apiLoader.services['cognitosync'] = {};
 AWS.CognitoSync = AWS.Service.defineService('cognitosync', [ '2014-06-30' ]);
 
-AWS.apiLoader.services['cognitosync']['2014-06-30'] = {"version":"2.0","metadata":{"apiVersion":"2014-06-30","endpointPrefix":"cognito-sync","jsonVersion":"1.1","serviceFullName":"Amazon Cognito Sync","signatureVersion":"v4","protocol":"rest-json"},"operations":{"BulkPublish":{"http":{"requestUri":"/identitypools/{IdentityPoolId}/bulkpublish","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"}}},"output":{"type":"structure","members":{"IdentityPoolId":{}}}},"DeleteDataset":{"http":{"method":"DELETE","requestUri":"/identitypools/{IdentityPoolId}/identities/{IdentityId}/datasets/{DatasetName}","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId","IdentityId","DatasetName"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"},"IdentityId":{"location":"uri","locationName":"IdentityId"},"DatasetName":{"location":"uri","locationName":"DatasetName"}}},"output":{"type":"structure","members":{"Dataset":{"shape":"S8"}}}},"DescribeDataset":{"http":{"method":"GET","requestUri":"/identitypools/{IdentityPoolId}/identities/{IdentityId}/datasets/{DatasetName}","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId","IdentityId","DatasetName"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"},"IdentityId":{"location":"uri","locationName":"IdentityId"},"DatasetName":{"location":"uri","locationName":"DatasetName"}}},"output":{"type":"structure","members":{"Dataset":{"shape":"S8"}}}},"DescribeIdentityPoolUsage":{"http":{"method":"GET","requestUri":"/identitypools/{IdentityPoolId}","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"}}},"output":{"type":"structure","members":{"IdentityPoolUsage":{"shape":"Sg"}}}},"DescribeIdentityUsage":{"http":{"method":"GET","requestUri":"/identitypools/{IdentityPoolId}/identities/{IdentityId}","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId","IdentityId"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"},"IdentityId":{"location":"uri","locationName":"IdentityId"}}},"output":{"type":"structure","members":{"IdentityUsage":{"type":"structure","members":{"IdentityId":{},"IdentityPoolId":{},"LastModifiedDate":{"type":"timestamp"},"DatasetCount":{"type":"integer"},"DataStorage":{"type":"long"}}}}}},"GetBulkPublishDetails":{"http":{"requestUri":"/identitypools/{IdentityPoolId}/getBulkPublishDetails","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"}}},"output":{"type":"structure","members":{"IdentityPoolId":{},"BulkPublishStartTime":{"type":"timestamp"},"BulkPublishCompleteTime":{"type":"timestamp"},"BulkPublishStatus":{},"FailureMessage":{}}}},"GetCognitoEvents":{"http":{"method":"GET","requestUri":"/identitypools/{IdentityPoolId}/events","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"}}},"output":{"type":"structure","members":{"Events":{"shape":"Sq"}}}},"GetIdentityPoolConfiguration":{"http":{"method":"GET","requestUri":"/identitypools/{IdentityPoolId}/configuration","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"}}},"output":{"type":"structure","members":{"IdentityPoolId":{},"PushSync":{"shape":"Sv"},"CognitoStreams":{"shape":"Sz"}}}},"ListDatasets":{"http":{"method":"GET","requestUri":"/identitypools/{IdentityPoolId}/identities/{IdentityId}/datasets","responseCode":200},"input":{"type":"structure","required":["IdentityId","IdentityPoolId"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"},"IdentityId":{"location":"uri","locationName":"IdentityId"},"NextToken":{"location":"querystring","locationName":"nextToken"},"MaxResults":{"location":"querystring","locationName":"maxResults","type":"integer"}}},"output":{"type":"structure","members":{"Datasets":{"type":"list","member":{"shape":"S8"}},"Count":{"type":"integer"},"NextToken":{}}}},"ListIdentityPoolUsage":{"http":{"method":"GET","requestUri":"/identitypools","responseCode":200},"input":{"type":"structure","members":{"NextToken":{"location":"querystring","locationName":"nextToken"},"MaxResults":{"location":"querystring","locationName":"maxResults","type":"integer"}}},"output":{"type":"structure","members":{"IdentityPoolUsages":{"type":"list","member":{"shape":"Sg"}},"MaxResults":{"type":"integer"},"Count":{"type":"integer"},"NextToken":{}}}},"ListRecords":{"http":{"method":"GET","requestUri":"/identitypools/{IdentityPoolId}/identities/{IdentityId}/datasets/{DatasetName}/records","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId","IdentityId","DatasetName"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"},"IdentityId":{"location":"uri","locationName":"IdentityId"},"DatasetName":{"location":"uri","locationName":"DatasetName"},"LastSyncCount":{"location":"querystring","locationName":"lastSyncCount","type":"long"},"NextToken":{"location":"querystring","locationName":"nextToken"},"MaxResults":{"location":"querystring","locationName":"maxResults","type":"integer"},"SyncSessionToken":{"location":"querystring","locationName":"syncSessionToken"}}},"output":{"type":"structure","members":{"Records":{"shape":"S1c"},"NextToken":{},"Count":{"type":"integer"},"DatasetSyncCount":{"type":"long"},"LastModifiedBy":{},"MergedDatasetNames":{"type":"list","member":{}},"DatasetExists":{"type":"boolean"},"DatasetDeletedAfterRequestedSyncCount":{"type":"boolean"},"SyncSessionToken":{}}}},"RegisterDevice":{"http":{"requestUri":"/identitypools/{IdentityPoolId}/identity/{IdentityId}/device","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId","IdentityId","Platform","Token"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"},"IdentityId":{"location":"uri","locationName":"IdentityId"},"Platform":{},"Token":{}}},"output":{"type":"structure","members":{"DeviceId":{}}}},"SetCognitoEvents":{"http":{"requestUri":"/identitypools/{IdentityPoolId}/events","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId","Events"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"},"Events":{"shape":"Sq"}}}},"SetIdentityPoolConfiguration":{"http":{"requestUri":"/identitypools/{IdentityPoolId}/configuration","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"},"PushSync":{"shape":"Sv"},"CognitoStreams":{"shape":"Sz"}}},"output":{"type":"structure","members":{"IdentityPoolId":{},"PushSync":{"shape":"Sv"},"CognitoStreams":{"shape":"Sz"}}}},"SubscribeToDataset":{"http":{"requestUri":"/identitypools/{IdentityPoolId}/identities/{IdentityId}/datasets/{DatasetName}/subscriptions/{DeviceId}","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId","IdentityId","DatasetName","DeviceId"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"},"IdentityId":{"location":"uri","locationName":"IdentityId"},"DatasetName":{"location":"uri","locationName":"DatasetName"},"DeviceId":{"location":"uri","locationName":"DeviceId"}}},"output":{"type":"structure","members":{}}},"UnsubscribeFromDataset":{"http":{"method":"DELETE","requestUri":"/identitypools/{IdentityPoolId}/identities/{IdentityId}/datasets/{DatasetName}/subscriptions/{DeviceId}","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId","IdentityId","DatasetName","DeviceId"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"},"IdentityId":{"location":"uri","locationName":"IdentityId"},"DatasetName":{"location":"uri","locationName":"DatasetName"},"DeviceId":{"location":"uri","locationName":"DeviceId"}}},"output":{"type":"structure","members":{}}},"UpdateRecords":{"http":{"requestUri":"/identitypools/{IdentityPoolId}/identities/{IdentityId}/datasets/{DatasetName}","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId","IdentityId","DatasetName","SyncSessionToken"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"},"IdentityId":{"location":"uri","locationName":"IdentityId"},"DatasetName":{"location":"uri","locationName":"DatasetName"},"DeviceId":{},"RecordPatches":{"type":"list","member":{"type":"structure","required":["Op","Key","SyncCount"],"members":{"Op":{},"Key":{},"Value":{},"SyncCount":{"type":"long"},"DeviceLastModifiedDate":{"type":"timestamp"}}}},"SyncSessionToken":{},"ClientContext":{"location":"header","locationName":"x-amz-Client-Context"}}},"output":{"type":"structure","members":{"Records":{"shape":"S1c"}}}}},"shapes":{"S8":{"type":"structure","members":{"IdentityId":{},"DatasetName":{},"CreationDate":{"type":"timestamp"},"LastModifiedDate":{"type":"timestamp"},"LastModifiedBy":{},"DataStorage":{"type":"long"},"NumRecords":{"type":"long"}}},"Sg":{"type":"structure","members":{"IdentityPoolId":{},"SyncSessionsCount":{"type":"long"},"DataStorage":{"type":"long"},"LastModifiedDate":{"type":"timestamp"}}},"Sq":{"type":"map","key":{},"value":{}},"Sv":{"type":"structure","members":{"ApplicationArns":{"type":"list","member":{}},"RoleArn":{}}},"Sz":{"type":"structure","members":{"StreamName":{},"RoleArn":{},"StreamingStatus":{}}},"S1c":{"type":"list","member":{"type":"structure","members":{"Key":{},"Value":{},"SyncCount":{"type":"long"},"LastModifiedDate":{"type":"timestamp"},"LastModifiedBy":{},"DeviceLastModifiedDate":{"type":"timestamp"}}}}}};
+AWS.apiLoader.services['cognitosync']['2014-06-30'] = {"version":"2.0","metadata":{"apiVersion":"2014-06-30","endpointPrefix":"cognito-sync","jsonVersion":"1.1","serviceFullName":"Amazon Cognito Sync","signatureVersion":"v4","protocol":"rest-json"},"operations":{"BulkPublish":{"http":{"requestUri":"/identitypools/{IdentityPoolId}/bulkpublish","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"}}},"output":{"type":"structure","members":{"IdentityPoolId":{}}}},"DeleteDataset":{"http":{"method":"DELETE","requestUri":"/identitypools/{IdentityPoolId}/identities/{IdentityId}/datasets/{DatasetName}","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId","IdentityId","DatasetName"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"},"IdentityId":{"location":"uri","locationName":"IdentityId"},"DatasetName":{"location":"uri","locationName":"DatasetName"}}},"output":{"type":"structure","members":{"Dataset":{"shape":"S8"}}}},"DescribeDataset":{"http":{"method":"GET","requestUri":"/identitypools/{IdentityPoolId}/identities/{IdentityId}/datasets/{DatasetName}","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId","IdentityId","DatasetName"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"},"IdentityId":{"location":"uri","locationName":"IdentityId"},"DatasetName":{"location":"uri","locationName":"DatasetName"}}},"output":{"type":"structure","members":{"Dataset":{"shape":"S8"}}}},"DescribeIdentityPoolUsage":{"http":{"method":"GET","requestUri":"/identitypools/{IdentityPoolId}","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"}}},"output":{"type":"structure","members":{"IdentityPoolUsage":{"shape":"Sg"}}}},"DescribeIdentityUsage":{"http":{"method":"GET","requestUri":"/identitypools/{IdentityPoolId}/identities/{IdentityId}","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId","IdentityId"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"},"IdentityId":{"location":"uri","locationName":"IdentityId"}}},"output":{"type":"structure","members":{"IdentityUsage":{"type":"structure","members":{"IdentityId":{},"IdentityPoolId":{},"LastModifiedDate":{"type":"timestamp"},"DatasetCount":{"type":"integer"},"DataStorage":{"type":"long"}}}}}},"GetBulkPublishDetails":{"http":{"requestUri":"/identitypools/{IdentityPoolId}/getBulkPublishDetails","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"}}},"output":{"type":"structure","members":{"IdentityPoolId":{},"BulkPublishStartTime":{"type":"timestamp"},"BulkPublishCompleteTime":{"type":"timestamp"},"BulkPublishStatus":{},"FailureMessage":{}}}},"GetCognitoEvents":{"http":{"method":"GET","requestUri":"/identitypools/{IdentityPoolId}/events","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"}}},"output":{"type":"structure","members":{"Events":{"shape":"Sq"}}}},"GetIdentityPoolConfiguration":{"http":{"method":"GET","requestUri":"/identitypools/{IdentityPoolId}/configuration","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"}}},"output":{"type":"structure","members":{"IdentityPoolId":{},"PushSync":{"shape":"Sv"},"CognitoStreams":{"shape":"Sz"}}}},"ListDatasets":{"http":{"method":"GET","requestUri":"/identitypools/{IdentityPoolId}/identities/{IdentityId}/datasets","responseCode":200},"input":{"type":"structure","required":["IdentityId","IdentityPoolId"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"},"IdentityId":{"location":"uri","locationName":"IdentityId"},"NextToken":{"location":"querystring","locationName":"nextToken"},"MaxResults":{"location":"querystring","locationName":"maxResults","type":"integer"}}},"output":{"type":"structure","members":{"Datasets":{"type":"list","member":{"shape":"S8"}},"Count":{"type":"integer"},"NextToken":{}}}},"ListIdentityPoolUsage":{"http":{"method":"GET","requestUri":"/identitypools","responseCode":200},"input":{"type":"structure","members":{"NextToken":{"location":"querystring","locationName":"nextToken"},"MaxResults":{"location":"querystring","locationName":"maxResults","type":"integer"}}},"output":{"type":"structure","members":{"IdentityPoolUsages":{"type":"list","member":{"shape":"Sg"}},"MaxResults":{"type":"integer"},"Count":{"type":"integer"},"NextToken":{}}}},"ListRecords":{"http":{"method":"GET","requestUri":"/identitypools/{IdentityPoolId}/identities/{IdentityId}/datasets/{DatasetName}/records","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId","IdentityId","DatasetName"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"},"IdentityId":{"location":"uri","locationName":"IdentityId"},"DatasetName":{"location":"uri","locationName":"DatasetName"},"LastSyncCount":{"location":"querystring","locationName":"lastSyncCount","type":"long"},"NextToken":{"location":"querystring","locationName":"nextToken"},"MaxResults":{"location":"querystring","locationName":"maxResults","type":"integer"},"SyncSessionToken":{"location":"querystring","locationName":"syncSessionToken"}}},"output":{"type":"structure","members":{"Records":{"shape":"S1c"},"NextToken":{},"Count":{"type":"integer"},"DatasetSyncCount":{"type":"long"},"LastModifiedBy":{},"MergedDatasetNames":{"type":"list","member":{}},"DatasetExists":{"type":"boolean"},"DatasetDeletedAfterRequestedSyncCount":{"type":"boolean"},"SyncSessionToken":{}}}},"RegisterDevice":{"http":{"requestUri":"/identitypools/{IdentityPoolId}/identity/{IdentityId}/device","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId","IdentityId","Platform","Token"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"},"IdentityId":{"location":"uri","locationName":"IdentityId"},"Platform":{},"Token":{}}},"output":{"type":"structure","members":{"DeviceId":{}}}},"SetCognitoEvents":{"http":{"requestUri":"/identitypools/{IdentityPoolId}/events","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId","Events"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"},"Events":{"shape":"Sq"}}}},"SetIdentityPoolConfiguration":{"http":{"requestUri":"/identitypools/{IdentityPoolId}/configuration","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"},"PushSync":{"shape":"Sv"},"CognitoStreams":{"shape":"Sz"}}},"output":{"type":"structure","members":{"IdentityPoolId":{},"PushSync":{"shape":"Sv"},"CognitoStreams":{"shape":"Sz"}}}},"SubscribeToDataset":{"http":{"requestUri":"/identitypools/{IdentityPoolId}/identities/{IdentityId}/datasets/{DatasetName}/subscriptions/{DeviceId}","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId","IdentityId","DatasetName","DeviceId"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"},"IdentityId":{"location":"uri","locationName":"IdentityId"},"DatasetName":{"location":"uri","locationName":"DatasetName"},"DeviceId":{"location":"uri","locationName":"DeviceId"}}},"output":{"type":"structure","members":{}}},"UnsubscribeFromDataset":{"http":{"method":"DELETE","requestUri":"/identitypools/{IdentityPoolId}/identities/{IdentityId}/datasets/{DatasetName}/subscriptions/{DeviceId}","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId","IdentityId","DatasetName","DeviceId"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"},"IdentityId":{"location":"uri","locationName":"IdentityId"},"DatasetName":{"location":"uri","locationName":"DatasetName"},"DeviceId":{"location":"uri","locationName":"DeviceId"}}},"output":{"type":"structure","members":{}}},"UpdateRecords":{"http":{"requestUri":"/identitypools/{IdentityPoolId}/identities/{IdentityId}/datasets/{DatasetName}","responseCode":200},"input":{"type":"structure","required":["IdentityPoolId","IdentityId","DatasetName","SyncSessionToken"],"members":{"IdentityPoolId":{"location":"uri","locationName":"IdentityPoolId"},"IdentityId":{"location":"uri","locationName":"IdentityId"},"DatasetName":{"location":"uri","locationName":"DatasetName"},"DeviceId":{},"RecordPatches":{"type":"list","member":{"type":"structure","required":["Op","Key","SyncCount"],"members":{"Op":{},"Key":{},"Value":{},"SyncCount":{"type":"long"},"DeviceLastModifiedDate":{"type":"timestamp"}}}},"SyncSessionToken":{},"ClientContext":{"location":"header","locationName":"x-amz-Client-Context"}}},"output":{"type":"structure","members":{"Records":{"shape":"S1c"}}}}},"shapes":{"S8":{"type":"structure","members":{"IdentityId":{},"DatasetName":{},"CreationDate":{"type":"timestamp"},"LastModifiedDate":{"type":"timestamp"},"LastModifiedBy":{},"DataStorage":{"type":"long"},"NumRecords":{"type":"long"}}},"Sg":{"type":"structure","members":{"IdentityPoolId":{},"SyncSessionsCount":{"type":"long"},"DataStorage":{"type":"long"},"LastModifiedDate":{"type":"timestamp"}}},"Sq":{"type":"map","key":{},"value":{}},"Sv":{"type":"structure","members":{"ApplicationArns":{"type":"list","member":{}},"RoleArn":{}}},"Sz":{"type":"structure","members":{"StreamName":{},"RoleArn":{},"StreamingStatus":{}}},"S1c":{"type":"list","member":{"type":"structure","members":{"Key":{},"Value":{},"SyncCount":{"type":"long"},"LastModifiedDate":{"type":"timestamp"},"LastModifiedBy":{},"DeviceLastModifiedDate":{"type":"timestamp"}}}}},"examples":{}};
 AWS.apiLoader.services['devicefarm'] = {};
 AWS.DeviceFarm = AWS.Service.defineService('devicefarm', [ '2015-06-23' ]);
 
-AWS.apiLoader.services['devicefarm']['2015-06-23'] = {"version":"2.0","metadata":{"apiVersion":"2015-06-23","endpointPrefix":"devicefarm","jsonVersion":"1.1","serviceFullName":"AWS Device Farm","signatureVersion":"v4","targetPrefix":"DeviceFarm_20150623","protocol":"json"},"operations":{"CreateDevicePool":{"input":{"type":"structure","required":["projectArn","name","rules"],"members":{"projectArn":{},"name":{},"description":{},"rules":{"shape":"S5"}}},"output":{"type":"structure","members":{"devicePool":{"shape":"Sb"}}},"http":{}},"CreateProject":{"input":{"type":"structure","required":["name"],"members":{"name":{}}},"output":{"type":"structure","members":{"project":{"shape":"Sf"}}},"http":{}},"CreateUpload":{"input":{"type":"structure","required":["projectArn","name","type"],"members":{"projectArn":{},"name":{},"type":{},"contentType":{}}},"output":{"type":"structure","members":{"upload":{"shape":"Sl"}}},"http":{}},"GetAccountSettings":{"input":{"type":"structure","members":{}},"output":{"type":"structure","members":{"accountSettings":{"type":"structure","members":{"awsAccountNumber":{},"unmeteredDevices":{"type":"map","key":{},"value":{"type":"integer"}}}}}},"http":{}},"GetDevice":{"input":{"type":"structure","required":["arn"],"members":{"arn":{}}},"output":{"type":"structure","members":{"device":{"shape":"Sy"}}},"http":{}},"GetDevicePool":{"input":{"type":"structure","required":["arn"],"members":{"arn":{}}},"output":{"type":"structure","members":{"devicePool":{"shape":"Sb"}}},"http":{}},"GetDevicePoolCompatibility":{"input":{"type":"structure","required":["devicePoolArn","appArn"],"members":{"devicePoolArn":{},"appArn":{},"testType":{}}},"output":{"type":"structure","members":{"compatibleDevices":{"shape":"S19"},"incompatibleDevices":{"shape":"S19"}}},"http":{}},"GetJob":{"input":{"type":"structure","required":["arn"],"members":{"arn":{}}},"output":{"type":"structure","members":{"job":{"shape":"S1g"}}},"http":{}},"GetProject":{"input":{"type":"structure","required":["arn"],"members":{"arn":{}}},"output":{"type":"structure","members":{"project":{"shape":"Sf"}}},"http":{}},"GetRun":{"input":{"type":"structure","required":["arn"],"members":{"arn":{}}},"output":{"type":"structure","members":{"run":{"shape":"S1o"}}},"http":{}},"GetSuite":{"input":{"type":"structure","required":["arn"],"members":{"arn":{}}},"output":{"type":"structure","members":{"suite":{"shape":"S1s"}}},"http":{}},"GetTest":{"input":{"type":"structure","required":["arn"],"members":{"arn":{}}},"output":{"type":"structure","members":{"test":{"shape":"S1v"}}},"http":{}},"GetUpload":{"input":{"type":"structure","required":["arn"],"members":{"arn":{}}},"output":{"type":"structure","members":{"upload":{"shape":"Sl"}}},"http":{}},"ListArtifacts":{"input":{"type":"structure","required":["arn","type"],"members":{"arn":{},"type":{},"nextToken":{}}},"output":{"type":"structure","members":{"artifacts":{"type":"list","member":{"type":"structure","members":{"arn":{},"name":{},"type":{},"extension":{},"url":{}}}},"nextToken":{}}},"http":{}},"ListDevicePools":{"input":{"type":"structure","required":["arn"],"members":{"arn":{},"type":{},"nextToken":{}}},"output":{"type":"structure","members":{"devicePools":{"type":"list","member":{"shape":"Sb"}},"nextToken":{}}},"http":{}},"ListDevices":{"input":{"type":"structure","members":{"arn":{},"nextToken":{}}},"output":{"type":"structure","members":{"devices":{"type":"list","member":{"shape":"Sy"}},"nextToken":{}}},"http":{}},"ListJobs":{"input":{"type":"structure","required":["arn"],"members":{"arn":{},"nextToken":{}}},"output":{"type":"structure","members":{"jobs":{"type":"list","member":{"shape":"S1g"}},"nextToken":{}}},"http":{}},"ListProjects":{"input":{"type":"structure","members":{"arn":{},"nextToken":{}}},"output":{"type":"structure","members":{"projects":{"type":"list","member":{"shape":"Sf"}},"nextToken":{}}},"http":{}},"ListRuns":{"input":{"type":"structure","required":["arn"],"members":{"arn":{},"nextToken":{}}},"output":{"type":"structure","members":{"runs":{"type":"list","member":{"shape":"S1o"}},"nextToken":{}}},"http":{}},"ListSamples":{"input":{"type":"structure","required":["arn"],"members":{"arn":{},"nextToken":{}}},"output":{"type":"structure","members":{"samples":{"type":"list","member":{"type":"structure","members":{"arn":{},"type":{},"url":{}}}},"nextToken":{}}},"http":{}},"ListSuites":{"input":{"type":"structure","required":["arn"],"members":{"arn":{},"nextToken":{}}},"output":{"type":"structure","members":{"suites":{"type":"list","member":{"shape":"S1s"}},"nextToken":{}}},"http":{}},"ListTests":{"input":{"type":"structure","required":["arn"],"members":{"arn":{},"nextToken":{}}},"output":{"type":"structure","members":{"tests":{"type":"list","member":{"shape":"S1v"}},"nextToken":{}}},"http":{}},"ListUniqueProblems":{"input":{"type":"structure","required":["arn"],"members":{"arn":{},"nextToken":{}}},"output":{"type":"structure","members":{"uniqueProblems":{"type":"map","key":{},"value":{"type":"list","member":{"type":"structure","members":{"message":{},"problems":{"type":"list","member":{"type":"structure","members":{"run":{"shape":"S32"},"job":{"shape":"S32"},"suite":{"shape":"S32"},"test":{"shape":"S32"},"device":{"shape":"Sy"},"result":{},"message":{}}}}}}}},"nextToken":{}}},"http":{}},"ListUploads":{"input":{"type":"structure","required":["arn"],"members":{"arn":{},"nextToken":{}}},"output":{"type":"structure","members":{"uploads":{"type":"list","member":{"shape":"Sl"}},"nextToken":{}}},"http":{}},"ScheduleRun":{"input":{"type":"structure","required":["projectArn","appArn","devicePoolArn","test"],"members":{"projectArn":{},"appArn":{},"devicePoolArn":{},"name":{},"test":{"type":"structure","required":["type"],"members":{"type":{},"testPackageArn":{},"filter":{},"parameters":{"type":"map","key":{},"value":{}}}},"configuration":{"type":"structure","members":{"extraDataPackageArn":{},"networkProfileArn":{},"locale":{},"location":{"type":"structure","required":["latitude","longitude"],"members":{"latitude":{"type":"double"},"longitude":{"type":"double"}}},"radios":{"type":"structure","members":{"wifi":{"type":"boolean"},"bluetooth":{"type":"boolean"},"nfc":{"type":"boolean"},"gps":{"type":"boolean"}}},"auxiliaryApps":{"type":"list","member":{}},"billingMethod":{}}}}},"output":{"type":"structure","members":{"run":{"shape":"S1o"}}},"http":{}}},"shapes":{"S5":{"type":"list","member":{"type":"structure","members":{"attribute":{},"operator":{},"value":{}}}},"Sb":{"type":"structure","members":{"arn":{},"name":{},"description":{},"type":{},"rules":{"shape":"S5"}}},"Sf":{"type":"structure","members":{"arn":{},"name":{},"created":{"type":"timestamp"}}},"Sl":{"type":"structure","members":{"arn":{},"name":{},"created":{"type":"timestamp"},"type":{},"status":{},"url":{},"metadata":{},"contentType":{},"message":{}}},"Sy":{"type":"structure","members":{"arn":{},"name":{},"manufacturer":{},"model":{},"formFactor":{},"platform":{},"os":{},"cpu":{"type":"structure","members":{"frequency":{},"architecture":{},"clock":{"type":"double"}}},"resolution":{"type":"structure","members":{"width":{"type":"integer"},"height":{"type":"integer"}}},"heapSize":{"type":"long"},"memory":{"type":"long"},"image":{},"carrier":{},"radio":{}}},"S19":{"type":"list","member":{"type":"structure","members":{"device":{"shape":"Sy"},"compatible":{"type":"boolean"},"incompatibilityMessages":{"type":"list","member":{"type":"structure","members":{"message":{},"type":{}}}}}}},"S1g":{"type":"structure","members":{"arn":{},"name":{},"type":{},"created":{"type":"timestamp"},"status":{},"result":{},"started":{"type":"timestamp"},"stopped":{"type":"timestamp"},"counters":{"shape":"S1j"},"message":{},"device":{"shape":"Sy"}}},"S1j":{"type":"structure","members":{"total":{"type":"integer"},"passed":{"type":"integer"},"failed":{"type":"integer"},"warned":{"type":"integer"},"errored":{"type":"integer"},"stopped":{"type":"integer"},"skipped":{"type":"integer"}}},"S1o":{"type":"structure","members":{"arn":{},"name":{},"type":{},"platform":{},"created":{"type":"timestamp"},"status":{},"result":{},"started":{"type":"timestamp"},"stopped":{"type":"timestamp"},"counters":{"shape":"S1j"},"message":{},"totalJobs":{"type":"integer"},"completedJobs":{"type":"integer"},"billingMethod":{}}},"S1s":{"type":"structure","members":{"arn":{},"name":{},"type":{},"created":{"type":"timestamp"},"status":{},"result":{},"started":{"type":"timestamp"},"stopped":{"type":"timestamp"},"counters":{"shape":"S1j"},"message":{}}},"S1v":{"type":"structure","members":{"arn":{},"name":{},"type":{},"created":{"type":"timestamp"},"status":{},"result":{},"started":{"type":"timestamp"},"stopped":{"type":"timestamp"},"counters":{"shape":"S1j"},"message":{}}},"S32":{"type":"structure","members":{"arn":{},"name":{}}}},"examples":{},"paginators":{"ListArtifacts":{"input_token":"nextToken","output_token":"nextToken","result_key":"artifacts"},"ListDevicePools":{"input_token":"nextToken","output_token":"nextToken","result_key":"devicePools"},"ListDevices":{"input_token":"nextToken","output_token":"nextToken","result_key":"devices"},"ListJobs":{"input_token":"nextToken","output_token":"nextToken","result_key":"jobs"},"ListProjects":{"input_token":"nextToken","output_token":"nextToken","result_key":"projects"},"ListRuns":{"input_token":"nextToken","output_token":"nextToken","result_key":"runs"},"ListSamples":{"input_token":"nextToken","output_token":"nextToken","result_key":"samples"},"ListSuites":{"input_token":"nextToken","output_token":"nextToken","result_key":"suites"},"ListTests":{"input_token":"nextToken","output_token":"nextToken","result_key":"tests"},"ListUniqueProblems":{"input_token":"nextToken","output_token":"nextToken","result_key":"uniqueProblems"},"ListUploads":{"input_token":"nextToken","output_token":"nextToken","result_key":"uploads"}}};
+AWS.apiLoader.services['devicefarm']['2015-06-23'] = {"version":"2.0","metadata":{"apiVersion":"2015-06-23","endpointPrefix":"devicefarm","jsonVersion":"1.1","serviceFullName":"AWS Device Farm","signatureVersion":"v4","targetPrefix":"DeviceFarm_20150623","protocol":"json"},"operations":{"CreateDevicePool":{"input":{"type":"structure","required":["projectArn","name","rules"],"members":{"projectArn":{},"name":{},"description":{},"rules":{"shape":"S5"}}},"output":{"type":"structure","members":{"devicePool":{"shape":"Sb"}}},"http":{}},"CreateProject":{"input":{"type":"structure","required":["name"],"members":{"name":{}}},"output":{"type":"structure","members":{"project":{"shape":"Sf"}}},"http":{}},"CreateUpload":{"input":{"type":"structure","required":["projectArn","name","type"],"members":{"projectArn":{},"name":{},"type":{},"contentType":{}}},"output":{"type":"structure","members":{"upload":{"shape":"Sl"}}},"http":{}},"DeleteDevicePool":{"input":{"type":"structure","required":["arn"],"members":{"arn":{}}},"output":{"type":"structure","members":{}},"http":{}},"DeleteProject":{"input":{"type":"structure","required":["arn"],"members":{"arn":{}}},"output":{"type":"structure","members":{}},"http":{}},"DeleteRun":{"input":{"type":"structure","required":["arn"],"members":{"arn":{}}},"output":{"type":"structure","members":{}},"http":{}},"DeleteUpload":{"input":{"type":"structure","required":["arn"],"members":{"arn":{}}},"output":{"type":"structure","members":{}},"http":{}},"GetAccountSettings":{"input":{"type":"structure","members":{}},"output":{"type":"structure","members":{"accountSettings":{"type":"structure","members":{"awsAccountNumber":{},"unmeteredDevices":{"type":"map","key":{},"value":{"type":"integer"}}}}}},"http":{}},"GetDevice":{"input":{"type":"structure","required":["arn"],"members":{"arn":{}}},"output":{"type":"structure","members":{"device":{"shape":"S16"}}},"http":{}},"GetDevicePool":{"input":{"type":"structure","required":["arn"],"members":{"arn":{}}},"output":{"type":"structure","members":{"devicePool":{"shape":"Sb"}}},"http":{}},"GetDevicePoolCompatibility":{"input":{"type":"structure","required":["devicePoolArn","appArn"],"members":{"devicePoolArn":{},"appArn":{},"testType":{}}},"output":{"type":"structure","members":{"compatibleDevices":{"shape":"S1h"},"incompatibleDevices":{"shape":"S1h"}}},"http":{}},"GetJob":{"input":{"type":"structure","required":["arn"],"members":{"arn":{}}},"output":{"type":"structure","members":{"job":{"shape":"S1o"}}},"http":{}},"GetProject":{"input":{"type":"structure","required":["arn"],"members":{"arn":{}}},"output":{"type":"structure","members":{"project":{"shape":"Sf"}}},"http":{}},"GetRun":{"input":{"type":"structure","required":["arn"],"members":{"arn":{}}},"output":{"type":"structure","members":{"run":{"shape":"S1x"}}},"http":{}},"GetSuite":{"input":{"type":"structure","required":["arn"],"members":{"arn":{}}},"output":{"type":"structure","members":{"suite":{"shape":"S21"}}},"http":{}},"GetTest":{"input":{"type":"structure","required":["arn"],"members":{"arn":{}}},"output":{"type":"structure","members":{"test":{"shape":"S24"}}},"http":{}},"GetUpload":{"input":{"type":"structure","required":["arn"],"members":{"arn":{}}},"output":{"type":"structure","members":{"upload":{"shape":"Sl"}}},"http":{}},"ListArtifacts":{"input":{"type":"structure","required":["arn","type"],"members":{"arn":{},"type":{},"nextToken":{}}},"output":{"type":"structure","members":{"artifacts":{"type":"list","member":{"type":"structure","members":{"arn":{},"name":{},"type":{},"extension":{},"url":{}}}},"nextToken":{}}},"http":{}},"ListDevicePools":{"input":{"type":"structure","required":["arn"],"members":{"arn":{},"type":{},"nextToken":{}}},"output":{"type":"structure","members":{"devicePools":{"type":"list","member":{"shape":"Sb"}},"nextToken":{}}},"http":{}},"ListDevices":{"input":{"type":"structure","members":{"arn":{},"nextToken":{}}},"output":{"type":"structure","members":{"devices":{"type":"list","member":{"shape":"S16"}},"nextToken":{}}},"http":{}},"ListJobs":{"input":{"type":"structure","required":["arn"],"members":{"arn":{},"nextToken":{}}},"output":{"type":"structure","members":{"jobs":{"type":"list","member":{"shape":"S1o"}},"nextToken":{}}},"http":{}},"ListProjects":{"input":{"type":"structure","members":{"arn":{},"nextToken":{}}},"output":{"type":"structure","members":{"projects":{"type":"list","member":{"shape":"Sf"}},"nextToken":{}}},"http":{}},"ListRuns":{"input":{"type":"structure","required":["arn"],"members":{"arn":{},"nextToken":{}}},"output":{"type":"structure","members":{"runs":{"type":"list","member":{"shape":"S1x"}},"nextToken":{}}},"http":{}},"ListSamples":{"input":{"type":"structure","required":["arn"],"members":{"arn":{},"nextToken":{}}},"output":{"type":"structure","members":{"samples":{"type":"list","member":{"type":"structure","members":{"arn":{},"type":{},"url":{}}}},"nextToken":{}}},"http":{}},"ListSuites":{"input":{"type":"structure","required":["arn"],"members":{"arn":{},"nextToken":{}}},"output":{"type":"structure","members":{"suites":{"type":"list","member":{"shape":"S21"}},"nextToken":{}}},"http":{}},"ListTests":{"input":{"type":"structure","required":["arn"],"members":{"arn":{},"nextToken":{}}},"output":{"type":"structure","members":{"tests":{"type":"list","member":{"shape":"S24"}},"nextToken":{}}},"http":{}},"ListUniqueProblems":{"input":{"type":"structure","required":["arn"],"members":{"arn":{},"nextToken":{}}},"output":{"type":"structure","members":{"uniqueProblems":{"type":"map","key":{},"value":{"type":"list","member":{"type":"structure","members":{"message":{},"problems":{"type":"list","member":{"type":"structure","members":{"run":{"shape":"S3b"},"job":{"shape":"S3b"},"suite":{"shape":"S3b"},"test":{"shape":"S3b"},"device":{"shape":"S16"},"result":{},"message":{}}}}}}}},"nextToken":{}}},"http":{}},"ListUploads":{"input":{"type":"structure","required":["arn"],"members":{"arn":{},"nextToken":{}}},"output":{"type":"structure","members":{"uploads":{"type":"list","member":{"shape":"Sl"}},"nextToken":{}}},"http":{}},"ScheduleRun":{"input":{"type":"structure","required":["projectArn","appArn","devicePoolArn","test"],"members":{"projectArn":{},"appArn":{},"devicePoolArn":{},"name":{},"test":{"type":"structure","required":["type"],"members":{"type":{},"testPackageArn":{},"filter":{},"parameters":{"type":"map","key":{},"value":{}}}},"configuration":{"type":"structure","members":{"extraDataPackageArn":{},"networkProfileArn":{},"locale":{},"location":{"type":"structure","required":["latitude","longitude"],"members":{"latitude":{"type":"double"},"longitude":{"type":"double"}}},"radios":{"type":"structure","members":{"wifi":{"type":"boolean"},"bluetooth":{"type":"boolean"},"nfc":{"type":"boolean"},"gps":{"type":"boolean"}}},"auxiliaryApps":{"type":"list","member":{}},"billingMethod":{}}}}},"output":{"type":"structure","members":{"run":{"shape":"S1x"}}},"http":{}},"UpdateDevicePool":{"input":{"type":"structure","required":["arn"],"members":{"arn":{},"name":{},"description":{},"rules":{"shape":"S5"}}},"output":{"type":"structure","members":{"devicePool":{"shape":"Sb"}}},"http":{}},"UpdateProject":{"input":{"type":"structure","required":["arn"],"members":{"arn":{},"name":{}}},"output":{"type":"structure","members":{"project":{"shape":"Sf"}}},"http":{}}},"shapes":{"S5":{"type":"list","member":{"type":"structure","members":{"attribute":{},"operator":{},"value":{}}}},"Sb":{"type":"structure","members":{"arn":{},"name":{},"description":{},"type":{},"rules":{"shape":"S5"}}},"Sf":{"type":"structure","members":{"arn":{},"name":{},"created":{"type":"timestamp"}}},"Sl":{"type":"structure","members":{"arn":{},"name":{},"created":{"type":"timestamp"},"type":{},"status":{},"url":{},"metadata":{},"contentType":{},"message":{}}},"S16":{"type":"structure","members":{"arn":{},"name":{},"manufacturer":{},"model":{},"formFactor":{},"platform":{},"os":{},"cpu":{"type":"structure","members":{"frequency":{},"architecture":{},"clock":{"type":"double"}}},"resolution":{"type":"structure","members":{"width":{"type":"integer"},"height":{"type":"integer"}}},"heapSize":{"type":"long"},"memory":{"type":"long"},"image":{},"carrier":{},"radio":{}}},"S1h":{"type":"list","member":{"type":"structure","members":{"device":{"shape":"S16"},"compatible":{"type":"boolean"},"incompatibilityMessages":{"type":"list","member":{"type":"structure","members":{"message":{},"type":{}}}}}}},"S1o":{"type":"structure","members":{"arn":{},"name":{},"type":{},"created":{"type":"timestamp"},"status":{},"result":{},"started":{"type":"timestamp"},"stopped":{"type":"timestamp"},"counters":{"shape":"S1r"},"message":{},"device":{"shape":"S16"},"deviceMinutes":{"shape":"S1s"}}},"S1r":{"type":"structure","members":{"total":{"type":"integer"},"passed":{"type":"integer"},"failed":{"type":"integer"},"warned":{"type":"integer"},"errored":{"type":"integer"},"stopped":{"type":"integer"},"skipped":{"type":"integer"}}},"S1s":{"type":"structure","members":{"total":{"type":"double"},"metered":{"type":"double"},"unmetered":{"type":"double"}}},"S1x":{"type":"structure","members":{"arn":{},"name":{},"type":{},"platform":{},"created":{"type":"timestamp"},"status":{},"result":{},"started":{"type":"timestamp"},"stopped":{"type":"timestamp"},"counters":{"shape":"S1r"},"message":{},"totalJobs":{"type":"integer"},"completedJobs":{"type":"integer"},"billingMethod":{},"deviceMinutes":{"shape":"S1s"}}},"S21":{"type":"structure","members":{"arn":{},"name":{},"type":{},"created":{"type":"timestamp"},"status":{},"result":{},"started":{"type":"timestamp"},"stopped":{"type":"timestamp"},"counters":{"shape":"S1r"},"message":{},"deviceMinutes":{"shape":"S1s"}}},"S24":{"type":"structure","members":{"arn":{},"name":{},"type":{},"created":{"type":"timestamp"},"status":{},"result":{},"started":{"type":"timestamp"},"stopped":{"type":"timestamp"},"counters":{"shape":"S1r"},"message":{},"deviceMinutes":{"shape":"S1s"}}},"S3b":{"type":"structure","members":{"arn":{},"name":{}}}},"examples":{},"paginators":{"ListArtifacts":{"input_token":"nextToken","output_token":"nextToken","result_key":"artifacts"},"ListDevicePools":{"input_token":"nextToken","output_token":"nextToken","result_key":"devicePools"},"ListDevices":{"input_token":"nextToken","output_token":"nextToken","result_key":"devices"},"ListJobs":{"input_token":"nextToken","output_token":"nextToken","result_key":"jobs"},"ListProjects":{"input_token":"nextToken","output_token":"nextToken","result_key":"projects"},"ListRuns":{"input_token":"nextToken","output_token":"nextToken","result_key":"runs"},"ListSamples":{"input_token":"nextToken","output_token":"nextToken","result_key":"samples"},"ListSuites":{"input_token":"nextToken","output_token":"nextToken","result_key":"suites"},"ListTests":{"input_token":"nextToken","output_token":"nextToken","result_key":"tests"},"ListUniqueProblems":{"input_token":"nextToken","output_token":"nextToken","result_key":"uniqueProblems"},"ListUploads":{"input_token":"nextToken","output_token":"nextToken","result_key":"uploads"}}};
 AWS.apiLoader.services['dynamodb'] = {};
 AWS.DynamoDB = AWS.Service.defineService('dynamodb', [ '2011-12-05', '2012-08-10' ]);
 require('./services/dynamodb');
@@ -53,27 +53,35 @@ AWS.DynamoDBStreams = AWS.Service.defineService('dynamodbstreams', [ '2012-08-10
 
 AWS.apiLoader.services['dynamodbstreams']['2012-08-10'] = {"version":"2.0","metadata":{"apiVersion":"2012-08-10","endpointPrefix":"streams.dynamodb","jsonVersion":"1.0","serviceFullName":"Amazon DynamoDB Streams","signatureVersion":"v4","signingName":"dynamodb","targetPrefix":"DynamoDBStreams_20120810","protocol":"json"},"operations":{"DescribeStream":{"input":{"type":"structure","required":["StreamArn"],"members":{"StreamArn":{},"Limit":{"type":"integer"},"ExclusiveStartShardId":{}}},"output":{"type":"structure","members":{"StreamDescription":{"type":"structure","members":{"StreamArn":{},"StreamLabel":{},"StreamStatus":{},"StreamViewType":{},"CreationRequestDateTime":{"type":"timestamp"},"TableName":{},"KeySchema":{"type":"list","member":{"type":"structure","required":["AttributeName","KeyType"],"members":{"AttributeName":{},"KeyType":{}}}},"Shards":{"type":"list","member":{"type":"structure","members":{"ShardId":{},"SequenceNumberRange":{"type":"structure","members":{"StartingSequenceNumber":{},"EndingSequenceNumber":{}}},"ParentShardId":{}}}},"LastEvaluatedShardId":{}}}}},"http":{}},"GetRecords":{"input":{"type":"structure","required":["ShardIterator"],"members":{"ShardIterator":{},"Limit":{"type":"integer"}}},"output":{"type":"structure","members":{"Records":{"type":"list","member":{"type":"structure","members":{"eventID":{},"eventName":{},"eventVersion":{},"eventSource":{},"awsRegion":{},"dynamodb":{"type":"structure","members":{"Keys":{"shape":"Sr"},"NewImage":{"shape":"Sr"},"OldImage":{"shape":"Sr"},"SequenceNumber":{},"SizeBytes":{"type":"long"},"StreamViewType":{}}}}}},"NextShardIterator":{}}},"http":{}},"GetShardIterator":{"input":{"type":"structure","required":["StreamArn","ShardId","ShardIteratorType"],"members":{"StreamArn":{},"ShardId":{},"ShardIteratorType":{},"SequenceNumber":{}}},"output":{"type":"structure","members":{"ShardIterator":{}}},"http":{}},"ListStreams":{"input":{"type":"structure","members":{"TableName":{},"Limit":{"type":"integer"},"ExclusiveStartStreamArn":{}}},"output":{"type":"structure","members":{"Streams":{"type":"list","member":{"type":"structure","members":{"StreamArn":{},"TableName":{},"StreamLabel":{}}}},"LastEvaluatedStreamArn":{}}},"http":{}}},"shapes":{"Sr":{"type":"map","key":{},"value":{"shape":"St"}},"St":{"type":"structure","members":{"S":{},"N":{},"B":{"type":"blob"},"SS":{"type":"list","member":{}},"NS":{"type":"list","member":{}},"BS":{"type":"list","member":{"type":"blob"}},"M":{"type":"map","key":{},"value":{"shape":"St"}},"L":{"type":"list","member":{"shape":"St"}},"NULL":{"type":"boolean"},"BOOL":{"type":"boolean"}}}},"examples":{}};
 AWS.apiLoader.services['ec2'] = {};
-AWS.EC2 = AWS.Service.defineService('ec2', [ '2015-04-15' ]);
+AWS.EC2 = AWS.Service.defineService('ec2', [ '2015-10-01' ]);
 require('./services/ec2');
 
-AWS.apiLoader.services['ec2']['2015-04-15'] = {"version":"2.0","metadata":{"apiVersion":"2015-04-15","endpointPrefix":"ec2","serviceAbbreviation":"Amazon EC2","serviceFullName":"Amazon Elastic Compute Cloud","signatureVersion":"v4","xmlNamespace":"http://ec2.amazonaws.com/doc/2015-04-15","protocol":"ec2"},"operations":{"AcceptVpcPeeringConnection":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcPeeringConnectionId":{"locationName":"vpcPeeringConnectionId"}}},"output":{"type":"structure","members":{"VpcPeeringConnection":{"shape":"S5","locationName":"vpcPeeringConnection"}}},"http":{}},"AllocateAddress":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Domain":{}}},"output":{"type":"structure","members":{"PublicIp":{"locationName":"publicIp"},"Domain":{"locationName":"domain"},"AllocationId":{"locationName":"allocationId"}}},"http":{}},"AssignPrivateIpAddresses":{"input":{"type":"structure","required":["NetworkInterfaceId"],"members":{"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"PrivateIpAddresses":{"shape":"Sg","locationName":"privateIpAddress"},"SecondaryPrivateIpAddressCount":{"locationName":"secondaryPrivateIpAddressCount","type":"integer"},"AllowReassignment":{"locationName":"allowReassignment","type":"boolean"}}},"http":{}},"AssociateAddress":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceId":{},"PublicIp":{},"AllocationId":{},"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"PrivateIpAddress":{"locationName":"privateIpAddress"},"AllowReassociation":{"locationName":"allowReassociation","type":"boolean"}}},"output":{"type":"structure","members":{"AssociationId":{"locationName":"associationId"}}},"http":{}},"AssociateDhcpOptions":{"input":{"type":"structure","required":["DhcpOptionsId","VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"DhcpOptionsId":{},"VpcId":{}}},"http":{}},"AssociateRouteTable":{"input":{"type":"structure","required":["SubnetId","RouteTableId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SubnetId":{"locationName":"subnetId"},"RouteTableId":{"locationName":"routeTableId"}}},"output":{"type":"structure","members":{"AssociationId":{"locationName":"associationId"}}},"http":{}},"AttachClassicLinkVpc":{"input":{"type":"structure","required":["InstanceId","VpcId","Groups"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceId":{"locationName":"instanceId"},"VpcId":{"locationName":"vpcId"},"Groups":{"shape":"So","locationName":"SecurityGroupId"}}},"output":{"type":"structure","members":{"Return":{"locationName":"return","type":"boolean"}}},"http":{}},"AttachInternetGateway":{"input":{"type":"structure","required":["InternetGatewayId","VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InternetGatewayId":{"locationName":"internetGatewayId"},"VpcId":{"locationName":"vpcId"}}},"http":{}},"AttachNetworkInterface":{"input":{"type":"structure","required":["NetworkInterfaceId","InstanceId","DeviceIndex"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"InstanceId":{"locationName":"instanceId"},"DeviceIndex":{"locationName":"deviceIndex","type":"integer"}}},"output":{"type":"structure","members":{"AttachmentId":{"locationName":"attachmentId"}}},"http":{}},"AttachVolume":{"input":{"type":"structure","required":["VolumeId","InstanceId","Device"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VolumeId":{},"InstanceId":{},"Device":{}}},"output":{"shape":"Su","locationName":"attachment"},"http":{}},"AttachVpnGateway":{"input":{"type":"structure","required":["VpnGatewayId","VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpnGatewayId":{},"VpcId":{}}},"output":{"type":"structure","members":{"VpcAttachment":{"shape":"Sy","locationName":"attachment"}}},"http":{}},"AuthorizeSecurityGroupEgress":{"input":{"type":"structure","required":["GroupId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"GroupId":{"locationName":"groupId"},"SourceSecurityGroupName":{"locationName":"sourceSecurityGroupName"},"SourceSecurityGroupOwnerId":{"locationName":"sourceSecurityGroupOwnerId"},"IpProtocol":{"locationName":"ipProtocol"},"FromPort":{"locationName":"fromPort","type":"integer"},"ToPort":{"locationName":"toPort","type":"integer"},"CidrIp":{"locationName":"cidrIp"},"IpPermissions":{"shape":"S11","locationName":"ipPermissions"}}},"http":{}},"AuthorizeSecurityGroupIngress":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"GroupName":{},"GroupId":{},"SourceSecurityGroupName":{},"SourceSecurityGroupOwnerId":{},"IpProtocol":{},"FromPort":{"type":"integer"},"ToPort":{"type":"integer"},"CidrIp":{},"IpPermissions":{"shape":"S11"}}},"http":{}},"BundleInstance":{"input":{"type":"structure","required":["InstanceId","Storage"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceId":{},"Storage":{"shape":"S1b"}}},"output":{"type":"structure","members":{"BundleTask":{"shape":"S1f","locationName":"bundleInstanceTask"}}},"http":{}},"CancelBundleTask":{"input":{"type":"structure","required":["BundleId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"BundleId":{}}},"output":{"type":"structure","members":{"BundleTask":{"shape":"S1f","locationName":"bundleInstanceTask"}}},"http":{}},"CancelConversionTask":{"input":{"type":"structure","required":["ConversionTaskId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ConversionTaskId":{"locationName":"conversionTaskId"},"ReasonMessage":{"locationName":"reasonMessage"}}},"http":{}},"CancelExportTask":{"input":{"type":"structure","required":["ExportTaskId"],"members":{"ExportTaskId":{"locationName":"exportTaskId"}}},"http":{}},"CancelImportTask":{"input":{"type":"structure","members":{"DryRun":{"type":"boolean"},"ImportTaskId":{},"CancelReason":{}}},"output":{"type":"structure","members":{"ImportTaskId":{"locationName":"importTaskId"},"State":{"locationName":"state"},"PreviousState":{"locationName":"previousState"}}},"http":{}},"CancelReservedInstancesListing":{"input":{"type":"structure","required":["ReservedInstancesListingId"],"members":{"ReservedInstancesListingId":{"locationName":"reservedInstancesListingId"}}},"output":{"type":"structure","members":{"ReservedInstancesListings":{"shape":"S1q","locationName":"reservedInstancesListingsSet"}}},"http":{}},"CancelSpotFleetRequests":{"input":{"type":"structure","required":["SpotFleetRequestIds","TerminateInstances"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SpotFleetRequestIds":{"shape":"S22","locationName":"spotFleetRequestId"},"TerminateInstances":{"locationName":"terminateInstances","type":"boolean"}}},"output":{"type":"structure","members":{"UnsuccessfulFleetRequests":{"locationName":"unsuccessfulFleetRequestSet","type":"list","member":{"locationName":"item","type":"structure","required":["SpotFleetRequestId","Error"],"members":{"SpotFleetRequestId":{"locationName":"spotFleetRequestId"},"Error":{"locationName":"error","type":"structure","required":["Code","Message"],"members":{"Code":{"locationName":"code"},"Message":{"locationName":"message"}}}}}},"SuccessfulFleetRequests":{"locationName":"successfulFleetRequestSet","type":"list","member":{"locationName":"item","type":"structure","required":["SpotFleetRequestId","CurrentSpotFleetRequestState","PreviousSpotFleetRequestState"],"members":{"SpotFleetRequestId":{"locationName":"spotFleetRequestId"},"CurrentSpotFleetRequestState":{"locationName":"currentSpotFleetRequestState"},"PreviousSpotFleetRequestState":{"locationName":"previousSpotFleetRequestState"}}}}}},"http":{}},"CancelSpotInstanceRequests":{"input":{"type":"structure","required":["SpotInstanceRequestIds"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SpotInstanceRequestIds":{"shape":"S2c","locationName":"SpotInstanceRequestId"}}},"output":{"type":"structure","members":{"CancelledSpotInstanceRequests":{"locationName":"spotInstanceRequestSet","type":"list","member":{"locationName":"item","type":"structure","members":{"SpotInstanceRequestId":{"locationName":"spotInstanceRequestId"},"State":{"locationName":"state"}}}}}},"http":{}},"ConfirmProductInstance":{"input":{"type":"structure","required":["ProductCode","InstanceId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ProductCode":{},"InstanceId":{}}},"output":{"type":"structure","members":{"OwnerId":{"locationName":"ownerId"},"Return":{"locationName":"return","type":"boolean"}}},"http":{}},"CopyImage":{"input":{"type":"structure","required":["SourceRegion","SourceImageId","Name"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SourceRegion":{},"SourceImageId":{},"Name":{},"Description":{},"ClientToken":{}}},"output":{"type":"structure","members":{"ImageId":{"locationName":"imageId"}}},"http":{}},"CopySnapshot":{"input":{"type":"structure","required":["SourceRegion","SourceSnapshotId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SourceRegion":{},"SourceSnapshotId":{},"Description":{},"DestinationRegion":{"locationName":"destinationRegion"},"PresignedUrl":{"locationName":"presignedUrl"},"Encrypted":{"locationName":"encrypted","type":"boolean"},"KmsKeyId":{"locationName":"kmsKeyId"}}},"output":{"type":"structure","members":{"SnapshotId":{"locationName":"snapshotId"}}},"http":{}},"CreateCustomerGateway":{"input":{"type":"structure","required":["Type","PublicIp","BgpAsn"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Type":{},"PublicIp":{"locationName":"IpAddress"},"BgpAsn":{"type":"integer"}}},"output":{"type":"structure","members":{"CustomerGateway":{"shape":"S2q","locationName":"customerGateway"}}},"http":{}},"CreateDhcpOptions":{"input":{"type":"structure","required":["DhcpConfigurations"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"DhcpConfigurations":{"locationName":"dhcpConfiguration","type":"list","member":{"locationName":"item","type":"structure","members":{"Key":{"locationName":"key"},"Values":{"shape":"S22","locationName":"Value"}}}}}},"output":{"type":"structure","members":{"DhcpOptions":{"shape":"S2v","locationName":"dhcpOptions"}}},"http":{}},"CreateFlowLogs":{"input":{"type":"structure","required":["ResourceIds","ResourceType","TrafficType","LogGroupName","DeliverLogsPermissionArn"],"members":{"ResourceIds":{"shape":"S22","locationName":"ResourceId"},"ResourceType":{},"TrafficType":{},"LogGroupName":{},"DeliverLogsPermissionArn":{},"ClientToken":{}}},"output":{"type":"structure","members":{"FlowLogIds":{"shape":"S22","locationName":"flowLogIdSet"},"ClientToken":{"locationName":"clientToken"},"Unsuccessful":{"shape":"S34","locationName":"unsuccessful"}}},"http":{}},"CreateImage":{"input":{"type":"structure","required":["InstanceId","Name"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceId":{"locationName":"instanceId"},"Name":{"locationName":"name"},"Description":{"locationName":"description"},"NoReboot":{"locationName":"noReboot","type":"boolean"},"BlockDeviceMappings":{"shape":"S38","locationName":"blockDeviceMapping"}}},"output":{"type":"structure","members":{"ImageId":{"locationName":"imageId"}}},"http":{}},"CreateInstanceExportTask":{"input":{"type":"structure","required":["InstanceId"],"members":{"Description":{"locationName":"description"},"InstanceId":{"locationName":"instanceId"},"TargetEnvironment":{"locationName":"targetEnvironment"},"ExportToS3Task":{"locationName":"exportToS3","type":"structure","members":{"DiskImageFormat":{"locationName":"diskImageFormat"},"ContainerFormat":{"locationName":"containerFormat"},"S3Bucket":{"locationName":"s3Bucket"},"S3Prefix":{"locationName":"s3Prefix"}}}}},"output":{"type":"structure","members":{"ExportTask":{"shape":"S3j","locationName":"exportTask"}}},"http":{}},"CreateInternetGateway":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"}}},"output":{"type":"structure","members":{"InternetGateway":{"shape":"S3p","locationName":"internetGateway"}}},"http":{}},"CreateKeyPair":{"input":{"type":"structure","required":["KeyName"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"KeyName":{}}},"output":{"locationName":"keyPair","type":"structure","members":{"KeyName":{"locationName":"keyName"},"KeyFingerprint":{"locationName":"keyFingerprint"},"KeyMaterial":{"locationName":"keyMaterial"}}},"http":{}},"CreateNetworkAcl":{"input":{"type":"structure","required":["VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcId":{"locationName":"vpcId"}}},"output":{"type":"structure","members":{"NetworkAcl":{"shape":"S3w","locationName":"networkAcl"}}},"http":{}},"CreateNetworkAclEntry":{"input":{"type":"structure","required":["NetworkAclId","RuleNumber","Protocol","RuleAction","Egress","CidrBlock"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"NetworkAclId":{"locationName":"networkAclId"},"RuleNumber":{"locationName":"ruleNumber","type":"integer"},"Protocol":{"locationName":"protocol"},"RuleAction":{"locationName":"ruleAction"},"Egress":{"locationName":"egress","type":"boolean"},"CidrBlock":{"locationName":"cidrBlock"},"IcmpTypeCode":{"shape":"S40","locationName":"Icmp"},"PortRange":{"shape":"S41","locationName":"portRange"}}},"http":{}},"CreateNetworkInterface":{"input":{"type":"structure","required":["SubnetId"],"members":{"SubnetId":{"locationName":"subnetId"},"Description":{"locationName":"description"},"PrivateIpAddress":{"locationName":"privateIpAddress"},"Groups":{"shape":"S46","locationName":"SecurityGroupId"},"PrivateIpAddresses":{"shape":"S47","locationName":"privateIpAddresses"},"SecondaryPrivateIpAddressCount":{"locationName":"secondaryPrivateIpAddressCount","type":"integer"},"DryRun":{"locationName":"dryRun","type":"boolean"}}},"output":{"type":"structure","members":{"NetworkInterface":{"shape":"S4a","locationName":"networkInterface"}}},"http":{}},"CreatePlacementGroup":{"input":{"type":"structure","required":["GroupName","Strategy"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"GroupName":{"locationName":"groupName"},"Strategy":{"locationName":"strategy"}}},"http":{}},"CreateReservedInstancesListing":{"input":{"type":"structure","required":["ReservedInstancesId","InstanceCount","PriceSchedules","ClientToken"],"members":{"ReservedInstancesId":{"locationName":"reservedInstancesId"},"InstanceCount":{"locationName":"instanceCount","type":"integer"},"PriceSchedules":{"locationName":"priceSchedules","type":"list","member":{"locationName":"item","type":"structure","members":{"Term":{"locationName":"term","type":"long"},"Price":{"locationName":"price","type":"double"},"CurrencyCode":{"locationName":"currencyCode"}}}},"ClientToken":{"locationName":"clientToken"}}},"output":{"type":"structure","members":{"ReservedInstancesListings":{"shape":"S1q","locationName":"reservedInstancesListingsSet"}}},"http":{}},"CreateRoute":{"input":{"type":"structure","required":["RouteTableId","DestinationCidrBlock"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"RouteTableId":{"locationName":"routeTableId"},"DestinationCidrBlock":{"locationName":"destinationCidrBlock"},"GatewayId":{"locationName":"gatewayId"},"InstanceId":{"locationName":"instanceId"},"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"VpcPeeringConnectionId":{"locationName":"vpcPeeringConnectionId"}}},"output":{"type":"structure","members":{"Return":{"locationName":"return","type":"boolean"}}},"http":{}},"CreateRouteTable":{"input":{"type":"structure","required":["VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcId":{"locationName":"vpcId"}}},"output":{"type":"structure","members":{"RouteTable":{"shape":"S4s","locationName":"routeTable"}}},"http":{}},"CreateSecurityGroup":{"input":{"type":"structure","required":["GroupName","Description"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"GroupName":{},"Description":{"locationName":"GroupDescription"},"VpcId":{}}},"output":{"type":"structure","members":{"GroupId":{"locationName":"groupId"}}},"http":{}},"CreateSnapshot":{"input":{"type":"structure","required":["VolumeId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VolumeId":{},"Description":{}}},"output":{"shape":"S54","locationName":"snapshot"},"http":{}},"CreateSpotDatafeedSubscription":{"input":{"type":"structure","required":["Bucket"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Bucket":{"locationName":"bucket"},"Prefix":{"locationName":"prefix"}}},"output":{"type":"structure","members":{"SpotDatafeedSubscription":{"shape":"S58","locationName":"spotDatafeedSubscription"}}},"http":{}},"CreateSubnet":{"input":{"type":"structure","required":["VpcId","CidrBlock"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcId":{},"CidrBlock":{},"AvailabilityZone":{}}},"output":{"type":"structure","members":{"Subnet":{"shape":"S5d","locationName":"subnet"}}},"http":{}},"CreateTags":{"input":{"type":"structure","required":["Resources","Tags"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Resources":{"shape":"S5g","locationName":"ResourceId"},"Tags":{"shape":"Sa","locationName":"Tag"}}},"http":{}},"CreateVolume":{"input":{"type":"structure","required":["AvailabilityZone"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Size":{"type":"integer"},"SnapshotId":{},"AvailabilityZone":{},"VolumeType":{},"Iops":{"type":"integer"},"Encrypted":{"locationName":"encrypted","type":"boolean"},"KmsKeyId":{}}},"output":{"shape":"S5i","locationName":"volume"},"http":{}},"CreateVpc":{"input":{"type":"structure","required":["CidrBlock"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"CidrBlock":{},"InstanceTenancy":{"locationName":"instanceTenancy"}}},"output":{"type":"structure","members":{"Vpc":{"shape":"S5o","locationName":"vpc"}}},"http":{}},"CreateVpcEndpoint":{"input":{"type":"structure","required":["VpcId","ServiceName"],"members":{"DryRun":{"type":"boolean"},"VpcId":{},"ServiceName":{},"PolicyDocument":{},"RouteTableIds":{"shape":"S22","locationName":"RouteTableId"},"ClientToken":{}}},"output":{"type":"structure","members":{"VpcEndpoint":{"shape":"S5s","locationName":"vpcEndpoint"},"ClientToken":{"locationName":"clientToken"}}},"http":{}},"CreateVpcPeeringConnection":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcId":{"locationName":"vpcId"},"PeerVpcId":{"locationName":"peerVpcId"},"PeerOwnerId":{"locationName":"peerOwnerId"}}},"output":{"type":"structure","members":{"VpcPeeringConnection":{"shape":"S5","locationName":"vpcPeeringConnection"}}},"http":{}},"CreateVpnConnection":{"input":{"type":"structure","required":["Type","CustomerGatewayId","VpnGatewayId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Type":{},"CustomerGatewayId":{},"VpnGatewayId":{},"Options":{"locationName":"options","type":"structure","members":{"StaticRoutesOnly":{"locationName":"staticRoutesOnly","type":"boolean"}}}}},"output":{"type":"structure","members":{"VpnConnection":{"shape":"S5z","locationName":"vpnConnection"}}},"http":{}},"CreateVpnConnectionRoute":{"input":{"type":"structure","required":["VpnConnectionId","DestinationCidrBlock"],"members":{"VpnConnectionId":{},"DestinationCidrBlock":{}}},"http":{}},"CreateVpnGateway":{"input":{"type":"structure","required":["Type"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Type":{},"AvailabilityZone":{}}},"output":{"type":"structure","members":{"VpnGateway":{"shape":"S6b","locationName":"vpnGateway"}}},"http":{}},"DeleteCustomerGateway":{"input":{"type":"structure","required":["CustomerGatewayId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"CustomerGatewayId":{}}},"http":{}},"DeleteDhcpOptions":{"input":{"type":"structure","required":["DhcpOptionsId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"DhcpOptionsId":{}}},"http":{}},"DeleteFlowLogs":{"input":{"type":"structure","required":["FlowLogIds"],"members":{"FlowLogIds":{"shape":"S22","locationName":"FlowLogId"}}},"output":{"type":"structure","members":{"Unsuccessful":{"shape":"S34","locationName":"unsuccessful"}}},"http":{}},"DeleteInternetGateway":{"input":{"type":"structure","required":["InternetGatewayId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InternetGatewayId":{"locationName":"internetGatewayId"}}},"http":{}},"DeleteKeyPair":{"input":{"type":"structure","required":["KeyName"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"KeyName":{}}},"http":{}},"DeleteNetworkAcl":{"input":{"type":"structure","required":["NetworkAclId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"NetworkAclId":{"locationName":"networkAclId"}}},"http":{}},"DeleteNetworkAclEntry":{"input":{"type":"structure","required":["NetworkAclId","RuleNumber","Egress"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"NetworkAclId":{"locationName":"networkAclId"},"RuleNumber":{"locationName":"ruleNumber","type":"integer"},"Egress":{"locationName":"egress","type":"boolean"}}},"http":{}},"DeleteNetworkInterface":{"input":{"type":"structure","required":["NetworkInterfaceId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"NetworkInterfaceId":{"locationName":"networkInterfaceId"}}},"http":{}},"DeletePlacementGroup":{"input":{"type":"structure","required":["GroupName"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"GroupName":{"locationName":"groupName"}}},"http":{}},"DeleteRoute":{"input":{"type":"structure","required":["RouteTableId","DestinationCidrBlock"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"RouteTableId":{"locationName":"routeTableId"},"DestinationCidrBlock":{"locationName":"destinationCidrBlock"}}},"http":{}},"DeleteRouteTable":{"input":{"type":"structure","required":["RouteTableId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"RouteTableId":{"locationName":"routeTableId"}}},"http":{}},"DeleteSecurityGroup":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"GroupName":{},"GroupId":{}}},"http":{}},"DeleteSnapshot":{"input":{"type":"structure","required":["SnapshotId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SnapshotId":{}}},"http":{}},"DeleteSpotDatafeedSubscription":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"}}},"http":{}},"DeleteSubnet":{"input":{"type":"structure","required":["SubnetId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SubnetId":{}}},"http":{}},"DeleteTags":{"input":{"type":"structure","required":["Resources"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Resources":{"shape":"S5g","locationName":"resourceId"},"Tags":{"shape":"Sa","locationName":"tag"}}},"http":{}},"DeleteVolume":{"input":{"type":"structure","required":["VolumeId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VolumeId":{}}},"http":{}},"DeleteVpc":{"input":{"type":"structure","required":["VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcId":{}}},"http":{}},"DeleteVpcEndpoints":{"input":{"type":"structure","required":["VpcEndpointIds"],"members":{"DryRun":{"type":"boolean"},"VpcEndpointIds":{"shape":"S22","locationName":"VpcEndpointId"}}},"output":{"type":"structure","members":{"Unsuccessful":{"shape":"S34","locationName":"unsuccessful"}}},"http":{}},"DeleteVpcPeeringConnection":{"input":{"type":"structure","required":["VpcPeeringConnectionId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcPeeringConnectionId":{"locationName":"vpcPeeringConnectionId"}}},"output":{"type":"structure","members":{"Return":{"locationName":"return","type":"boolean"}}},"http":{}},"DeleteVpnConnection":{"input":{"type":"structure","required":["VpnConnectionId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpnConnectionId":{}}},"http":{}},"DeleteVpnConnectionRoute":{"input":{"type":"structure","required":["VpnConnectionId","DestinationCidrBlock"],"members":{"VpnConnectionId":{},"DestinationCidrBlock":{}}},"http":{}},"DeleteVpnGateway":{"input":{"type":"structure","required":["VpnGatewayId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpnGatewayId":{}}},"http":{}},"DeregisterImage":{"input":{"type":"structure","required":["ImageId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ImageId":{}}},"http":{}},"DescribeAccountAttributes":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"AttributeNames":{"locationName":"attributeName","type":"list","member":{"locationName":"attributeName"}}}},"output":{"type":"structure","members":{"AccountAttributes":{"locationName":"accountAttributeSet","type":"list","member":{"locationName":"item","type":"structure","members":{"AttributeName":{"locationName":"attributeName"},"AttributeValues":{"locationName":"attributeValueSet","type":"list","member":{"locationName":"item","type":"structure","members":{"AttributeValue":{"locationName":"attributeValue"}}}}}}}}},"http":{}},"DescribeAddresses":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"PublicIps":{"locationName":"PublicIp","type":"list","member":{"locationName":"PublicIp"}},"Filters":{"shape":"S7e","locationName":"Filter"},"AllocationIds":{"locationName":"AllocationId","type":"list","member":{"locationName":"AllocationId"}}}},"output":{"type":"structure","members":{"Addresses":{"locationName":"addressesSet","type":"list","member":{"locationName":"item","type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"PublicIp":{"locationName":"publicIp"},"AllocationId":{"locationName":"allocationId"},"AssociationId":{"locationName":"associationId"},"Domain":{"locationName":"domain"},"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"NetworkInterfaceOwnerId":{"locationName":"networkInterfaceOwnerId"},"PrivateIpAddress":{"locationName":"privateIpAddress"}}}}}},"http":{}},"DescribeAvailabilityZones":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ZoneNames":{"locationName":"ZoneName","type":"list","member":{"locationName":"ZoneName"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"AvailabilityZones":{"locationName":"availabilityZoneInfo","type":"list","member":{"locationName":"item","type":"structure","members":{"ZoneName":{"locationName":"zoneName"},"State":{"locationName":"zoneState"},"RegionName":{"locationName":"regionName"},"Messages":{"locationName":"messageSet","type":"list","member":{"locationName":"item","type":"structure","members":{"Message":{"locationName":"message"}}}}}}}}},"http":{}},"DescribeBundleTasks":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"BundleIds":{"locationName":"BundleId","type":"list","member":{"locationName":"BundleId"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"BundleTasks":{"locationName":"bundleInstanceTasksSet","type":"list","member":{"shape":"S1f","locationName":"item"}}}},"http":{}},"DescribeClassicLinkInstances":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceIds":{"shape":"S7x","locationName":"InstanceId"},"Filters":{"shape":"S7e","locationName":"Filter"},"NextToken":{"locationName":"nextToken"},"MaxResults":{"locationName":"maxResults","type":"integer"}}},"output":{"type":"structure","members":{"Instances":{"locationName":"instancesSet","type":"list","member":{"locationName":"item","type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"VpcId":{"locationName":"vpcId"},"Groups":{"shape":"S4c","locationName":"groupSet"},"Tags":{"shape":"Sa","locationName":"tagSet"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeConversionTasks":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Filters":{"shape":"S7e","locationName":"filter"},"ConversionTaskIds":{"locationName":"conversionTaskId","type":"list","member":{"locationName":"item"}}}},"output":{"type":"structure","members":{"ConversionTasks":{"locationName":"conversionTasks","type":"list","member":{"shape":"S85","locationName":"item"}}}},"http":{}},"DescribeCustomerGateways":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"CustomerGatewayIds":{"locationName":"CustomerGatewayId","type":"list","member":{"locationName":"CustomerGatewayId"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"CustomerGateways":{"locationName":"customerGatewaySet","type":"list","member":{"shape":"S2q","locationName":"item"}}}},"http":{}},"DescribeDhcpOptions":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"DhcpOptionsIds":{"locationName":"DhcpOptionsId","type":"list","member":{"locationName":"DhcpOptionsId"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"DhcpOptions":{"locationName":"dhcpOptionsSet","type":"list","member":{"shape":"S2v","locationName":"item"}}}},"http":{}},"DescribeExportTasks":{"input":{"type":"structure","members":{"ExportTaskIds":{"locationName":"exportTaskId","type":"list","member":{"locationName":"ExportTaskId"}}}},"output":{"type":"structure","members":{"ExportTasks":{"locationName":"exportTaskSet","type":"list","member":{"shape":"S3j","locationName":"item"}}}},"http":{}},"DescribeFlowLogs":{"input":{"type":"structure","members":{"FlowLogIds":{"shape":"S22","locationName":"FlowLogId"},"Filter":{"shape":"S7e"},"NextToken":{},"MaxResults":{"type":"integer"}}},"output":{"type":"structure","members":{"FlowLogs":{"locationName":"flowLogSet","type":"list","member":{"locationName":"item","type":"structure","members":{"CreationTime":{"locationName":"creationTime","type":"timestamp"},"FlowLogId":{"locationName":"flowLogId"},"FlowLogStatus":{"locationName":"flowLogStatus"},"ResourceId":{"locationName":"resourceId"},"TrafficType":{"locationName":"trafficType"},"LogGroupName":{"locationName":"logGroupName"},"DeliverLogsStatus":{"locationName":"deliverLogsStatus"},"DeliverLogsErrorMessage":{"locationName":"deliverLogsErrorMessage"},"DeliverLogsPermissionArn":{"locationName":"deliverLogsPermissionArn"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeImageAttribute":{"input":{"type":"structure","required":["ImageId","Attribute"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ImageId":{},"Attribute":{}}},"output":{"locationName":"imageAttribute","type":"structure","members":{"ImageId":{"locationName":"imageId"},"LaunchPermissions":{"shape":"S8x","locationName":"launchPermission"},"ProductCodes":{"shape":"S90","locationName":"productCodes"},"KernelId":{"shape":"S2z","locationName":"kernel"},"RamdiskId":{"shape":"S2z","locationName":"ramdisk"},"Description":{"shape":"S2z","locationName":"description"},"SriovNetSupport":{"shape":"S2z","locationName":"sriovNetSupport"},"BlockDeviceMappings":{"shape":"S93","locationName":"blockDeviceMapping"}}},"http":{}},"DescribeImages":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ImageIds":{"locationName":"ImageId","type":"list","member":{"locationName":"ImageId"}},"Owners":{"shape":"S96","locationName":"Owner"},"ExecutableUsers":{"locationName":"ExecutableBy","type":"list","member":{"locationName":"ExecutableBy"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"Images":{"locationName":"imagesSet","type":"list","member":{"locationName":"item","type":"structure","members":{"ImageId":{"locationName":"imageId"},"ImageLocation":{"locationName":"imageLocation"},"State":{"locationName":"imageState"},"OwnerId":{"locationName":"imageOwnerId"},"CreationDate":{"locationName":"creationDate"},"Public":{"locationName":"isPublic","type":"boolean"},"ProductCodes":{"shape":"S90","locationName":"productCodes"},"Architecture":{"locationName":"architecture"},"ImageType":{"locationName":"imageType"},"KernelId":{"locationName":"kernelId"},"RamdiskId":{"locationName":"ramdiskId"},"Platform":{"locationName":"platform"},"SriovNetSupport":{"locationName":"sriovNetSupport"},"StateReason":{"shape":"S9e","locationName":"stateReason"},"ImageOwnerAlias":{"locationName":"imageOwnerAlias"},"Name":{"locationName":"name"},"Description":{"locationName":"description"},"RootDeviceType":{"locationName":"rootDeviceType"},"RootDeviceName":{"locationName":"rootDeviceName"},"BlockDeviceMappings":{"shape":"S93","locationName":"blockDeviceMapping"},"VirtualizationType":{"locationName":"virtualizationType"},"Tags":{"shape":"Sa","locationName":"tagSet"},"Hypervisor":{"locationName":"hypervisor"}}}}}},"http":{}},"DescribeImportImageTasks":{"input":{"type":"structure","members":{"DryRun":{"type":"boolean"},"ImportTaskIds":{"shape":"S9j","locationName":"ImportTaskId"},"NextToken":{},"MaxResults":{"type":"integer"},"Filters":{"shape":"S7e"}}},"output":{"type":"structure","members":{"ImportImageTasks":{"locationName":"importImageTaskSet","type":"list","member":{"locationName":"item","type":"structure","members":{"ImportTaskId":{"locationName":"importTaskId"},"Architecture":{"locationName":"architecture"},"LicenseType":{"locationName":"licenseType"},"Platform":{"locationName":"platform"},"Hypervisor":{"locationName":"hypervisor"},"Description":{"locationName":"description"},"SnapshotDetails":{"shape":"S9n","locationName":"snapshotDetailSet"},"ImageId":{"locationName":"imageId"},"Progress":{"locationName":"progress"},"StatusMessage":{"locationName":"statusMessage"},"Status":{"locationName":"status"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeImportSnapshotTasks":{"input":{"type":"structure","members":{"DryRun":{"type":"boolean"},"ImportTaskIds":{"shape":"S9j","locationName":"ImportTaskId"},"NextToken":{},"MaxResults":{"type":"integer"},"Filters":{"shape":"S7e"}}},"output":{"type":"structure","members":{"ImportSnapshotTasks":{"locationName":"importSnapshotTaskSet","type":"list","member":{"locationName":"item","type":"structure","members":{"ImportTaskId":{"locationName":"importTaskId"},"SnapshotTaskDetail":{"shape":"S9u","locationName":"snapshotTaskDetail"},"Description":{"locationName":"description"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeInstanceAttribute":{"input":{"type":"structure","required":["InstanceId","Attribute"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceId":{"locationName":"instanceId"},"Attribute":{"locationName":"attribute"}}},"output":{"type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"InstanceType":{"shape":"S2z","locationName":"instanceType"},"KernelId":{"shape":"S2z","locationName":"kernel"},"RamdiskId":{"shape":"S2z","locationName":"ramdisk"},"UserData":{"shape":"S2z","locationName":"userData"},"DisableApiTermination":{"shape":"S9y","locationName":"disableApiTermination"},"InstanceInitiatedShutdownBehavior":{"shape":"S2z","locationName":"instanceInitiatedShutdownBehavior"},"RootDeviceName":{"shape":"S2z","locationName":"rootDeviceName"},"BlockDeviceMappings":{"shape":"S9z","locationName":"blockDeviceMapping"},"ProductCodes":{"shape":"S90","locationName":"productCodes"},"EbsOptimized":{"shape":"S9y","locationName":"ebsOptimized"},"SriovNetSupport":{"shape":"S2z","locationName":"sriovNetSupport"},"SourceDestCheck":{"shape":"S9y","locationName":"sourceDestCheck"},"Groups":{"shape":"S4c","locationName":"groupSet"}}},"http":{}},"DescribeInstanceStatus":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceIds":{"shape":"S7x","locationName":"InstanceId"},"Filters":{"shape":"S7e","locationName":"Filter"},"NextToken":{},"MaxResults":{"type":"integer"},"IncludeAllInstances":{"locationName":"includeAllInstances","type":"boolean"}}},"output":{"type":"structure","members":{"InstanceStatuses":{"locationName":"instanceStatusSet","type":"list","member":{"locationName":"item","type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"AvailabilityZone":{"locationName":"availabilityZone"},"Events":{"locationName":"eventsSet","type":"list","member":{"locationName":"item","type":"structure","members":{"Code":{"locationName":"code"},"Description":{"locationName":"description"},"NotBefore":{"locationName":"notBefore","type":"timestamp"},"NotAfter":{"locationName":"notAfter","type":"timestamp"}}}},"InstanceState":{"shape":"Sa9","locationName":"instanceState"},"SystemStatus":{"shape":"Sab","locationName":"systemStatus"},"InstanceStatus":{"shape":"Sab","locationName":"instanceStatus"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeInstances":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceIds":{"shape":"S7x","locationName":"InstanceId"},"Filters":{"shape":"S7e","locationName":"Filter"},"NextToken":{"locationName":"nextToken"},"MaxResults":{"locationName":"maxResults","type":"integer"}}},"output":{"type":"structure","members":{"Reservations":{"locationName":"reservationSet","type":"list","member":{"shape":"Sak","locationName":"item"}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeInternetGateways":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InternetGatewayIds":{"shape":"S22","locationName":"internetGatewayId"},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"InternetGateways":{"locationName":"internetGatewaySet","type":"list","member":{"shape":"S3p","locationName":"item"}}}},"http":{}},"DescribeKeyPairs":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"KeyNames":{"locationName":"KeyName","type":"list","member":{"locationName":"KeyName"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"KeyPairs":{"locationName":"keySet","type":"list","member":{"locationName":"item","type":"structure","members":{"KeyName":{"locationName":"keyName"},"KeyFingerprint":{"locationName":"keyFingerprint"}}}}}},"http":{}},"DescribeMovingAddresses":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"PublicIps":{"shape":"S22","locationName":"publicIp"},"NextToken":{"locationName":"nextToken"},"Filters":{"shape":"S7e","locationName":"filter"},"MaxResults":{"locationName":"maxResults","type":"integer"}}},"output":{"type":"structure","members":{"MovingAddressStatuses":{"locationName":"movingAddressStatusSet","type":"list","member":{"locationName":"item","type":"structure","members":{"PublicIp":{"locationName":"publicIp"},"MoveStatus":{"locationName":"moveStatus"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeNetworkAcls":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"NetworkAclIds":{"shape":"S22","locationName":"NetworkAclId"},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"NetworkAcls":{"locationName":"networkAclSet","type":"list","member":{"shape":"S3w","locationName":"item"}}}},"http":{}},"DescribeNetworkInterfaceAttribute":{"input":{"type":"structure","required":["NetworkInterfaceId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"Attribute":{"locationName":"attribute"}}},"output":{"type":"structure","members":{"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"Description":{"shape":"S2z","locationName":"description"},"SourceDestCheck":{"shape":"S9y","locationName":"sourceDestCheck"},"Groups":{"shape":"S4c","locationName":"groupSet"},"Attachment":{"shape":"S4e","locationName":"attachment"}}},"http":{}},"DescribeNetworkInterfaces":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"NetworkInterfaceIds":{"locationName":"NetworkInterfaceId","type":"list","member":{"locationName":"item"}},"Filters":{"shape":"S7e","locationName":"filter"}}},"output":{"type":"structure","members":{"NetworkInterfaces":{"locationName":"networkInterfaceSet","type":"list","member":{"shape":"S4a","locationName":"item"}}}},"http":{}},"DescribePlacementGroups":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"GroupNames":{"locationName":"groupName","type":"list","member":{}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"PlacementGroups":{"locationName":"placementGroupSet","type":"list","member":{"locationName":"item","type":"structure","members":{"GroupName":{"locationName":"groupName"},"Strategy":{"locationName":"strategy"},"State":{"locationName":"state"}}}}}},"http":{}},"DescribePrefixLists":{"input":{"type":"structure","members":{"DryRun":{"type":"boolean"},"PrefixListIds":{"shape":"S22","locationName":"PrefixListId"},"Filters":{"shape":"S7e","locationName":"Filter"},"MaxResults":{"type":"integer"},"NextToken":{}}},"output":{"type":"structure","members":{"PrefixLists":{"locationName":"prefixListSet","type":"list","member":{"locationName":"item","type":"structure","members":{"PrefixListId":{"locationName":"prefixListId"},"PrefixListName":{"locationName":"prefixListName"},"Cidrs":{"shape":"S22","locationName":"cidrSet"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeRegions":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"RegionNames":{"locationName":"RegionName","type":"list","member":{"locationName":"RegionName"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"Regions":{"locationName":"regionInfo","type":"list","member":{"locationName":"item","type":"structure","members":{"RegionName":{"locationName":"regionName"},"Endpoint":{"locationName":"regionEndpoint"}}}}}},"http":{}},"DescribeReservedInstances":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ReservedInstancesIds":{"shape":"Sc2","locationName":"ReservedInstancesId"},"Filters":{"shape":"S7e","locationName":"Filter"},"OfferingType":{"locationName":"offeringType"}}},"output":{"type":"structure","members":{"ReservedInstances":{"locationName":"reservedInstancesSet","type":"list","member":{"locationName":"item","type":"structure","members":{"ReservedInstancesId":{"locationName":"reservedInstancesId"},"InstanceType":{"locationName":"instanceType"},"AvailabilityZone":{"locationName":"availabilityZone"},"Start":{"locationName":"start","type":"timestamp"},"End":{"locationName":"end","type":"timestamp"},"Duration":{"locationName":"duration","type":"long"},"UsagePrice":{"locationName":"usagePrice","type":"float"},"FixedPrice":{"locationName":"fixedPrice","type":"float"},"InstanceCount":{"locationName":"instanceCount","type":"integer"},"ProductDescription":{"locationName":"productDescription"},"State":{"locationName":"state"},"Tags":{"shape":"Sa","locationName":"tagSet"},"InstanceTenancy":{"locationName":"instanceTenancy"},"CurrencyCode":{"locationName":"currencyCode"},"OfferingType":{"locationName":"offeringType"},"RecurringCharges":{"shape":"Sca","locationName":"recurringCharges"}}}}}},"http":{}},"DescribeReservedInstancesListings":{"input":{"type":"structure","members":{"ReservedInstancesId":{"locationName":"reservedInstancesId"},"ReservedInstancesListingId":{"locationName":"reservedInstancesListingId"},"Filters":{"shape":"S7e","locationName":"filters"}}},"output":{"type":"structure","members":{"ReservedInstancesListings":{"shape":"S1q","locationName":"reservedInstancesListingsSet"}}},"http":{}},"DescribeReservedInstancesModifications":{"input":{"type":"structure","members":{"ReservedInstancesModificationIds":{"locationName":"ReservedInstancesModificationId","type":"list","member":{"locationName":"ReservedInstancesModificationId"}},"NextToken":{"locationName":"nextToken"},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"ReservedInstancesModifications":{"locationName":"reservedInstancesModificationsSet","type":"list","member":{"locationName":"item","type":"structure","members":{"ReservedInstancesModificationId":{"locationName":"reservedInstancesModificationId"},"ReservedInstancesIds":{"locationName":"reservedInstancesSet","type":"list","member":{"locationName":"item","type":"structure","members":{"ReservedInstancesId":{"locationName":"reservedInstancesId"}}}},"ModificationResults":{"locationName":"modificationResultSet","type":"list","member":{"locationName":"item","type":"structure","members":{"ReservedInstancesId":{"locationName":"reservedInstancesId"},"TargetConfiguration":{"shape":"Sco","locationName":"targetConfiguration"}}}},"CreateDate":{"locationName":"createDate","type":"timestamp"},"UpdateDate":{"locationName":"updateDate","type":"timestamp"},"EffectiveDate":{"locationName":"effectiveDate","type":"timestamp"},"Status":{"locationName":"status"},"StatusMessage":{"locationName":"statusMessage"},"ClientToken":{"locationName":"clientToken"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeReservedInstancesOfferings":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ReservedInstancesOfferingIds":{"locationName":"ReservedInstancesOfferingId","type":"list","member":{}},"InstanceType":{},"AvailabilityZone":{},"ProductDescription":{},"Filters":{"shape":"S7e","locationName":"Filter"},"InstanceTenancy":{"locationName":"instanceTenancy"},"OfferingType":{"locationName":"offeringType"},"NextToken":{"locationName":"nextToken"},"MaxResults":{"locationName":"maxResults","type":"integer"},"IncludeMarketplace":{"type":"boolean"},"MinDuration":{"type":"long"},"MaxDuration":{"type":"long"},"MaxInstanceCount":{"type":"integer"}}},"output":{"type":"structure","members":{"ReservedInstancesOfferings":{"locationName":"reservedInstancesOfferingsSet","type":"list","member":{"locationName":"item","type":"structure","members":{"ReservedInstancesOfferingId":{"locationName":"reservedInstancesOfferingId"},"InstanceType":{"locationName":"instanceType"},"AvailabilityZone":{"locationName":"availabilityZone"},"Duration":{"locationName":"duration","type":"long"},"UsagePrice":{"locationName":"usagePrice","type":"float"},"FixedPrice":{"locationName":"fixedPrice","type":"float"},"ProductDescription":{"locationName":"productDescription"},"InstanceTenancy":{"locationName":"instanceTenancy"},"CurrencyCode":{"locationName":"currencyCode"},"OfferingType":{"locationName":"offeringType"},"RecurringCharges":{"shape":"Sca","locationName":"recurringCharges"},"Marketplace":{"locationName":"marketplace","type":"boolean"},"PricingDetails":{"locationName":"pricingDetailsSet","type":"list","member":{"locationName":"item","type":"structure","members":{"Price":{"locationName":"price","type":"double"},"Count":{"locationName":"count","type":"integer"}}}}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeRouteTables":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"RouteTableIds":{"shape":"S22","locationName":"RouteTableId"},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"RouteTables":{"locationName":"routeTableSet","type":"list","member":{"shape":"S4s","locationName":"item"}}}},"http":{}},"DescribeSecurityGroups":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"GroupNames":{"shape":"Sd0","locationName":"GroupName"},"GroupIds":{"shape":"So","locationName":"GroupId"},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"SecurityGroups":{"locationName":"securityGroupInfo","type":"list","member":{"locationName":"item","type":"structure","members":{"OwnerId":{"locationName":"ownerId"},"GroupName":{"locationName":"groupName"},"GroupId":{"locationName":"groupId"},"Description":{"locationName":"groupDescription"},"IpPermissions":{"shape":"S11","locationName":"ipPermissions"},"IpPermissionsEgress":{"shape":"S11","locationName":"ipPermissionsEgress"},"VpcId":{"locationName":"vpcId"},"Tags":{"shape":"Sa","locationName":"tagSet"}}}}}},"http":{}},"DescribeSnapshotAttribute":{"input":{"type":"structure","required":["SnapshotId","Attribute"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SnapshotId":{},"Attribute":{}}},"output":{"type":"structure","members":{"SnapshotId":{"locationName":"snapshotId"},"CreateVolumePermissions":{"shape":"Sd7","locationName":"createVolumePermission"},"ProductCodes":{"shape":"S90","locationName":"productCodes"}}},"http":{}},"DescribeSnapshots":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SnapshotIds":{"locationName":"SnapshotId","type":"list","member":{"locationName":"SnapshotId"}},"OwnerIds":{"shape":"S96","locationName":"Owner"},"RestorableByUserIds":{"locationName":"RestorableBy","type":"list","member":{}},"Filters":{"shape":"S7e","locationName":"Filter"},"NextToken":{},"MaxResults":{"type":"integer"}}},"output":{"type":"structure","members":{"Snapshots":{"locationName":"snapshotSet","type":"list","member":{"shape":"S54","locationName":"item"}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeSpotDatafeedSubscription":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"}}},"output":{"type":"structure","members":{"SpotDatafeedSubscription":{"shape":"S58","locationName":"spotDatafeedSubscription"}}},"http":{}},"DescribeSpotFleetInstances":{"input":{"type":"structure","required":["SpotFleetRequestId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SpotFleetRequestId":{"locationName":"spotFleetRequestId"},"NextToken":{"locationName":"nextToken"},"MaxResults":{"locationName":"maxResults","type":"integer"}}},"output":{"type":"structure","required":["SpotFleetRequestId","ActiveInstances"],"members":{"SpotFleetRequestId":{"locationName":"spotFleetRequestId"},"ActiveInstances":{"locationName":"activeInstanceSet","type":"list","member":{"locationName":"item","type":"structure","members":{"InstanceType":{"locationName":"instanceType"},"InstanceId":{"locationName":"instanceId"},"SpotInstanceRequestId":{"locationName":"spotInstanceRequestId"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeSpotFleetRequestHistory":{"input":{"type":"structure","required":["SpotFleetRequestId","StartTime"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SpotFleetRequestId":{"locationName":"spotFleetRequestId"},"EventType":{"locationName":"eventType"},"StartTime":{"locationName":"startTime","type":"timestamp"},"NextToken":{"locationName":"nextToken"},"MaxResults":{"locationName":"maxResults","type":"integer"}}},"output":{"type":"structure","required":["SpotFleetRequestId","StartTime","LastEvaluatedTime","HistoryRecords"],"members":{"SpotFleetRequestId":{"locationName":"spotFleetRequestId"},"StartTime":{"locationName":"startTime","type":"timestamp"},"LastEvaluatedTime":{"locationName":"lastEvaluatedTime","type":"timestamp"},"HistoryRecords":{"locationName":"historyRecordSet","type":"list","member":{"locationName":"item","type":"structure","required":["Timestamp","EventType","EventInformation"],"members":{"Timestamp":{"locationName":"timestamp","type":"timestamp"},"EventType":{"locationName":"eventType"},"EventInformation":{"locationName":"eventInformation","type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"EventSubType":{"locationName":"eventSubType"},"EventDescription":{"locationName":"eventDescription"}}}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeSpotFleetRequests":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SpotFleetRequestIds":{"shape":"S22","locationName":"spotFleetRequestId"},"NextToken":{"locationName":"nextToken"},"MaxResults":{"locationName":"maxResults","type":"integer"}}},"output":{"type":"structure","required":["SpotFleetRequestConfigs"],"members":{"SpotFleetRequestConfigs":{"locationName":"spotFleetRequestConfigSet","type":"list","member":{"locationName":"item","type":"structure","required":["SpotFleetRequestId","SpotFleetRequestState","SpotFleetRequestConfig"],"members":{"SpotFleetRequestId":{"locationName":"spotFleetRequestId"},"SpotFleetRequestState":{"locationName":"spotFleetRequestState"},"SpotFleetRequestConfig":{"shape":"Sdu","locationName":"spotFleetRequestConfig"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeSpotInstanceRequests":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SpotInstanceRequestIds":{"shape":"S2c","locationName":"SpotInstanceRequestId"},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"SpotInstanceRequests":{"shape":"Se5","locationName":"spotInstanceRequestSet"}}},"http":{}},"DescribeSpotPriceHistory":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"StartTime":{"locationName":"startTime","type":"timestamp"},"EndTime":{"locationName":"endTime","type":"timestamp"},"InstanceTypes":{"locationName":"InstanceType","type":"list","member":{}},"ProductDescriptions":{"locationName":"ProductDescription","type":"list","member":{}},"Filters":{"shape":"S7e","locationName":"Filter"},"AvailabilityZone":{"locationName":"availabilityZone"},"MaxResults":{"locationName":"maxResults","type":"integer"},"NextToken":{"locationName":"nextToken"}}},"output":{"type":"structure","members":{"SpotPriceHistory":{"locationName":"spotPriceHistorySet","type":"list","member":{"locationName":"item","type":"structure","members":{"InstanceType":{"locationName":"instanceType"},"ProductDescription":{"locationName":"productDescription"},"SpotPrice":{"locationName":"spotPrice"},"Timestamp":{"locationName":"timestamp","type":"timestamp"},"AvailabilityZone":{"locationName":"availabilityZone"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeSubnets":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SubnetIds":{"locationName":"SubnetId","type":"list","member":{"locationName":"SubnetId"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"Subnets":{"locationName":"subnetSet","type":"list","member":{"shape":"S5d","locationName":"item"}}}},"http":{}},"DescribeTags":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Filters":{"shape":"S7e","locationName":"Filter"},"MaxResults":{"locationName":"maxResults","type":"integer"},"NextToken":{"locationName":"nextToken"}}},"output":{"type":"structure","members":{"Tags":{"locationName":"tagSet","type":"list","member":{"locationName":"item","type":"structure","members":{"ResourceId":{"locationName":"resourceId"},"ResourceType":{"locationName":"resourceType"},"Key":{"locationName":"key"},"Value":{"locationName":"value"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeVolumeAttribute":{"input":{"type":"structure","required":["VolumeId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VolumeId":{},"Attribute":{}}},"output":{"type":"structure","members":{"VolumeId":{"locationName":"volumeId"},"AutoEnableIO":{"shape":"S9y","locationName":"autoEnableIO"},"ProductCodes":{"shape":"S90","locationName":"productCodes"}}},"http":{}},"DescribeVolumeStatus":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VolumeIds":{"shape":"Sev","locationName":"VolumeId"},"Filters":{"shape":"S7e","locationName":"Filter"},"NextToken":{},"MaxResults":{"type":"integer"}}},"output":{"type":"structure","members":{"VolumeStatuses":{"locationName":"volumeStatusSet","type":"list","member":{"locationName":"item","type":"structure","members":{"VolumeId":{"locationName":"volumeId"},"AvailabilityZone":{"locationName":"availabilityZone"},"VolumeStatus":{"locationName":"volumeStatus","type":"structure","members":{"Status":{"locationName":"status"},"Details":{"locationName":"details","type":"list","member":{"locationName":"item","type":"structure","members":{"Name":{"locationName":"name"},"Status":{"locationName":"status"}}}}}},"Events":{"locationName":"eventsSet","type":"list","member":{"locationName":"item","type":"structure","members":{"EventType":{"locationName":"eventType"},"Description":{"locationName":"description"},"NotBefore":{"locationName":"notBefore","type":"timestamp"},"NotAfter":{"locationName":"notAfter","type":"timestamp"},"EventId":{"locationName":"eventId"}}}},"Actions":{"locationName":"actionsSet","type":"list","member":{"locationName":"item","type":"structure","members":{"Code":{"locationName":"code"},"Description":{"locationName":"description"},"EventType":{"locationName":"eventType"},"EventId":{"locationName":"eventId"}}}}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeVolumes":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VolumeIds":{"shape":"Sev","locationName":"VolumeId"},"Filters":{"shape":"S7e","locationName":"Filter"},"NextToken":{"locationName":"nextToken"},"MaxResults":{"locationName":"maxResults","type":"integer"}}},"output":{"type":"structure","members":{"Volumes":{"locationName":"volumeSet","type":"list","member":{"shape":"S5i","locationName":"item"}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeVpcAttribute":{"input":{"type":"structure","required":["VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcId":{},"Attribute":{}}},"output":{"type":"structure","members":{"VpcId":{"locationName":"vpcId"},"EnableDnsSupport":{"shape":"S9y","locationName":"enableDnsSupport"},"EnableDnsHostnames":{"shape":"S9y","locationName":"enableDnsHostnames"}}},"http":{}},"DescribeVpcClassicLink":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcIds":{"locationName":"VpcId","type":"list","member":{"locationName":"VpcId"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"Vpcs":{"locationName":"vpcSet","type":"list","member":{"locationName":"item","type":"structure","members":{"VpcId":{"locationName":"vpcId"},"ClassicLinkEnabled":{"locationName":"classicLinkEnabled","type":"boolean"},"Tags":{"shape":"Sa","locationName":"tagSet"}}}}}},"http":{}},"DescribeVpcEndpointServices":{"input":{"type":"structure","members":{"DryRun":{"type":"boolean"},"MaxResults":{"type":"integer"},"NextToken":{}}},"output":{"type":"structure","members":{"ServiceNames":{"shape":"S22","locationName":"serviceNameSet"},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeVpcEndpoints":{"input":{"type":"structure","members":{"DryRun":{"type":"boolean"},"VpcEndpointIds":{"shape":"S22","locationName":"VpcEndpointId"},"Filters":{"shape":"S7e","locationName":"Filter"},"MaxResults":{"type":"integer"},"NextToken":{}}},"output":{"type":"structure","members":{"VpcEndpoints":{"locationName":"vpcEndpointSet","type":"list","member":{"shape":"S5s","locationName":"item"}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeVpcPeeringConnections":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcPeeringConnectionIds":{"shape":"S22","locationName":"VpcPeeringConnectionId"},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"VpcPeeringConnections":{"locationName":"vpcPeeringConnectionSet","type":"list","member":{"shape":"S5","locationName":"item"}}}},"http":{}},"DescribeVpcs":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcIds":{"locationName":"VpcId","type":"list","member":{"locationName":"VpcId"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"Vpcs":{"locationName":"vpcSet","type":"list","member":{"shape":"S5o","locationName":"item"}}}},"http":{}},"DescribeVpnConnections":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpnConnectionIds":{"locationName":"VpnConnectionId","type":"list","member":{"locationName":"VpnConnectionId"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"VpnConnections":{"locationName":"vpnConnectionSet","type":"list","member":{"shape":"S5z","locationName":"item"}}}},"http":{}},"DescribeVpnGateways":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpnGatewayIds":{"locationName":"VpnGatewayId","type":"list","member":{"locationName":"VpnGatewayId"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"VpnGateways":{"locationName":"vpnGatewaySet","type":"list","member":{"shape":"S6b","locationName":"item"}}}},"http":{}},"DetachClassicLinkVpc":{"input":{"type":"structure","required":["InstanceId","VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceId":{"locationName":"instanceId"},"VpcId":{"locationName":"vpcId"}}},"output":{"type":"structure","members":{"Return":{"locationName":"return","type":"boolean"}}},"http":{}},"DetachInternetGateway":{"input":{"type":"structure","required":["InternetGatewayId","VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InternetGatewayId":{"locationName":"internetGatewayId"},"VpcId":{"locationName":"vpcId"}}},"http":{}},"DetachNetworkInterface":{"input":{"type":"structure","required":["AttachmentId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"AttachmentId":{"locationName":"attachmentId"},"Force":{"locationName":"force","type":"boolean"}}},"http":{}},"DetachVolume":{"input":{"type":"structure","required":["VolumeId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VolumeId":{},"InstanceId":{},"Device":{},"Force":{"type":"boolean"}}},"output":{"shape":"Su","locationName":"attachment"},"http":{}},"DetachVpnGateway":{"input":{"type":"structure","required":["VpnGatewayId","VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpnGatewayId":{},"VpcId":{}}},"http":{}},"DisableVgwRoutePropagation":{"input":{"type":"structure","required":["RouteTableId","GatewayId"],"members":{"RouteTableId":{},"GatewayId":{}}},"http":{}},"DisableVpcClassicLink":{"input":{"type":"structure","required":["VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcId":{"locationName":"vpcId"}}},"output":{"type":"structure","members":{"Return":{"locationName":"return","type":"boolean"}}},"http":{}},"DisassociateAddress":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"PublicIp":{},"AssociationId":{}}},"http":{}},"DisassociateRouteTable":{"input":{"type":"structure","required":["AssociationId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"AssociationId":{"locationName":"associationId"}}},"http":{}},"EnableVgwRoutePropagation":{"input":{"type":"structure","required":["RouteTableId","GatewayId"],"members":{"RouteTableId":{},"GatewayId":{}}},"http":{}},"EnableVolumeIO":{"input":{"type":"structure","required":["VolumeId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VolumeId":{"locationName":"volumeId"}}},"http":{}},"EnableVpcClassicLink":{"input":{"type":"structure","required":["VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcId":{"locationName":"vpcId"}}},"output":{"type":"structure","members":{"Return":{"locationName":"return","type":"boolean"}}},"http":{}},"GetConsoleOutput":{"input":{"type":"structure","required":["InstanceId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceId":{}}},"output":{"type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"Timestamp":{"locationName":"timestamp","type":"timestamp"},"Output":{"locationName":"output"}}},"http":{}},"GetPasswordData":{"input":{"type":"structure","required":["InstanceId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceId":{}}},"output":{"type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"Timestamp":{"locationName":"timestamp","type":"timestamp"},"PasswordData":{"locationName":"passwordData"}}},"http":{}},"ImportImage":{"input":{"type":"structure","members":{"DryRun":{"type":"boolean"},"Description":{},"DiskContainers":{"locationName":"DiskContainer","type":"list","member":{"locationName":"item","type":"structure","members":{"Description":{},"Format":{},"Url":{},"UserBucket":{"shape":"Sgp"},"DeviceName":{},"SnapshotId":{}}}},"LicenseType":{},"Hypervisor":{},"Architecture":{},"Platform":{},"ClientData":{"shape":"Sgq"},"ClientToken":{},"RoleName":{}}},"output":{"type":"structure","members":{"ImportTaskId":{"locationName":"importTaskId"},"Architecture":{"locationName":"architecture"},"LicenseType":{"locationName":"licenseType"},"Platform":{"locationName":"platform"},"Hypervisor":{"locationName":"hypervisor"},"Description":{"locationName":"description"},"SnapshotDetails":{"shape":"S9n","locationName":"snapshotDetailSet"},"ImageId":{"locationName":"imageId"},"Progress":{"locationName":"progress"},"StatusMessage":{"locationName":"statusMessage"},"Status":{"locationName":"status"}}},"http":{}},"ImportInstance":{"input":{"type":"structure","required":["Platform"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Description":{"locationName":"description"},"LaunchSpecification":{"locationName":"launchSpecification","type":"structure","members":{"Architecture":{"locationName":"architecture"},"GroupNames":{"shape":"Sgu","locationName":"GroupName"},"GroupIds":{"shape":"S46","locationName":"GroupId"},"AdditionalInfo":{"locationName":"additionalInfo"},"UserData":{"locationName":"userData","type":"structure","members":{"Data":{"locationName":"data"}}},"InstanceType":{"locationName":"instanceType"},"Placement":{"shape":"Sao","locationName":"placement"},"Monitoring":{"locationName":"monitoring","type":"boolean"},"SubnetId":{"locationName":"subnetId"},"InstanceInitiatedShutdownBehavior":{"locationName":"instanceInitiatedShutdownBehavior"},"PrivateIpAddress":{"locationName":"privateIpAddress"}}},"DiskImages":{"locationName":"diskImage","type":"list","member":{"type":"structure","members":{"Image":{"shape":"Sgz"},"Description":{},"Volume":{"shape":"Sh0"}}}},"Platform":{"locationName":"platform"}}},"output":{"type":"structure","members":{"ConversionTask":{"shape":"S85","locationName":"conversionTask"}}},"http":{}},"ImportKeyPair":{"input":{"type":"structure","required":["KeyName","PublicKeyMaterial"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"KeyName":{"locationName":"keyName"},"PublicKeyMaterial":{"locationName":"publicKeyMaterial","type":"blob"}}},"output":{"type":"structure","members":{"KeyName":{"locationName":"keyName"},"KeyFingerprint":{"locationName":"keyFingerprint"}}},"http":{}},"ImportSnapshot":{"input":{"type":"structure","members":{"DryRun":{"type":"boolean"},"Description":{},"DiskContainer":{"type":"structure","members":{"Description":{},"Format":{},"Url":{},"UserBucket":{"shape":"Sgp"}}},"ClientData":{"shape":"Sgq"},"ClientToken":{},"RoleName":{}}},"output":{"type":"structure","members":{"ImportTaskId":{"locationName":"importTaskId"},"SnapshotTaskDetail":{"shape":"S9u","locationName":"snapshotTaskDetail"},"Description":{"locationName":"description"}}},"http":{}},"ImportVolume":{"input":{"type":"structure","required":["AvailabilityZone","Image","Volume"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"AvailabilityZone":{"locationName":"availabilityZone"},"Image":{"shape":"Sgz","locationName":"image"},"Description":{"locationName":"description"},"Volume":{"shape":"Sh0","locationName":"volume"}}},"output":{"type":"structure","members":{"ConversionTask":{"shape":"S85","locationName":"conversionTask"}}},"http":{}},"ModifyImageAttribute":{"input":{"type":"structure","required":["ImageId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ImageId":{},"Attribute":{},"OperationType":{},"UserIds":{"shape":"Shb","locationName":"UserId"},"UserGroups":{"locationName":"UserGroup","type":"list","member":{"locationName":"UserGroup"}},"ProductCodes":{"locationName":"ProductCode","type":"list","member":{"locationName":"ProductCode"}},"Value":{},"LaunchPermission":{"type":"structure","members":{"Add":{"shape":"S8x"},"Remove":{"shape":"S8x"}}},"Description":{"shape":"S2z"}}},"http":{}},"ModifyInstanceAttribute":{"input":{"type":"structure","required":["InstanceId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceId":{"locationName":"instanceId"},"Attribute":{"locationName":"attribute"},"Value":{"locationName":"value"},"BlockDeviceMappings":{"locationName":"blockDeviceMapping","type":"list","member":{"locationName":"item","type":"structure","members":{"DeviceName":{"locationName":"deviceName"},"Ebs":{"locationName":"ebs","type":"structure","members":{"VolumeId":{"locationName":"volumeId"},"DeleteOnTermination":{"locationName":"deleteOnTermination","type":"boolean"}}},"VirtualName":{"locationName":"virtualName"},"NoDevice":{"locationName":"noDevice"}}}},"SourceDestCheck":{"shape":"S9y"},"DisableApiTermination":{"shape":"S9y","locationName":"disableApiTermination"},"InstanceType":{"shape":"S2z","locationName":"instanceType"},"Kernel":{"shape":"S2z","locationName":"kernel"},"Ramdisk":{"shape":"S2z","locationName":"ramdisk"},"UserData":{"locationName":"userData","type":"structure","members":{"Value":{"locationName":"value","type":"blob"}}},"InstanceInitiatedShutdownBehavior":{"shape":"S2z","locationName":"instanceInitiatedShutdownBehavior"},"Groups":{"shape":"So","locationName":"GroupId"},"EbsOptimized":{"shape":"S9y","locationName":"ebsOptimized"},"SriovNetSupport":{"shape":"S2z","locationName":"sriovNetSupport"}}},"http":{}},"ModifyNetworkInterfaceAttribute":{"input":{"type":"structure","required":["NetworkInterfaceId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"Description":{"shape":"S2z","locationName":"description"},"SourceDestCheck":{"shape":"S9y","locationName":"sourceDestCheck"},"Groups":{"shape":"S46","locationName":"SecurityGroupId"},"Attachment":{"locationName":"attachment","type":"structure","members":{"AttachmentId":{"locationName":"attachmentId"},"DeleteOnTermination":{"locationName":"deleteOnTermination","type":"boolean"}}}}},"http":{}},"ModifyReservedInstances":{"input":{"type":"structure","required":["ReservedInstancesIds","TargetConfigurations"],"members":{"ClientToken":{"locationName":"clientToken"},"ReservedInstancesIds":{"shape":"Sc2","locationName":"ReservedInstancesId"},"TargetConfigurations":{"locationName":"ReservedInstancesConfigurationSetItemType","type":"list","member":{"shape":"Sco","locationName":"item"}}}},"output":{"type":"structure","members":{"ReservedInstancesModificationId":{"locationName":"reservedInstancesModificationId"}}},"http":{}},"ModifySnapshotAttribute":{"input":{"type":"structure","required":["SnapshotId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SnapshotId":{},"Attribute":{},"OperationType":{},"UserIds":{"shape":"Shb","locationName":"UserId"},"GroupNames":{"shape":"Sd0","locationName":"UserGroup"},"CreateVolumePermission":{"type":"structure","members":{"Add":{"shape":"Sd7"},"Remove":{"shape":"Sd7"}}}}},"http":{}},"ModifySubnetAttribute":{"input":{"type":"structure","required":["SubnetId"],"members":{"SubnetId":{"locationName":"subnetId"},"MapPublicIpOnLaunch":{"shape":"S9y"}}},"http":{}},"ModifyVolumeAttribute":{"input":{"type":"structure","required":["VolumeId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VolumeId":{},"AutoEnableIO":{"shape":"S9y"}}},"http":{}},"ModifyVpcAttribute":{"input":{"type":"structure","required":["VpcId"],"members":{"VpcId":{"locationName":"vpcId"},"EnableDnsSupport":{"shape":"S9y"},"EnableDnsHostnames":{"shape":"S9y"}}},"http":{}},"ModifyVpcEndpoint":{"input":{"type":"structure","required":["VpcEndpointId"],"members":{"DryRun":{"type":"boolean"},"VpcEndpointId":{},"ResetPolicy":{"type":"boolean"},"PolicyDocument":{},"AddRouteTableIds":{"shape":"S22","locationName":"AddRouteTableId"},"RemoveRouteTableIds":{"shape":"S22","locationName":"RemoveRouteTableId"}}},"output":{"type":"structure","members":{"Return":{"locationName":"return","type":"boolean"}}},"http":{}},"MonitorInstances":{"input":{"type":"structure","required":["InstanceIds"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceIds":{"shape":"S7x","locationName":"InstanceId"}}},"output":{"type":"structure","members":{"InstanceMonitorings":{"shape":"Shy","locationName":"instancesSet"}}},"http":{}},"MoveAddressToVpc":{"input":{"type":"structure","required":["PublicIp"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"PublicIp":{"locationName":"publicIp"}}},"output":{"type":"structure","members":{"AllocationId":{"locationName":"allocationId"},"Status":{"locationName":"status"}}},"http":{}},"PurchaseReservedInstancesOffering":{"input":{"type":"structure","required":["ReservedInstancesOfferingId","InstanceCount"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ReservedInstancesOfferingId":{},"InstanceCount":{"type":"integer"},"LimitPrice":{"locationName":"limitPrice","type":"structure","members":{"Amount":{"locationName":"amount","type":"double"},"CurrencyCode":{"locationName":"currencyCode"}}}}},"output":{"type":"structure","members":{"ReservedInstancesId":{"locationName":"reservedInstancesId"}}},"http":{}},"RebootInstances":{"input":{"type":"structure","required":["InstanceIds"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceIds":{"shape":"S7x","locationName":"InstanceId"}}},"http":{}},"RegisterImage":{"input":{"type":"structure","required":["Name"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ImageLocation":{},"Name":{"locationName":"name"},"Description":{"locationName":"description"},"Architecture":{"locationName":"architecture"},"KernelId":{"locationName":"kernelId"},"RamdiskId":{"locationName":"ramdiskId"},"RootDeviceName":{"locationName":"rootDeviceName"},"BlockDeviceMappings":{"shape":"S38","locationName":"BlockDeviceMapping"},"VirtualizationType":{"locationName":"virtualizationType"},"SriovNetSupport":{"locationName":"sriovNetSupport"}}},"output":{"type":"structure","members":{"ImageId":{"locationName":"imageId"}}},"http":{}},"RejectVpcPeeringConnection":{"input":{"type":"structure","required":["VpcPeeringConnectionId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcPeeringConnectionId":{"locationName":"vpcPeeringConnectionId"}}},"output":{"type":"structure","members":{"Return":{"locationName":"return","type":"boolean"}}},"http":{}},"ReleaseAddress":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"PublicIp":{},"AllocationId":{}}},"http":{}},"ReplaceNetworkAclAssociation":{"input":{"type":"structure","required":["AssociationId","NetworkAclId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"AssociationId":{"locationName":"associationId"},"NetworkAclId":{"locationName":"networkAclId"}}},"output":{"type":"structure","members":{"NewAssociationId":{"locationName":"newAssociationId"}}},"http":{}},"ReplaceNetworkAclEntry":{"input":{"type":"structure","required":["NetworkAclId","RuleNumber","Protocol","RuleAction","Egress","CidrBlock"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"NetworkAclId":{"locationName":"networkAclId"},"RuleNumber":{"locationName":"ruleNumber","type":"integer"},"Protocol":{"locationName":"protocol"},"RuleAction":{"locationName":"ruleAction"},"Egress":{"locationName":"egress","type":"boolean"},"CidrBlock":{"locationName":"cidrBlock"},"IcmpTypeCode":{"shape":"S40","locationName":"Icmp"},"PortRange":{"shape":"S41","locationName":"portRange"}}},"http":{}},"ReplaceRoute":{"input":{"type":"structure","required":["RouteTableId","DestinationCidrBlock"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"RouteTableId":{"locationName":"routeTableId"},"DestinationCidrBlock":{"locationName":"destinationCidrBlock"},"GatewayId":{"locationName":"gatewayId"},"InstanceId":{"locationName":"instanceId"},"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"VpcPeeringConnectionId":{"locationName":"vpcPeeringConnectionId"}}},"http":{}},"ReplaceRouteTableAssociation":{"input":{"type":"structure","required":["AssociationId","RouteTableId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"AssociationId":{"locationName":"associationId"},"RouteTableId":{"locationName":"routeTableId"}}},"output":{"type":"structure","members":{"NewAssociationId":{"locationName":"newAssociationId"}}},"http":{}},"ReportInstanceStatus":{"input":{"type":"structure","required":["Instances","Status","ReasonCodes"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Instances":{"shape":"S7x","locationName":"instanceId"},"Status":{"locationName":"status"},"StartTime":{"locationName":"startTime","type":"timestamp"},"EndTime":{"locationName":"endTime","type":"timestamp"},"ReasonCodes":{"locationName":"reasonCode","type":"list","member":{"locationName":"item"}},"Description":{"locationName":"description"}}},"http":{}},"RequestSpotFleet":{"input":{"type":"structure","required":["SpotFleetRequestConfig"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SpotFleetRequestConfig":{"shape":"Sdu","locationName":"spotFleetRequestConfig"}}},"output":{"type":"structure","required":["SpotFleetRequestId"],"members":{"SpotFleetRequestId":{"locationName":"spotFleetRequestId"}}},"http":{}},"RequestSpotInstances":{"input":{"type":"structure","required":["SpotPrice"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SpotPrice":{"locationName":"spotPrice"},"ClientToken":{"locationName":"clientToken"},"InstanceCount":{"locationName":"instanceCount","type":"integer"},"Type":{"locationName":"type"},"ValidFrom":{"locationName":"validFrom","type":"timestamp"},"ValidUntil":{"locationName":"validUntil","type":"timestamp"},"LaunchGroup":{"locationName":"launchGroup"},"AvailabilityZoneGroup":{"locationName":"availabilityZoneGroup"},"LaunchSpecification":{"type":"structure","members":{"ImageId":{"locationName":"imageId"},"KeyName":{"locationName":"keyName"},"SecurityGroups":{"shape":"S22","locationName":"SecurityGroup"},"UserData":{"locationName":"userData"},"AddressingType":{"locationName":"addressingType"},"InstanceType":{"locationName":"instanceType"},"Placement":{"shape":"Sdx","locationName":"placement"},"KernelId":{"locationName":"kernelId"},"RamdiskId":{"locationName":"ramdiskId"},"BlockDeviceMappings":{"shape":"S93","locationName":"blockDeviceMapping"},"SubnetId":{"locationName":"subnetId"},"NetworkInterfaces":{"shape":"Sdz","locationName":"NetworkInterface"},"IamInstanceProfile":{"shape":"Se1","locationName":"iamInstanceProfile"},"EbsOptimized":{"locationName":"ebsOptimized","type":"boolean"},"Monitoring":{"shape":"Seb","locationName":"monitoring"},"SecurityGroupIds":{"shape":"S22","locationName":"SecurityGroupId"}}}}},"output":{"type":"structure","members":{"SpotInstanceRequests":{"shape":"Se5","locationName":"spotInstanceRequestSet"}}},"http":{}},"ResetImageAttribute":{"input":{"type":"structure","required":["ImageId","Attribute"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ImageId":{},"Attribute":{}}},"http":{}},"ResetInstanceAttribute":{"input":{"type":"structure","required":["InstanceId","Attribute"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceId":{"locationName":"instanceId"},"Attribute":{"locationName":"attribute"}}},"http":{}},"ResetNetworkInterfaceAttribute":{"input":{"type":"structure","required":["NetworkInterfaceId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"SourceDestCheck":{"locationName":"sourceDestCheck"}}},"http":{}},"ResetSnapshotAttribute":{"input":{"type":"structure","required":["SnapshotId","Attribute"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SnapshotId":{},"Attribute":{}}},"http":{}},"RestoreAddressToClassic":{"input":{"type":"structure","required":["PublicIp"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"PublicIp":{"locationName":"publicIp"}}},"output":{"type":"structure","members":{"Status":{"locationName":"status"},"PublicIp":{"locationName":"publicIp"}}},"http":{}},"RevokeSecurityGroupEgress":{"input":{"type":"structure","required":["GroupId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"GroupId":{"locationName":"groupId"},"SourceSecurityGroupName":{"locationName":"sourceSecurityGroupName"},"SourceSecurityGroupOwnerId":{"locationName":"sourceSecurityGroupOwnerId"},"IpProtocol":{"locationName":"ipProtocol"},"FromPort":{"locationName":"fromPort","type":"integer"},"ToPort":{"locationName":"toPort","type":"integer"},"CidrIp":{"locationName":"cidrIp"},"IpPermissions":{"shape":"S11","locationName":"ipPermissions"}}},"http":{}},"RevokeSecurityGroupIngress":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"GroupName":{},"GroupId":{},"SourceSecurityGroupName":{},"SourceSecurityGroupOwnerId":{},"IpProtocol":{},"FromPort":{"type":"integer"},"ToPort":{"type":"integer"},"CidrIp":{},"IpPermissions":{"shape":"S11"}}},"http":{}},"RunInstances":{"input":{"type":"structure","required":["ImageId","MinCount","MaxCount"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ImageId":{},"MinCount":{"type":"integer"},"MaxCount":{"type":"integer"},"KeyName":{},"SecurityGroups":{"shape":"Sgu","locationName":"SecurityGroup"},"SecurityGroupIds":{"shape":"S46","locationName":"SecurityGroupId"},"UserData":{},"InstanceType":{},"Placement":{"shape":"Sao"},"KernelId":{},"RamdiskId":{},"BlockDeviceMappings":{"shape":"S38","locationName":"BlockDeviceMapping"},"Monitoring":{"shape":"Seb"},"SubnetId":{},"DisableApiTermination":{"locationName":"disableApiTermination","type":"boolean"},"InstanceInitiatedShutdownBehavior":{"locationName":"instanceInitiatedShutdownBehavior"},"PrivateIpAddress":{"locationName":"privateIpAddress"},"ClientToken":{"locationName":"clientToken"},"AdditionalInfo":{"locationName":"additionalInfo"},"NetworkInterfaces":{"shape":"Sdz","locationName":"networkInterface"},"IamInstanceProfile":{"shape":"Se1","locationName":"iamInstanceProfile"},"EbsOptimized":{"locationName":"ebsOptimized","type":"boolean"}}},"output":{"shape":"Sak","locationName":"reservation"},"http":{}},"StartInstances":{"input":{"type":"structure","required":["InstanceIds"],"members":{"InstanceIds":{"shape":"S7x","locationName":"InstanceId"},"AdditionalInfo":{"locationName":"additionalInfo"},"DryRun":{"locationName":"dryRun","type":"boolean"}}},"output":{"type":"structure","members":{"StartingInstances":{"shape":"Sj3","locationName":"instancesSet"}}},"http":{}},"StopInstances":{"input":{"type":"structure","required":["InstanceIds"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceIds":{"shape":"S7x","locationName":"InstanceId"},"Force":{"locationName":"force","type":"boolean"}}},"output":{"type":"structure","members":{"StoppingInstances":{"shape":"Sj3","locationName":"instancesSet"}}},"http":{}},"TerminateInstances":{"input":{"type":"structure","required":["InstanceIds"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceIds":{"shape":"S7x","locationName":"InstanceId"}}},"output":{"type":"structure","members":{"TerminatingInstances":{"shape":"Sj3","locationName":"instancesSet"}}},"http":{}},"UnassignPrivateIpAddresses":{"input":{"type":"structure","required":["NetworkInterfaceId","PrivateIpAddresses"],"members":{"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"PrivateIpAddresses":{"shape":"Sg","locationName":"privateIpAddress"}}},"http":{}},"UnmonitorInstances":{"input":{"type":"structure","required":["InstanceIds"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceIds":{"shape":"S7x","locationName":"InstanceId"}}},"output":{"type":"structure","members":{"InstanceMonitorings":{"shape":"Shy","locationName":"instancesSet"}}},"http":{}}},"shapes":{"S5":{"type":"structure","members":{"AccepterVpcInfo":{"shape":"S6","locationName":"accepterVpcInfo"},"ExpirationTime":{"locationName":"expirationTime","type":"timestamp"},"RequesterVpcInfo":{"shape":"S6","locationName":"requesterVpcInfo"},"Status":{"locationName":"status","type":"structure","members":{"Code":{"locationName":"code"},"Message":{"locationName":"message"}}},"Tags":{"shape":"Sa","locationName":"tagSet"},"VpcPeeringConnectionId":{"locationName":"vpcPeeringConnectionId"}}},"S6":{"type":"structure","members":{"CidrBlock":{"locationName":"cidrBlock"},"OwnerId":{"locationName":"ownerId"},"VpcId":{"locationName":"vpcId"}}},"Sa":{"type":"list","member":{"locationName":"item","type":"structure","members":{"Key":{"locationName":"key"},"Value":{"locationName":"value"}}}},"Sg":{"type":"list","member":{"locationName":"PrivateIpAddress"}},"So":{"type":"list","member":{"locationName":"groupId"}},"Su":{"type":"structure","members":{"VolumeId":{"locationName":"volumeId"},"InstanceId":{"locationName":"instanceId"},"Device":{"locationName":"device"},"State":{"locationName":"status"},"AttachTime":{"locationName":"attachTime","type":"timestamp"},"DeleteOnTermination":{"locationName":"deleteOnTermination","type":"boolean"}}},"Sy":{"type":"structure","members":{"VpcId":{"locationName":"vpcId"},"State":{"locationName":"state"}}},"S11":{"type":"list","member":{"locationName":"item","type":"structure","members":{"IpProtocol":{"locationName":"ipProtocol"},"FromPort":{"locationName":"fromPort","type":"integer"},"ToPort":{"locationName":"toPort","type":"integer"},"UserIdGroupPairs":{"locationName":"groups","type":"list","member":{"locationName":"item","type":"structure","members":{"UserId":{"locationName":"userId"},"GroupName":{"locationName":"groupName"},"GroupId":{"locationName":"groupId"}}}},"IpRanges":{"locationName":"ipRanges","type":"list","member":{"locationName":"item","type":"structure","members":{"CidrIp":{"locationName":"cidrIp"}}}},"PrefixListIds":{"locationName":"prefixListIds","type":"list","member":{"locationName":"item","type":"structure","members":{"PrefixListId":{"locationName":"prefixListId"}}}}}}},"S1b":{"type":"structure","members":{"S3":{"type":"structure","members":{"Bucket":{"locationName":"bucket"},"Prefix":{"locationName":"prefix"},"AWSAccessKeyId":{},"UploadPolicy":{"locationName":"uploadPolicy","type":"blob"},"UploadPolicySignature":{"locationName":"uploadPolicySignature"}}}}},"S1f":{"type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"BundleId":{"locationName":"bundleId"},"State":{"locationName":"state"},"StartTime":{"locationName":"startTime","type":"timestamp"},"UpdateTime":{"locationName":"updateTime","type":"timestamp"},"Storage":{"shape":"S1b","locationName":"storage"},"Progress":{"locationName":"progress"},"BundleTaskError":{"locationName":"error","type":"structure","members":{"Code":{"locationName":"code"},"Message":{"locationName":"message"}}}}},"S1q":{"type":"list","member":{"locationName":"item","type":"structure","members":{"ReservedInstancesListingId":{"locationName":"reservedInstancesListingId"},"ReservedInstancesId":{"locationName":"reservedInstancesId"},"CreateDate":{"locationName":"createDate","type":"timestamp"},"UpdateDate":{"locationName":"updateDate","type":"timestamp"},"Status":{"locationName":"status"},"StatusMessage":{"locationName":"statusMessage"},"InstanceCounts":{"locationName":"instanceCounts","type":"list","member":{"locationName":"item","type":"structure","members":{"State":{"locationName":"state"},"InstanceCount":{"locationName":"instanceCount","type":"integer"}}}},"PriceSchedules":{"locationName":"priceSchedules","type":"list","member":{"locationName":"item","type":"structure","members":{"Term":{"locationName":"term","type":"long"},"Price":{"locationName":"price","type":"double"},"CurrencyCode":{"locationName":"currencyCode"},"Active":{"locationName":"active","type":"boolean"}}}},"Tags":{"shape":"Sa","locationName":"tagSet"},"ClientToken":{"locationName":"clientToken"}}}},"S22":{"type":"list","member":{"locationName":"item"}},"S2c":{"type":"list","member":{"locationName":"SpotInstanceRequestId"}},"S2q":{"type":"structure","members":{"CustomerGatewayId":{"locationName":"customerGatewayId"},"State":{"locationName":"state"},"Type":{"locationName":"type"},"IpAddress":{"locationName":"ipAddress"},"BgpAsn":{"locationName":"bgpAsn"},"Tags":{"shape":"Sa","locationName":"tagSet"}}},"S2v":{"type":"structure","members":{"DhcpOptionsId":{"locationName":"dhcpOptionsId"},"DhcpConfigurations":{"locationName":"dhcpConfigurationSet","type":"list","member":{"locationName":"item","type":"structure","members":{"Key":{"locationName":"key"},"Values":{"locationName":"valueSet","type":"list","member":{"shape":"S2z","locationName":"item"}}}}},"Tags":{"shape":"Sa","locationName":"tagSet"}}},"S2z":{"type":"structure","members":{"Value":{"locationName":"value"}}},"S34":{"type":"list","member":{"locationName":"item","type":"structure","required":["Error"],"members":{"ResourceId":{"locationName":"resourceId"},"Error":{"locationName":"error","type":"structure","required":["Code","Message"],"members":{"Code":{"locationName":"code"},"Message":{"locationName":"message"}}}}}},"S38":{"type":"list","member":{"shape":"S39","locationName":"BlockDeviceMapping"}},"S39":{"type":"structure","members":{"VirtualName":{"locationName":"virtualName"},"DeviceName":{"locationName":"deviceName"},"Ebs":{"locationName":"ebs","type":"structure","members":{"SnapshotId":{"locationName":"snapshotId"},"VolumeSize":{"locationName":"volumeSize","type":"integer"},"DeleteOnTermination":{"locationName":"deleteOnTermination","type":"boolean"},"VolumeType":{"locationName":"volumeType"},"Iops":{"locationName":"iops","type":"integer"},"Encrypted":{"locationName":"encrypted","type":"boolean"}}},"NoDevice":{"locationName":"noDevice"}}},"S3j":{"type":"structure","members":{"ExportTaskId":{"locationName":"exportTaskId"},"Description":{"locationName":"description"},"State":{"locationName":"state"},"StatusMessage":{"locationName":"statusMessage"},"InstanceExportDetails":{"locationName":"instanceExport","type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"TargetEnvironment":{"locationName":"targetEnvironment"}}},"ExportToS3Task":{"locationName":"exportToS3","type":"structure","members":{"DiskImageFormat":{"locationName":"diskImageFormat"},"ContainerFormat":{"locationName":"containerFormat"},"S3Bucket":{"locationName":"s3Bucket"},"S3Key":{"locationName":"s3Key"}}}}},"S3p":{"type":"structure","members":{"InternetGatewayId":{"locationName":"internetGatewayId"},"Attachments":{"locationName":"attachmentSet","type":"list","member":{"locationName":"item","type":"structure","members":{"VpcId":{"locationName":"vpcId"},"State":{"locationName":"state"}}}},"Tags":{"shape":"Sa","locationName":"tagSet"}}},"S3w":{"type":"structure","members":{"NetworkAclId":{"locationName":"networkAclId"},"VpcId":{"locationName":"vpcId"},"IsDefault":{"locationName":"default","type":"boolean"},"Entries":{"locationName":"entrySet","type":"list","member":{"locationName":"item","type":"structure","members":{"RuleNumber":{"locationName":"ruleNumber","type":"integer"},"Protocol":{"locationName":"protocol"},"RuleAction":{"locationName":"ruleAction"},"Egress":{"locationName":"egress","type":"boolean"},"CidrBlock":{"locationName":"cidrBlock"},"IcmpTypeCode":{"shape":"S40","locationName":"icmpTypeCode"},"PortRange":{"shape":"S41","locationName":"portRange"}}}},"Associations":{"locationName":"associationSet","type":"list","member":{"locationName":"item","type":"structure","members":{"NetworkAclAssociationId":{"locationName":"networkAclAssociationId"},"NetworkAclId":{"locationName":"networkAclId"},"SubnetId":{"locationName":"subnetId"}}}},"Tags":{"shape":"Sa","locationName":"tagSet"}}},"S40":{"type":"structure","members":{"Type":{"locationName":"type","type":"integer"},"Code":{"locationName":"code","type":"integer"}}},"S41":{"type":"structure","members":{"From":{"locationName":"from","type":"integer"},"To":{"locationName":"to","type":"integer"}}},"S46":{"type":"list","member":{"locationName":"SecurityGroupId"}},"S47":{"type":"list","member":{"locationName":"item","type":"structure","required":["PrivateIpAddress"],"members":{"PrivateIpAddress":{"locationName":"privateIpAddress"},"Primary":{"locationName":"primary","type":"boolean"}}}},"S4a":{"type":"structure","members":{"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"SubnetId":{"locationName":"subnetId"},"VpcId":{"locationName":"vpcId"},"AvailabilityZone":{"locationName":"availabilityZone"},"Description":{"locationName":"description"},"OwnerId":{"locationName":"ownerId"},"RequesterId":{"locationName":"requesterId"},"RequesterManaged":{"locationName":"requesterManaged","type":"boolean"},"Status":{"locationName":"status"},"MacAddress":{"locationName":"macAddress"},"PrivateIpAddress":{"locationName":"privateIpAddress"},"PrivateDnsName":{"locationName":"privateDnsName"},"SourceDestCheck":{"locationName":"sourceDestCheck","type":"boolean"},"Groups":{"shape":"S4c","locationName":"groupSet"},"Attachment":{"shape":"S4e","locationName":"attachment"},"Association":{"shape":"S4f","locationName":"association"},"TagSet":{"shape":"Sa","locationName":"tagSet"},"PrivateIpAddresses":{"locationName":"privateIpAddressesSet","type":"list","member":{"locationName":"item","type":"structure","members":{"PrivateIpAddress":{"locationName":"privateIpAddress"},"PrivateDnsName":{"locationName":"privateDnsName"},"Primary":{"locationName":"primary","type":"boolean"},"Association":{"shape":"S4f","locationName":"association"}}}}}},"S4c":{"type":"list","member":{"locationName":"item","type":"structure","members":{"GroupName":{"locationName":"groupName"},"GroupId":{"locationName":"groupId"}}}},"S4e":{"type":"structure","members":{"AttachmentId":{"locationName":"attachmentId"},"InstanceId":{"locationName":"instanceId"},"InstanceOwnerId":{"locationName":"instanceOwnerId"},"DeviceIndex":{"locationName":"deviceIndex","type":"integer"},"Status":{"locationName":"status"},"AttachTime":{"locationName":"attachTime","type":"timestamp"},"DeleteOnTermination":{"locationName":"deleteOnTermination","type":"boolean"}}},"S4f":{"type":"structure","members":{"PublicIp":{"locationName":"publicIp"},"PublicDnsName":{"locationName":"publicDnsName"},"IpOwnerId":{"locationName":"ipOwnerId"},"AllocationId":{"locationName":"allocationId"},"AssociationId":{"locationName":"associationId"}}},"S4s":{"type":"structure","members":{"RouteTableId":{"locationName":"routeTableId"},"VpcId":{"locationName":"vpcId"},"Routes":{"locationName":"routeSet","type":"list","member":{"locationName":"item","type":"structure","members":{"DestinationCidrBlock":{"locationName":"destinationCidrBlock"},"DestinationPrefixListId":{"locationName":"destinationPrefixListId"},"GatewayId":{"locationName":"gatewayId"},"InstanceId":{"locationName":"instanceId"},"InstanceOwnerId":{"locationName":"instanceOwnerId"},"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"VpcPeeringConnectionId":{"locationName":"vpcPeeringConnectionId"},"State":{"locationName":"state"},"Origin":{"locationName":"origin"}}}},"Associations":{"locationName":"associationSet","type":"list","member":{"locationName":"item","type":"structure","members":{"RouteTableAssociationId":{"locationName":"routeTableAssociationId"},"RouteTableId":{"locationName":"routeTableId"},"SubnetId":{"locationName":"subnetId"},"Main":{"locationName":"main","type":"boolean"}}}},"Tags":{"shape":"Sa","locationName":"tagSet"},"PropagatingVgws":{"locationName":"propagatingVgwSet","type":"list","member":{"locationName":"item","type":"structure","members":{"GatewayId":{"locationName":"gatewayId"}}}}}},"S54":{"type":"structure","members":{"SnapshotId":{"locationName":"snapshotId"},"VolumeId":{"locationName":"volumeId"},"State":{"locationName":"status"},"StateMessage":{"locationName":"statusMessage"},"StartTime":{"locationName":"startTime","type":"timestamp"},"Progress":{"locationName":"progress"},"OwnerId":{"locationName":"ownerId"},"Description":{"locationName":"description"},"VolumeSize":{"locationName":"volumeSize","type":"integer"},"OwnerAlias":{"locationName":"ownerAlias"},"Tags":{"shape":"Sa","locationName":"tagSet"},"Encrypted":{"locationName":"encrypted","type":"boolean"},"KmsKeyId":{"locationName":"kmsKeyId"},"DataEncryptionKeyId":{"locationName":"dataEncryptionKeyId"}}},"S58":{"type":"structure","members":{"OwnerId":{"locationName":"ownerId"},"Bucket":{"locationName":"bucket"},"Prefix":{"locationName":"prefix"},"State":{"locationName":"state"},"Fault":{"shape":"S5a","locationName":"fault"}}},"S5a":{"type":"structure","members":{"Code":{"locationName":"code"},"Message":{"locationName":"message"}}},"S5d":{"type":"structure","members":{"SubnetId":{"locationName":"subnetId"},"State":{"locationName":"state"},"VpcId":{"locationName":"vpcId"},"CidrBlock":{"locationName":"cidrBlock"},"AvailableIpAddressCount":{"locationName":"availableIpAddressCount","type":"integer"},"AvailabilityZone":{"locationName":"availabilityZone"},"DefaultForAz":{"locationName":"defaultForAz","type":"boolean"},"MapPublicIpOnLaunch":{"locationName":"mapPublicIpOnLaunch","type":"boolean"},"Tags":{"shape":"Sa","locationName":"tagSet"}}},"S5g":{"type":"list","member":{}},"S5i":{"type":"structure","members":{"VolumeId":{"locationName":"volumeId"},"Size":{"locationName":"size","type":"integer"},"SnapshotId":{"locationName":"snapshotId"},"AvailabilityZone":{"locationName":"availabilityZone"},"State":{"locationName":"status"},"CreateTime":{"locationName":"createTime","type":"timestamp"},"Attachments":{"locationName":"attachmentSet","type":"list","member":{"shape":"Su","locationName":"item"}},"Tags":{"shape":"Sa","locationName":"tagSet"},"VolumeType":{"locationName":"volumeType"},"Iops":{"locationName":"iops","type":"integer"},"Encrypted":{"locationName":"encrypted","type":"boolean"},"KmsKeyId":{"locationName":"kmsKeyId"}}},"S5o":{"type":"structure","members":{"VpcId":{"locationName":"vpcId"},"State":{"locationName":"state"},"CidrBlock":{"locationName":"cidrBlock"},"DhcpOptionsId":{"locationName":"dhcpOptionsId"},"Tags":{"shape":"Sa","locationName":"tagSet"},"InstanceTenancy":{"locationName":"instanceTenancy"},"IsDefault":{"locationName":"isDefault","type":"boolean"}}},"S5s":{"type":"structure","members":{"VpcEndpointId":{"locationName":"vpcEndpointId"},"VpcId":{"locationName":"vpcId"},"ServiceName":{"locationName":"serviceName"},"State":{"locationName":"state"},"PolicyDocument":{"locationName":"policyDocument"},"RouteTableIds":{"shape":"S22","locationName":"routeTableIdSet"},"CreationTimestamp":{"locationName":"creationTimestamp","type":"timestamp"}}},"S5z":{"type":"structure","members":{"VpnConnectionId":{"locationName":"vpnConnectionId"},"State":{"locationName":"state"},"CustomerGatewayConfiguration":{"locationName":"customerGatewayConfiguration"},"Type":{"locationName":"type"},"CustomerGatewayId":{"locationName":"customerGatewayId"},"VpnGatewayId":{"locationName":"vpnGatewayId"},"Tags":{"shape":"Sa","locationName":"tagSet"},"VgwTelemetry":{"locationName":"vgwTelemetry","type":"list","member":{"locationName":"item","type":"structure","members":{"OutsideIpAddress":{"locationName":"outsideIpAddress"},"Status":{"locationName":"status"},"LastStatusChange":{"locationName":"lastStatusChange","type":"timestamp"},"StatusMessage":{"locationName":"statusMessage"},"AcceptedRouteCount":{"locationName":"acceptedRouteCount","type":"integer"}}}},"Options":{"locationName":"options","type":"structure","members":{"StaticRoutesOnly":{"locationName":"staticRoutesOnly","type":"boolean"}}},"Routes":{"locationName":"routes","type":"list","member":{"locationName":"item","type":"structure","members":{"DestinationCidrBlock":{"locationName":"destinationCidrBlock"},"Source":{"locationName":"source"},"State":{"locationName":"state"}}}}}},"S6b":{"type":"structure","members":{"VpnGatewayId":{"locationName":"vpnGatewayId"},"State":{"locationName":"state"},"Type":{"locationName":"type"},"AvailabilityZone":{"locationName":"availabilityZone"},"VpcAttachments":{"locationName":"attachments","type":"list","member":{"shape":"Sy","locationName":"item"}},"Tags":{"shape":"Sa","locationName":"tagSet"}}},"S7e":{"type":"list","member":{"locationName":"Filter","type":"structure","members":{"Name":{},"Values":{"shape":"S22","locationName":"Value"}}}},"S7x":{"type":"list","member":{"locationName":"InstanceId"}},"S85":{"type":"structure","required":["ConversionTaskId","State"],"members":{"ConversionTaskId":{"locationName":"conversionTaskId"},"ExpirationTime":{"locationName":"expirationTime"},"ImportInstance":{"locationName":"importInstance","type":"structure","required":["Volumes"],"members":{"Volumes":{"locationName":"volumes","type":"list","member":{"locationName":"item","type":"structure","required":["BytesConverted","AvailabilityZone","Image","Volume","Status"],"members":{"BytesConverted":{"locationName":"bytesConverted","type":"long"},"AvailabilityZone":{"locationName":"availabilityZone"},"Image":{"shape":"S89","locationName":"image"},"Volume":{"shape":"S8a","locationName":"volume"},"Status":{"locationName":"status"},"StatusMessage":{"locationName":"statusMessage"},"Description":{"locationName":"description"}}}},"InstanceId":{"locationName":"instanceId"},"Platform":{"locationName":"platform"},"Description":{"locationName":"description"}}},"ImportVolume":{"locationName":"importVolume","type":"structure","required":["BytesConverted","AvailabilityZone","Image","Volume"],"members":{"BytesConverted":{"locationName":"bytesConverted","type":"long"},"AvailabilityZone":{"locationName":"availabilityZone"},"Description":{"locationName":"description"},"Image":{"shape":"S89","locationName":"image"},"Volume":{"shape":"S8a","locationName":"volume"}}},"State":{"locationName":"state"},"StatusMessage":{"locationName":"statusMessage"},"Tags":{"shape":"Sa","locationName":"tagSet"}}},"S89":{"type":"structure","required":["Format","Size","ImportManifestUrl"],"members":{"Format":{"locationName":"format"},"Size":{"locationName":"size","type":"long"},"ImportManifestUrl":{"locationName":"importManifestUrl"},"Checksum":{"locationName":"checksum"}}},"S8a":{"type":"structure","required":["Id"],"members":{"Size":{"locationName":"size","type":"long"},"Id":{"locationName":"id"}}},"S8x":{"type":"list","member":{"locationName":"item","type":"structure","members":{"UserId":{"locationName":"userId"},"Group":{"locationName":"group"}}}},"S90":{"type":"list","member":{"locationName":"item","type":"structure","members":{"ProductCodeId":{"locationName":"productCode"},"ProductCodeType":{"locationName":"type"}}}},"S93":{"type":"list","member":{"shape":"S39","locationName":"item"}},"S96":{"type":"list","member":{"locationName":"Owner"}},"S9e":{"type":"structure","members":{"Code":{"locationName":"code"},"Message":{"locationName":"message"}}},"S9j":{"type":"list","member":{"locationName":"ImportTaskId"}},"S9n":{"type":"list","member":{"locationName":"item","type":"structure","members":{"DiskImageSize":{"locationName":"diskImageSize","type":"double"},"Description":{"locationName":"description"},"Format":{"locationName":"format"},"Url":{"locationName":"url"},"UserBucket":{"shape":"S9p","locationName":"userBucket"},"DeviceName":{"locationName":"deviceName"},"SnapshotId":{"locationName":"snapshotId"},"Progress":{"locationName":"progress"},"StatusMessage":{"locationName":"statusMessage"},"Status":{"locationName":"status"}}}},"S9p":{"type":"structure","members":{"S3Bucket":{"locationName":"s3Bucket"},"S3Key":{"locationName":"s3Key"}}},"S9u":{"type":"structure","members":{"DiskImageSize":{"locationName":"diskImageSize","type":"double"},"Description":{"locationName":"description"},"Format":{"locationName":"format"},"Url":{"locationName":"url"},"UserBucket":{"shape":"S9p","locationName":"userBucket"},"SnapshotId":{"locationName":"snapshotId"},"Progress":{"locationName":"progress"},"StatusMessage":{"locationName":"statusMessage"},"Status":{"locationName":"status"}}},"S9y":{"type":"structure","members":{"Value":{"locationName":"value","type":"boolean"}}},"S9z":{"type":"list","member":{"locationName":"item","type":"structure","members":{"DeviceName":{"locationName":"deviceName"},"Ebs":{"locationName":"ebs","type":"structure","members":{"VolumeId":{"locationName":"volumeId"},"Status":{"locationName":"status"},"AttachTime":{"locationName":"attachTime","type":"timestamp"},"DeleteOnTermination":{"locationName":"deleteOnTermination","type":"boolean"}}}}}},"Sa9":{"type":"structure","members":{"Code":{"locationName":"code","type":"integer"},"Name":{"locationName":"name"}}},"Sab":{"type":"structure","members":{"Status":{"locationName":"status"},"Details":{"locationName":"details","type":"list","member":{"locationName":"item","type":"structure","members":{"Name":{"locationName":"name"},"Status":{"locationName":"status"},"ImpairedSince":{"locationName":"impairedSince","type":"timestamp"}}}}}},"Sak":{"type":"structure","members":{"ReservationId":{"locationName":"reservationId"},"OwnerId":{"locationName":"ownerId"},"RequesterId":{"locationName":"requesterId"},"Groups":{"shape":"S4c","locationName":"groupSet"},"Instances":{"locationName":"instancesSet","type":"list","member":{"locationName":"item","type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"ImageId":{"locationName":"imageId"},"State":{"shape":"Sa9","locationName":"instanceState"},"PrivateDnsName":{"locationName":"privateDnsName"},"PublicDnsName":{"locationName":"dnsName"},"StateTransitionReason":{"locationName":"reason"},"KeyName":{"locationName":"keyName"},"AmiLaunchIndex":{"locationName":"amiLaunchIndex","type":"integer"},"ProductCodes":{"shape":"S90","locationName":"productCodes"},"InstanceType":{"locationName":"instanceType"},"LaunchTime":{"locationName":"launchTime","type":"timestamp"},"Placement":{"shape":"Sao","locationName":"placement"},"KernelId":{"locationName":"kernelId"},"RamdiskId":{"locationName":"ramdiskId"},"Platform":{"locationName":"platform"},"Monitoring":{"shape":"Sap","locationName":"monitoring"},"SubnetId":{"locationName":"subnetId"},"VpcId":{"locationName":"vpcId"},"PrivateIpAddress":{"locationName":"privateIpAddress"},"PublicIpAddress":{"locationName":"ipAddress"},"StateReason":{"shape":"S9e","locationName":"stateReason"},"Architecture":{"locationName":"architecture"},"RootDeviceType":{"locationName":"rootDeviceType"},"RootDeviceName":{"locationName":"rootDeviceName"},"BlockDeviceMappings":{"shape":"S9z","locationName":"blockDeviceMapping"},"VirtualizationType":{"locationName":"virtualizationType"},"InstanceLifecycle":{"locationName":"instanceLifecycle"},"SpotInstanceRequestId":{"locationName":"spotInstanceRequestId"},"ClientToken":{"locationName":"clientToken"},"Tags":{"shape":"Sa","locationName":"tagSet"},"SecurityGroups":{"shape":"S4c","locationName":"groupSet"},"SourceDestCheck":{"locationName":"sourceDestCheck","type":"boolean"},"Hypervisor":{"locationName":"hypervisor"},"NetworkInterfaces":{"locationName":"networkInterfaceSet","type":"list","member":{"locationName":"item","type":"structure","members":{"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"SubnetId":{"locationName":"subnetId"},"VpcId":{"locationName":"vpcId"},"Description":{"locationName":"description"},"OwnerId":{"locationName":"ownerId"},"Status":{"locationName":"status"},"MacAddress":{"locationName":"macAddress"},"PrivateIpAddress":{"locationName":"privateIpAddress"},"PrivateDnsName":{"locationName":"privateDnsName"},"SourceDestCheck":{"locationName":"sourceDestCheck","type":"boolean"},"Groups":{"shape":"S4c","locationName":"groupSet"},"Attachment":{"locationName":"attachment","type":"structure","members":{"AttachmentId":{"locationName":"attachmentId"},"DeviceIndex":{"locationName":"deviceIndex","type":"integer"},"Status":{"locationName":"status"},"AttachTime":{"locationName":"attachTime","type":"timestamp"},"DeleteOnTermination":{"locationName":"deleteOnTermination","type":"boolean"}}},"Association":{"shape":"Sav","locationName":"association"},"PrivateIpAddresses":{"locationName":"privateIpAddressesSet","type":"list","member":{"locationName":"item","type":"structure","members":{"PrivateIpAddress":{"locationName":"privateIpAddress"},"PrivateDnsName":{"locationName":"privateDnsName"},"Primary":{"locationName":"primary","type":"boolean"},"Association":{"shape":"Sav","locationName":"association"}}}}}}},"IamInstanceProfile":{"locationName":"iamInstanceProfile","type":"structure","members":{"Arn":{"locationName":"arn"},"Id":{"locationName":"id"}}},"EbsOptimized":{"locationName":"ebsOptimized","type":"boolean"},"SriovNetSupport":{"locationName":"sriovNetSupport"}}}}}},"Sao":{"type":"structure","members":{"AvailabilityZone":{"locationName":"availabilityZone"},"GroupName":{"locationName":"groupName"},"Tenancy":{"locationName":"tenancy"}}},"Sap":{"type":"structure","members":{"State":{"locationName":"state"}}},"Sav":{"type":"structure","members":{"PublicIp":{"locationName":"publicIp"},"PublicDnsName":{"locationName":"publicDnsName"},"IpOwnerId":{"locationName":"ipOwnerId"}}},"Sc2":{"type":"list","member":{"locationName":"ReservedInstancesId"}},"Sca":{"type":"list","member":{"locationName":"item","type":"structure","members":{"Frequency":{"locationName":"frequency"},"Amount":{"locationName":"amount","type":"double"}}}},"Sco":{"type":"structure","members":{"AvailabilityZone":{"locationName":"availabilityZone"},"Platform":{"locationName":"platform"},"InstanceCount":{"locationName":"instanceCount","type":"integer"},"InstanceType":{"locationName":"instanceType"}}},"Sd0":{"type":"list","member":{"locationName":"GroupName"}},"Sd7":{"type":"list","member":{"locationName":"item","type":"structure","members":{"UserId":{"locationName":"userId"},"Group":{"locationName":"group"}}}},"Sdu":{"type":"structure","required":["SpotPrice","TargetCapacity","IamFleetRole","LaunchSpecifications"],"members":{"ClientToken":{"locationName":"clientToken"},"SpotPrice":{"locationName":"spotPrice"},"TargetCapacity":{"locationName":"targetCapacity","type":"integer"},"ValidFrom":{"locationName":"validFrom","type":"timestamp"},"ValidUntil":{"locationName":"validUntil","type":"timestamp"},"TerminateInstancesWithExpiration":{"locationName":"terminateInstancesWithExpiration","type":"boolean"},"IamFleetRole":{"locationName":"iamFleetRole"},"LaunchSpecifications":{"locationName":"launchSpecifications","type":"list","member":{"locationName":"item","type":"structure","members":{"ImageId":{"locationName":"imageId"},"KeyName":{"locationName":"keyName"},"SecurityGroups":{"shape":"S4c","locationName":"groupSet"},"UserData":{"locationName":"userData"},"AddressingType":{"locationName":"addressingType"},"InstanceType":{"locationName":"instanceType"},"Placement":{"shape":"Sdx","locationName":"placement"},"KernelId":{"locationName":"kernelId"},"RamdiskId":{"locationName":"ramdiskId"},"BlockDeviceMappings":{"shape":"S93","locationName":"blockDeviceMapping"},"Monitoring":{"locationName":"monitoring","type":"structure","members":{"Enabled":{"locationName":"enabled","type":"boolean"}}},"SubnetId":{"locationName":"subnetId"},"NetworkInterfaces":{"shape":"Sdz","locationName":"networkInterfaceSet"},"IamInstanceProfile":{"shape":"Se1","locationName":"iamInstanceProfile"},"EbsOptimized":{"locationName":"ebsOptimized","type":"boolean"},"WeightedCapacity":{"locationName":"weightedCapacity","type":"double"},"SpotPrice":{"locationName":"spotPrice"}}}},"AllocationStrategy":{"locationName":"allocationStrategy"}}},"Sdx":{"type":"structure","members":{"AvailabilityZone":{"locationName":"availabilityZone"},"GroupName":{"locationName":"groupName"}}},"Sdz":{"type":"list","member":{"locationName":"item","type":"structure","members":{"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"DeviceIndex":{"locationName":"deviceIndex","type":"integer"},"SubnetId":{"locationName":"subnetId"},"Description":{"locationName":"description"},"PrivateIpAddress":{"locationName":"privateIpAddress"},"Groups":{"shape":"S46","locationName":"SecurityGroupId"},"DeleteOnTermination":{"locationName":"deleteOnTermination","type":"boolean"},"PrivateIpAddresses":{"shape":"S47","locationName":"privateIpAddressesSet","queryName":"PrivateIpAddresses"},"SecondaryPrivateIpAddressCount":{"locationName":"secondaryPrivateIpAddressCount","type":"integer"},"AssociatePublicIpAddress":{"locationName":"associatePublicIpAddress","type":"boolean"}}}},"Se1":{"type":"structure","members":{"Arn":{"locationName":"arn"},"Name":{"locationName":"name"}}},"Se5":{"type":"list","member":{"locationName":"item","type":"structure","members":{"SpotInstanceRequestId":{"locationName":"spotInstanceRequestId"},"SpotPrice":{"locationName":"spotPrice"},"Type":{"locationName":"type"},"State":{"locationName":"state"},"Fault":{"shape":"S5a","locationName":"fault"},"Status":{"locationName":"status","type":"structure","members":{"Code":{"locationName":"code"},"UpdateTime":{"locationName":"updateTime","type":"timestamp"},"Message":{"locationName":"message"}}},"ValidFrom":{"locationName":"validFrom","type":"timestamp"},"ValidUntil":{"locationName":"validUntil","type":"timestamp"},"LaunchGroup":{"locationName":"launchGroup"},"AvailabilityZoneGroup":{"locationName":"availabilityZoneGroup"},"LaunchSpecification":{"locationName":"launchSpecification","type":"structure","members":{"ImageId":{"locationName":"imageId"},"KeyName":{"locationName":"keyName"},"SecurityGroups":{"shape":"S4c","locationName":"groupSet"},"UserData":{"locationName":"userData"},"AddressingType":{"locationName":"addressingType"},"InstanceType":{"locationName":"instanceType"},"Placement":{"shape":"Sdx","locationName":"placement"},"KernelId":{"locationName":"kernelId"},"RamdiskId":{"locationName":"ramdiskId"},"BlockDeviceMappings":{"shape":"S93","locationName":"blockDeviceMapping"},"SubnetId":{"locationName":"subnetId"},"NetworkInterfaces":{"shape":"Sdz","locationName":"networkInterfaceSet"},"IamInstanceProfile":{"shape":"Se1","locationName":"iamInstanceProfile"},"EbsOptimized":{"locationName":"ebsOptimized","type":"boolean"},"Monitoring":{"shape":"Seb","locationName":"monitoring"}}},"InstanceId":{"locationName":"instanceId"},"CreateTime":{"locationName":"createTime","type":"timestamp"},"ProductDescription":{"locationName":"productDescription"},"Tags":{"shape":"Sa","locationName":"tagSet"},"LaunchedAvailabilityZone":{"locationName":"launchedAvailabilityZone"}}}},"Seb":{"type":"structure","required":["Enabled"],"members":{"Enabled":{"locationName":"enabled","type":"boolean"}}},"Sev":{"type":"list","member":{"locationName":"VolumeId"}},"Sgp":{"type":"structure","members":{"S3Bucket":{},"S3Key":{}}},"Sgq":{"type":"structure","members":{"UploadStart":{"type":"timestamp"},"UploadEnd":{"type":"timestamp"},"UploadSize":{"type":"double"},"Comment":{}}},"Sgu":{"type":"list","member":{"locationName":"SecurityGroup"}},"Sgz":{"type":"structure","required":["Format","Bytes","ImportManifestUrl"],"members":{"Format":{"locationName":"format"},"Bytes":{"locationName":"bytes","type":"long"},"ImportManifestUrl":{"locationName":"importManifestUrl"}}},"Sh0":{"type":"structure","required":["Size"],"members":{"Size":{"locationName":"size","type":"long"}}},"Shb":{"type":"list","member":{"locationName":"UserId"}},"Shy":{"type":"list","member":{"locationName":"item","type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"Monitoring":{"shape":"Sap","locationName":"monitoring"}}}},"Sj3":{"type":"list","member":{"locationName":"item","type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"CurrentState":{"shape":"Sa9","locationName":"currentState"},"PreviousState":{"shape":"Sa9","locationName":"previousState"}}}}},"examples":{},"paginators":{"DescribeAccountAttributes":{"result_key":"AccountAttributes"},"DescribeAddresses":{"result_key":"Addresses"},"DescribeAvailabilityZones":{"result_key":"AvailabilityZones"},"DescribeBundleTasks":{"result_key":"BundleTasks"},"DescribeConversionTasks":{"result_key":"ConversionTasks"},"DescribeCustomerGateways":{"result_key":"CustomerGateways"},"DescribeDhcpOptions":{"result_key":"DhcpOptions"},"DescribeExportTasks":{"result_key":"ExportTasks"},"DescribeImages":{"result_key":"Images"},"DescribeInstanceStatus":{"input_token":"NextToken","output_token":"NextToken","limit_key":"MaxResults","result_key":"InstanceStatuses"},"DescribeInstances":{"input_token":"NextToken","output_token":"NextToken","limit_key":"MaxResults","result_key":"Reservations"},"DescribeInternetGateways":{"result_key":"InternetGateways"},"DescribeKeyPairs":{"result_key":"KeyPairs"},"DescribeNetworkAcls":{"result_key":"NetworkAcls"},"DescribeNetworkInterfaces":{"result_key":"NetworkInterfaces"},"DescribePlacementGroups":{"result_key":"PlacementGroups"},"DescribeRegions":{"result_key":"Regions"},"DescribeReservedInstances":{"result_key":"ReservedInstances"},"DescribeReservedInstancesListings":{"result_key":"ReservedInstancesListings"},"DescribeReservedInstancesOfferings":{"input_token":"NextToken","output_token":"NextToken","limit_key":"MaxResults","result_key":"ReservedInstancesOfferings"},"DescribeReservedInstancesModifications":{"input_token":"NextToken","output_token":"NextToken","result_key":"ReservedInstancesModifications"},"DescribeRouteTables":{"result_key":"RouteTables"},"DescribeSecurityGroups":{"result_key":"SecurityGroups"},"DescribeSnapshots":{"input_token":"NextToken","output_token":"NextToken","result_key":"Snapshots"},"DescribeSpotInstanceRequests":{"result_key":"SpotInstanceRequests"},"DescribeSpotPriceHistory":{"input_token":"NextToken","output_token":"NextToken","limit_key":"MaxResults","result_key":"SpotPriceHistory"},"DescribeSubnets":{"result_key":"Subnets"},"DescribeTags":{"result_key":"Tags"},"DescribeVolumeStatus":{"input_token":"NextToken","output_token":"NextToken","limit_key":"MaxResults","result_key":"VolumeStatuses"},"DescribeVolumes":{"input_token":"NextToken","output_token":"NextToken","limit_key":"MaxResults","result_key":"Volumes"},"DescribeVpcs":{"result_key":"Vpcs"},"DescribeVpnConnections":{"result_key":"VpnConnections"},"DescribeVpnGateways":{"result_key":"VpnGateways"}},"waiters":{"__default__":{"interval":15,"max_attempts":40,"acceptor_type":"output"},"__InstanceState":{"operation":"DescribeInstances","acceptor_path":"Reservations[].Instances[].State.Name"},"__InstanceStatus":{"operation":"DescribeInstanceStatus","success_value":"ok"},"SystemStatusOk":{"extends":"__InstanceStatus","acceptor_path":"InstanceStatuses[].SystemStatus.Status"},"InstanceStatusOk":{"extends":"__InstanceStatus","acceptor_path":"InstanceStatuses[].InstanceStatus.Status"},"ImageAvailable":{"operation":"DescribeImages","acceptor_path":"Images[].State","success_value":"available","failure_value":["failed"]},"InstanceRunning":{"extends":"__InstanceState","success_value":"running","failure_value":["shutting-down","terminated","stopping"]},"InstanceStopped":{"extends":"__InstanceState","success_value":"stopped","failure_value":["pending","terminated"]},"InstanceTerminated":{"extends":"__InstanceState","success_value":"terminated","failure_value":["pending","stopping"]},"__ExportTaskState":{"operation":"DescribeExportTasks","acceptor_path":"ExportTasks[].State"},"ExportTaskCompleted":{"extends":"__ExportTaskState","success_value":"completed"},"ExportTaskCancelled":{"extends":"__ExportTaskState","success_value":"cancelled"},"SnapshotCompleted":{"operation":"DescribeSnapshots","success_path":"Snapshots[].State","success_value":"completed"},"SubnetAvailable":{"operation":"DescribeSubnets","success_path":"Subnets[].State","success_value":"available"},"__VolumeStatus":{"operation":"DescribeVolumes","acceptor_path":"Volumes[].State"},"VolumeAvailable":{"extends":"__VolumeStatus","success_value":"available","failure_value":["deleted"]},"VolumeInUse":{"extends":"__VolumeStatus","success_value":"in-use","failure_value":["deleted"]},"VolumeDeleted":{"extends":"__VolumeStatus","success_type":"error","success_value":"InvalidVolume.NotFound"},"VpcAvailable":{"operation":"DescribeVpcs","success_path":"Vpcs[].State","success_value":"available"},"__VpnConnectionState":{"operation":"DescribeVpnConnections","acceptor_path":"VpnConnections[].State"},"VpnConnectionAvailable":{"extends":"__VpnConnectionState","success_value":"available","failure_value":["deleting","deleted"]},"VpnConnectionDeleted":{"extends":"__VpnConnectionState","success_value":"deleted","failure_value":["pending"]},"BundleTaskComplete":{"operation":"DescribeBundleTasks","acceptor_path":"BundleTasks[].State","success_value":"complete","failure_value":["failed"]},"__ConversionTaskState":{"operation":"DescribeConversionTasks","acceptor_path":"ConversionTasks[].State"},"ConversionTaskCompleted":{"extends":"__ConversionTaskState","success_value":"completed","failure_value":["cancelled","cancelling"]},"ConversionTaskCancelled":{"extends":"__ConversionTaskState","success_value":"cancelled"},"__CustomerGatewayState":{"operation":"DescribeCustomerGateways","acceptor_path":"CustomerGateways[].State"},"CustomerGatewayAvailable":{"extends":"__CustomerGatewayState","success_value":"available","failure_value":["deleted","deleting"]},"ConversionTaskDeleted":{"extends":"__CustomerGatewayState","success_value":"deleted"},"__SpotInstanceRequestState":{"operation":"DescribeSpotInstanceRequests","acceptor_path":"SpotInstanceRequests[].Status.Code"},"SpotInstanceRequestFulfilled":{"extends":"__SpotInstanceRequestState","success_value":"fulfilled","failure_value":["schedule-expired","canceled-before-fulfillment","bad-parameters","system-error"]}}};
+AWS.apiLoader.services['ec2']['2015-10-01'] = {"version":"2.0","metadata":{"apiVersion":"2015-10-01","endpointPrefix":"ec2","serviceAbbreviation":"Amazon EC2","serviceFullName":"Amazon Elastic Compute Cloud","signatureVersion":"v4","xmlNamespace":"http://ec2.amazonaws.com/doc/2015-10-01","protocol":"ec2"},"operations":{"AcceptVpcPeeringConnection":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcPeeringConnectionId":{"locationName":"vpcPeeringConnectionId"}}},"output":{"type":"structure","members":{"VpcPeeringConnection":{"shape":"S5","locationName":"vpcPeeringConnection"}}},"http":{}},"AllocateAddress":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Domain":{}}},"output":{"type":"structure","members":{"PublicIp":{"locationName":"publicIp"},"Domain":{"locationName":"domain"},"AllocationId":{"locationName":"allocationId"}}},"http":{}},"AssignPrivateIpAddresses":{"input":{"type":"structure","required":["NetworkInterfaceId"],"members":{"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"PrivateIpAddresses":{"shape":"Sg","locationName":"privateIpAddress"},"SecondaryPrivateIpAddressCount":{"locationName":"secondaryPrivateIpAddressCount","type":"integer"},"AllowReassignment":{"locationName":"allowReassignment","type":"boolean"}}},"http":{}},"AssociateAddress":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceId":{},"PublicIp":{},"AllocationId":{},"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"PrivateIpAddress":{"locationName":"privateIpAddress"},"AllowReassociation":{"locationName":"allowReassociation","type":"boolean"}}},"output":{"type":"structure","members":{"AssociationId":{"locationName":"associationId"}}},"http":{}},"AssociateDhcpOptions":{"input":{"type":"structure","required":["DhcpOptionsId","VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"DhcpOptionsId":{},"VpcId":{}}},"http":{}},"AssociateRouteTable":{"input":{"type":"structure","required":["SubnetId","RouteTableId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SubnetId":{"locationName":"subnetId"},"RouteTableId":{"locationName":"routeTableId"}}},"output":{"type":"structure","members":{"AssociationId":{"locationName":"associationId"}}},"http":{}},"AttachClassicLinkVpc":{"input":{"type":"structure","required":["InstanceId","VpcId","Groups"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceId":{"locationName":"instanceId"},"VpcId":{"locationName":"vpcId"},"Groups":{"shape":"So","locationName":"SecurityGroupId"}}},"output":{"type":"structure","members":{"Return":{"locationName":"return","type":"boolean"}}},"http":{}},"AttachInternetGateway":{"input":{"type":"structure","required":["InternetGatewayId","VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InternetGatewayId":{"locationName":"internetGatewayId"},"VpcId":{"locationName":"vpcId"}}},"http":{}},"AttachNetworkInterface":{"input":{"type":"structure","required":["NetworkInterfaceId","InstanceId","DeviceIndex"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"InstanceId":{"locationName":"instanceId"},"DeviceIndex":{"locationName":"deviceIndex","type":"integer"}}},"output":{"type":"structure","members":{"AttachmentId":{"locationName":"attachmentId"}}},"http":{}},"AttachVolume":{"input":{"type":"structure","required":["VolumeId","InstanceId","Device"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VolumeId":{},"InstanceId":{},"Device":{}}},"output":{"shape":"Su","locationName":"attachment"},"http":{}},"AttachVpnGateway":{"input":{"type":"structure","required":["VpnGatewayId","VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpnGatewayId":{},"VpcId":{}}},"output":{"type":"structure","members":{"VpcAttachment":{"shape":"Sy","locationName":"attachment"}}},"http":{}},"AuthorizeSecurityGroupEgress":{"input":{"type":"structure","required":["GroupId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"GroupId":{"locationName":"groupId"},"SourceSecurityGroupName":{"locationName":"sourceSecurityGroupName"},"SourceSecurityGroupOwnerId":{"locationName":"sourceSecurityGroupOwnerId"},"IpProtocol":{"locationName":"ipProtocol"},"FromPort":{"locationName":"fromPort","type":"integer"},"ToPort":{"locationName":"toPort","type":"integer"},"CidrIp":{"locationName":"cidrIp"},"IpPermissions":{"shape":"S11","locationName":"ipPermissions"}}},"http":{}},"AuthorizeSecurityGroupIngress":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"GroupName":{},"GroupId":{},"SourceSecurityGroupName":{},"SourceSecurityGroupOwnerId":{},"IpProtocol":{},"FromPort":{"type":"integer"},"ToPort":{"type":"integer"},"CidrIp":{},"IpPermissions":{"shape":"S11"}}},"http":{}},"BundleInstance":{"input":{"type":"structure","required":["InstanceId","Storage"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceId":{},"Storage":{"shape":"S1b"}}},"output":{"type":"structure","members":{"BundleTask":{"shape":"S1f","locationName":"bundleInstanceTask"}}},"http":{}},"CancelBundleTask":{"input":{"type":"structure","required":["BundleId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"BundleId":{}}},"output":{"type":"structure","members":{"BundleTask":{"shape":"S1f","locationName":"bundleInstanceTask"}}},"http":{}},"CancelConversionTask":{"input":{"type":"structure","required":["ConversionTaskId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ConversionTaskId":{"locationName":"conversionTaskId"},"ReasonMessage":{"locationName":"reasonMessage"}}},"http":{}},"CancelExportTask":{"input":{"type":"structure","required":["ExportTaskId"],"members":{"ExportTaskId":{"locationName":"exportTaskId"}}},"http":{}},"CancelImportTask":{"input":{"type":"structure","members":{"DryRun":{"type":"boolean"},"ImportTaskId":{},"CancelReason":{}}},"output":{"type":"structure","members":{"ImportTaskId":{"locationName":"importTaskId"},"State":{"locationName":"state"},"PreviousState":{"locationName":"previousState"}}},"http":{}},"CancelReservedInstancesListing":{"input":{"type":"structure","required":["ReservedInstancesListingId"],"members":{"ReservedInstancesListingId":{"locationName":"reservedInstancesListingId"}}},"output":{"type":"structure","members":{"ReservedInstancesListings":{"shape":"S1q","locationName":"reservedInstancesListingsSet"}}},"http":{}},"CancelSpotFleetRequests":{"input":{"type":"structure","required":["SpotFleetRequestIds","TerminateInstances"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SpotFleetRequestIds":{"shape":"S22","locationName":"spotFleetRequestId"},"TerminateInstances":{"locationName":"terminateInstances","type":"boolean"}}},"output":{"type":"structure","members":{"UnsuccessfulFleetRequests":{"locationName":"unsuccessfulFleetRequestSet","type":"list","member":{"locationName":"item","type":"structure","required":["SpotFleetRequestId","Error"],"members":{"SpotFleetRequestId":{"locationName":"spotFleetRequestId"},"Error":{"locationName":"error","type":"structure","required":["Code","Message"],"members":{"Code":{"locationName":"code"},"Message":{"locationName":"message"}}}}}},"SuccessfulFleetRequests":{"locationName":"successfulFleetRequestSet","type":"list","member":{"locationName":"item","type":"structure","required":["SpotFleetRequestId","CurrentSpotFleetRequestState","PreviousSpotFleetRequestState"],"members":{"SpotFleetRequestId":{"locationName":"spotFleetRequestId"},"CurrentSpotFleetRequestState":{"locationName":"currentSpotFleetRequestState"},"PreviousSpotFleetRequestState":{"locationName":"previousSpotFleetRequestState"}}}}}},"http":{}},"CancelSpotInstanceRequests":{"input":{"type":"structure","required":["SpotInstanceRequestIds"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SpotInstanceRequestIds":{"shape":"S2c","locationName":"SpotInstanceRequestId"}}},"output":{"type":"structure","members":{"CancelledSpotInstanceRequests":{"locationName":"spotInstanceRequestSet","type":"list","member":{"locationName":"item","type":"structure","members":{"SpotInstanceRequestId":{"locationName":"spotInstanceRequestId"},"State":{"locationName":"state"}}}}}},"http":{}},"ConfirmProductInstance":{"input":{"type":"structure","required":["ProductCode","InstanceId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ProductCode":{},"InstanceId":{}}},"output":{"type":"structure","members":{"OwnerId":{"locationName":"ownerId"},"Return":{"locationName":"return","type":"boolean"}}},"http":{}},"CopyImage":{"input":{"type":"structure","required":["SourceRegion","SourceImageId","Name"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SourceRegion":{},"SourceImageId":{},"Name":{},"Description":{},"ClientToken":{}}},"output":{"type":"structure","members":{"ImageId":{"locationName":"imageId"}}},"http":{}},"CopySnapshot":{"input":{"type":"structure","required":["SourceRegion","SourceSnapshotId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SourceRegion":{},"SourceSnapshotId":{},"Description":{},"DestinationRegion":{"locationName":"destinationRegion"},"PresignedUrl":{"locationName":"presignedUrl"},"Encrypted":{"locationName":"encrypted","type":"boolean"},"KmsKeyId":{"locationName":"kmsKeyId"}}},"output":{"type":"structure","members":{"SnapshotId":{"locationName":"snapshotId"}}},"http":{}},"CreateCustomerGateway":{"input":{"type":"structure","required":["Type","PublicIp","BgpAsn"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Type":{},"PublicIp":{"locationName":"IpAddress"},"BgpAsn":{"type":"integer"}}},"output":{"type":"structure","members":{"CustomerGateway":{"shape":"S2q","locationName":"customerGateway"}}},"http":{}},"CreateDhcpOptions":{"input":{"type":"structure","required":["DhcpConfigurations"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"DhcpConfigurations":{"locationName":"dhcpConfiguration","type":"list","member":{"locationName":"item","type":"structure","members":{"Key":{"locationName":"key"},"Values":{"shape":"S22","locationName":"Value"}}}}}},"output":{"type":"structure","members":{"DhcpOptions":{"shape":"S2v","locationName":"dhcpOptions"}}},"http":{}},"CreateFlowLogs":{"input":{"type":"structure","required":["ResourceIds","ResourceType","TrafficType","LogGroupName","DeliverLogsPermissionArn"],"members":{"ResourceIds":{"shape":"S22","locationName":"ResourceId"},"ResourceType":{},"TrafficType":{},"LogGroupName":{},"DeliverLogsPermissionArn":{},"ClientToken":{}}},"output":{"type":"structure","members":{"FlowLogIds":{"shape":"S22","locationName":"flowLogIdSet"},"ClientToken":{"locationName":"clientToken"},"Unsuccessful":{"shape":"S34","locationName":"unsuccessful"}}},"http":{}},"CreateImage":{"input":{"type":"structure","required":["InstanceId","Name"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceId":{"locationName":"instanceId"},"Name":{"locationName":"name"},"Description":{"locationName":"description"},"NoReboot":{"locationName":"noReboot","type":"boolean"},"BlockDeviceMappings":{"shape":"S38","locationName":"blockDeviceMapping"}}},"output":{"type":"structure","members":{"ImageId":{"locationName":"imageId"}}},"http":{}},"CreateInstanceExportTask":{"input":{"type":"structure","required":["InstanceId"],"members":{"Description":{"locationName":"description"},"InstanceId":{"locationName":"instanceId"},"TargetEnvironment":{"locationName":"targetEnvironment"},"ExportToS3Task":{"locationName":"exportToS3","type":"structure","members":{"DiskImageFormat":{"locationName":"diskImageFormat"},"ContainerFormat":{"locationName":"containerFormat"},"S3Bucket":{"locationName":"s3Bucket"},"S3Prefix":{"locationName":"s3Prefix"}}}}},"output":{"type":"structure","members":{"ExportTask":{"shape":"S3j","locationName":"exportTask"}}},"http":{}},"CreateInternetGateway":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"}}},"output":{"type":"structure","members":{"InternetGateway":{"shape":"S3p","locationName":"internetGateway"}}},"http":{}},"CreateKeyPair":{"input":{"type":"structure","required":["KeyName"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"KeyName":{}}},"output":{"locationName":"keyPair","type":"structure","members":{"KeyName":{"locationName":"keyName"},"KeyFingerprint":{"locationName":"keyFingerprint"},"KeyMaterial":{"locationName":"keyMaterial"}}},"http":{}},"CreateNetworkAcl":{"input":{"type":"structure","required":["VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcId":{"locationName":"vpcId"}}},"output":{"type":"structure","members":{"NetworkAcl":{"shape":"S3w","locationName":"networkAcl"}}},"http":{}},"CreateNetworkAclEntry":{"input":{"type":"structure","required":["NetworkAclId","RuleNumber","Protocol","RuleAction","Egress","CidrBlock"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"NetworkAclId":{"locationName":"networkAclId"},"RuleNumber":{"locationName":"ruleNumber","type":"integer"},"Protocol":{"locationName":"protocol"},"RuleAction":{"locationName":"ruleAction"},"Egress":{"locationName":"egress","type":"boolean"},"CidrBlock":{"locationName":"cidrBlock"},"IcmpTypeCode":{"shape":"S40","locationName":"Icmp"},"PortRange":{"shape":"S41","locationName":"portRange"}}},"http":{}},"CreateNetworkInterface":{"input":{"type":"structure","required":["SubnetId"],"members":{"SubnetId":{"locationName":"subnetId"},"Description":{"locationName":"description"},"PrivateIpAddress":{"locationName":"privateIpAddress"},"Groups":{"shape":"S46","locationName":"SecurityGroupId"},"PrivateIpAddresses":{"shape":"S47","locationName":"privateIpAddresses"},"SecondaryPrivateIpAddressCount":{"locationName":"secondaryPrivateIpAddressCount","type":"integer"},"DryRun":{"locationName":"dryRun","type":"boolean"}}},"output":{"type":"structure","members":{"NetworkInterface":{"shape":"S4a","locationName":"networkInterface"}}},"http":{}},"CreatePlacementGroup":{"input":{"type":"structure","required":["GroupName","Strategy"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"GroupName":{"locationName":"groupName"},"Strategy":{"locationName":"strategy"}}},"http":{}},"CreateReservedInstancesListing":{"input":{"type":"structure","required":["ReservedInstancesId","InstanceCount","PriceSchedules","ClientToken"],"members":{"ReservedInstancesId":{"locationName":"reservedInstancesId"},"InstanceCount":{"locationName":"instanceCount","type":"integer"},"PriceSchedules":{"locationName":"priceSchedules","type":"list","member":{"locationName":"item","type":"structure","members":{"Term":{"locationName":"term","type":"long"},"Price":{"locationName":"price","type":"double"},"CurrencyCode":{"locationName":"currencyCode"}}}},"ClientToken":{"locationName":"clientToken"}}},"output":{"type":"structure","members":{"ReservedInstancesListings":{"shape":"S1q","locationName":"reservedInstancesListingsSet"}}},"http":{}},"CreateRoute":{"input":{"type":"structure","required":["RouteTableId","DestinationCidrBlock"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"RouteTableId":{"locationName":"routeTableId"},"DestinationCidrBlock":{"locationName":"destinationCidrBlock"},"GatewayId":{"locationName":"gatewayId"},"InstanceId":{"locationName":"instanceId"},"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"VpcPeeringConnectionId":{"locationName":"vpcPeeringConnectionId"}}},"output":{"type":"structure","members":{"Return":{"locationName":"return","type":"boolean"}}},"http":{}},"CreateRouteTable":{"input":{"type":"structure","required":["VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcId":{"locationName":"vpcId"}}},"output":{"type":"structure","members":{"RouteTable":{"shape":"S4s","locationName":"routeTable"}}},"http":{}},"CreateSecurityGroup":{"input":{"type":"structure","required":["GroupName","Description"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"GroupName":{},"Description":{"locationName":"GroupDescription"},"VpcId":{}}},"output":{"type":"structure","members":{"GroupId":{"locationName":"groupId"}}},"http":{}},"CreateSnapshot":{"input":{"type":"structure","required":["VolumeId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VolumeId":{},"Description":{}}},"output":{"shape":"S54","locationName":"snapshot"},"http":{}},"CreateSpotDatafeedSubscription":{"input":{"type":"structure","required":["Bucket"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Bucket":{"locationName":"bucket"},"Prefix":{"locationName":"prefix"}}},"output":{"type":"structure","members":{"SpotDatafeedSubscription":{"shape":"S58","locationName":"spotDatafeedSubscription"}}},"http":{}},"CreateSubnet":{"input":{"type":"structure","required":["VpcId","CidrBlock"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcId":{},"CidrBlock":{},"AvailabilityZone":{}}},"output":{"type":"structure","members":{"Subnet":{"shape":"S5d","locationName":"subnet"}}},"http":{}},"CreateTags":{"input":{"type":"structure","required":["Resources","Tags"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Resources":{"shape":"S5g","locationName":"ResourceId"},"Tags":{"shape":"Sa","locationName":"Tag"}}},"http":{}},"CreateVolume":{"input":{"type":"structure","required":["AvailabilityZone"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Size":{"type":"integer"},"SnapshotId":{},"AvailabilityZone":{},"VolumeType":{},"Iops":{"type":"integer"},"Encrypted":{"locationName":"encrypted","type":"boolean"},"KmsKeyId":{}}},"output":{"shape":"S5i","locationName":"volume"},"http":{}},"CreateVpc":{"input":{"type":"structure","required":["CidrBlock"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"CidrBlock":{},"InstanceTenancy":{"locationName":"instanceTenancy"}}},"output":{"type":"structure","members":{"Vpc":{"shape":"S5o","locationName":"vpc"}}},"http":{}},"CreateVpcEndpoint":{"input":{"type":"structure","required":["VpcId","ServiceName"],"members":{"DryRun":{"type":"boolean"},"VpcId":{},"ServiceName":{},"PolicyDocument":{},"RouteTableIds":{"shape":"S22","locationName":"RouteTableId"},"ClientToken":{}}},"output":{"type":"structure","members":{"VpcEndpoint":{"shape":"S5s","locationName":"vpcEndpoint"},"ClientToken":{"locationName":"clientToken"}}},"http":{}},"CreateVpcPeeringConnection":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcId":{"locationName":"vpcId"},"PeerVpcId":{"locationName":"peerVpcId"},"PeerOwnerId":{"locationName":"peerOwnerId"}}},"output":{"type":"structure","members":{"VpcPeeringConnection":{"shape":"S5","locationName":"vpcPeeringConnection"}}},"http":{}},"CreateVpnConnection":{"input":{"type":"structure","required":["Type","CustomerGatewayId","VpnGatewayId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Type":{},"CustomerGatewayId":{},"VpnGatewayId":{},"Options":{"locationName":"options","type":"structure","members":{"StaticRoutesOnly":{"locationName":"staticRoutesOnly","type":"boolean"}}}}},"output":{"type":"structure","members":{"VpnConnection":{"shape":"S5z","locationName":"vpnConnection"}}},"http":{}},"CreateVpnConnectionRoute":{"input":{"type":"structure","required":["VpnConnectionId","DestinationCidrBlock"],"members":{"VpnConnectionId":{},"DestinationCidrBlock":{}}},"http":{}},"CreateVpnGateway":{"input":{"type":"structure","required":["Type"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Type":{},"AvailabilityZone":{}}},"output":{"type":"structure","members":{"VpnGateway":{"shape":"S6b","locationName":"vpnGateway"}}},"http":{}},"DeleteCustomerGateway":{"input":{"type":"structure","required":["CustomerGatewayId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"CustomerGatewayId":{}}},"http":{}},"DeleteDhcpOptions":{"input":{"type":"structure","required":["DhcpOptionsId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"DhcpOptionsId":{}}},"http":{}},"DeleteFlowLogs":{"input":{"type":"structure","required":["FlowLogIds"],"members":{"FlowLogIds":{"shape":"S22","locationName":"FlowLogId"}}},"output":{"type":"structure","members":{"Unsuccessful":{"shape":"S34","locationName":"unsuccessful"}}},"http":{}},"DeleteInternetGateway":{"input":{"type":"structure","required":["InternetGatewayId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InternetGatewayId":{"locationName":"internetGatewayId"}}},"http":{}},"DeleteKeyPair":{"input":{"type":"structure","required":["KeyName"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"KeyName":{}}},"http":{}},"DeleteNetworkAcl":{"input":{"type":"structure","required":["NetworkAclId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"NetworkAclId":{"locationName":"networkAclId"}}},"http":{}},"DeleteNetworkAclEntry":{"input":{"type":"structure","required":["NetworkAclId","RuleNumber","Egress"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"NetworkAclId":{"locationName":"networkAclId"},"RuleNumber":{"locationName":"ruleNumber","type":"integer"},"Egress":{"locationName":"egress","type":"boolean"}}},"http":{}},"DeleteNetworkInterface":{"input":{"type":"structure","required":["NetworkInterfaceId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"NetworkInterfaceId":{"locationName":"networkInterfaceId"}}},"http":{}},"DeletePlacementGroup":{"input":{"type":"structure","required":["GroupName"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"GroupName":{"locationName":"groupName"}}},"http":{}},"DeleteRoute":{"input":{"type":"structure","required":["RouteTableId","DestinationCidrBlock"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"RouteTableId":{"locationName":"routeTableId"},"DestinationCidrBlock":{"locationName":"destinationCidrBlock"}}},"http":{}},"DeleteRouteTable":{"input":{"type":"structure","required":["RouteTableId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"RouteTableId":{"locationName":"routeTableId"}}},"http":{}},"DeleteSecurityGroup":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"GroupName":{},"GroupId":{}}},"http":{}},"DeleteSnapshot":{"input":{"type":"structure","required":["SnapshotId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SnapshotId":{}}},"http":{}},"DeleteSpotDatafeedSubscription":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"}}},"http":{}},"DeleteSubnet":{"input":{"type":"structure","required":["SubnetId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SubnetId":{}}},"http":{}},"DeleteTags":{"input":{"type":"structure","required":["Resources"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Resources":{"shape":"S5g","locationName":"resourceId"},"Tags":{"shape":"Sa","locationName":"tag"}}},"http":{}},"DeleteVolume":{"input":{"type":"structure","required":["VolumeId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VolumeId":{}}},"http":{}},"DeleteVpc":{"input":{"type":"structure","required":["VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcId":{}}},"http":{}},"DeleteVpcEndpoints":{"input":{"type":"structure","required":["VpcEndpointIds"],"members":{"DryRun":{"type":"boolean"},"VpcEndpointIds":{"shape":"S22","locationName":"VpcEndpointId"}}},"output":{"type":"structure","members":{"Unsuccessful":{"shape":"S34","locationName":"unsuccessful"}}},"http":{}},"DeleteVpcPeeringConnection":{"input":{"type":"structure","required":["VpcPeeringConnectionId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcPeeringConnectionId":{"locationName":"vpcPeeringConnectionId"}}},"output":{"type":"structure","members":{"Return":{"locationName":"return","type":"boolean"}}},"http":{}},"DeleteVpnConnection":{"input":{"type":"structure","required":["VpnConnectionId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpnConnectionId":{}}},"http":{}},"DeleteVpnConnectionRoute":{"input":{"type":"structure","required":["VpnConnectionId","DestinationCidrBlock"],"members":{"VpnConnectionId":{},"DestinationCidrBlock":{}}},"http":{}},"DeleteVpnGateway":{"input":{"type":"structure","required":["VpnGatewayId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpnGatewayId":{}}},"http":{}},"DeregisterImage":{"input":{"type":"structure","required":["ImageId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ImageId":{}}},"http":{}},"DescribeAccountAttributes":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"AttributeNames":{"locationName":"attributeName","type":"list","member":{"locationName":"attributeName"}}}},"output":{"type":"structure","members":{"AccountAttributes":{"locationName":"accountAttributeSet","type":"list","member":{"locationName":"item","type":"structure","members":{"AttributeName":{"locationName":"attributeName"},"AttributeValues":{"locationName":"attributeValueSet","type":"list","member":{"locationName":"item","type":"structure","members":{"AttributeValue":{"locationName":"attributeValue"}}}}}}}}},"http":{}},"DescribeAddresses":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"PublicIps":{"locationName":"PublicIp","type":"list","member":{"locationName":"PublicIp"}},"Filters":{"shape":"S7e","locationName":"Filter"},"AllocationIds":{"locationName":"AllocationId","type":"list","member":{"locationName":"AllocationId"}}}},"output":{"type":"structure","members":{"Addresses":{"locationName":"addressesSet","type":"list","member":{"locationName":"item","type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"PublicIp":{"locationName":"publicIp"},"AllocationId":{"locationName":"allocationId"},"AssociationId":{"locationName":"associationId"},"Domain":{"locationName":"domain"},"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"NetworkInterfaceOwnerId":{"locationName":"networkInterfaceOwnerId"},"PrivateIpAddress":{"locationName":"privateIpAddress"}}}}}},"http":{}},"DescribeAvailabilityZones":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ZoneNames":{"locationName":"ZoneName","type":"list","member":{"locationName":"ZoneName"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"AvailabilityZones":{"locationName":"availabilityZoneInfo","type":"list","member":{"locationName":"item","type":"structure","members":{"ZoneName":{"locationName":"zoneName"},"State":{"locationName":"zoneState"},"RegionName":{"locationName":"regionName"},"Messages":{"locationName":"messageSet","type":"list","member":{"locationName":"item","type":"structure","members":{"Message":{"locationName":"message"}}}}}}}}},"http":{}},"DescribeBundleTasks":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"BundleIds":{"locationName":"BundleId","type":"list","member":{"locationName":"BundleId"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"BundleTasks":{"locationName":"bundleInstanceTasksSet","type":"list","member":{"shape":"S1f","locationName":"item"}}}},"http":{}},"DescribeClassicLinkInstances":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceIds":{"shape":"S7x","locationName":"InstanceId"},"Filters":{"shape":"S7e","locationName":"Filter"},"NextToken":{"locationName":"nextToken"},"MaxResults":{"locationName":"maxResults","type":"integer"}}},"output":{"type":"structure","members":{"Instances":{"locationName":"instancesSet","type":"list","member":{"locationName":"item","type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"VpcId":{"locationName":"vpcId"},"Groups":{"shape":"S4c","locationName":"groupSet"},"Tags":{"shape":"Sa","locationName":"tagSet"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeConversionTasks":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Filters":{"shape":"S7e","locationName":"filter"},"ConversionTaskIds":{"locationName":"conversionTaskId","type":"list","member":{"locationName":"item"}}}},"output":{"type":"structure","members":{"ConversionTasks":{"locationName":"conversionTasks","type":"list","member":{"shape":"S85","locationName":"item"}}}},"http":{}},"DescribeCustomerGateways":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"CustomerGatewayIds":{"locationName":"CustomerGatewayId","type":"list","member":{"locationName":"CustomerGatewayId"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"CustomerGateways":{"locationName":"customerGatewaySet","type":"list","member":{"shape":"S2q","locationName":"item"}}}},"http":{}},"DescribeDhcpOptions":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"DhcpOptionsIds":{"locationName":"DhcpOptionsId","type":"list","member":{"locationName":"DhcpOptionsId"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"DhcpOptions":{"locationName":"dhcpOptionsSet","type":"list","member":{"shape":"S2v","locationName":"item"}}}},"http":{}},"DescribeExportTasks":{"input":{"type":"structure","members":{"ExportTaskIds":{"locationName":"exportTaskId","type":"list","member":{"locationName":"ExportTaskId"}}}},"output":{"type":"structure","members":{"ExportTasks":{"locationName":"exportTaskSet","type":"list","member":{"shape":"S3j","locationName":"item"}}}},"http":{}},"DescribeFlowLogs":{"input":{"type":"structure","members":{"FlowLogIds":{"shape":"S22","locationName":"FlowLogId"},"Filter":{"shape":"S7e"},"NextToken":{},"MaxResults":{"type":"integer"}}},"output":{"type":"structure","members":{"FlowLogs":{"locationName":"flowLogSet","type":"list","member":{"locationName":"item","type":"structure","members":{"CreationTime":{"locationName":"creationTime","type":"timestamp"},"FlowLogId":{"locationName":"flowLogId"},"FlowLogStatus":{"locationName":"flowLogStatus"},"ResourceId":{"locationName":"resourceId"},"TrafficType":{"locationName":"trafficType"},"LogGroupName":{"locationName":"logGroupName"},"DeliverLogsStatus":{"locationName":"deliverLogsStatus"},"DeliverLogsErrorMessage":{"locationName":"deliverLogsErrorMessage"},"DeliverLogsPermissionArn":{"locationName":"deliverLogsPermissionArn"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeImageAttribute":{"input":{"type":"structure","required":["ImageId","Attribute"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ImageId":{},"Attribute":{}}},"output":{"locationName":"imageAttribute","type":"structure","members":{"ImageId":{"locationName":"imageId"},"LaunchPermissions":{"shape":"S8x","locationName":"launchPermission"},"ProductCodes":{"shape":"S90","locationName":"productCodes"},"KernelId":{"shape":"S2z","locationName":"kernel"},"RamdiskId":{"shape":"S2z","locationName":"ramdisk"},"Description":{"shape":"S2z","locationName":"description"},"SriovNetSupport":{"shape":"S2z","locationName":"sriovNetSupport"},"BlockDeviceMappings":{"shape":"S93","locationName":"blockDeviceMapping"}}},"http":{}},"DescribeImages":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ImageIds":{"locationName":"ImageId","type":"list","member":{"locationName":"ImageId"}},"Owners":{"shape":"S96","locationName":"Owner"},"ExecutableUsers":{"locationName":"ExecutableBy","type":"list","member":{"locationName":"ExecutableBy"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"Images":{"locationName":"imagesSet","type":"list","member":{"locationName":"item","type":"structure","members":{"ImageId":{"locationName":"imageId"},"ImageLocation":{"locationName":"imageLocation"},"State":{"locationName":"imageState"},"OwnerId":{"locationName":"imageOwnerId"},"CreationDate":{"locationName":"creationDate"},"Public":{"locationName":"isPublic","type":"boolean"},"ProductCodes":{"shape":"S90","locationName":"productCodes"},"Architecture":{"locationName":"architecture"},"ImageType":{"locationName":"imageType"},"KernelId":{"locationName":"kernelId"},"RamdiskId":{"locationName":"ramdiskId"},"Platform":{"locationName":"platform"},"SriovNetSupport":{"locationName":"sriovNetSupport"},"StateReason":{"shape":"S9e","locationName":"stateReason"},"ImageOwnerAlias":{"locationName":"imageOwnerAlias"},"Name":{"locationName":"name"},"Description":{"locationName":"description"},"RootDeviceType":{"locationName":"rootDeviceType"},"RootDeviceName":{"locationName":"rootDeviceName"},"BlockDeviceMappings":{"shape":"S93","locationName":"blockDeviceMapping"},"VirtualizationType":{"locationName":"virtualizationType"},"Tags":{"shape":"Sa","locationName":"tagSet"},"Hypervisor":{"locationName":"hypervisor"}}}}}},"http":{}},"DescribeImportImageTasks":{"input":{"type":"structure","members":{"DryRun":{"type":"boolean"},"ImportTaskIds":{"shape":"S9j","locationName":"ImportTaskId"},"NextToken":{},"MaxResults":{"type":"integer"},"Filters":{"shape":"S7e"}}},"output":{"type":"structure","members":{"ImportImageTasks":{"locationName":"importImageTaskSet","type":"list","member":{"locationName":"item","type":"structure","members":{"ImportTaskId":{"locationName":"importTaskId"},"Architecture":{"locationName":"architecture"},"LicenseType":{"locationName":"licenseType"},"Platform":{"locationName":"platform"},"Hypervisor":{"locationName":"hypervisor"},"Description":{"locationName":"description"},"SnapshotDetails":{"shape":"S9n","locationName":"snapshotDetailSet"},"ImageId":{"locationName":"imageId"},"Progress":{"locationName":"progress"},"StatusMessage":{"locationName":"statusMessage"},"Status":{"locationName":"status"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeImportSnapshotTasks":{"input":{"type":"structure","members":{"DryRun":{"type":"boolean"},"ImportTaskIds":{"shape":"S9j","locationName":"ImportTaskId"},"NextToken":{},"MaxResults":{"type":"integer"},"Filters":{"shape":"S7e"}}},"output":{"type":"structure","members":{"ImportSnapshotTasks":{"locationName":"importSnapshotTaskSet","type":"list","member":{"locationName":"item","type":"structure","members":{"ImportTaskId":{"locationName":"importTaskId"},"SnapshotTaskDetail":{"shape":"S9u","locationName":"snapshotTaskDetail"},"Description":{"locationName":"description"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeInstanceAttribute":{"input":{"type":"structure","required":["InstanceId","Attribute"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceId":{"locationName":"instanceId"},"Attribute":{"locationName":"attribute"}}},"output":{"type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"InstanceType":{"shape":"S2z","locationName":"instanceType"},"KernelId":{"shape":"S2z","locationName":"kernel"},"RamdiskId":{"shape":"S2z","locationName":"ramdisk"},"UserData":{"shape":"S2z","locationName":"userData"},"DisableApiTermination":{"shape":"S9y","locationName":"disableApiTermination"},"InstanceInitiatedShutdownBehavior":{"shape":"S2z","locationName":"instanceInitiatedShutdownBehavior"},"RootDeviceName":{"shape":"S2z","locationName":"rootDeviceName"},"BlockDeviceMappings":{"shape":"S9z","locationName":"blockDeviceMapping"},"ProductCodes":{"shape":"S90","locationName":"productCodes"},"EbsOptimized":{"shape":"S9y","locationName":"ebsOptimized"},"SriovNetSupport":{"shape":"S2z","locationName":"sriovNetSupport"},"SourceDestCheck":{"shape":"S9y","locationName":"sourceDestCheck"},"Groups":{"shape":"S4c","locationName":"groupSet"}}},"http":{}},"DescribeInstanceStatus":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceIds":{"shape":"S7x","locationName":"InstanceId"},"Filters":{"shape":"S7e","locationName":"Filter"},"NextToken":{},"MaxResults":{"type":"integer"},"IncludeAllInstances":{"locationName":"includeAllInstances","type":"boolean"}}},"output":{"type":"structure","members":{"InstanceStatuses":{"locationName":"instanceStatusSet","type":"list","member":{"locationName":"item","type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"AvailabilityZone":{"locationName":"availabilityZone"},"Events":{"locationName":"eventsSet","type":"list","member":{"locationName":"item","type":"structure","members":{"Code":{"locationName":"code"},"Description":{"locationName":"description"},"NotBefore":{"locationName":"notBefore","type":"timestamp"},"NotAfter":{"locationName":"notAfter","type":"timestamp"}}}},"InstanceState":{"shape":"Sa9","locationName":"instanceState"},"SystemStatus":{"shape":"Sab","locationName":"systemStatus"},"InstanceStatus":{"shape":"Sab","locationName":"instanceStatus"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeInstances":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceIds":{"shape":"S7x","locationName":"InstanceId"},"Filters":{"shape":"S7e","locationName":"Filter"},"NextToken":{"locationName":"nextToken"},"MaxResults":{"locationName":"maxResults","type":"integer"}}},"output":{"type":"structure","members":{"Reservations":{"locationName":"reservationSet","type":"list","member":{"shape":"Sak","locationName":"item"}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeInternetGateways":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InternetGatewayIds":{"shape":"S22","locationName":"internetGatewayId"},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"InternetGateways":{"locationName":"internetGatewaySet","type":"list","member":{"shape":"S3p","locationName":"item"}}}},"http":{}},"DescribeKeyPairs":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"KeyNames":{"locationName":"KeyName","type":"list","member":{"locationName":"KeyName"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"KeyPairs":{"locationName":"keySet","type":"list","member":{"locationName":"item","type":"structure","members":{"KeyName":{"locationName":"keyName"},"KeyFingerprint":{"locationName":"keyFingerprint"}}}}}},"http":{}},"DescribeMovingAddresses":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"PublicIps":{"shape":"S22","locationName":"publicIp"},"NextToken":{"locationName":"nextToken"},"Filters":{"shape":"S7e","locationName":"filter"},"MaxResults":{"locationName":"maxResults","type":"integer"}}},"output":{"type":"structure","members":{"MovingAddressStatuses":{"locationName":"movingAddressStatusSet","type":"list","member":{"locationName":"item","type":"structure","members":{"PublicIp":{"locationName":"publicIp"},"MoveStatus":{"locationName":"moveStatus"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeNetworkAcls":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"NetworkAclIds":{"shape":"S22","locationName":"NetworkAclId"},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"NetworkAcls":{"locationName":"networkAclSet","type":"list","member":{"shape":"S3w","locationName":"item"}}}},"http":{}},"DescribeNetworkInterfaceAttribute":{"input":{"type":"structure","required":["NetworkInterfaceId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"Attribute":{"locationName":"attribute"}}},"output":{"type":"structure","members":{"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"Description":{"shape":"S2z","locationName":"description"},"SourceDestCheck":{"shape":"S9y","locationName":"sourceDestCheck"},"Groups":{"shape":"S4c","locationName":"groupSet"},"Attachment":{"shape":"S4e","locationName":"attachment"}}},"http":{}},"DescribeNetworkInterfaces":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"NetworkInterfaceIds":{"locationName":"NetworkInterfaceId","type":"list","member":{"locationName":"item"}},"Filters":{"shape":"S7e","locationName":"filter"}}},"output":{"type":"structure","members":{"NetworkInterfaces":{"locationName":"networkInterfaceSet","type":"list","member":{"shape":"S4a","locationName":"item"}}}},"http":{}},"DescribePlacementGroups":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"GroupNames":{"locationName":"groupName","type":"list","member":{}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"PlacementGroups":{"locationName":"placementGroupSet","type":"list","member":{"locationName":"item","type":"structure","members":{"GroupName":{"locationName":"groupName"},"Strategy":{"locationName":"strategy"},"State":{"locationName":"state"}}}}}},"http":{}},"DescribePrefixLists":{"input":{"type":"structure","members":{"DryRun":{"type":"boolean"},"PrefixListIds":{"shape":"S22","locationName":"PrefixListId"},"Filters":{"shape":"S7e","locationName":"Filter"},"MaxResults":{"type":"integer"},"NextToken":{}}},"output":{"type":"structure","members":{"PrefixLists":{"locationName":"prefixListSet","type":"list","member":{"locationName":"item","type":"structure","members":{"PrefixListId":{"locationName":"prefixListId"},"PrefixListName":{"locationName":"prefixListName"},"Cidrs":{"shape":"S22","locationName":"cidrSet"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeRegions":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"RegionNames":{"locationName":"RegionName","type":"list","member":{"locationName":"RegionName"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"Regions":{"locationName":"regionInfo","type":"list","member":{"locationName":"item","type":"structure","members":{"RegionName":{"locationName":"regionName"},"Endpoint":{"locationName":"regionEndpoint"}}}}}},"http":{}},"DescribeReservedInstances":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ReservedInstancesIds":{"shape":"Sc2","locationName":"ReservedInstancesId"},"Filters":{"shape":"S7e","locationName":"Filter"},"OfferingType":{"locationName":"offeringType"}}},"output":{"type":"structure","members":{"ReservedInstances":{"locationName":"reservedInstancesSet","type":"list","member":{"locationName":"item","type":"structure","members":{"ReservedInstancesId":{"locationName":"reservedInstancesId"},"InstanceType":{"locationName":"instanceType"},"AvailabilityZone":{"locationName":"availabilityZone"},"Start":{"locationName":"start","type":"timestamp"},"End":{"locationName":"end","type":"timestamp"},"Duration":{"locationName":"duration","type":"long"},"UsagePrice":{"locationName":"usagePrice","type":"float"},"FixedPrice":{"locationName":"fixedPrice","type":"float"},"InstanceCount":{"locationName":"instanceCount","type":"integer"},"ProductDescription":{"locationName":"productDescription"},"State":{"locationName":"state"},"Tags":{"shape":"Sa","locationName":"tagSet"},"InstanceTenancy":{"locationName":"instanceTenancy"},"CurrencyCode":{"locationName":"currencyCode"},"OfferingType":{"locationName":"offeringType"},"RecurringCharges":{"shape":"Sca","locationName":"recurringCharges"}}}}}},"http":{}},"DescribeReservedInstancesListings":{"input":{"type":"structure","members":{"ReservedInstancesId":{"locationName":"reservedInstancesId"},"ReservedInstancesListingId":{"locationName":"reservedInstancesListingId"},"Filters":{"shape":"S7e","locationName":"filters"}}},"output":{"type":"structure","members":{"ReservedInstancesListings":{"shape":"S1q","locationName":"reservedInstancesListingsSet"}}},"http":{}},"DescribeReservedInstancesModifications":{"input":{"type":"structure","members":{"ReservedInstancesModificationIds":{"locationName":"ReservedInstancesModificationId","type":"list","member":{"locationName":"ReservedInstancesModificationId"}},"NextToken":{"locationName":"nextToken"},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"ReservedInstancesModifications":{"locationName":"reservedInstancesModificationsSet","type":"list","member":{"locationName":"item","type":"structure","members":{"ReservedInstancesModificationId":{"locationName":"reservedInstancesModificationId"},"ReservedInstancesIds":{"locationName":"reservedInstancesSet","type":"list","member":{"locationName":"item","type":"structure","members":{"ReservedInstancesId":{"locationName":"reservedInstancesId"}}}},"ModificationResults":{"locationName":"modificationResultSet","type":"list","member":{"locationName":"item","type":"structure","members":{"ReservedInstancesId":{"locationName":"reservedInstancesId"},"TargetConfiguration":{"shape":"Sco","locationName":"targetConfiguration"}}}},"CreateDate":{"locationName":"createDate","type":"timestamp"},"UpdateDate":{"locationName":"updateDate","type":"timestamp"},"EffectiveDate":{"locationName":"effectiveDate","type":"timestamp"},"Status":{"locationName":"status"},"StatusMessage":{"locationName":"statusMessage"},"ClientToken":{"locationName":"clientToken"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeReservedInstancesOfferings":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ReservedInstancesOfferingIds":{"locationName":"ReservedInstancesOfferingId","type":"list","member":{}},"InstanceType":{},"AvailabilityZone":{},"ProductDescription":{},"Filters":{"shape":"S7e","locationName":"Filter"},"InstanceTenancy":{"locationName":"instanceTenancy"},"OfferingType":{"locationName":"offeringType"},"NextToken":{"locationName":"nextToken"},"MaxResults":{"locationName":"maxResults","type":"integer"},"IncludeMarketplace":{"type":"boolean"},"MinDuration":{"type":"long"},"MaxDuration":{"type":"long"},"MaxInstanceCount":{"type":"integer"}}},"output":{"type":"structure","members":{"ReservedInstancesOfferings":{"locationName":"reservedInstancesOfferingsSet","type":"list","member":{"locationName":"item","type":"structure","members":{"ReservedInstancesOfferingId":{"locationName":"reservedInstancesOfferingId"},"InstanceType":{"locationName":"instanceType"},"AvailabilityZone":{"locationName":"availabilityZone"},"Duration":{"locationName":"duration","type":"long"},"UsagePrice":{"locationName":"usagePrice","type":"float"},"FixedPrice":{"locationName":"fixedPrice","type":"float"},"ProductDescription":{"locationName":"productDescription"},"InstanceTenancy":{"locationName":"instanceTenancy"},"CurrencyCode":{"locationName":"currencyCode"},"OfferingType":{"locationName":"offeringType"},"RecurringCharges":{"shape":"Sca","locationName":"recurringCharges"},"Marketplace":{"locationName":"marketplace","type":"boolean"},"PricingDetails":{"locationName":"pricingDetailsSet","type":"list","member":{"locationName":"item","type":"structure","members":{"Price":{"locationName":"price","type":"double"},"Count":{"locationName":"count","type":"integer"}}}}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeRouteTables":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"RouteTableIds":{"shape":"S22","locationName":"RouteTableId"},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"RouteTables":{"locationName":"routeTableSet","type":"list","member":{"shape":"S4s","locationName":"item"}}}},"http":{}},"DescribeSecurityGroups":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"GroupNames":{"shape":"Sd0","locationName":"GroupName"},"GroupIds":{"shape":"So","locationName":"GroupId"},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"SecurityGroups":{"locationName":"securityGroupInfo","type":"list","member":{"locationName":"item","type":"structure","members":{"OwnerId":{"locationName":"ownerId"},"GroupName":{"locationName":"groupName"},"GroupId":{"locationName":"groupId"},"Description":{"locationName":"groupDescription"},"IpPermissions":{"shape":"S11","locationName":"ipPermissions"},"IpPermissionsEgress":{"shape":"S11","locationName":"ipPermissionsEgress"},"VpcId":{"locationName":"vpcId"},"Tags":{"shape":"Sa","locationName":"tagSet"}}}}}},"http":{}},"DescribeSnapshotAttribute":{"input":{"type":"structure","required":["SnapshotId","Attribute"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SnapshotId":{},"Attribute":{}}},"output":{"type":"structure","members":{"SnapshotId":{"locationName":"snapshotId"},"CreateVolumePermissions":{"shape":"Sd7","locationName":"createVolumePermission"},"ProductCodes":{"shape":"S90","locationName":"productCodes"}}},"http":{}},"DescribeSnapshots":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SnapshotIds":{"locationName":"SnapshotId","type":"list","member":{"locationName":"SnapshotId"}},"OwnerIds":{"shape":"S96","locationName":"Owner"},"RestorableByUserIds":{"locationName":"RestorableBy","type":"list","member":{}},"Filters":{"shape":"S7e","locationName":"Filter"},"NextToken":{},"MaxResults":{"type":"integer"}}},"output":{"type":"structure","members":{"Snapshots":{"locationName":"snapshotSet","type":"list","member":{"shape":"S54","locationName":"item"}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeSpotDatafeedSubscription":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"}}},"output":{"type":"structure","members":{"SpotDatafeedSubscription":{"shape":"S58","locationName":"spotDatafeedSubscription"}}},"http":{}},"DescribeSpotFleetInstances":{"input":{"type":"structure","required":["SpotFleetRequestId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SpotFleetRequestId":{"locationName":"spotFleetRequestId"},"NextToken":{"locationName":"nextToken"},"MaxResults":{"locationName":"maxResults","type":"integer"}}},"output":{"type":"structure","required":["SpotFleetRequestId","ActiveInstances"],"members":{"SpotFleetRequestId":{"locationName":"spotFleetRequestId"},"ActiveInstances":{"locationName":"activeInstanceSet","type":"list","member":{"locationName":"item","type":"structure","members":{"InstanceType":{"locationName":"instanceType"},"InstanceId":{"locationName":"instanceId"},"SpotInstanceRequestId":{"locationName":"spotInstanceRequestId"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeSpotFleetRequestHistory":{"input":{"type":"structure","required":["SpotFleetRequestId","StartTime"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SpotFleetRequestId":{"locationName":"spotFleetRequestId"},"EventType":{"locationName":"eventType"},"StartTime":{"locationName":"startTime","type":"timestamp"},"NextToken":{"locationName":"nextToken"},"MaxResults":{"locationName":"maxResults","type":"integer"}}},"output":{"type":"structure","required":["SpotFleetRequestId","StartTime","LastEvaluatedTime","HistoryRecords"],"members":{"SpotFleetRequestId":{"locationName":"spotFleetRequestId"},"StartTime":{"locationName":"startTime","type":"timestamp"},"LastEvaluatedTime":{"locationName":"lastEvaluatedTime","type":"timestamp"},"HistoryRecords":{"locationName":"historyRecordSet","type":"list","member":{"locationName":"item","type":"structure","required":["Timestamp","EventType","EventInformation"],"members":{"Timestamp":{"locationName":"timestamp","type":"timestamp"},"EventType":{"locationName":"eventType"},"EventInformation":{"locationName":"eventInformation","type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"EventSubType":{"locationName":"eventSubType"},"EventDescription":{"locationName":"eventDescription"}}}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeSpotFleetRequests":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SpotFleetRequestIds":{"shape":"S22","locationName":"spotFleetRequestId"},"NextToken":{"locationName":"nextToken"},"MaxResults":{"locationName":"maxResults","type":"integer"}}},"output":{"type":"structure","required":["SpotFleetRequestConfigs"],"members":{"SpotFleetRequestConfigs":{"locationName":"spotFleetRequestConfigSet","type":"list","member":{"locationName":"item","type":"structure","required":["SpotFleetRequestId","SpotFleetRequestState","SpotFleetRequestConfig","CreateTime"],"members":{"SpotFleetRequestId":{"locationName":"spotFleetRequestId"},"SpotFleetRequestState":{"locationName":"spotFleetRequestState"},"SpotFleetRequestConfig":{"shape":"Sdu","locationName":"spotFleetRequestConfig"},"CreateTime":{"locationName":"createTime","type":"timestamp"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeSpotInstanceRequests":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SpotInstanceRequestIds":{"shape":"S2c","locationName":"SpotInstanceRequestId"},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"SpotInstanceRequests":{"shape":"Se6","locationName":"spotInstanceRequestSet"}}},"http":{}},"DescribeSpotPriceHistory":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"StartTime":{"locationName":"startTime","type":"timestamp"},"EndTime":{"locationName":"endTime","type":"timestamp"},"InstanceTypes":{"locationName":"InstanceType","type":"list","member":{}},"ProductDescriptions":{"locationName":"ProductDescription","type":"list","member":{}},"Filters":{"shape":"S7e","locationName":"Filter"},"AvailabilityZone":{"locationName":"availabilityZone"},"MaxResults":{"locationName":"maxResults","type":"integer"},"NextToken":{"locationName":"nextToken"}}},"output":{"type":"structure","members":{"SpotPriceHistory":{"locationName":"spotPriceHistorySet","type":"list","member":{"locationName":"item","type":"structure","members":{"InstanceType":{"locationName":"instanceType"},"ProductDescription":{"locationName":"productDescription"},"SpotPrice":{"locationName":"spotPrice"},"Timestamp":{"locationName":"timestamp","type":"timestamp"},"AvailabilityZone":{"locationName":"availabilityZone"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeSubnets":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SubnetIds":{"locationName":"SubnetId","type":"list","member":{"locationName":"SubnetId"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"Subnets":{"locationName":"subnetSet","type":"list","member":{"shape":"S5d","locationName":"item"}}}},"http":{}},"DescribeTags":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Filters":{"shape":"S7e","locationName":"Filter"},"MaxResults":{"locationName":"maxResults","type":"integer"},"NextToken":{"locationName":"nextToken"}}},"output":{"type":"structure","members":{"Tags":{"locationName":"tagSet","type":"list","member":{"locationName":"item","type":"structure","members":{"ResourceId":{"locationName":"resourceId"},"ResourceType":{"locationName":"resourceType"},"Key":{"locationName":"key"},"Value":{"locationName":"value"}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeVolumeAttribute":{"input":{"type":"structure","required":["VolumeId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VolumeId":{},"Attribute":{}}},"output":{"type":"structure","members":{"VolumeId":{"locationName":"volumeId"},"AutoEnableIO":{"shape":"S9y","locationName":"autoEnableIO"},"ProductCodes":{"shape":"S90","locationName":"productCodes"}}},"http":{}},"DescribeVolumeStatus":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VolumeIds":{"shape":"Sew","locationName":"VolumeId"},"Filters":{"shape":"S7e","locationName":"Filter"},"NextToken":{},"MaxResults":{"type":"integer"}}},"output":{"type":"structure","members":{"VolumeStatuses":{"locationName":"volumeStatusSet","type":"list","member":{"locationName":"item","type":"structure","members":{"VolumeId":{"locationName":"volumeId"},"AvailabilityZone":{"locationName":"availabilityZone"},"VolumeStatus":{"locationName":"volumeStatus","type":"structure","members":{"Status":{"locationName":"status"},"Details":{"locationName":"details","type":"list","member":{"locationName":"item","type":"structure","members":{"Name":{"locationName":"name"},"Status":{"locationName":"status"}}}}}},"Events":{"locationName":"eventsSet","type":"list","member":{"locationName":"item","type":"structure","members":{"EventType":{"locationName":"eventType"},"Description":{"locationName":"description"},"NotBefore":{"locationName":"notBefore","type":"timestamp"},"NotAfter":{"locationName":"notAfter","type":"timestamp"},"EventId":{"locationName":"eventId"}}}},"Actions":{"locationName":"actionsSet","type":"list","member":{"locationName":"item","type":"structure","members":{"Code":{"locationName":"code"},"Description":{"locationName":"description"},"EventType":{"locationName":"eventType"},"EventId":{"locationName":"eventId"}}}}}}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeVolumes":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VolumeIds":{"shape":"Sew","locationName":"VolumeId"},"Filters":{"shape":"S7e","locationName":"Filter"},"NextToken":{"locationName":"nextToken"},"MaxResults":{"locationName":"maxResults","type":"integer"}}},"output":{"type":"structure","members":{"Volumes":{"locationName":"volumeSet","type":"list","member":{"shape":"S5i","locationName":"item"}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeVpcAttribute":{"input":{"type":"structure","required":["VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcId":{},"Attribute":{}}},"output":{"type":"structure","members":{"VpcId":{"locationName":"vpcId"},"EnableDnsSupport":{"shape":"S9y","locationName":"enableDnsSupport"},"EnableDnsHostnames":{"shape":"S9y","locationName":"enableDnsHostnames"}}},"http":{}},"DescribeVpcClassicLink":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcIds":{"locationName":"VpcId","type":"list","member":{"locationName":"VpcId"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"Vpcs":{"locationName":"vpcSet","type":"list","member":{"locationName":"item","type":"structure","members":{"VpcId":{"locationName":"vpcId"},"ClassicLinkEnabled":{"locationName":"classicLinkEnabled","type":"boolean"},"Tags":{"shape":"Sa","locationName":"tagSet"}}}}}},"http":{}},"DescribeVpcEndpointServices":{"input":{"type":"structure","members":{"DryRun":{"type":"boolean"},"MaxResults":{"type":"integer"},"NextToken":{}}},"output":{"type":"structure","members":{"ServiceNames":{"shape":"S22","locationName":"serviceNameSet"},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeVpcEndpoints":{"input":{"type":"structure","members":{"DryRun":{"type":"boolean"},"VpcEndpointIds":{"shape":"S22","locationName":"VpcEndpointId"},"Filters":{"shape":"S7e","locationName":"Filter"},"MaxResults":{"type":"integer"},"NextToken":{}}},"output":{"type":"structure","members":{"VpcEndpoints":{"locationName":"vpcEndpointSet","type":"list","member":{"shape":"S5s","locationName":"item"}},"NextToken":{"locationName":"nextToken"}}},"http":{}},"DescribeVpcPeeringConnections":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcPeeringConnectionIds":{"shape":"S22","locationName":"VpcPeeringConnectionId"},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"VpcPeeringConnections":{"locationName":"vpcPeeringConnectionSet","type":"list","member":{"shape":"S5","locationName":"item"}}}},"http":{}},"DescribeVpcs":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcIds":{"locationName":"VpcId","type":"list","member":{"locationName":"VpcId"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"Vpcs":{"locationName":"vpcSet","type":"list","member":{"shape":"S5o","locationName":"item"}}}},"http":{}},"DescribeVpnConnections":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpnConnectionIds":{"locationName":"VpnConnectionId","type":"list","member":{"locationName":"VpnConnectionId"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"VpnConnections":{"locationName":"vpnConnectionSet","type":"list","member":{"shape":"S5z","locationName":"item"}}}},"http":{}},"DescribeVpnGateways":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpnGatewayIds":{"locationName":"VpnGatewayId","type":"list","member":{"locationName":"VpnGatewayId"}},"Filters":{"shape":"S7e","locationName":"Filter"}}},"output":{"type":"structure","members":{"VpnGateways":{"locationName":"vpnGatewaySet","type":"list","member":{"shape":"S6b","locationName":"item"}}}},"http":{}},"DetachClassicLinkVpc":{"input":{"type":"structure","required":["InstanceId","VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceId":{"locationName":"instanceId"},"VpcId":{"locationName":"vpcId"}}},"output":{"type":"structure","members":{"Return":{"locationName":"return","type":"boolean"}}},"http":{}},"DetachInternetGateway":{"input":{"type":"structure","required":["InternetGatewayId","VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InternetGatewayId":{"locationName":"internetGatewayId"},"VpcId":{"locationName":"vpcId"}}},"http":{}},"DetachNetworkInterface":{"input":{"type":"structure","required":["AttachmentId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"AttachmentId":{"locationName":"attachmentId"},"Force":{"locationName":"force","type":"boolean"}}},"http":{}},"DetachVolume":{"input":{"type":"structure","required":["VolumeId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VolumeId":{},"InstanceId":{},"Device":{},"Force":{"type":"boolean"}}},"output":{"shape":"Su","locationName":"attachment"},"http":{}},"DetachVpnGateway":{"input":{"type":"structure","required":["VpnGatewayId","VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpnGatewayId":{},"VpcId":{}}},"http":{}},"DisableVgwRoutePropagation":{"input":{"type":"structure","required":["RouteTableId","GatewayId"],"members":{"RouteTableId":{},"GatewayId":{}}},"http":{}},"DisableVpcClassicLink":{"input":{"type":"structure","required":["VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcId":{"locationName":"vpcId"}}},"output":{"type":"structure","members":{"Return":{"locationName":"return","type":"boolean"}}},"http":{}},"DisassociateAddress":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"PublicIp":{},"AssociationId":{}}},"http":{}},"DisassociateRouteTable":{"input":{"type":"structure","required":["AssociationId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"AssociationId":{"locationName":"associationId"}}},"http":{}},"EnableVgwRoutePropagation":{"input":{"type":"structure","required":["RouteTableId","GatewayId"],"members":{"RouteTableId":{},"GatewayId":{}}},"http":{}},"EnableVolumeIO":{"input":{"type":"structure","required":["VolumeId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VolumeId":{"locationName":"volumeId"}}},"http":{}},"EnableVpcClassicLink":{"input":{"type":"structure","required":["VpcId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcId":{"locationName":"vpcId"}}},"output":{"type":"structure","members":{"Return":{"locationName":"return","type":"boolean"}}},"http":{}},"GetConsoleOutput":{"input":{"type":"structure","required":["InstanceId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceId":{}}},"output":{"type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"Timestamp":{"locationName":"timestamp","type":"timestamp"},"Output":{"locationName":"output"}}},"http":{}},"GetPasswordData":{"input":{"type":"structure","required":["InstanceId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceId":{}}},"output":{"type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"Timestamp":{"locationName":"timestamp","type":"timestamp"},"PasswordData":{"locationName":"passwordData"}}},"http":{}},"ImportImage":{"input":{"type":"structure","members":{"DryRun":{"type":"boolean"},"Description":{},"DiskContainers":{"locationName":"DiskContainer","type":"list","member":{"locationName":"item","type":"structure","members":{"Description":{},"Format":{},"Url":{},"UserBucket":{"shape":"Sgq"},"DeviceName":{},"SnapshotId":{}}}},"LicenseType":{},"Hypervisor":{},"Architecture":{},"Platform":{},"ClientData":{"shape":"Sgr"},"ClientToken":{},"RoleName":{}}},"output":{"type":"structure","members":{"ImportTaskId":{"locationName":"importTaskId"},"Architecture":{"locationName":"architecture"},"LicenseType":{"locationName":"licenseType"},"Platform":{"locationName":"platform"},"Hypervisor":{"locationName":"hypervisor"},"Description":{"locationName":"description"},"SnapshotDetails":{"shape":"S9n","locationName":"snapshotDetailSet"},"ImageId":{"locationName":"imageId"},"Progress":{"locationName":"progress"},"StatusMessage":{"locationName":"statusMessage"},"Status":{"locationName":"status"}}},"http":{}},"ImportInstance":{"input":{"type":"structure","required":["Platform"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Description":{"locationName":"description"},"LaunchSpecification":{"locationName":"launchSpecification","type":"structure","members":{"Architecture":{"locationName":"architecture"},"GroupNames":{"shape":"Sgv","locationName":"GroupName"},"GroupIds":{"shape":"S46","locationName":"GroupId"},"AdditionalInfo":{"locationName":"additionalInfo"},"UserData":{"locationName":"userData","type":"structure","members":{"Data":{"locationName":"data"}}},"InstanceType":{"locationName":"instanceType"},"Placement":{"shape":"Sao","locationName":"placement"},"Monitoring":{"locationName":"monitoring","type":"boolean"},"SubnetId":{"locationName":"subnetId"},"InstanceInitiatedShutdownBehavior":{"locationName":"instanceInitiatedShutdownBehavior"},"PrivateIpAddress":{"locationName":"privateIpAddress"}}},"DiskImages":{"locationName":"diskImage","type":"list","member":{"type":"structure","members":{"Image":{"shape":"Sh0"},"Description":{},"Volume":{"shape":"Sh1"}}}},"Platform":{"locationName":"platform"}}},"output":{"type":"structure","members":{"ConversionTask":{"shape":"S85","locationName":"conversionTask"}}},"http":{}},"ImportKeyPair":{"input":{"type":"structure","required":["KeyName","PublicKeyMaterial"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"KeyName":{"locationName":"keyName"},"PublicKeyMaterial":{"locationName":"publicKeyMaterial","type":"blob"}}},"output":{"type":"structure","members":{"KeyName":{"locationName":"keyName"},"KeyFingerprint":{"locationName":"keyFingerprint"}}},"http":{}},"ImportSnapshot":{"input":{"type":"structure","members":{"DryRun":{"type":"boolean"},"Description":{},"DiskContainer":{"type":"structure","members":{"Description":{},"Format":{},"Url":{},"UserBucket":{"shape":"Sgq"}}},"ClientData":{"shape":"Sgr"},"ClientToken":{},"RoleName":{}}},"output":{"type":"structure","members":{"ImportTaskId":{"locationName":"importTaskId"},"SnapshotTaskDetail":{"shape":"S9u","locationName":"snapshotTaskDetail"},"Description":{"locationName":"description"}}},"http":{}},"ImportVolume":{"input":{"type":"structure","required":["AvailabilityZone","Image","Volume"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"AvailabilityZone":{"locationName":"availabilityZone"},"Image":{"shape":"Sh0","locationName":"image"},"Description":{"locationName":"description"},"Volume":{"shape":"Sh1","locationName":"volume"}}},"output":{"type":"structure","members":{"ConversionTask":{"shape":"S85","locationName":"conversionTask"}}},"http":{}},"ModifyImageAttribute":{"input":{"type":"structure","required":["ImageId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ImageId":{},"Attribute":{},"OperationType":{},"UserIds":{"shape":"Shc","locationName":"UserId"},"UserGroups":{"locationName":"UserGroup","type":"list","member":{"locationName":"UserGroup"}},"ProductCodes":{"locationName":"ProductCode","type":"list","member":{"locationName":"ProductCode"}},"Value":{},"LaunchPermission":{"type":"structure","members":{"Add":{"shape":"S8x"},"Remove":{"shape":"S8x"}}},"Description":{"shape":"S2z"}}},"http":{}},"ModifyInstanceAttribute":{"input":{"type":"structure","required":["InstanceId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceId":{"locationName":"instanceId"},"Attribute":{"locationName":"attribute"},"Value":{"locationName":"value"},"BlockDeviceMappings":{"locationName":"blockDeviceMapping","type":"list","member":{"locationName":"item","type":"structure","members":{"DeviceName":{"locationName":"deviceName"},"Ebs":{"locationName":"ebs","type":"structure","members":{"VolumeId":{"locationName":"volumeId"},"DeleteOnTermination":{"locationName":"deleteOnTermination","type":"boolean"}}},"VirtualName":{"locationName":"virtualName"},"NoDevice":{"locationName":"noDevice"}}}},"SourceDestCheck":{"shape":"S9y"},"DisableApiTermination":{"shape":"S9y","locationName":"disableApiTermination"},"InstanceType":{"shape":"S2z","locationName":"instanceType"},"Kernel":{"shape":"S2z","locationName":"kernel"},"Ramdisk":{"shape":"S2z","locationName":"ramdisk"},"UserData":{"locationName":"userData","type":"structure","members":{"Value":{"locationName":"value","type":"blob"}}},"InstanceInitiatedShutdownBehavior":{"shape":"S2z","locationName":"instanceInitiatedShutdownBehavior"},"Groups":{"shape":"So","locationName":"GroupId"},"EbsOptimized":{"shape":"S9y","locationName":"ebsOptimized"},"SriovNetSupport":{"shape":"S2z","locationName":"sriovNetSupport"}}},"http":{}},"ModifyNetworkInterfaceAttribute":{"input":{"type":"structure","required":["NetworkInterfaceId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"Description":{"shape":"S2z","locationName":"description"},"SourceDestCheck":{"shape":"S9y","locationName":"sourceDestCheck"},"Groups":{"shape":"S46","locationName":"SecurityGroupId"},"Attachment":{"locationName":"attachment","type":"structure","members":{"AttachmentId":{"locationName":"attachmentId"},"DeleteOnTermination":{"locationName":"deleteOnTermination","type":"boolean"}}}}},"http":{}},"ModifyReservedInstances":{"input":{"type":"structure","required":["ReservedInstancesIds","TargetConfigurations"],"members":{"ClientToken":{"locationName":"clientToken"},"ReservedInstancesIds":{"shape":"Sc2","locationName":"ReservedInstancesId"},"TargetConfigurations":{"locationName":"ReservedInstancesConfigurationSetItemType","type":"list","member":{"shape":"Sco","locationName":"item"}}}},"output":{"type":"structure","members":{"ReservedInstancesModificationId":{"locationName":"reservedInstancesModificationId"}}},"http":{}},"ModifySnapshotAttribute":{"input":{"type":"structure","required":["SnapshotId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SnapshotId":{},"Attribute":{},"OperationType":{},"UserIds":{"shape":"Shc","locationName":"UserId"},"GroupNames":{"shape":"Sd0","locationName":"UserGroup"},"CreateVolumePermission":{"type":"structure","members":{"Add":{"shape":"Sd7"},"Remove":{"shape":"Sd7"}}}}},"http":{}},"ModifySpotFleetRequest":{"input":{"type":"structure","required":["SpotFleetRequestId"],"members":{"SpotFleetRequestId":{"locationName":"spotFleetRequestId"},"TargetCapacity":{"locationName":"targetCapacity","type":"integer"},"ExcessCapacityTerminationPolicy":{"locationName":"excessCapacityTerminationPolicy"}}},"output":{"type":"structure","members":{"Return":{"locationName":"return","type":"boolean"}}},"http":{}},"ModifySubnetAttribute":{"input":{"type":"structure","required":["SubnetId"],"members":{"SubnetId":{"locationName":"subnetId"},"MapPublicIpOnLaunch":{"shape":"S9y"}}},"http":{}},"ModifyVolumeAttribute":{"input":{"type":"structure","required":["VolumeId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VolumeId":{},"AutoEnableIO":{"shape":"S9y"}}},"http":{}},"ModifyVpcAttribute":{"input":{"type":"structure","required":["VpcId"],"members":{"VpcId":{"locationName":"vpcId"},"EnableDnsSupport":{"shape":"S9y"},"EnableDnsHostnames":{"shape":"S9y"}}},"http":{}},"ModifyVpcEndpoint":{"input":{"type":"structure","required":["VpcEndpointId"],"members":{"DryRun":{"type":"boolean"},"VpcEndpointId":{},"ResetPolicy":{"type":"boolean"},"PolicyDocument":{},"AddRouteTableIds":{"shape":"S22","locationName":"AddRouteTableId"},"RemoveRouteTableIds":{"shape":"S22","locationName":"RemoveRouteTableId"}}},"output":{"type":"structure","members":{"Return":{"locationName":"return","type":"boolean"}}},"http":{}},"MonitorInstances":{"input":{"type":"structure","required":["InstanceIds"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceIds":{"shape":"S7x","locationName":"InstanceId"}}},"output":{"type":"structure","members":{"InstanceMonitorings":{"shape":"Si1","locationName":"instancesSet"}}},"http":{}},"MoveAddressToVpc":{"input":{"type":"structure","required":["PublicIp"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"PublicIp":{"locationName":"publicIp"}}},"output":{"type":"structure","members":{"AllocationId":{"locationName":"allocationId"},"Status":{"locationName":"status"}}},"http":{}},"PurchaseReservedInstancesOffering":{"input":{"type":"structure","required":["ReservedInstancesOfferingId","InstanceCount"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ReservedInstancesOfferingId":{},"InstanceCount":{"type":"integer"},"LimitPrice":{"locationName":"limitPrice","type":"structure","members":{"Amount":{"locationName":"amount","type":"double"},"CurrencyCode":{"locationName":"currencyCode"}}}}},"output":{"type":"structure","members":{"ReservedInstancesId":{"locationName":"reservedInstancesId"}}},"http":{}},"RebootInstances":{"input":{"type":"structure","required":["InstanceIds"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceIds":{"shape":"S7x","locationName":"InstanceId"}}},"http":{}},"RegisterImage":{"input":{"type":"structure","required":["Name"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ImageLocation":{},"Name":{"locationName":"name"},"Description":{"locationName":"description"},"Architecture":{"locationName":"architecture"},"KernelId":{"locationName":"kernelId"},"RamdiskId":{"locationName":"ramdiskId"},"RootDeviceName":{"locationName":"rootDeviceName"},"BlockDeviceMappings":{"shape":"S38","locationName":"BlockDeviceMapping"},"VirtualizationType":{"locationName":"virtualizationType"},"SriovNetSupport":{"locationName":"sriovNetSupport"}}},"output":{"type":"structure","members":{"ImageId":{"locationName":"imageId"}}},"http":{}},"RejectVpcPeeringConnection":{"input":{"type":"structure","required":["VpcPeeringConnectionId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"VpcPeeringConnectionId":{"locationName":"vpcPeeringConnectionId"}}},"output":{"type":"structure","members":{"Return":{"locationName":"return","type":"boolean"}}},"http":{}},"ReleaseAddress":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"PublicIp":{},"AllocationId":{}}},"http":{}},"ReplaceNetworkAclAssociation":{"input":{"type":"structure","required":["AssociationId","NetworkAclId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"AssociationId":{"locationName":"associationId"},"NetworkAclId":{"locationName":"networkAclId"}}},"output":{"type":"structure","members":{"NewAssociationId":{"locationName":"newAssociationId"}}},"http":{}},"ReplaceNetworkAclEntry":{"input":{"type":"structure","required":["NetworkAclId","RuleNumber","Protocol","RuleAction","Egress","CidrBlock"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"NetworkAclId":{"locationName":"networkAclId"},"RuleNumber":{"locationName":"ruleNumber","type":"integer"},"Protocol":{"locationName":"protocol"},"RuleAction":{"locationName":"ruleAction"},"Egress":{"locationName":"egress","type":"boolean"},"CidrBlock":{"locationName":"cidrBlock"},"IcmpTypeCode":{"shape":"S40","locationName":"Icmp"},"PortRange":{"shape":"S41","locationName":"portRange"}}},"http":{}},"ReplaceRoute":{"input":{"type":"structure","required":["RouteTableId","DestinationCidrBlock"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"RouteTableId":{"locationName":"routeTableId"},"DestinationCidrBlock":{"locationName":"destinationCidrBlock"},"GatewayId":{"locationName":"gatewayId"},"InstanceId":{"locationName":"instanceId"},"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"VpcPeeringConnectionId":{"locationName":"vpcPeeringConnectionId"}}},"http":{}},"ReplaceRouteTableAssociation":{"input":{"type":"structure","required":["AssociationId","RouteTableId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"AssociationId":{"locationName":"associationId"},"RouteTableId":{"locationName":"routeTableId"}}},"output":{"type":"structure","members":{"NewAssociationId":{"locationName":"newAssociationId"}}},"http":{}},"ReportInstanceStatus":{"input":{"type":"structure","required":["Instances","Status","ReasonCodes"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"Instances":{"shape":"S7x","locationName":"instanceId"},"Status":{"locationName":"status"},"StartTime":{"locationName":"startTime","type":"timestamp"},"EndTime":{"locationName":"endTime","type":"timestamp"},"ReasonCodes":{"locationName":"reasonCode","type":"list","member":{"locationName":"item"}},"Description":{"locationName":"description"}}},"http":{}},"RequestSpotFleet":{"input":{"type":"structure","required":["SpotFleetRequestConfig"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SpotFleetRequestConfig":{"shape":"Sdu","locationName":"spotFleetRequestConfig"}}},"output":{"type":"structure","required":["SpotFleetRequestId"],"members":{"SpotFleetRequestId":{"locationName":"spotFleetRequestId"}}},"http":{}},"RequestSpotInstances":{"input":{"type":"structure","required":["SpotPrice"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SpotPrice":{"locationName":"spotPrice"},"ClientToken":{"locationName":"clientToken"},"InstanceCount":{"locationName":"instanceCount","type":"integer"},"Type":{"locationName":"type"},"ValidFrom":{"locationName":"validFrom","type":"timestamp"},"ValidUntil":{"locationName":"validUntil","type":"timestamp"},"LaunchGroup":{"locationName":"launchGroup"},"AvailabilityZoneGroup":{"locationName":"availabilityZoneGroup"},"BlockDurationMinutes":{"locationName":"blockDurationMinutes","type":"integer"},"LaunchSpecification":{"type":"structure","members":{"ImageId":{"locationName":"imageId"},"KeyName":{"locationName":"keyName"},"SecurityGroups":{"shape":"S22","locationName":"SecurityGroup"},"UserData":{"locationName":"userData"},"AddressingType":{"locationName":"addressingType"},"InstanceType":{"locationName":"instanceType"},"Placement":{"shape":"Sdx","locationName":"placement"},"KernelId":{"locationName":"kernelId"},"RamdiskId":{"locationName":"ramdiskId"},"BlockDeviceMappings":{"shape":"S93","locationName":"blockDeviceMapping"},"SubnetId":{"locationName":"subnetId"},"NetworkInterfaces":{"shape":"Sdz","locationName":"NetworkInterface"},"IamInstanceProfile":{"shape":"Se1","locationName":"iamInstanceProfile"},"EbsOptimized":{"locationName":"ebsOptimized","type":"boolean"},"Monitoring":{"shape":"Sec","locationName":"monitoring"},"SecurityGroupIds":{"shape":"S22","locationName":"SecurityGroupId"}}}}},"output":{"type":"structure","members":{"SpotInstanceRequests":{"shape":"Se6","locationName":"spotInstanceRequestSet"}}},"http":{}},"ResetImageAttribute":{"input":{"type":"structure","required":["ImageId","Attribute"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ImageId":{},"Attribute":{}}},"http":{}},"ResetInstanceAttribute":{"input":{"type":"structure","required":["InstanceId","Attribute"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceId":{"locationName":"instanceId"},"Attribute":{"locationName":"attribute"}}},"http":{}},"ResetNetworkInterfaceAttribute":{"input":{"type":"structure","required":["NetworkInterfaceId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"SourceDestCheck":{"locationName":"sourceDestCheck"}}},"http":{}},"ResetSnapshotAttribute":{"input":{"type":"structure","required":["SnapshotId","Attribute"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"SnapshotId":{},"Attribute":{}}},"http":{}},"RestoreAddressToClassic":{"input":{"type":"structure","required":["PublicIp"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"PublicIp":{"locationName":"publicIp"}}},"output":{"type":"structure","members":{"Status":{"locationName":"status"},"PublicIp":{"locationName":"publicIp"}}},"http":{}},"RevokeSecurityGroupEgress":{"input":{"type":"structure","required":["GroupId"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"GroupId":{"locationName":"groupId"},"SourceSecurityGroupName":{"locationName":"sourceSecurityGroupName"},"SourceSecurityGroupOwnerId":{"locationName":"sourceSecurityGroupOwnerId"},"IpProtocol":{"locationName":"ipProtocol"},"FromPort":{"locationName":"fromPort","type":"integer"},"ToPort":{"locationName":"toPort","type":"integer"},"CidrIp":{"locationName":"cidrIp"},"IpPermissions":{"shape":"S11","locationName":"ipPermissions"}}},"http":{}},"RevokeSecurityGroupIngress":{"input":{"type":"structure","members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"GroupName":{},"GroupId":{},"SourceSecurityGroupName":{},"SourceSecurityGroupOwnerId":{},"IpProtocol":{},"FromPort":{"type":"integer"},"ToPort":{"type":"integer"},"CidrIp":{},"IpPermissions":{"shape":"S11"}}},"http":{}},"RunInstances":{"input":{"type":"structure","required":["ImageId","MinCount","MaxCount"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"ImageId":{},"MinCount":{"type":"integer"},"MaxCount":{"type":"integer"},"KeyName":{},"SecurityGroups":{"shape":"Sgv","locationName":"SecurityGroup"},"SecurityGroupIds":{"shape":"S46","locationName":"SecurityGroupId"},"UserData":{},"InstanceType":{},"Placement":{"shape":"Sao"},"KernelId":{},"RamdiskId":{},"BlockDeviceMappings":{"shape":"S38","locationName":"BlockDeviceMapping"},"Monitoring":{"shape":"Sec"},"SubnetId":{},"DisableApiTermination":{"locationName":"disableApiTermination","type":"boolean"},"InstanceInitiatedShutdownBehavior":{"locationName":"instanceInitiatedShutdownBehavior"},"PrivateIpAddress":{"locationName":"privateIpAddress"},"ClientToken":{"locationName":"clientToken"},"AdditionalInfo":{"locationName":"additionalInfo"},"NetworkInterfaces":{"shape":"Sdz","locationName":"networkInterface"},"IamInstanceProfile":{"shape":"Se1","locationName":"iamInstanceProfile"},"EbsOptimized":{"locationName":"ebsOptimized","type":"boolean"}}},"output":{"shape":"Sak","locationName":"reservation"},"http":{}},"StartInstances":{"input":{"type":"structure","required":["InstanceIds"],"members":{"InstanceIds":{"shape":"S7x","locationName":"InstanceId"},"AdditionalInfo":{"locationName":"additionalInfo"},"DryRun":{"locationName":"dryRun","type":"boolean"}}},"output":{"type":"structure","members":{"StartingInstances":{"shape":"Sj6","locationName":"instancesSet"}}},"http":{}},"StopInstances":{"input":{"type":"structure","required":["InstanceIds"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceIds":{"shape":"S7x","locationName":"InstanceId"},"Force":{"locationName":"force","type":"boolean"}}},"output":{"type":"structure","members":{"StoppingInstances":{"shape":"Sj6","locationName":"instancesSet"}}},"http":{}},"TerminateInstances":{"input":{"type":"structure","required":["InstanceIds"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceIds":{"shape":"S7x","locationName":"InstanceId"}}},"output":{"type":"structure","members":{"TerminatingInstances":{"shape":"Sj6","locationName":"instancesSet"}}},"http":{}},"UnassignPrivateIpAddresses":{"input":{"type":"structure","required":["NetworkInterfaceId","PrivateIpAddresses"],"members":{"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"PrivateIpAddresses":{"shape":"Sg","locationName":"privateIpAddress"}}},"http":{}},"UnmonitorInstances":{"input":{"type":"structure","required":["InstanceIds"],"members":{"DryRun":{"locationName":"dryRun","type":"boolean"},"InstanceIds":{"shape":"S7x","locationName":"InstanceId"}}},"output":{"type":"structure","members":{"InstanceMonitorings":{"shape":"Si1","locationName":"instancesSet"}}},"http":{}}},"shapes":{"S5":{"type":"structure","members":{"AccepterVpcInfo":{"shape":"S6","locationName":"accepterVpcInfo"},"ExpirationTime":{"locationName":"expirationTime","type":"timestamp"},"RequesterVpcInfo":{"shape":"S6","locationName":"requesterVpcInfo"},"Status":{"locationName":"status","type":"structure","members":{"Code":{"locationName":"code"},"Message":{"locationName":"message"}}},"Tags":{"shape":"Sa","locationName":"tagSet"},"VpcPeeringConnectionId":{"locationName":"vpcPeeringConnectionId"}}},"S6":{"type":"structure","members":{"CidrBlock":{"locationName":"cidrBlock"},"OwnerId":{"locationName":"ownerId"},"VpcId":{"locationName":"vpcId"}}},"Sa":{"type":"list","member":{"locationName":"item","type":"structure","members":{"Key":{"locationName":"key"},"Value":{"locationName":"value"}}}},"Sg":{"type":"list","member":{"locationName":"PrivateIpAddress"}},"So":{"type":"list","member":{"locationName":"groupId"}},"Su":{"type":"structure","members":{"VolumeId":{"locationName":"volumeId"},"InstanceId":{"locationName":"instanceId"},"Device":{"locationName":"device"},"State":{"locationName":"status"},"AttachTime":{"locationName":"attachTime","type":"timestamp"},"DeleteOnTermination":{"locationName":"deleteOnTermination","type":"boolean"}}},"Sy":{"type":"structure","members":{"VpcId":{"locationName":"vpcId"},"State":{"locationName":"state"}}},"S11":{"type":"list","member":{"locationName":"item","type":"structure","members":{"IpProtocol":{"locationName":"ipProtocol"},"FromPort":{"locationName":"fromPort","type":"integer"},"ToPort":{"locationName":"toPort","type":"integer"},"UserIdGroupPairs":{"locationName":"groups","type":"list","member":{"locationName":"item","type":"structure","members":{"UserId":{"locationName":"userId"},"GroupName":{"locationName":"groupName"},"GroupId":{"locationName":"groupId"}}}},"IpRanges":{"locationName":"ipRanges","type":"list","member":{"locationName":"item","type":"structure","members":{"CidrIp":{"locationName":"cidrIp"}}}},"PrefixListIds":{"locationName":"prefixListIds","type":"list","member":{"locationName":"item","type":"structure","members":{"PrefixListId":{"locationName":"prefixListId"}}}}}}},"S1b":{"type":"structure","members":{"S3":{"type":"structure","members":{"Bucket":{"locationName":"bucket"},"Prefix":{"locationName":"prefix"},"AWSAccessKeyId":{},"UploadPolicy":{"locationName":"uploadPolicy","type":"blob"},"UploadPolicySignature":{"locationName":"uploadPolicySignature"}}}}},"S1f":{"type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"BundleId":{"locationName":"bundleId"},"State":{"locationName":"state"},"StartTime":{"locationName":"startTime","type":"timestamp"},"UpdateTime":{"locationName":"updateTime","type":"timestamp"},"Storage":{"shape":"S1b","locationName":"storage"},"Progress":{"locationName":"progress"},"BundleTaskError":{"locationName":"error","type":"structure","members":{"Code":{"locationName":"code"},"Message":{"locationName":"message"}}}}},"S1q":{"type":"list","member":{"locationName":"item","type":"structure","members":{"ReservedInstancesListingId":{"locationName":"reservedInstancesListingId"},"ReservedInstancesId":{"locationName":"reservedInstancesId"},"CreateDate":{"locationName":"createDate","type":"timestamp"},"UpdateDate":{"locationName":"updateDate","type":"timestamp"},"Status":{"locationName":"status"},"StatusMessage":{"locationName":"statusMessage"},"InstanceCounts":{"locationName":"instanceCounts","type":"list","member":{"locationName":"item","type":"structure","members":{"State":{"locationName":"state"},"InstanceCount":{"locationName":"instanceCount","type":"integer"}}}},"PriceSchedules":{"locationName":"priceSchedules","type":"list","member":{"locationName":"item","type":"structure","members":{"Term":{"locationName":"term","type":"long"},"Price":{"locationName":"price","type":"double"},"CurrencyCode":{"locationName":"currencyCode"},"Active":{"locationName":"active","type":"boolean"}}}},"Tags":{"shape":"Sa","locationName":"tagSet"},"ClientToken":{"locationName":"clientToken"}}}},"S22":{"type":"list","member":{"locationName":"item"}},"S2c":{"type":"list","member":{"locationName":"SpotInstanceRequestId"}},"S2q":{"type":"structure","members":{"CustomerGatewayId":{"locationName":"customerGatewayId"},"State":{"locationName":"state"},"Type":{"locationName":"type"},"IpAddress":{"locationName":"ipAddress"},"BgpAsn":{"locationName":"bgpAsn"},"Tags":{"shape":"Sa","locationName":"tagSet"}}},"S2v":{"type":"structure","members":{"DhcpOptionsId":{"locationName":"dhcpOptionsId"},"DhcpConfigurations":{"locationName":"dhcpConfigurationSet","type":"list","member":{"locationName":"item","type":"structure","members":{"Key":{"locationName":"key"},"Values":{"locationName":"valueSet","type":"list","member":{"shape":"S2z","locationName":"item"}}}}},"Tags":{"shape":"Sa","locationName":"tagSet"}}},"S2z":{"type":"structure","members":{"Value":{"locationName":"value"}}},"S34":{"type":"list","member":{"locationName":"item","type":"structure","required":["Error"],"members":{"ResourceId":{"locationName":"resourceId"},"Error":{"locationName":"error","type":"structure","required":["Code","Message"],"members":{"Code":{"locationName":"code"},"Message":{"locationName":"message"}}}}}},"S38":{"type":"list","member":{"shape":"S39","locationName":"BlockDeviceMapping"}},"S39":{"type":"structure","members":{"VirtualName":{"locationName":"virtualName"},"DeviceName":{"locationName":"deviceName"},"Ebs":{"locationName":"ebs","type":"structure","members":{"SnapshotId":{"locationName":"snapshotId"},"VolumeSize":{"locationName":"volumeSize","type":"integer"},"DeleteOnTermination":{"locationName":"deleteOnTermination","type":"boolean"},"VolumeType":{"locationName":"volumeType"},"Iops":{"locationName":"iops","type":"integer"},"Encrypted":{"locationName":"encrypted","type":"boolean"}}},"NoDevice":{"locationName":"noDevice"}}},"S3j":{"type":"structure","members":{"ExportTaskId":{"locationName":"exportTaskId"},"Description":{"locationName":"description"},"State":{"locationName":"state"},"StatusMessage":{"locationName":"statusMessage"},"InstanceExportDetails":{"locationName":"instanceExport","type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"TargetEnvironment":{"locationName":"targetEnvironment"}}},"ExportToS3Task":{"locationName":"exportToS3","type":"structure","members":{"DiskImageFormat":{"locationName":"diskImageFormat"},"ContainerFormat":{"locationName":"containerFormat"},"S3Bucket":{"locationName":"s3Bucket"},"S3Key":{"locationName":"s3Key"}}}}},"S3p":{"type":"structure","members":{"InternetGatewayId":{"locationName":"internetGatewayId"},"Attachments":{"locationName":"attachmentSet","type":"list","member":{"locationName":"item","type":"structure","members":{"VpcId":{"locationName":"vpcId"},"State":{"locationName":"state"}}}},"Tags":{"shape":"Sa","locationName":"tagSet"}}},"S3w":{"type":"structure","members":{"NetworkAclId":{"locationName":"networkAclId"},"VpcId":{"locationName":"vpcId"},"IsDefault":{"locationName":"default","type":"boolean"},"Entries":{"locationName":"entrySet","type":"list","member":{"locationName":"item","type":"structure","members":{"RuleNumber":{"locationName":"ruleNumber","type":"integer"},"Protocol":{"locationName":"protocol"},"RuleAction":{"locationName":"ruleAction"},"Egress":{"locationName":"egress","type":"boolean"},"CidrBlock":{"locationName":"cidrBlock"},"IcmpTypeCode":{"shape":"S40","locationName":"icmpTypeCode"},"PortRange":{"shape":"S41","locationName":"portRange"}}}},"Associations":{"locationName":"associationSet","type":"list","member":{"locationName":"item","type":"structure","members":{"NetworkAclAssociationId":{"locationName":"networkAclAssociationId"},"NetworkAclId":{"locationName":"networkAclId"},"SubnetId":{"locationName":"subnetId"}}}},"Tags":{"shape":"Sa","locationName":"tagSet"}}},"S40":{"type":"structure","members":{"Type":{"locationName":"type","type":"integer"},"Code":{"locationName":"code","type":"integer"}}},"S41":{"type":"structure","members":{"From":{"locationName":"from","type":"integer"},"To":{"locationName":"to","type":"integer"}}},"S46":{"type":"list","member":{"locationName":"SecurityGroupId"}},"S47":{"type":"list","member":{"locationName":"item","type":"structure","required":["PrivateIpAddress"],"members":{"PrivateIpAddress":{"locationName":"privateIpAddress"},"Primary":{"locationName":"primary","type":"boolean"}}}},"S4a":{"type":"structure","members":{"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"SubnetId":{"locationName":"subnetId"},"VpcId":{"locationName":"vpcId"},"AvailabilityZone":{"locationName":"availabilityZone"},"Description":{"locationName":"description"},"OwnerId":{"locationName":"ownerId"},"RequesterId":{"locationName":"requesterId"},"RequesterManaged":{"locationName":"requesterManaged","type":"boolean"},"Status":{"locationName":"status"},"MacAddress":{"locationName":"macAddress"},"PrivateIpAddress":{"locationName":"privateIpAddress"},"PrivateDnsName":{"locationName":"privateDnsName"},"SourceDestCheck":{"locationName":"sourceDestCheck","type":"boolean"},"Groups":{"shape":"S4c","locationName":"groupSet"},"Attachment":{"shape":"S4e","locationName":"attachment"},"Association":{"shape":"S4f","locationName":"association"},"TagSet":{"shape":"Sa","locationName":"tagSet"},"PrivateIpAddresses":{"locationName":"privateIpAddressesSet","type":"list","member":{"locationName":"item","type":"structure","members":{"PrivateIpAddress":{"locationName":"privateIpAddress"},"PrivateDnsName":{"locationName":"privateDnsName"},"Primary":{"locationName":"primary","type":"boolean"},"Association":{"shape":"S4f","locationName":"association"}}}}}},"S4c":{"type":"list","member":{"locationName":"item","type":"structure","members":{"GroupName":{"locationName":"groupName"},"GroupId":{"locationName":"groupId"}}}},"S4e":{"type":"structure","members":{"AttachmentId":{"locationName":"attachmentId"},"InstanceId":{"locationName":"instanceId"},"InstanceOwnerId":{"locationName":"instanceOwnerId"},"DeviceIndex":{"locationName":"deviceIndex","type":"integer"},"Status":{"locationName":"status"},"AttachTime":{"locationName":"attachTime","type":"timestamp"},"DeleteOnTermination":{"locationName":"deleteOnTermination","type":"boolean"}}},"S4f":{"type":"structure","members":{"PublicIp":{"locationName":"publicIp"},"PublicDnsName":{"locationName":"publicDnsName"},"IpOwnerId":{"locationName":"ipOwnerId"},"AllocationId":{"locationName":"allocationId"},"AssociationId":{"locationName":"associationId"}}},"S4s":{"type":"structure","members":{"RouteTableId":{"locationName":"routeTableId"},"VpcId":{"locationName":"vpcId"},"Routes":{"locationName":"routeSet","type":"list","member":{"locationName":"item","type":"structure","members":{"DestinationCidrBlock":{"locationName":"destinationCidrBlock"},"DestinationPrefixListId":{"locationName":"destinationPrefixListId"},"GatewayId":{"locationName":"gatewayId"},"InstanceId":{"locationName":"instanceId"},"InstanceOwnerId":{"locationName":"instanceOwnerId"},"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"VpcPeeringConnectionId":{"locationName":"vpcPeeringConnectionId"},"State":{"locationName":"state"},"Origin":{"locationName":"origin"}}}},"Associations":{"locationName":"associationSet","type":"list","member":{"locationName":"item","type":"structure","members":{"RouteTableAssociationId":{"locationName":"routeTableAssociationId"},"RouteTableId":{"locationName":"routeTableId"},"SubnetId":{"locationName":"subnetId"},"Main":{"locationName":"main","type":"boolean"}}}},"Tags":{"shape":"Sa","locationName":"tagSet"},"PropagatingVgws":{"locationName":"propagatingVgwSet","type":"list","member":{"locationName":"item","type":"structure","members":{"GatewayId":{"locationName":"gatewayId"}}}}}},"S54":{"type":"structure","members":{"SnapshotId":{"locationName":"snapshotId"},"VolumeId":{"locationName":"volumeId"},"State":{"locationName":"status"},"StateMessage":{"locationName":"statusMessage"},"StartTime":{"locationName":"startTime","type":"timestamp"},"Progress":{"locationName":"progress"},"OwnerId":{"locationName":"ownerId"},"Description":{"locationName":"description"},"VolumeSize":{"locationName":"volumeSize","type":"integer"},"OwnerAlias":{"locationName":"ownerAlias"},"Tags":{"shape":"Sa","locationName":"tagSet"},"Encrypted":{"locationName":"encrypted","type":"boolean"},"KmsKeyId":{"locationName":"kmsKeyId"},"DataEncryptionKeyId":{"locationName":"dataEncryptionKeyId"}}},"S58":{"type":"structure","members":{"OwnerId":{"locationName":"ownerId"},"Bucket":{"locationName":"bucket"},"Prefix":{"locationName":"prefix"},"State":{"locationName":"state"},"Fault":{"shape":"S5a","locationName":"fault"}}},"S5a":{"type":"structure","members":{"Code":{"locationName":"code"},"Message":{"locationName":"message"}}},"S5d":{"type":"structure","members":{"SubnetId":{"locationName":"subnetId"},"State":{"locationName":"state"},"VpcId":{"locationName":"vpcId"},"CidrBlock":{"locationName":"cidrBlock"},"AvailableIpAddressCount":{"locationName":"availableIpAddressCount","type":"integer"},"AvailabilityZone":{"locationName":"availabilityZone"},"DefaultForAz":{"locationName":"defaultForAz","type":"boolean"},"MapPublicIpOnLaunch":{"locationName":"mapPublicIpOnLaunch","type":"boolean"},"Tags":{"shape":"Sa","locationName":"tagSet"}}},"S5g":{"type":"list","member":{}},"S5i":{"type":"structure","members":{"VolumeId":{"locationName":"volumeId"},"Size":{"locationName":"size","type":"integer"},"SnapshotId":{"locationName":"snapshotId"},"AvailabilityZone":{"locationName":"availabilityZone"},"State":{"locationName":"status"},"CreateTime":{"locationName":"createTime","type":"timestamp"},"Attachments":{"locationName":"attachmentSet","type":"list","member":{"shape":"Su","locationName":"item"}},"Tags":{"shape":"Sa","locationName":"tagSet"},"VolumeType":{"locationName":"volumeType"},"Iops":{"locationName":"iops","type":"integer"},"Encrypted":{"locationName":"encrypted","type":"boolean"},"KmsKeyId":{"locationName":"kmsKeyId"}}},"S5o":{"type":"structure","members":{"VpcId":{"locationName":"vpcId"},"State":{"locationName":"state"},"CidrBlock":{"locationName":"cidrBlock"},"DhcpOptionsId":{"locationName":"dhcpOptionsId"},"Tags":{"shape":"Sa","locationName":"tagSet"},"InstanceTenancy":{"locationName":"instanceTenancy"},"IsDefault":{"locationName":"isDefault","type":"boolean"}}},"S5s":{"type":"structure","members":{"VpcEndpointId":{"locationName":"vpcEndpointId"},"VpcId":{"locationName":"vpcId"},"ServiceName":{"locationName":"serviceName"},"State":{"locationName":"state"},"PolicyDocument":{"locationName":"policyDocument"},"RouteTableIds":{"shape":"S22","locationName":"routeTableIdSet"},"CreationTimestamp":{"locationName":"creationTimestamp","type":"timestamp"}}},"S5z":{"type":"structure","members":{"VpnConnectionId":{"locationName":"vpnConnectionId"},"State":{"locationName":"state"},"CustomerGatewayConfiguration":{"locationName":"customerGatewayConfiguration"},"Type":{"locationName":"type"},"CustomerGatewayId":{"locationName":"customerGatewayId"},"VpnGatewayId":{"locationName":"vpnGatewayId"},"Tags":{"shape":"Sa","locationName":"tagSet"},"VgwTelemetry":{"locationName":"vgwTelemetry","type":"list","member":{"locationName":"item","type":"structure","members":{"OutsideIpAddress":{"locationName":"outsideIpAddress"},"Status":{"locationName":"status"},"LastStatusChange":{"locationName":"lastStatusChange","type":"timestamp"},"StatusMessage":{"locationName":"statusMessage"},"AcceptedRouteCount":{"locationName":"acceptedRouteCount","type":"integer"}}}},"Options":{"locationName":"options","type":"structure","members":{"StaticRoutesOnly":{"locationName":"staticRoutesOnly","type":"boolean"}}},"Routes":{"locationName":"routes","type":"list","member":{"locationName":"item","type":"structure","members":{"DestinationCidrBlock":{"locationName":"destinationCidrBlock"},"Source":{"locationName":"source"},"State":{"locationName":"state"}}}}}},"S6b":{"type":"structure","members":{"VpnGatewayId":{"locationName":"vpnGatewayId"},"State":{"locationName":"state"},"Type":{"locationName":"type"},"AvailabilityZone":{"locationName":"availabilityZone"},"VpcAttachments":{"locationName":"attachments","type":"list","member":{"shape":"Sy","locationName":"item"}},"Tags":{"shape":"Sa","locationName":"tagSet"}}},"S7e":{"type":"list","member":{"locationName":"Filter","type":"structure","members":{"Name":{},"Values":{"shape":"S22","locationName":"Value"}}}},"S7x":{"type":"list","member":{"locationName":"InstanceId"}},"S85":{"type":"structure","required":["ConversionTaskId","State"],"members":{"ConversionTaskId":{"locationName":"conversionTaskId"},"ExpirationTime":{"locationName":"expirationTime"},"ImportInstance":{"locationName":"importInstance","type":"structure","required":["Volumes"],"members":{"Volumes":{"locationName":"volumes","type":"list","member":{"locationName":"item","type":"structure","required":["BytesConverted","AvailabilityZone","Image","Volume","Status"],"members":{"BytesConverted":{"locationName":"bytesConverted","type":"long"},"AvailabilityZone":{"locationName":"availabilityZone"},"Image":{"shape":"S89","locationName":"image"},"Volume":{"shape":"S8a","locationName":"volume"},"Status":{"locationName":"status"},"StatusMessage":{"locationName":"statusMessage"},"Description":{"locationName":"description"}}}},"InstanceId":{"locationName":"instanceId"},"Platform":{"locationName":"platform"},"Description":{"locationName":"description"}}},"ImportVolume":{"locationName":"importVolume","type":"structure","required":["BytesConverted","AvailabilityZone","Image","Volume"],"members":{"BytesConverted":{"locationName":"bytesConverted","type":"long"},"AvailabilityZone":{"locationName":"availabilityZone"},"Description":{"locationName":"description"},"Image":{"shape":"S89","locationName":"image"},"Volume":{"shape":"S8a","locationName":"volume"}}},"State":{"locationName":"state"},"StatusMessage":{"locationName":"statusMessage"},"Tags":{"shape":"Sa","locationName":"tagSet"}}},"S89":{"type":"structure","required":["Format","Size","ImportManifestUrl"],"members":{"Format":{"locationName":"format"},"Size":{"locationName":"size","type":"long"},"ImportManifestUrl":{"locationName":"importManifestUrl"},"Checksum":{"locationName":"checksum"}}},"S8a":{"type":"structure","required":["Id"],"members":{"Size":{"locationName":"size","type":"long"},"Id":{"locationName":"id"}}},"S8x":{"type":"list","member":{"locationName":"item","type":"structure","members":{"UserId":{"locationName":"userId"},"Group":{"locationName":"group"}}}},"S90":{"type":"list","member":{"locationName":"item","type":"structure","members":{"ProductCodeId":{"locationName":"productCode"},"ProductCodeType":{"locationName":"type"}}}},"S93":{"type":"list","member":{"shape":"S39","locationName":"item"}},"S96":{"type":"list","member":{"locationName":"Owner"}},"S9e":{"type":"structure","members":{"Code":{"locationName":"code"},"Message":{"locationName":"message"}}},"S9j":{"type":"list","member":{"locationName":"ImportTaskId"}},"S9n":{"type":"list","member":{"locationName":"item","type":"structure","members":{"DiskImageSize":{"locationName":"diskImageSize","type":"double"},"Description":{"locationName":"description"},"Format":{"locationName":"format"},"Url":{"locationName":"url"},"UserBucket":{"shape":"S9p","locationName":"userBucket"},"DeviceName":{"locationName":"deviceName"},"SnapshotId":{"locationName":"snapshotId"},"Progress":{"locationName":"progress"},"StatusMessage":{"locationName":"statusMessage"},"Status":{"locationName":"status"}}}},"S9p":{"type":"structure","members":{"S3Bucket":{"locationName":"s3Bucket"},"S3Key":{"locationName":"s3Key"}}},"S9u":{"type":"structure","members":{"DiskImageSize":{"locationName":"diskImageSize","type":"double"},"Description":{"locationName":"description"},"Format":{"locationName":"format"},"Url":{"locationName":"url"},"UserBucket":{"shape":"S9p","locationName":"userBucket"},"SnapshotId":{"locationName":"snapshotId"},"Progress":{"locationName":"progress"},"StatusMessage":{"locationName":"statusMessage"},"Status":{"locationName":"status"}}},"S9y":{"type":"structure","members":{"Value":{"locationName":"value","type":"boolean"}}},"S9z":{"type":"list","member":{"locationName":"item","type":"structure","members":{"DeviceName":{"locationName":"deviceName"},"Ebs":{"locationName":"ebs","type":"structure","members":{"VolumeId":{"locationName":"volumeId"},"Status":{"locationName":"status"},"AttachTime":{"locationName":"attachTime","type":"timestamp"},"DeleteOnTermination":{"locationName":"deleteOnTermination","type":"boolean"}}}}}},"Sa9":{"type":"structure","members":{"Code":{"locationName":"code","type":"integer"},"Name":{"locationName":"name"}}},"Sab":{"type":"structure","members":{"Status":{"locationName":"status"},"Details":{"locationName":"details","type":"list","member":{"locationName":"item","type":"structure","members":{"Name":{"locationName":"name"},"Status":{"locationName":"status"},"ImpairedSince":{"locationName":"impairedSince","type":"timestamp"}}}}}},"Sak":{"type":"structure","members":{"ReservationId":{"locationName":"reservationId"},"OwnerId":{"locationName":"ownerId"},"RequesterId":{"locationName":"requesterId"},"Groups":{"shape":"S4c","locationName":"groupSet"},"Instances":{"locationName":"instancesSet","type":"list","member":{"locationName":"item","type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"ImageId":{"locationName":"imageId"},"State":{"shape":"Sa9","locationName":"instanceState"},"PrivateDnsName":{"locationName":"privateDnsName"},"PublicDnsName":{"locationName":"dnsName"},"StateTransitionReason":{"locationName":"reason"},"KeyName":{"locationName":"keyName"},"AmiLaunchIndex":{"locationName":"amiLaunchIndex","type":"integer"},"ProductCodes":{"shape":"S90","locationName":"productCodes"},"InstanceType":{"locationName":"instanceType"},"LaunchTime":{"locationName":"launchTime","type":"timestamp"},"Placement":{"shape":"Sao","locationName":"placement"},"KernelId":{"locationName":"kernelId"},"RamdiskId":{"locationName":"ramdiskId"},"Platform":{"locationName":"platform"},"Monitoring":{"shape":"Sap","locationName":"monitoring"},"SubnetId":{"locationName":"subnetId"},"VpcId":{"locationName":"vpcId"},"PrivateIpAddress":{"locationName":"privateIpAddress"},"PublicIpAddress":{"locationName":"ipAddress"},"StateReason":{"shape":"S9e","locationName":"stateReason"},"Architecture":{"locationName":"architecture"},"RootDeviceType":{"locationName":"rootDeviceType"},"RootDeviceName":{"locationName":"rootDeviceName"},"BlockDeviceMappings":{"shape":"S9z","locationName":"blockDeviceMapping"},"VirtualizationType":{"locationName":"virtualizationType"},"InstanceLifecycle":{"locationName":"instanceLifecycle"},"SpotInstanceRequestId":{"locationName":"spotInstanceRequestId"},"ClientToken":{"locationName":"clientToken"},"Tags":{"shape":"Sa","locationName":"tagSet"},"SecurityGroups":{"shape":"S4c","locationName":"groupSet"},"SourceDestCheck":{"locationName":"sourceDestCheck","type":"boolean"},"Hypervisor":{"locationName":"hypervisor"},"NetworkInterfaces":{"locationName":"networkInterfaceSet","type":"list","member":{"locationName":"item","type":"structure","members":{"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"SubnetId":{"locationName":"subnetId"},"VpcId":{"locationName":"vpcId"},"Description":{"locationName":"description"},"OwnerId":{"locationName":"ownerId"},"Status":{"locationName":"status"},"MacAddress":{"locationName":"macAddress"},"PrivateIpAddress":{"locationName":"privateIpAddress"},"PrivateDnsName":{"locationName":"privateDnsName"},"SourceDestCheck":{"locationName":"sourceDestCheck","type":"boolean"},"Groups":{"shape":"S4c","locationName":"groupSet"},"Attachment":{"locationName":"attachment","type":"structure","members":{"AttachmentId":{"locationName":"attachmentId"},"DeviceIndex":{"locationName":"deviceIndex","type":"integer"},"Status":{"locationName":"status"},"AttachTime":{"locationName":"attachTime","type":"timestamp"},"DeleteOnTermination":{"locationName":"deleteOnTermination","type":"boolean"}}},"Association":{"shape":"Sav","locationName":"association"},"PrivateIpAddresses":{"locationName":"privateIpAddressesSet","type":"list","member":{"locationName":"item","type":"structure","members":{"PrivateIpAddress":{"locationName":"privateIpAddress"},"PrivateDnsName":{"locationName":"privateDnsName"},"Primary":{"locationName":"primary","type":"boolean"},"Association":{"shape":"Sav","locationName":"association"}}}}}}},"IamInstanceProfile":{"locationName":"iamInstanceProfile","type":"structure","members":{"Arn":{"locationName":"arn"},"Id":{"locationName":"id"}}},"EbsOptimized":{"locationName":"ebsOptimized","type":"boolean"},"SriovNetSupport":{"locationName":"sriovNetSupport"}}}}}},"Sao":{"type":"structure","members":{"AvailabilityZone":{"locationName":"availabilityZone"},"GroupName":{"locationName":"groupName"},"Tenancy":{"locationName":"tenancy"}}},"Sap":{"type":"structure","members":{"State":{"locationName":"state"}}},"Sav":{"type":"structure","members":{"PublicIp":{"locationName":"publicIp"},"PublicDnsName":{"locationName":"publicDnsName"},"IpOwnerId":{"locationName":"ipOwnerId"}}},"Sc2":{"type":"list","member":{"locationName":"ReservedInstancesId"}},"Sca":{"type":"list","member":{"locationName":"item","type":"structure","members":{"Frequency":{"locationName":"frequency"},"Amount":{"locationName":"amount","type":"double"}}}},"Sco":{"type":"structure","members":{"AvailabilityZone":{"locationName":"availabilityZone"},"Platform":{"locationName":"platform"},"InstanceCount":{"locationName":"instanceCount","type":"integer"},"InstanceType":{"locationName":"instanceType"}}},"Sd0":{"type":"list","member":{"locationName":"GroupName"}},"Sd7":{"type":"list","member":{"locationName":"item","type":"structure","members":{"UserId":{"locationName":"userId"},"Group":{"locationName":"group"}}}},"Sdu":{"type":"structure","required":["SpotPrice","TargetCapacity","IamFleetRole","LaunchSpecifications"],"members":{"ClientToken":{"locationName":"clientToken"},"SpotPrice":{"locationName":"spotPrice"},"TargetCapacity":{"locationName":"targetCapacity","type":"integer"},"ValidFrom":{"locationName":"validFrom","type":"timestamp"},"ValidUntil":{"locationName":"validUntil","type":"timestamp"},"TerminateInstancesWithExpiration":{"locationName":"terminateInstancesWithExpiration","type":"boolean"},"IamFleetRole":{"locationName":"iamFleetRole"},"LaunchSpecifications":{"locationName":"launchSpecifications","type":"list","member":{"locationName":"item","type":"structure","members":{"ImageId":{"locationName":"imageId"},"KeyName":{"locationName":"keyName"},"SecurityGroups":{"shape":"S4c","locationName":"groupSet"},"UserData":{"locationName":"userData"},"AddressingType":{"locationName":"addressingType"},"InstanceType":{"locationName":"instanceType"},"Placement":{"shape":"Sdx","locationName":"placement"},"KernelId":{"locationName":"kernelId"},"RamdiskId":{"locationName":"ramdiskId"},"BlockDeviceMappings":{"shape":"S93","locationName":"blockDeviceMapping"},"Monitoring":{"locationName":"monitoring","type":"structure","members":{"Enabled":{"locationName":"enabled","type":"boolean"}}},"SubnetId":{"locationName":"subnetId"},"NetworkInterfaces":{"shape":"Sdz","locationName":"networkInterfaceSet"},"IamInstanceProfile":{"shape":"Se1","locationName":"iamInstanceProfile"},"EbsOptimized":{"locationName":"ebsOptimized","type":"boolean"},"WeightedCapacity":{"locationName":"weightedCapacity","type":"double"},"SpotPrice":{"locationName":"spotPrice"}}}},"ExcessCapacityTerminationPolicy":{"locationName":"excessCapacityTerminationPolicy"},"AllocationStrategy":{"locationName":"allocationStrategy"}}},"Sdx":{"type":"structure","members":{"AvailabilityZone":{"locationName":"availabilityZone"},"GroupName":{"locationName":"groupName"}}},"Sdz":{"type":"list","member":{"locationName":"item","type":"structure","members":{"NetworkInterfaceId":{"locationName":"networkInterfaceId"},"DeviceIndex":{"locationName":"deviceIndex","type":"integer"},"SubnetId":{"locationName":"subnetId"},"Description":{"locationName":"description"},"PrivateIpAddress":{"locationName":"privateIpAddress"},"Groups":{"shape":"S46","locationName":"SecurityGroupId"},"DeleteOnTermination":{"locationName":"deleteOnTermination","type":"boolean"},"PrivateIpAddresses":{"shape":"S47","locationName":"privateIpAddressesSet","queryName":"PrivateIpAddresses"},"SecondaryPrivateIpAddressCount":{"locationName":"secondaryPrivateIpAddressCount","type":"integer"},"AssociatePublicIpAddress":{"locationName":"associatePublicIpAddress","type":"boolean"}}}},"Se1":{"type":"structure","members":{"Arn":{"locationName":"arn"},"Name":{"locationName":"name"}}},"Se6":{"type":"list","member":{"locationName":"item","type":"structure","members":{"SpotInstanceRequestId":{"locationName":"spotInstanceRequestId"},"SpotPrice":{"locationName":"spotPrice"},"Type":{"locationName":"type"},"State":{"locationName":"state"},"Fault":{"shape":"S5a","locationName":"fault"},"Status":{"locationName":"status","type":"structure","members":{"Code":{"locationName":"code"},"UpdateTime":{"locationName":"updateTime","type":"timestamp"},"Message":{"locationName":"message"}}},"ValidFrom":{"locationName":"validFrom","type":"timestamp"},"ValidUntil":{"locationName":"validUntil","type":"timestamp"},"LaunchGroup":{"locationName":"launchGroup"},"AvailabilityZoneGroup":{"locationName":"availabilityZoneGroup"},"LaunchSpecification":{"locationName":"launchSpecification","type":"structure","members":{"ImageId":{"locationName":"imageId"},"KeyName":{"locationName":"keyName"},"SecurityGroups":{"shape":"S4c","locationName":"groupSet"},"UserData":{"locationName":"userData"},"AddressingType":{"locationName":"addressingType"},"InstanceType":{"locationName":"instanceType"},"Placement":{"shape":"Sdx","locationName":"placement"},"KernelId":{"locationName":"kernelId"},"RamdiskId":{"locationName":"ramdiskId"},"BlockDeviceMappings":{"shape":"S93","locationName":"blockDeviceMapping"},"SubnetId":{"locationName":"subnetId"},"NetworkInterfaces":{"shape":"Sdz","locationName":"networkInterfaceSet"},"IamInstanceProfile":{"shape":"Se1","locationName":"iamInstanceProfile"},"EbsOptimized":{"locationName":"ebsOptimized","type":"boolean"},"Monitoring":{"shape":"Sec","locationName":"monitoring"}}},"InstanceId":{"locationName":"instanceId"},"CreateTime":{"locationName":"createTime","type":"timestamp"},"ProductDescription":{"locationName":"productDescription"},"BlockDurationMinutes":{"locationName":"blockDurationMinutes","type":"integer"},"ActualBlockHourlyPrice":{"locationName":"actualBlockHourlyPrice"},"Tags":{"shape":"Sa","locationName":"tagSet"},"LaunchedAvailabilityZone":{"locationName":"launchedAvailabilityZone"}}}},"Sec":{"type":"structure","required":["Enabled"],"members":{"Enabled":{"locationName":"enabled","type":"boolean"}}},"Sew":{"type":"list","member":{"locationName":"VolumeId"}},"Sgq":{"type":"structure","members":{"S3Bucket":{},"S3Key":{}}},"Sgr":{"type":"structure","members":{"UploadStart":{"type":"timestamp"},"UploadEnd":{"type":"timestamp"},"UploadSize":{"type":"double"},"Comment":{}}},"Sgv":{"type":"list","member":{"locationName":"SecurityGroup"}},"Sh0":{"type":"structure","required":["Format","Bytes","ImportManifestUrl"],"members":{"Format":{"locationName":"format"},"Bytes":{"locationName":"bytes","type":"long"},"ImportManifestUrl":{"locationName":"importManifestUrl"}}},"Sh1":{"type":"structure","required":["Size"],"members":{"Size":{"locationName":"size","type":"long"}}},"Shc":{"type":"list","member":{"locationName":"UserId"}},"Si1":{"type":"list","member":{"locationName":"item","type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"Monitoring":{"shape":"Sap","locationName":"monitoring"}}}},"Sj6":{"type":"list","member":{"locationName":"item","type":"structure","members":{"InstanceId":{"locationName":"instanceId"},"CurrentState":{"shape":"Sa9","locationName":"currentState"},"PreviousState":{"shape":"Sa9","locationName":"previousState"}}}}},"examples":{},"paginators":{"DescribeAccountAttributes":{"result_key":"AccountAttributes"},"DescribeAddresses":{"result_key":"Addresses"},"DescribeAvailabilityZones":{"result_key":"AvailabilityZones"},"DescribeBundleTasks":{"result_key":"BundleTasks"},"DescribeConversionTasks":{"result_key":"ConversionTasks"},"DescribeCustomerGateways":{"result_key":"CustomerGateways"},"DescribeDhcpOptions":{"result_key":"DhcpOptions"},"DescribeExportTasks":{"result_key":"ExportTasks"},"DescribeImages":{"result_key":"Images"},"DescribeInstanceStatus":{"input_token":"NextToken","output_token":"NextToken","limit_key":"MaxResults","result_key":"InstanceStatuses"},"DescribeInstances":{"input_token":"NextToken","output_token":"NextToken","limit_key":"MaxResults","result_key":"Reservations"},"DescribeInternetGateways":{"result_key":"InternetGateways"},"DescribeKeyPairs":{"result_key":"KeyPairs"},"DescribeNetworkAcls":{"result_key":"NetworkAcls"},"DescribeNetworkInterfaces":{"result_key":"NetworkInterfaces"},"DescribePlacementGroups":{"result_key":"PlacementGroups"},"DescribeRegions":{"result_key":"Regions"},"DescribeReservedInstances":{"result_key":"ReservedInstances"},"DescribeReservedInstancesListings":{"result_key":"ReservedInstancesListings"},"DescribeReservedInstancesOfferings":{"input_token":"NextToken","output_token":"NextToken","limit_key":"MaxResults","result_key":"ReservedInstancesOfferings"},"DescribeReservedInstancesModifications":{"input_token":"NextToken","output_token":"NextToken","result_key":"ReservedInstancesModifications"},"DescribeRouteTables":{"result_key":"RouteTables"},"DescribeSecurityGroups":{"result_key":"SecurityGroups"},"DescribeSnapshots":{"input_token":"NextToken","output_token":"NextToken","result_key":"Snapshots"},"DescribeSpotInstanceRequests":{"result_key":"SpotInstanceRequests"},"DescribeSpotPriceHistory":{"input_token":"NextToken","output_token":"NextToken","limit_key":"MaxResults","result_key":"SpotPriceHistory"},"DescribeSubnets":{"result_key":"Subnets"},"DescribeTags":{"result_key":"Tags"},"DescribeVolumeStatus":{"input_token":"NextToken","output_token":"NextToken","limit_key":"MaxResults","result_key":"VolumeStatuses"},"DescribeVolumes":{"input_token":"NextToken","output_token":"NextToken","limit_key":"MaxResults","result_key":"Volumes"},"DescribeVpcs":{"result_key":"Vpcs"},"DescribeVpnConnections":{"result_key":"VpnConnections"},"DescribeVpnGateways":{"result_key":"VpnGateways"}},"waiters":{"__default__":{"interval":15,"max_attempts":40,"acceptor_type":"output"},"__InstanceState":{"operation":"DescribeInstances","acceptor_path":"Reservations[].Instances[].State.Name"},"__InstanceStatus":{"operation":"DescribeInstanceStatus","success_value":"ok"},"SystemStatusOk":{"extends":"__InstanceStatus","acceptor_path":"InstanceStatuses[].SystemStatus.Status"},"InstanceStatusOk":{"extends":"__InstanceStatus","acceptor_path":"InstanceStatuses[].InstanceStatus.Status"},"ImageAvailable":{"operation":"DescribeImages","acceptor_path":"Images[].State","success_value":"available","failure_value":["failed"]},"InstanceRunning":{"extends":"__InstanceState","success_value":"running","failure_value":["shutting-down","terminated","stopping"]},"InstanceStopped":{"extends":"__InstanceState","success_value":"stopped","failure_value":["pending","terminated"]},"InstanceTerminated":{"extends":"__InstanceState","success_value":"terminated","failure_value":["pending","stopping"]},"__ExportTaskState":{"operation":"DescribeExportTasks","acceptor_path":"ExportTasks[].State"},"ExportTaskCompleted":{"extends":"__ExportTaskState","success_value":"completed"},"ExportTaskCancelled":{"extends":"__ExportTaskState","success_value":"cancelled"},"SnapshotCompleted":{"operation":"DescribeSnapshots","success_path":"Snapshots[].State","success_value":"completed"},"SubnetAvailable":{"operation":"DescribeSubnets","success_path":"Subnets[].State","success_value":"available"},"__VolumeStatus":{"operation":"DescribeVolumes","acceptor_path":"Volumes[].State"},"VolumeAvailable":{"extends":"__VolumeStatus","success_value":"available","failure_value":["deleted"]},"VolumeInUse":{"extends":"__VolumeStatus","success_value":"in-use","failure_value":["deleted"]},"VolumeDeleted":{"extends":"__VolumeStatus","success_type":"error","success_value":"InvalidVolume.NotFound"},"VpcAvailable":{"operation":"DescribeVpcs","success_path":"Vpcs[].State","success_value":"available"},"__VpnConnectionState":{"operation":"DescribeVpnConnections","acceptor_path":"VpnConnections[].State"},"VpnConnectionAvailable":{"extends":"__VpnConnectionState","success_value":"available","failure_value":["deleting","deleted"]},"VpnConnectionDeleted":{"extends":"__VpnConnectionState","success_value":"deleted","failure_value":["pending"]},"BundleTaskComplete":{"operation":"DescribeBundleTasks","acceptor_path":"BundleTasks[].State","success_value":"complete","failure_value":["failed"]},"__ConversionTaskState":{"operation":"DescribeConversionTasks","acceptor_path":"ConversionTasks[].State"},"ConversionTaskCompleted":{"extends":"__ConversionTaskState","success_value":"completed","failure_value":["cancelled","cancelling"]},"ConversionTaskCancelled":{"extends":"__ConversionTaskState","success_value":"cancelled"},"__CustomerGatewayState":{"operation":"DescribeCustomerGateways","acceptor_path":"CustomerGateways[].State"},"CustomerGatewayAvailable":{"extends":"__CustomerGatewayState","success_value":"available","failure_value":["deleted","deleting"]},"ConversionTaskDeleted":{"extends":"__CustomerGatewayState","success_value":"deleted"},"__SpotInstanceRequestState":{"operation":"DescribeSpotInstanceRequests","acceptor_path":"SpotInstanceRequests[].Status.Code"},"SpotInstanceRequestFulfilled":{"extends":"__SpotInstanceRequestState","success_value":"fulfilled","failure_value":["schedule-expired","canceled-before-fulfillment","bad-parameters","system-error"]}}};
 AWS.apiLoader.services['elastictranscoder'] = {};
 AWS.ElasticTranscoder = AWS.Service.defineService('elastictranscoder', [ '2012-09-25' ]);
 
 AWS.apiLoader.services['elastictranscoder']['2012-09-25'] = {"version":"2.0","metadata":{"apiVersion":"2012-09-25","endpointPrefix":"elastictranscoder","serviceFullName":"Amazon Elastic Transcoder","signatureVersion":"v4","protocol":"rest-json"},"operations":{"CancelJob":{"http":{"method":"DELETE","requestUri":"/2012-09-25/jobs/{Id}","responseCode":202},"input":{"type":"structure","required":["Id"],"members":{"Id":{"location":"uri","locationName":"Id"}}},"output":{"type":"structure","members":{}}},"CreateJob":{"http":{"requestUri":"/2012-09-25/jobs","responseCode":201},"input":{"type":"structure","required":["PipelineId","Input"],"members":{"PipelineId":{},"Input":{"shape":"S5"},"Output":{"shape":"Sk"},"Outputs":{"type":"list","member":{"shape":"Sk"}},"OutputKeyPrefix":{},"Playlists":{"type":"list","member":{"type":"structure","members":{"Name":{},"Format":{},"OutputKeys":{"shape":"S1i"},"HlsContentProtection":{"shape":"S1j"},"PlayReadyDrm":{"shape":"S1n"}}}},"UserMetadata":{"shape":"S1s"}}},"output":{"type":"structure","members":{"Job":{"shape":"S1v"}}}},"CreatePipeline":{"http":{"requestUri":"/2012-09-25/pipelines","responseCode":201},"input":{"type":"structure","required":["Name","InputBucket","Role"],"members":{"Name":{},"InputBucket":{},"OutputBucket":{},"Role":{},"AwsKmsKeyArn":{},"Notifications":{"shape":"S27"},"ContentConfig":{"shape":"S29"},"ThumbnailConfig":{"shape":"S29"}}},"output":{"type":"structure","members":{"Pipeline":{"shape":"S2i"},"Warnings":{"shape":"S2k"}}}},"CreatePreset":{"http":{"requestUri":"/2012-09-25/presets","responseCode":201},"input":{"type":"structure","required":["Name","Container"],"members":{"Name":{},"Description":{},"Container":{},"Video":{"shape":"S2o"},"Audio":{"shape":"S34"},"Thumbnails":{"shape":"S3f"}}},"output":{"type":"structure","members":{"Preset":{"shape":"S3j"},"Warning":{}}}},"DeletePipeline":{"http":{"method":"DELETE","requestUri":"/2012-09-25/pipelines/{Id}","responseCode":202},"input":{"type":"structure","required":["Id"],"members":{"Id":{"location":"uri","locationName":"Id"}}},"output":{"type":"structure","members":{}}},"DeletePreset":{"http":{"method":"DELETE","requestUri":"/2012-09-25/presets/{Id}","responseCode":202},"input":{"type":"structure","required":["Id"],"members":{"Id":{"location":"uri","locationName":"Id"}}},"output":{"type":"structure","members":{}}},"ListJobsByPipeline":{"http":{"method":"GET","requestUri":"/2012-09-25/jobsByPipeline/{PipelineId}"},"input":{"type":"structure","required":["PipelineId"],"members":{"PipelineId":{"location":"uri","locationName":"PipelineId"},"Ascending":{"location":"querystring","locationName":"Ascending"},"PageToken":{"location":"querystring","locationName":"PageToken"}}},"output":{"type":"structure","members":{"Jobs":{"shape":"S3s"},"NextPageToken":{}}}},"ListJobsByStatus":{"http":{"method":"GET","requestUri":"/2012-09-25/jobsByStatus/{Status}"},"input":{"type":"structure","required":["Status"],"members":{"Status":{"location":"uri","locationName":"Status"},"Ascending":{"location":"querystring","locationName":"Ascending"},"PageToken":{"location":"querystring","locationName":"PageToken"}}},"output":{"type":"structure","members":{"Jobs":{"shape":"S3s"},"NextPageToken":{}}}},"ListPipelines":{"http":{"method":"GET","requestUri":"/2012-09-25/pipelines"},"input":{"type":"structure","members":{"Ascending":{"location":"querystring","locationName":"Ascending"},"PageToken":{"location":"querystring","locationName":"PageToken"}}},"output":{"type":"structure","members":{"Pipelines":{"type":"list","member":{"shape":"S2i"}},"NextPageToken":{}}}},"ListPresets":{"http":{"method":"GET","requestUri":"/2012-09-25/presets"},"input":{"type":"structure","members":{"Ascending":{"location":"querystring","locationName":"Ascending"},"PageToken":{"location":"querystring","locationName":"PageToken"}}},"output":{"type":"structure","members":{"Presets":{"type":"list","member":{"shape":"S3j"}},"NextPageToken":{}}}},"ReadJob":{"http":{"method":"GET","requestUri":"/2012-09-25/jobs/{Id}"},"input":{"type":"structure","required":["Id"],"members":{"Id":{"location":"uri","locationName":"Id"}}},"output":{"type":"structure","members":{"Job":{"shape":"S1v"}}}},"ReadPipeline":{"http":{"method":"GET","requestUri":"/2012-09-25/pipelines/{Id}"},"input":{"type":"structure","required":["Id"],"members":{"Id":{"location":"uri","locationName":"Id"}}},"output":{"type":"structure","members":{"Pipeline":{"shape":"S2i"},"Warnings":{"shape":"S2k"}}}},"ReadPreset":{"http":{"method":"GET","requestUri":"/2012-09-25/presets/{Id}"},"input":{"type":"structure","required":["Id"],"members":{"Id":{"location":"uri","locationName":"Id"}}},"output":{"type":"structure","members":{"Preset":{"shape":"S3j"}}}},"TestRole":{"http":{"requestUri":"/2012-09-25/roleTests","responseCode":200},"input":{"type":"structure","required":["Role","InputBucket","OutputBucket","Topics"],"members":{"Role":{},"InputBucket":{},"OutputBucket":{},"Topics":{"type":"list","member":{}}}},"output":{"type":"structure","members":{"Success":{},"Messages":{"type":"list","member":{}}}}},"UpdatePipeline":{"http":{"method":"PUT","requestUri":"/2012-09-25/pipelines/{Id}","responseCode":200},"input":{"type":"structure","required":["Id"],"members":{"Id":{"location":"uri","locationName":"Id"},"Name":{},"InputBucket":{},"Role":{},"AwsKmsKeyArn":{},"Notifications":{"shape":"S27"},"ContentConfig":{"shape":"S29"},"ThumbnailConfig":{"shape":"S29"}}},"output":{"type":"structure","members":{"Pipeline":{"shape":"S2i"},"Warnings":{"shape":"S2k"}}}},"UpdatePipelineNotifications":{"http":{"requestUri":"/2012-09-25/pipelines/{Id}/notifications"},"input":{"type":"structure","required":["Id","Notifications"],"members":{"Id":{"location":"uri","locationName":"Id"},"Notifications":{"shape":"S27"}}},"output":{"type":"structure","members":{"Pipeline":{"shape":"S2i"}}}},"UpdatePipelineStatus":{"http":{"requestUri":"/2012-09-25/pipelines/{Id}/status"},"input":{"type":"structure","required":["Id","Status"],"members":{"Id":{"location":"uri","locationName":"Id"},"Status":{}}},"output":{"type":"structure","members":{"Pipeline":{"shape":"S2i"}}}}},"shapes":{"S5":{"type":"structure","members":{"Key":{},"FrameRate":{},"Resolution":{},"AspectRatio":{},"Interlaced":{},"Container":{},"Encryption":{"shape":"Sc"},"DetectedProperties":{"type":"structure","members":{"Width":{"type":"integer"},"Height":{"type":"integer"},"FrameRate":{},"FileSize":{"type":"long"},"DurationMillis":{"type":"long"}}}}},"Sc":{"type":"structure","members":{"Mode":{},"Key":{},"KeyMd5":{},"InitializationVector":{}}},"Sk":{"type":"structure","members":{"Key":{},"ThumbnailPattern":{},"ThumbnailEncryption":{"shape":"Sc"},"Rotate":{},"PresetId":{},"SegmentDuration":{},"Watermarks":{"shape":"Sn"},"AlbumArt":{"shape":"Sr"},"Composition":{"shape":"Sz"},"Captions":{"shape":"S13"},"Encryption":{"shape":"Sc"}}},"Sn":{"type":"list","member":{"type":"structure","members":{"PresetWatermarkId":{},"InputKey":{},"Encryption":{"shape":"Sc"}}}},"Sr":{"type":"structure","members":{"MergePolicy":{},"Artwork":{"type":"list","member":{"type":"structure","members":{"InputKey":{},"MaxWidth":{},"MaxHeight":{},"SizingPolicy":{},"PaddingPolicy":{},"AlbumArtFormat":{},"Encryption":{"shape":"Sc"}}}}}},"Sz":{"type":"list","member":{"type":"structure","members":{"TimeSpan":{"type":"structure","members":{"StartTime":{},"Duration":{}}}}}},"S13":{"type":"structure","members":{"MergePolicy":{},"CaptionSources":{"type":"list","member":{"type":"structure","members":{"Key":{},"Language":{},"TimeOffset":{},"Label":{},"Encryption":{"shape":"Sc"}}}},"CaptionFormats":{"type":"list","member":{"type":"structure","members":{"Format":{},"Pattern":{},"Encryption":{"shape":"Sc"}}}}}},"S1i":{"type":"list","member":{}},"S1j":{"type":"structure","members":{"Method":{},"Key":{},"KeyMd5":{},"InitializationVector":{},"LicenseAcquisitionUrl":{},"KeyStoragePolicy":{}}},"S1n":{"type":"structure","members":{"Format":{},"Key":{},"KeyMd5":{},"KeyId":{},"InitializationVector":{},"LicenseAcquisitionUrl":{}}},"S1s":{"type":"map","key":{},"value":{}},"S1v":{"type":"structure","members":{"Id":{},"Arn":{},"PipelineId":{},"Input":{"shape":"S5"},"Output":{"shape":"S1w"},"Outputs":{"type":"list","member":{"shape":"S1w"}},"OutputKeyPrefix":{},"Playlists":{"type":"list","member":{"type":"structure","members":{"Name":{},"Format":{},"OutputKeys":{"shape":"S1i"},"HlsContentProtection":{"shape":"S1j"},"PlayReadyDrm":{"shape":"S1n"},"Status":{},"StatusDetail":{}}}},"Status":{},"UserMetadata":{"shape":"S1s"},"Timing":{"type":"structure","members":{"SubmitTimeMillis":{"type":"long"},"StartTimeMillis":{"type":"long"},"FinishTimeMillis":{"type":"long"}}}}},"S1w":{"type":"structure","members":{"Id":{},"Key":{},"ThumbnailPattern":{},"ThumbnailEncryption":{"shape":"Sc"},"Rotate":{},"PresetId":{},"SegmentDuration":{},"Status":{},"StatusDetail":{},"Duration":{"type":"long"},"Width":{"type":"integer"},"Height":{"type":"integer"},"FrameRate":{},"FileSize":{"type":"long"},"DurationMillis":{"type":"long"},"Watermarks":{"shape":"Sn"},"AlbumArt":{"shape":"Sr"},"Composition":{"shape":"Sz"},"Captions":{"shape":"S13"},"Encryption":{"shape":"Sc"},"AppliedColorSpaceConversion":{}}},"S27":{"type":"structure","members":{"Progressing":{},"Completed":{},"Warning":{},"Error":{}}},"S29":{"type":"structure","members":{"Bucket":{},"StorageClass":{},"Permissions":{"type":"list","member":{"type":"structure","members":{"GranteeType":{},"Grantee":{},"Access":{"type":"list","member":{}}}}}}},"S2i":{"type":"structure","members":{"Id":{},"Arn":{},"Name":{},"Status":{},"InputBucket":{},"OutputBucket":{},"Role":{},"AwsKmsKeyArn":{},"Notifications":{"shape":"S27"},"ContentConfig":{"shape":"S29"},"ThumbnailConfig":{"shape":"S29"}}},"S2k":{"type":"list","member":{"type":"structure","members":{"Code":{},"Message":{}}}},"S2o":{"type":"structure","members":{"Codec":{},"CodecOptions":{"type":"map","key":{},"value":{}},"KeyframesMaxDist":{},"FixedGOP":{},"BitRate":{},"FrameRate":{},"MaxFrameRate":{},"Resolution":{},"AspectRatio":{},"MaxWidth":{},"MaxHeight":{},"DisplayAspectRatio":{},"SizingPolicy":{},"PaddingPolicy":{},"Watermarks":{"type":"list","member":{"type":"structure","members":{"Id":{},"MaxWidth":{},"MaxHeight":{},"SizingPolicy":{},"HorizontalAlign":{},"HorizontalOffset":{},"VerticalAlign":{},"VerticalOffset":{},"Opacity":{},"Target":{}}}}}},"S34":{"type":"structure","members":{"Codec":{},"SampleRate":{},"BitRate":{},"Channels":{},"AudioPackingMode":{},"CodecOptions":{"type":"structure","members":{"Profile":{},"BitDepth":{},"BitOrder":{},"Signed":{}}}}},"S3f":{"type":"structure","members":{"Format":{},"Interval":{},"Resolution":{},"AspectRatio":{},"MaxWidth":{},"MaxHeight":{},"SizingPolicy":{},"PaddingPolicy":{}}},"S3j":{"type":"structure","members":{"Id":{},"Arn":{},"Name":{},"Description":{},"Container":{},"Audio":{"shape":"S34"},"Video":{"shape":"S2o"},"Thumbnails":{"shape":"S3f"},"Type":{}}},"S3s":{"type":"list","member":{"shape":"S1v"}}},"paginators":{"ListJobsByPipeline":{"input_token":"PageToken","output_token":"NextPageToken","result_key":"Jobs"},"ListJobsByStatus":{"input_token":"PageToken","output_token":"NextPageToken","result_key":"Jobs"},"ListPipelines":{"input_token":"PageToken","output_token":"NextPageToken","result_key":"Pipelines"},"ListPresets":{"input_token":"PageToken","output_token":"NextPageToken","result_key":"Presets"}},"waiters":{"JobComplete":{"operation":"ReadJob","success_type":"output","success_path":"Job.Status","interval":30,"max_attempts":120,"success_value":"Complete","failure_value":["Canceled","Error"]}}};
+AWS.apiLoader.services['firehose'] = {};
+AWS.Firehose = AWS.Service.defineService('firehose', [ '2015-08-04' ]);
+
+AWS.apiLoader.services['firehose']['2015-08-04'] = {"version":"2.0","metadata":{"apiVersion":"2015-08-04","endpointPrefix":"firehose","jsonVersion":"1.1","serviceAbbreviation":"Firehose","serviceFullName":"0","signatureVersion":"v4","targetPrefix":"Firehose_20150804","protocol":"json"},"operations":{"CreateDeliveryStream":{"input":{"type":"structure","required":["DeliveryStreamName"],"members":{"DeliveryStreamName":{},"S3DestinationConfiguration":{"shape":"S3"},"RedshiftDestinationConfiguration":{"type":"structure","required":["RoleARN","ClusterJDBCURL","CopyCommand","Username","Password","S3Configuration"],"members":{"RoleARN":{},"ClusterJDBCURL":{},"CopyCommand":{"shape":"Sh"},"Username":{"shape":"Sl"},"Password":{"shape":"Sm"},"S3Configuration":{"shape":"S3"}}}}},"output":{"type":"structure","members":{"DeliveryStreamARN":{}}},"http":{}},"DeleteDeliveryStream":{"input":{"type":"structure","required":["DeliveryStreamName"],"members":{"DeliveryStreamName":{}}},"output":{"type":"structure","members":{}},"http":{}},"DescribeDeliveryStream":{"input":{"type":"structure","required":["DeliveryStreamName"],"members":{"DeliveryStreamName":{},"Limit":{"type":"integer"},"ExclusiveStartDestinationId":{}}},"output":{"type":"structure","required":["DeliveryStreamDescription"],"members":{"DeliveryStreamDescription":{"type":"structure","required":["DeliveryStreamName","DeliveryStreamARN","DeliveryStreamStatus","VersionId","Destinations","HasMoreDestinations"],"members":{"DeliveryStreamName":{},"DeliveryStreamARN":{},"DeliveryStreamStatus":{},"VersionId":{},"CreateTimestamp":{"type":"timestamp"},"LastUpdateTimestamp":{"type":"timestamp"},"Destinations":{"type":"list","member":{"type":"structure","required":["DestinationId"],"members":{"DestinationId":{},"S3DestinationDescription":{"shape":"S11"},"RedshiftDestinationDescription":{"type":"structure","required":["RoleARN","ClusterJDBCURL","CopyCommand","Username","S3DestinationDescription"],"members":{"RoleARN":{},"ClusterJDBCURL":{},"CopyCommand":{"shape":"Sh"},"Username":{"shape":"Sl"},"S3DestinationDescription":{"shape":"S11"}}}}}},"HasMoreDestinations":{"type":"boolean"}}}}},"http":{}},"ListDeliveryStreams":{"input":{"type":"structure","members":{"Limit":{"type":"integer"},"ExclusiveStartDeliveryStreamName":{}}},"output":{"type":"structure","required":["DeliveryStreamNames","HasMoreDeliveryStreams"],"members":{"DeliveryStreamNames":{"type":"list","member":{}},"HasMoreDeliveryStreams":{"type":"boolean"}}},"http":{}},"PutRecord":{"input":{"type":"structure","required":["DeliveryStreamName","Record"],"members":{"DeliveryStreamName":{},"Record":{"shape":"S19"}}},"output":{"type":"structure","required":["RecordId"],"members":{"RecordId":{}}},"http":{}},"PutRecordBatch":{"input":{"type":"structure","required":["DeliveryStreamName","Records"],"members":{"DeliveryStreamName":{},"Records":{"type":"list","member":{"shape":"S19"}}}},"output":{"type":"structure","required":["FailedPutCount","RequestResponses"],"members":{"FailedPutCount":{"type":"integer"},"RequestResponses":{"type":"list","member":{"type":"structure","members":{"RecordId":{},"ErrorCode":{},"ErrorMessage":{}}}}}},"http":{}},"UpdateDestination":{"input":{"type":"structure","required":["DeliveryStreamName","CurrentDeliveryStreamVersionId","DestinationId"],"members":{"DeliveryStreamName":{},"CurrentDeliveryStreamVersionId":{},"DestinationId":{},"S3DestinationUpdate":{"shape":"S1m"},"RedshiftDestinationUpdate":{"type":"structure","members":{"RoleARN":{},"ClusterJDBCURL":{},"CopyCommand":{"shape":"Sh"},"Username":{"shape":"Sl"},"Password":{"shape":"Sm"},"S3Update":{"shape":"S1m"}}}}},"output":{"type":"structure","members":{}},"http":{}}},"shapes":{"S3":{"type":"structure","required":["RoleARN","BucketARN"],"members":{"RoleARN":{},"BucketARN":{},"Prefix":{},"BufferingHints":{"shape":"S7"},"CompressionFormat":{},"EncryptionConfiguration":{"shape":"Sb"}}},"S7":{"type":"structure","members":{"SizeInMBs":{"type":"integer"},"IntervalInSeconds":{"type":"integer"}}},"Sb":{"type":"structure","members":{"NoEncryptionConfig":{},"KMSEncryptionConfig":{"type":"structure","required":["AWSKMSKeyARN"],"members":{"AWSKMSKeyARN":{}}}}},"Sh":{"type":"structure","required":["DataTableName"],"members":{"DataTableName":{},"DataTableColumns":{},"CopyOptions":{}}},"Sl":{"type":"string","sensitive":true},"Sm":{"type":"string","sensitive":true},"S11":{"type":"structure","required":["RoleARN","BucketARN","BufferingHints","CompressionFormat","EncryptionConfiguration"],"members":{"RoleARN":{},"BucketARN":{},"Prefix":{},"BufferingHints":{"shape":"S7"},"CompressionFormat":{},"EncryptionConfiguration":{"shape":"Sb"}}},"S19":{"type":"structure","required":["Data"],"members":{"Data":{"type":"blob"}}},"S1m":{"type":"structure","members":{"RoleARN":{},"BucketARN":{},"Prefix":{},"BufferingHints":{"shape":"S7"},"CompressionFormat":{},"EncryptionConfiguration":{"shape":"Sb"}}}},"examples":{}};
 AWS.apiLoader.services['kinesis'] = {};
 AWS.Kinesis = AWS.Service.defineService('kinesis', [ '2013-12-02' ]);
 
-AWS.apiLoader.services['kinesis']['2013-12-02'] = {"version":"2.0","metadata":{"apiVersion":"2013-12-02","endpointPrefix":"kinesis","jsonVersion":"1.1","serviceAbbreviation":"Kinesis","serviceFullName":"Amazon Kinesis","signatureVersion":"v4","targetPrefix":"Kinesis_20131202","protocol":"json"},"operations":{"AddTagsToStream":{"input":{"type":"structure","required":["StreamName","Tags"],"members":{"StreamName":{},"Tags":{"type":"map","key":{},"value":{}}}},"http":{}},"CreateStream":{"input":{"type":"structure","required":["StreamName","ShardCount"],"members":{"StreamName":{},"ShardCount":{"type":"integer"}}},"http":{}},"DeleteStream":{"input":{"type":"structure","required":["StreamName"],"members":{"StreamName":{}}},"http":{}},"DescribeStream":{"input":{"type":"structure","required":["StreamName"],"members":{"StreamName":{},"Limit":{"type":"integer"},"ExclusiveStartShardId":{}}},"output":{"type":"structure","required":["StreamDescription"],"members":{"StreamDescription":{"type":"structure","required":["StreamName","StreamARN","StreamStatus","Shards","HasMoreShards"],"members":{"StreamName":{},"StreamARN":{},"StreamStatus":{},"Shards":{"type":"list","member":{"type":"structure","required":["ShardId","HashKeyRange","SequenceNumberRange"],"members":{"ShardId":{},"ParentShardId":{},"AdjacentParentShardId":{},"HashKeyRange":{"type":"structure","required":["StartingHashKey","EndingHashKey"],"members":{"StartingHashKey":{},"EndingHashKey":{}}},"SequenceNumberRange":{"type":"structure","required":["StartingSequenceNumber"],"members":{"StartingSequenceNumber":{},"EndingSequenceNumber":{}}}}}},"HasMoreShards":{"type":"boolean"}}}}},"http":{}},"GetRecords":{"input":{"type":"structure","required":["ShardIterator"],"members":{"ShardIterator":{},"Limit":{"type":"integer"}}},"output":{"type":"structure","required":["Records"],"members":{"Records":{"type":"list","member":{"type":"structure","required":["SequenceNumber","Data","PartitionKey"],"members":{"SequenceNumber":{},"ApproximateArrivalTimestamp":{"type":"timestamp"},"Data":{"type":"blob"},"PartitionKey":{}}}},"NextShardIterator":{},"MillisBehindLatest":{"type":"long"}}},"http":{}},"GetShardIterator":{"input":{"type":"structure","required":["StreamName","ShardId","ShardIteratorType"],"members":{"StreamName":{},"ShardId":{},"ShardIteratorType":{},"StartingSequenceNumber":{}}},"output":{"type":"structure","members":{"ShardIterator":{}}},"http":{}},"ListStreams":{"input":{"type":"structure","members":{"Limit":{"type":"integer"},"ExclusiveStartStreamName":{}}},"output":{"type":"structure","required":["StreamNames","HasMoreStreams"],"members":{"StreamNames":{"type":"list","member":{}},"HasMoreStreams":{"type":"boolean"}}},"http":{}},"ListTagsForStream":{"input":{"type":"structure","required":["StreamName"],"members":{"StreamName":{},"ExclusiveStartTagKey":{},"Limit":{"type":"integer"}}},"output":{"type":"structure","required":["Tags","HasMoreTags"],"members":{"Tags":{"type":"list","member":{"type":"structure","required":["Key"],"members":{"Key":{},"Value":{}}}},"HasMoreTags":{"type":"boolean"}}},"http":{}},"MergeShards":{"input":{"type":"structure","required":["StreamName","ShardToMerge","AdjacentShardToMerge"],"members":{"StreamName":{},"ShardToMerge":{},"AdjacentShardToMerge":{}}},"http":{}},"PutRecord":{"input":{"type":"structure","required":["StreamName","Data","PartitionKey"],"members":{"StreamName":{},"Data":{"type":"blob"},"PartitionKey":{},"ExplicitHashKey":{},"SequenceNumberForOrdering":{}}},"output":{"type":"structure","required":["ShardId","SequenceNumber"],"members":{"ShardId":{},"SequenceNumber":{}}},"http":{}},"PutRecords":{"input":{"type":"structure","required":["Records","StreamName"],"members":{"Records":{"type":"list","member":{"type":"structure","required":["Data","PartitionKey"],"members":{"Data":{"type":"blob"},"ExplicitHashKey":{},"PartitionKey":{}}}},"StreamName":{}}},"output":{"type":"structure","required":["Records"],"members":{"FailedRecordCount":{"type":"integer"},"Records":{"type":"list","member":{"type":"structure","members":{"SequenceNumber":{},"ShardId":{},"ErrorCode":{},"ErrorMessage":{}}}}}},"http":{}},"RemoveTagsFromStream":{"input":{"type":"structure","required":["StreamName","TagKeys"],"members":{"StreamName":{},"TagKeys":{"type":"list","member":{}}}},"http":{}},"SplitShard":{"input":{"type":"structure","required":["StreamName","ShardToSplit","NewStartingHashKey"],"members":{"StreamName":{},"ShardToSplit":{},"NewStartingHashKey":{}}},"http":{}}},"shapes":{},"examples":{},"paginators":{"DescribeStream":{"input_token":"ExclusiveStartShardId","limit_key":"Limit","more_results":"StreamDescription.HasMoreShards","output_token":"StreamDescription.Shards[-1].ShardId","result_key":"StreamDescription.Shards"},"ListStreams":{"input_token":"ExclusiveStartStreamName","limit_key":"Limit","more_results":"HasMoreStreams","output_token":"StreamNames[-1]","result_key":"StreamNames"}}};
+AWS.apiLoader.services['kinesis']['2013-12-02'] = {"version":"2.0","metadata":{"apiVersion":"2013-12-02","endpointPrefix":"kinesis","jsonVersion":"1.1","serviceAbbreviation":"Kinesis","serviceFullName":"Amazon Kinesis","signatureVersion":"v4","targetPrefix":"Kinesis_20131202","protocol":"json"},"operations":{"AddTagsToStream":{"input":{"type":"structure","required":["StreamName","Tags"],"members":{"StreamName":{},"Tags":{"type":"map","key":{},"value":{}}}},"http":{}},"CreateStream":{"input":{"type":"structure","required":["StreamName","ShardCount"],"members":{"StreamName":{},"ShardCount":{"type":"integer"}}},"http":{}},"DecreaseStreamRetentionPeriod":{"input":{"type":"structure","required":["StreamName","RetentionPeriodHours"],"members":{"StreamName":{},"RetentionPeriodHours":{"type":"integer"}}},"http":{}},"DeleteStream":{"input":{"type":"structure","required":["StreamName"],"members":{"StreamName":{}}},"http":{}},"DescribeStream":{"input":{"type":"structure","required":["StreamName"],"members":{"StreamName":{},"Limit":{"type":"integer"},"ExclusiveStartShardId":{}}},"output":{"type":"structure","required":["StreamDescription"],"members":{"StreamDescription":{"type":"structure","required":["StreamName","StreamARN","StreamStatus","Shards","HasMoreShards","RetentionPeriodHours"],"members":{"StreamName":{},"StreamARN":{},"StreamStatus":{},"Shards":{"type":"list","member":{"type":"structure","required":["ShardId","HashKeyRange","SequenceNumberRange"],"members":{"ShardId":{},"ParentShardId":{},"AdjacentParentShardId":{},"HashKeyRange":{"type":"structure","required":["StartingHashKey","EndingHashKey"],"members":{"StartingHashKey":{},"EndingHashKey":{}}},"SequenceNumberRange":{"type":"structure","required":["StartingSequenceNumber"],"members":{"StartingSequenceNumber":{},"EndingSequenceNumber":{}}}}}},"HasMoreShards":{"type":"boolean"},"RetentionPeriodHours":{"type":"integer"}}}}},"http":{}},"GetRecords":{"input":{"type":"structure","required":["ShardIterator"],"members":{"ShardIterator":{},"Limit":{"type":"integer"}}},"output":{"type":"structure","required":["Records"],"members":{"Records":{"type":"list","member":{"type":"structure","required":["SequenceNumber","Data","PartitionKey"],"members":{"SequenceNumber":{},"ApproximateArrivalTimestamp":{"type":"timestamp"},"Data":{"type":"blob"},"PartitionKey":{}}}},"NextShardIterator":{},"MillisBehindLatest":{"type":"long"}}},"http":{}},"GetShardIterator":{"input":{"type":"structure","required":["StreamName","ShardId","ShardIteratorType"],"members":{"StreamName":{},"ShardId":{},"ShardIteratorType":{},"StartingSequenceNumber":{}}},"output":{"type":"structure","members":{"ShardIterator":{}}},"http":{}},"IncreaseStreamRetentionPeriod":{"input":{"type":"structure","required":["StreamName","RetentionPeriodHours"],"members":{"StreamName":{},"RetentionPeriodHours":{"type":"integer"}}},"http":{}},"ListStreams":{"input":{"type":"structure","members":{"Limit":{"type":"integer"},"ExclusiveStartStreamName":{}}},"output":{"type":"structure","required":["StreamNames","HasMoreStreams"],"members":{"StreamNames":{"type":"list","member":{}},"HasMoreStreams":{"type":"boolean"}}},"http":{}},"ListTagsForStream":{"input":{"type":"structure","required":["StreamName"],"members":{"StreamName":{},"ExclusiveStartTagKey":{},"Limit":{"type":"integer"}}},"output":{"type":"structure","required":["Tags","HasMoreTags"],"members":{"Tags":{"type":"list","member":{"type":"structure","required":["Key"],"members":{"Key":{},"Value":{}}}},"HasMoreTags":{"type":"boolean"}}},"http":{}},"MergeShards":{"input":{"type":"structure","required":["StreamName","ShardToMerge","AdjacentShardToMerge"],"members":{"StreamName":{},"ShardToMerge":{},"AdjacentShardToMerge":{}}},"http":{}},"PutRecord":{"input":{"type":"structure","required":["StreamName","Data","PartitionKey"],"members":{"StreamName":{},"Data":{"type":"blob"},"PartitionKey":{},"ExplicitHashKey":{},"SequenceNumberForOrdering":{}}},"output":{"type":"structure","required":["ShardId","SequenceNumber"],"members":{"ShardId":{},"SequenceNumber":{}}},"http":{}},"PutRecords":{"input":{"type":"structure","required":["Records","StreamName"],"members":{"Records":{"type":"list","member":{"type":"structure","required":["Data","PartitionKey"],"members":{"Data":{"type":"blob"},"ExplicitHashKey":{},"PartitionKey":{}}}},"StreamName":{}}},"output":{"type":"structure","required":["Records"],"members":{"FailedRecordCount":{"type":"integer"},"Records":{"type":"list","member":{"type":"structure","members":{"SequenceNumber":{},"ShardId":{},"ErrorCode":{},"ErrorMessage":{}}}}}},"http":{}},"RemoveTagsFromStream":{"input":{"type":"structure","required":["StreamName","TagKeys"],"members":{"StreamName":{},"TagKeys":{"type":"list","member":{}}}},"http":{}},"SplitShard":{"input":{"type":"structure","required":["StreamName","ShardToSplit","NewStartingHashKey"],"members":{"StreamName":{},"ShardToSplit":{},"NewStartingHashKey":{}}},"http":{}}},"shapes":{},"examples":{},"paginators":{"DescribeStream":{"input_token":"ExclusiveStartShardId","limit_key":"Limit","more_results":"StreamDescription.HasMoreShards","output_token":"StreamDescription.Shards[-1].ShardId","result_key":"StreamDescription.Shards"},"ListStreams":{"input_token":"ExclusiveStartStreamName","limit_key":"Limit","more_results":"HasMoreStreams","output_token":"StreamNames[-1]","result_key":"StreamNames"}}};
 AWS.apiLoader.services['lambda'] = {};
 AWS.Lambda = AWS.Service.defineService('lambda', [ '2014-11-11', '2015-03-31' ]);
 
-AWS.apiLoader.services['lambda']['2015-03-31'] = {"version":"2.0","metadata":{"apiVersion":"2015-03-31","endpointPrefix":"lambda","serviceFullName":"AWS Lambda","signatureVersion":"v4","protocol":"rest-json"},"operations":{"AddPermission":{"http":{"requestUri":"/2015-03-31/functions/{FunctionName}/versions/HEAD/policy","responseCode":201},"input":{"type":"structure","required":["FunctionName","StatementId","Action","Principal"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"},"StatementId":{},"Action":{},"Principal":{},"SourceArn":{},"SourceAccount":{}}},"output":{"type":"structure","members":{"Statement":{}}}},"CreateEventSourceMapping":{"http":{"requestUri":"/2015-03-31/event-source-mappings/","responseCode":202},"input":{"type":"structure","required":["EventSourceArn","FunctionName","StartingPosition"],"members":{"EventSourceArn":{},"FunctionName":{},"Enabled":{"type":"boolean"},"BatchSize":{"type":"integer"},"StartingPosition":{}}},"output":{"shape":"Se"}},"CreateFunction":{"http":{"requestUri":"/2015-03-31/functions","responseCode":201},"input":{"type":"structure","required":["FunctionName","Runtime","Role","Handler","Code"],"members":{"FunctionName":{},"Runtime":{},"Role":{},"Handler":{},"Description":{},"Timeout":{"type":"integer"},"MemorySize":{"type":"integer"},"Code":{"type":"structure","members":{"ZipFile":{"type":"blob"},"S3Bucket":{},"S3Key":{},"S3ObjectVersion":{}}}}},"output":{"shape":"St"}},"DeleteEventSourceMapping":{"http":{"method":"DELETE","requestUri":"/2015-03-31/event-source-mappings/{UUID}","responseCode":202},"input":{"type":"structure","required":["UUID"],"members":{"UUID":{"location":"uri","locationName":"UUID"}}},"output":{"shape":"Se"}},"DeleteFunction":{"http":{"method":"DELETE","requestUri":"/2015-03-31/functions/{FunctionName}","responseCode":204},"input":{"type":"structure","required":["FunctionName"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"}}}},"GetEventSourceMapping":{"http":{"method":"GET","requestUri":"/2015-03-31/event-source-mappings/{UUID}","responseCode":200},"input":{"type":"structure","required":["UUID"],"members":{"UUID":{"location":"uri","locationName":"UUID"}}},"output":{"shape":"Se"}},"GetFunction":{"http":{"method":"GET","requestUri":"/2015-03-31/functions/{FunctionName}/versions/HEAD","responseCode":200},"input":{"type":"structure","required":["FunctionName"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"}}},"output":{"type":"structure","members":{"Configuration":{"shape":"St"},"Code":{"type":"structure","members":{"RepositoryType":{},"Location":{}}}}}},"GetFunctionConfiguration":{"http":{"method":"GET","requestUri":"/2015-03-31/functions/{FunctionName}/versions/HEAD/configuration","responseCode":200},"input":{"type":"structure","required":["FunctionName"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"}}},"output":{"shape":"St"}},"GetPolicy":{"http":{"method":"GET","requestUri":"/2015-03-31/functions/{FunctionName}/versions/HEAD/policy","responseCode":200},"input":{"type":"structure","required":["FunctionName"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"}}},"output":{"type":"structure","members":{"Policy":{}}}},"Invoke":{"http":{"requestUri":"/2015-03-31/functions/{FunctionName}/invocations"},"input":{"type":"structure","required":["FunctionName"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"},"InvocationType":{"location":"header","locationName":"X-Amz-Invocation-Type"},"LogType":{"location":"header","locationName":"X-Amz-Log-Type"},"ClientContext":{"location":"header","locationName":"X-Amz-Client-Context"},"Payload":{"type":"blob"}},"payload":"Payload"},"output":{"type":"structure","members":{"StatusCode":{"location":"statusCode","type":"integer"},"FunctionError":{"location":"header","locationName":"X-Amz-Function-Error"},"LogResult":{"location":"header","locationName":"X-Amz-Log-Result"},"Payload":{"type":"blob"}},"payload":"Payload"}},"InvokeAsync":{"http":{"requestUri":"/2014-11-13/functions/{FunctionName}/invoke-async/","responseCode":202},"input":{"deprecated":true,"type":"structure","required":["FunctionName","InvokeArgs"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"},"InvokeArgs":{"type":"blob","streaming":true}},"payload":"InvokeArgs"},"output":{"deprecated":true,"type":"structure","members":{"Status":{"location":"statusCode","type":"integer"}}},"deprecated":true},"ListEventSourceMappings":{"http":{"method":"GET","requestUri":"/2015-03-31/event-source-mappings/","responseCode":200},"input":{"type":"structure","members":{"EventSourceArn":{"location":"querystring","locationName":"EventSourceArn"},"FunctionName":{"location":"querystring","locationName":"FunctionName"},"Marker":{"location":"querystring","locationName":"Marker"},"MaxItems":{"location":"querystring","locationName":"MaxItems","type":"integer"}}},"output":{"type":"structure","members":{"NextMarker":{},"EventSourceMappings":{"type":"list","member":{"shape":"Se"}}}}},"ListFunctions":{"http":{"method":"GET","requestUri":"/2015-03-31/functions/","responseCode":200},"input":{"type":"structure","members":{"Marker":{"location":"querystring","locationName":"Marker"},"MaxItems":{"location":"querystring","locationName":"MaxItems","type":"integer"}}},"output":{"type":"structure","members":{"NextMarker":{},"Functions":{"type":"list","member":{"shape":"St"}}}}},"RemovePermission":{"http":{"method":"DELETE","requestUri":"/2015-03-31/functions/{FunctionName}/versions/HEAD/policy/{StatementId}","responseCode":204},"input":{"type":"structure","required":["FunctionName","StatementId"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"},"StatementId":{"location":"uri","locationName":"StatementId"}}}},"UpdateEventSourceMapping":{"http":{"method":"PUT","requestUri":"/2015-03-31/event-source-mappings/{UUID}","responseCode":202},"input":{"type":"structure","required":["UUID"],"members":{"UUID":{"location":"uri","locationName":"UUID"},"FunctionName":{},"Enabled":{"type":"boolean"},"BatchSize":{"type":"integer"}}},"output":{"shape":"Se"}},"UpdateFunctionCode":{"http":{"method":"PUT","requestUri":"/2015-03-31/functions/{FunctionName}/versions/HEAD/code","responseCode":200},"input":{"type":"structure","required":["FunctionName"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"},"ZipFile":{"type":"blob"},"S3Bucket":{},"S3Key":{},"S3ObjectVersion":{}}},"output":{"shape":"St"}},"UpdateFunctionConfiguration":{"http":{"method":"PUT","requestUri":"/2015-03-31/functions/{FunctionName}/versions/HEAD/configuration","responseCode":200},"input":{"type":"structure","required":["FunctionName"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"},"Role":{},"Handler":{},"Description":{},"Timeout":{"type":"integer"},"MemorySize":{"type":"integer"}}},"output":{"shape":"St"}}},"shapes":{"Se":{"type":"structure","members":{"UUID":{},"BatchSize":{"type":"integer"},"EventSourceArn":{},"FunctionArn":{},"LastModified":{"type":"timestamp"},"LastProcessingResult":{},"State":{},"StateTransitionReason":{}}},"St":{"type":"structure","members":{"FunctionName":{},"FunctionArn":{},"Runtime":{},"Role":{},"Handler":{},"CodeSize":{"type":"long"},"Description":{},"Timeout":{"type":"integer"},"MemorySize":{"type":"integer"},"LastModified":{}}}},"paginators":{"ListEventSourceMappings":{"input_token":"Marker","output_token":"NextMarker","limit_key":"MaxItems","result_key":"EventSourceMappings"},"ListFunctions":{"input_token":"Marker","output_token":"NextMarker","limit_key":"MaxItems","result_key":"Functions"}}};
+AWS.apiLoader.services['lambda']['2015-03-31'] = {"version":"2.0","metadata":{"apiVersion":"2015-03-31","endpointPrefix":"lambda","serviceFullName":"AWS Lambda","signatureVersion":"v4","protocol":"rest-json"},"operations":{"AddPermission":{"http":{"requestUri":"/2015-03-31/functions/{FunctionName}/policy","responseCode":201},"input":{"type":"structure","required":["FunctionName","StatementId","Action","Principal"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"},"StatementId":{},"Action":{},"Principal":{},"SourceArn":{},"SourceAccount":{},"Qualifier":{"location":"querystring","locationName":"Qualifier"}}},"output":{"type":"structure","members":{"Statement":{}}}},"CreateAlias":{"http":{"requestUri":"/2015-03-31/functions/{FunctionName}/aliases","responseCode":201},"input":{"type":"structure","required":["FunctionName","Name","FunctionVersion"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"},"Name":{},"FunctionVersion":{},"Description":{}}},"output":{"shape":"Sf"}},"CreateEventSourceMapping":{"http":{"requestUri":"/2015-03-31/event-source-mappings/","responseCode":202},"input":{"type":"structure","required":["EventSourceArn","FunctionName","StartingPosition"],"members":{"EventSourceArn":{},"FunctionName":{},"Enabled":{"type":"boolean"},"BatchSize":{"type":"integer"},"StartingPosition":{}}},"output":{"shape":"Sl"}},"CreateFunction":{"http":{"requestUri":"/2015-03-31/functions","responseCode":201},"input":{"type":"structure","required":["FunctionName","Runtime","Role","Handler","Code"],"members":{"FunctionName":{},"Runtime":{},"Role":{},"Handler":{},"Code":{"type":"structure","members":{"ZipFile":{"type":"blob"},"S3Bucket":{},"S3Key":{},"S3ObjectVersion":{}}},"Description":{},"Timeout":{"type":"integer"},"MemorySize":{"type":"integer"},"Publish":{"type":"boolean"}}},"output":{"shape":"Sz"}},"DeleteAlias":{"http":{"method":"DELETE","requestUri":"/2015-03-31/functions/{FunctionName}/aliases/{Name}","responseCode":204},"input":{"type":"structure","required":["FunctionName","Name"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"},"Name":{"location":"uri","locationName":"Name"}}}},"DeleteEventSourceMapping":{"http":{"method":"DELETE","requestUri":"/2015-03-31/event-source-mappings/{UUID}","responseCode":202},"input":{"type":"structure","required":["UUID"],"members":{"UUID":{"location":"uri","locationName":"UUID"}}},"output":{"shape":"Sl"}},"DeleteFunction":{"http":{"method":"DELETE","requestUri":"/2015-03-31/functions/{FunctionName}","responseCode":204},"input":{"type":"structure","required":["FunctionName"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"},"Qualifier":{"location":"querystring","locationName":"Qualifier"}}}},"GetAlias":{"http":{"method":"GET","requestUri":"/2015-03-31/functions/{FunctionName}/aliases/{Name}","responseCode":200},"input":{"type":"structure","required":["FunctionName","Name"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"},"Name":{"location":"uri","locationName":"Name"}}},"output":{"shape":"Sf"}},"GetEventSourceMapping":{"http":{"method":"GET","requestUri":"/2015-03-31/event-source-mappings/{UUID}","responseCode":200},"input":{"type":"structure","required":["UUID"],"members":{"UUID":{"location":"uri","locationName":"UUID"}}},"output":{"shape":"Sl"}},"GetFunction":{"http":{"method":"GET","requestUri":"/2015-03-31/functions/{FunctionName}","responseCode":200},"input":{"type":"structure","required":["FunctionName"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"},"Qualifier":{"location":"querystring","locationName":"Qualifier"}}},"output":{"type":"structure","members":{"Configuration":{"shape":"Sz"},"Code":{"type":"structure","members":{"RepositoryType":{},"Location":{}}}}}},"GetFunctionConfiguration":{"http":{"method":"GET","requestUri":"/2015-03-31/functions/{FunctionName}/configuration","responseCode":200},"input":{"type":"structure","required":["FunctionName"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"},"Qualifier":{"location":"querystring","locationName":"Qualifier"}}},"output":{"shape":"Sz"}},"GetPolicy":{"http":{"method":"GET","requestUri":"/2015-03-31/functions/{FunctionName}/policy","responseCode":200},"input":{"type":"structure","required":["FunctionName"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"},"Qualifier":{}}},"output":{"type":"structure","members":{"Policy":{}}}},"Invoke":{"http":{"requestUri":"/2015-03-31/functions/{FunctionName}/invocations"},"input":{"type":"structure","required":["FunctionName"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"},"InvocationType":{"location":"header","locationName":"X-Amz-Invocation-Type"},"LogType":{"location":"header","locationName":"X-Amz-Log-Type"},"ClientContext":{"location":"header","locationName":"X-Amz-Client-Context"},"Payload":{"type":"blob"},"Qualifier":{"location":"querystring","locationName":"Qualifier"}},"payload":"Payload"},"output":{"type":"structure","members":{"StatusCode":{"location":"statusCode","type":"integer"},"FunctionError":{"location":"header","locationName":"X-Amz-Function-Error"},"LogResult":{"location":"header","locationName":"X-Amz-Log-Result"},"Payload":{"type":"blob"}},"payload":"Payload"}},"InvokeAsync":{"http":{"requestUri":"/2014-11-13/functions/{FunctionName}/invoke-async/","responseCode":202},"input":{"deprecated":true,"type":"structure","required":["FunctionName","InvokeArgs"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"},"InvokeArgs":{"type":"blob","streaming":true}},"payload":"InvokeArgs"},"output":{"deprecated":true,"type":"structure","members":{"Status":{"location":"statusCode","type":"integer"}}},"deprecated":true},"ListAliases":{"http":{"method":"GET","requestUri":"/2015-03-31/functions/{FunctionName}/aliases","responseCode":200},"input":{"type":"structure","required":["FunctionName"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"},"FunctionVersion":{"location":"querystring","locationName":"FunctionVersion"},"Marker":{"location":"querystring","locationName":"Marker"},"MaxItems":{"location":"querystring","locationName":"MaxItems","type":"integer"}}},"output":{"type":"structure","members":{"NextMarker":{},"Aliases":{"type":"list","member":{"shape":"Sf"}}}}},"ListEventSourceMappings":{"http":{"method":"GET","requestUri":"/2015-03-31/event-source-mappings/","responseCode":200},"input":{"type":"structure","members":{"EventSourceArn":{"location":"querystring","locationName":"EventSourceArn"},"FunctionName":{"location":"querystring","locationName":"FunctionName"},"Marker":{"location":"querystring","locationName":"Marker"},"MaxItems":{"location":"querystring","locationName":"MaxItems","type":"integer"}}},"output":{"type":"structure","members":{"NextMarker":{},"EventSourceMappings":{"type":"list","member":{"shape":"Sl"}}}}},"ListFunctions":{"http":{"method":"GET","requestUri":"/2015-03-31/functions/","responseCode":200},"input":{"type":"structure","members":{"Marker":{"location":"querystring","locationName":"Marker"},"MaxItems":{"location":"querystring","locationName":"MaxItems","type":"integer"}}},"output":{"type":"structure","members":{"NextMarker":{},"Functions":{"shape":"S1v"}}}},"ListVersionsByFunction":{"http":{"method":"GET","requestUri":"/2015-03-31/functions/{FunctionName}/versions","responseCode":200},"input":{"type":"structure","required":["FunctionName"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"},"Marker":{"location":"querystring","locationName":"Marker"},"MaxItems":{"location":"querystring","locationName":"MaxItems","type":"integer"}}},"output":{"type":"structure","members":{"NextMarker":{},"Versions":{"shape":"S1v"}}}},"PublishVersion":{"http":{"requestUri":"/2015-03-31/functions/{FunctionName}/versions","responseCode":201},"input":{"type":"structure","required":["FunctionName"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"},"CodeSha256":{},"Description":{}}},"output":{"shape":"Sz"}},"RemovePermission":{"http":{"method":"DELETE","requestUri":"/2015-03-31/functions/{FunctionName}/policy/{StatementId}","responseCode":204},"input":{"type":"structure","required":["FunctionName","StatementId"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"},"StatementId":{"location":"uri","locationName":"StatementId"},"Qualifier":{"location":"querystring","locationName":"Qualifier"}}}},"UpdateAlias":{"http":{"method":"PUT","requestUri":"/2015-03-31/functions/{FunctionName}/aliases/{Name}","responseCode":200},"input":{"type":"structure","required":["FunctionName","Name"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"},"Name":{"location":"uri","locationName":"Name"},"FunctionVersion":{},"Description":{}}},"output":{"shape":"Sf"}},"UpdateEventSourceMapping":{"http":{"method":"PUT","requestUri":"/2015-03-31/event-source-mappings/{UUID}","responseCode":202},"input":{"type":"structure","required":["UUID"],"members":{"UUID":{"location":"uri","locationName":"UUID"},"FunctionName":{},"Enabled":{"type":"boolean"},"BatchSize":{"type":"integer"}}},"output":{"shape":"Sl"}},"UpdateFunctionCode":{"http":{"method":"PUT","requestUri":"/2015-03-31/functions/{FunctionName}/code","responseCode":200},"input":{"type":"structure","required":["FunctionName"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"},"ZipFile":{"type":"blob"},"S3Bucket":{},"S3Key":{},"S3ObjectVersion":{},"Publish":{"type":"boolean"}}},"output":{"shape":"Sz"}},"UpdateFunctionConfiguration":{"http":{"method":"PUT","requestUri":"/2015-03-31/functions/{FunctionName}/configuration","responseCode":200},"input":{"type":"structure","required":["FunctionName"],"members":{"FunctionName":{"location":"uri","locationName":"FunctionName"},"Role":{},"Handler":{},"Description":{},"Timeout":{"type":"integer"},"MemorySize":{"type":"integer"}}},"output":{"shape":"Sz"}}},"shapes":{"Sf":{"type":"structure","members":{"AliasArn":{},"Name":{},"FunctionVersion":{},"Description":{}}},"Sl":{"type":"structure","members":{"UUID":{},"BatchSize":{"type":"integer"},"EventSourceArn":{},"FunctionArn":{},"LastModified":{"type":"timestamp"},"LastProcessingResult":{},"State":{},"StateTransitionReason":{}}},"Sz":{"type":"structure","members":{"FunctionName":{},"FunctionArn":{},"Runtime":{},"Role":{},"Handler":{},"CodeSize":{"type":"long"},"Description":{},"Timeout":{"type":"integer"},"MemorySize":{"type":"integer"},"LastModified":{},"CodeSha256":{},"Version":{}}},"S1v":{"type":"list","member":{"shape":"Sz"}}},"examples":{},"paginators":{"ListEventSourceMappings":{"input_token":"Marker","output_token":"NextMarker","limit_key":"MaxItems","result_key":"EventSourceMappings"},"ListFunctions":{"input_token":"Marker","output_token":"NextMarker","limit_key":"MaxItems","result_key":"Functions"}}};
 AWS.apiLoader.services['machinelearning'] = {};
 AWS.MachineLearning = AWS.Service.defineService('machinelearning', [ '2014-12-12' ]);
 require('./services/machinelearning');
 
 AWS.apiLoader.services['machinelearning']['2014-12-12'] = {"version":"2.0","metadata":{"apiVersion":"2014-12-12","endpointPrefix":"machinelearning","jsonVersion":"1.1","serviceFullName":"Amazon Machine Learning","signatureVersion":"v4","targetPrefix":"AmazonML_20141212","protocol":"json"},"operations":{"CreateBatchPrediction":{"input":{"type":"structure","required":["BatchPredictionId","MLModelId","BatchPredictionDataSourceId","OutputUri"],"members":{"BatchPredictionId":{},"BatchPredictionName":{},"MLModelId":{},"BatchPredictionDataSourceId":{},"OutputUri":{}}},"output":{"type":"structure","members":{"BatchPredictionId":{}}},"http":{}},"CreateDataSourceFromRDS":{"input":{"type":"structure","required":["DataSourceId","RDSData","RoleARN"],"members":{"DataSourceId":{},"DataSourceName":{},"RDSData":{"type":"structure","required":["DatabaseInformation","SelectSqlQuery","DatabaseCredentials","S3StagingLocation","ResourceRole","ServiceRole","SubnetId","SecurityGroupIds"],"members":{"DatabaseInformation":{"shape":"S8"},"SelectSqlQuery":{},"DatabaseCredentials":{"type":"structure","required":["Username","Password"],"members":{"Username":{},"Password":{}}},"S3StagingLocation":{},"DataRearrangement":{},"DataSchema":{},"DataSchemaUri":{},"ResourceRole":{},"ServiceRole":{},"SubnetId":{},"SecurityGroupIds":{"type":"list","member":{}}}},"RoleARN":{},"ComputeStatistics":{"type":"boolean"}}},"output":{"type":"structure","members":{"DataSourceId":{}}},"http":{}},"CreateDataSourceFromRedshift":{"input":{"type":"structure","required":["DataSourceId","DataSpec","RoleARN"],"members":{"DataSourceId":{},"DataSourceName":{},"DataSpec":{"type":"structure","required":["DatabaseInformation","SelectSqlQuery","DatabaseCredentials","S3StagingLocation"],"members":{"DatabaseInformation":{"shape":"Sr"},"SelectSqlQuery":{},"DatabaseCredentials":{"type":"structure","required":["Username","Password"],"members":{"Username":{},"Password":{}}},"S3StagingLocation":{},"DataRearrangement":{},"DataSchema":{},"DataSchemaUri":{}}},"RoleARN":{},"ComputeStatistics":{"type":"boolean"}}},"output":{"type":"structure","members":{"DataSourceId":{}}},"http":{}},"CreateDataSourceFromS3":{"input":{"type":"structure","required":["DataSourceId","DataSpec"],"members":{"DataSourceId":{},"DataSourceName":{},"DataSpec":{"type":"structure","required":["DataLocationS3"],"members":{"DataLocationS3":{},"DataRearrangement":{},"DataSchema":{},"DataSchemaLocationS3":{}}},"ComputeStatistics":{"type":"boolean"}}},"output":{"type":"structure","members":{"DataSourceId":{}}},"http":{}},"CreateEvaluation":{"input":{"type":"structure","required":["EvaluationId","MLModelId","EvaluationDataSourceId"],"members":{"EvaluationId":{},"EvaluationName":{},"MLModelId":{},"EvaluationDataSourceId":{}}},"output":{"type":"structure","members":{"EvaluationId":{}}},"http":{}},"CreateMLModel":{"input":{"type":"structure","required":["MLModelId","MLModelType","TrainingDataSourceId"],"members":{"MLModelId":{},"MLModelName":{},"MLModelType":{},"Parameters":{"shape":"S16"},"TrainingDataSourceId":{},"Recipe":{},"RecipeUri":{}}},"output":{"type":"structure","members":{"MLModelId":{}}},"http":{}},"CreateRealtimeEndpoint":{"input":{"type":"structure","required":["MLModelId"],"members":{"MLModelId":{}}},"output":{"type":"structure","members":{"MLModelId":{},"RealtimeEndpointInfo":{"shape":"S1c"}}},"http":{}},"DeleteBatchPrediction":{"input":{"type":"structure","required":["BatchPredictionId"],"members":{"BatchPredictionId":{}}},"output":{"type":"structure","members":{"BatchPredictionId":{}}},"http":{}},"DeleteDataSource":{"input":{"type":"structure","required":["DataSourceId"],"members":{"DataSourceId":{}}},"output":{"type":"structure","members":{"DataSourceId":{}}},"http":{}},"DeleteEvaluation":{"input":{"type":"structure","required":["EvaluationId"],"members":{"EvaluationId":{}}},"output":{"type":"structure","members":{"EvaluationId":{}}},"http":{}},"DeleteMLModel":{"input":{"type":"structure","required":["MLModelId"],"members":{"MLModelId":{}}},"output":{"type":"structure","members":{"MLModelId":{}}},"http":{}},"DeleteRealtimeEndpoint":{"input":{"type":"structure","required":["MLModelId"],"members":{"MLModelId":{}}},"output":{"type":"structure","members":{"MLModelId":{},"RealtimeEndpointInfo":{"shape":"S1c"}}},"http":{}},"DescribeBatchPredictions":{"input":{"type":"structure","members":{"FilterVariable":{},"EQ":{},"GT":{},"LT":{},"GE":{},"LE":{},"NE":{},"Prefix":{},"SortOrder":{},"NextToken":{},"Limit":{"type":"integer"}}},"output":{"type":"structure","members":{"Results":{"type":"list","member":{"type":"structure","members":{"BatchPredictionId":{},"MLModelId":{},"BatchPredictionDataSourceId":{},"InputDataLocationS3":{},"CreatedByIamUser":{},"CreatedAt":{"type":"timestamp"},"LastUpdatedAt":{"type":"timestamp"},"Name":{},"Status":{},"OutputUri":{},"Message":{}}}},"NextToken":{}}},"http":{}},"DescribeDataSources":{"input":{"type":"structure","members":{"FilterVariable":{},"EQ":{},"GT":{},"LT":{},"GE":{},"LE":{},"NE":{},"Prefix":{},"SortOrder":{},"NextToken":{},"Limit":{"type":"integer"}}},"output":{"type":"structure","members":{"Results":{"type":"list","member":{"type":"structure","members":{"DataSourceId":{},"DataLocationS3":{},"DataRearrangement":{},"CreatedByIamUser":{},"CreatedAt":{"type":"timestamp"},"LastUpdatedAt":{"type":"timestamp"},"DataSizeInBytes":{"type":"long"},"NumberOfFiles":{"type":"long"},"Name":{},"Status":{},"Message":{},"RedshiftMetadata":{"shape":"S28"},"RDSMetadata":{"shape":"S29"},"RoleARN":{},"ComputeStatistics":{"type":"boolean"}}}},"NextToken":{}}},"http":{}},"DescribeEvaluations":{"input":{"type":"structure","members":{"FilterVariable":{},"EQ":{},"GT":{},"LT":{},"GE":{},"LE":{},"NE":{},"Prefix":{},"SortOrder":{},"NextToken":{},"Limit":{"type":"integer"}}},"output":{"type":"structure","members":{"Results":{"type":"list","member":{"type":"structure","members":{"EvaluationId":{},"MLModelId":{},"EvaluationDataSourceId":{},"InputDataLocationS3":{},"CreatedByIamUser":{},"CreatedAt":{"type":"timestamp"},"LastUpdatedAt":{"type":"timestamp"},"Name":{},"Status":{},"PerformanceMetrics":{"shape":"S2g"},"Message":{}}}},"NextToken":{}}},"http":{}},"DescribeMLModels":{"input":{"type":"structure","members":{"FilterVariable":{},"EQ":{},"GT":{},"LT":{},"GE":{},"LE":{},"NE":{},"Prefix":{},"SortOrder":{},"NextToken":{},"Limit":{"type":"integer"}}},"output":{"type":"structure","members":{"Results":{"type":"list","member":{"type":"structure","members":{"MLModelId":{},"TrainingDataSourceId":{},"CreatedByIamUser":{},"CreatedAt":{"type":"timestamp"},"LastUpdatedAt":{"type":"timestamp"},"Name":{},"Status":{},"SizeInBytes":{"type":"long"},"EndpointInfo":{"shape":"S1c"},"TrainingParameters":{"shape":"S16"},"InputDataLocationS3":{},"Algorithm":{},"MLModelType":{},"ScoreThreshold":{"type":"float"},"ScoreThresholdLastUpdatedAt":{"type":"timestamp"},"Message":{}}}},"NextToken":{}}},"http":{}},"GetBatchPrediction":{"input":{"type":"structure","required":["BatchPredictionId"],"members":{"BatchPredictionId":{}}},"output":{"type":"structure","members":{"BatchPredictionId":{},"MLModelId":{},"BatchPredictionDataSourceId":{},"InputDataLocationS3":{},"CreatedByIamUser":{},"CreatedAt":{"type":"timestamp"},"LastUpdatedAt":{"type":"timestamp"},"Name":{},"Status":{},"OutputUri":{},"LogUri":{},"Message":{}}},"http":{}},"GetDataSource":{"input":{"type":"structure","required":["DataSourceId"],"members":{"DataSourceId":{},"Verbose":{"type":"boolean"}}},"output":{"type":"structure","members":{"DataSourceId":{},"DataLocationS3":{},"DataRearrangement":{},"CreatedByIamUser":{},"CreatedAt":{"type":"timestamp"},"LastUpdatedAt":{"type":"timestamp"},"DataSizeInBytes":{"type":"long"},"NumberOfFiles":{"type":"long"},"Name":{},"Status":{},"LogUri":{},"Message":{},"RedshiftMetadata":{"shape":"S28"},"RDSMetadata":{"shape":"S29"},"RoleARN":{},"ComputeStatistics":{"type":"boolean"},"DataSourceSchema":{}}},"http":{}},"GetEvaluation":{"input":{"type":"structure","required":["EvaluationId"],"members":{"EvaluationId":{}}},"output":{"type":"structure","members":{"EvaluationId":{},"MLModelId":{},"EvaluationDataSourceId":{},"InputDataLocationS3":{},"CreatedByIamUser":{},"CreatedAt":{"type":"timestamp"},"LastUpdatedAt":{"type":"timestamp"},"Name":{},"Status":{},"PerformanceMetrics":{"shape":"S2g"},"LogUri":{},"Message":{}}},"http":{}},"GetMLModel":{"input":{"type":"structure","required":["MLModelId"],"members":{"MLModelId":{},"Verbose":{"type":"boolean"}}},"output":{"type":"structure","members":{"MLModelId":{},"TrainingDataSourceId":{},"CreatedByIamUser":{},"CreatedAt":{"type":"timestamp"},"LastUpdatedAt":{"type":"timestamp"},"Name":{},"Status":{},"SizeInBytes":{"type":"long"},"EndpointInfo":{"shape":"S1c"},"TrainingParameters":{"shape":"S16"},"InputDataLocationS3":{},"MLModelType":{},"ScoreThreshold":{"type":"float"},"ScoreThresholdLastUpdatedAt":{"type":"timestamp"},"LogUri":{},"Message":{},"Recipe":{},"Schema":{}}},"http":{}},"Predict":{"input":{"type":"structure","required":["MLModelId","Record","PredictEndpoint"],"members":{"MLModelId":{},"Record":{"type":"map","key":{},"value":{}},"PredictEndpoint":{}}},"output":{"type":"structure","members":{"Prediction":{"type":"structure","members":{"predictedLabel":{},"predictedValue":{"type":"float"},"predictedScores":{"type":"map","key":{},"value":{"type":"float"}},"details":{"type":"map","key":{},"value":{}}}}}},"http":{}},"UpdateBatchPrediction":{"input":{"type":"structure","required":["BatchPredictionId","BatchPredictionName"],"members":{"BatchPredictionId":{},"BatchPredictionName":{}}},"output":{"type":"structure","members":{"BatchPredictionId":{}}},"http":{}},"UpdateDataSource":{"input":{"type":"structure","required":["DataSourceId","DataSourceName"],"members":{"DataSourceId":{},"DataSourceName":{}}},"output":{"type":"structure","members":{"DataSourceId":{}}},"http":{}},"UpdateEvaluation":{"input":{"type":"structure","required":["EvaluationId","EvaluationName"],"members":{"EvaluationId":{},"EvaluationName":{}}},"output":{"type":"structure","members":{"EvaluationId":{}}},"http":{}},"UpdateMLModel":{"input":{"type":"structure","required":["MLModelId"],"members":{"MLModelId":{},"MLModelName":{},"ScoreThreshold":{"type":"float"}}},"output":{"type":"structure","members":{"MLModelId":{}}},"http":{}}},"shapes":{"S8":{"type":"structure","required":["InstanceIdentifier","DatabaseName"],"members":{"InstanceIdentifier":{},"DatabaseName":{}}},"Sr":{"type":"structure","required":["DatabaseName","ClusterIdentifier"],"members":{"DatabaseName":{},"ClusterIdentifier":{}}},"S16":{"type":"map","key":{},"value":{}},"S1c":{"type":"structure","members":{"PeakRequestsPerSecond":{"type":"integer"},"CreatedAt":{"type":"timestamp"},"EndpointUrl":{},"EndpointStatus":{}}},"S28":{"type":"structure","members":{"RedshiftDatabase":{"shape":"Sr"},"DatabaseUserName":{},"SelectSqlQuery":{}}},"S29":{"type":"structure","members":{"Database":{"shape":"S8"},"DatabaseUserName":{},"SelectSqlQuery":{},"ResourceRole":{},"ServiceRole":{},"DataPipelineId":{}}},"S2g":{"type":"structure","members":{"Properties":{"type":"map","key":{},"value":{}}}}},"examples":{},"paginators":{"DescribeBatchPredictions":{"limit_key":"Limit","output_token":"NextToken","input_token":"NextToken","result_key":"Results"},"DescribeDataSources":{"limit_key":"Limit","output_token":"NextToken","input_token":"NextToken","result_key":"Results"},"DescribeEvaluations":{"limit_key":"Limit","output_token":"NextToken","input_token":"NextToken","result_key":"Results"},"DescribeMLModels":{"limit_key":"Limit","output_token":"NextToken","input_token":"NextToken","result_key":"Results"}}};
+AWS.apiLoader.services['marketplacecommerceanalytics'] = {};
+AWS.MarketplaceCommerceAnalytics = AWS.Service.defineService('marketplacecommerceanalytics', [ '2015-07-01' ]);
+
+AWS.apiLoader.services['marketplacecommerceanalytics']['2015-07-01'] = {"version":"2.0","metadata":{"apiVersion":"2015-07-01","endpointPrefix":"marketplacecommerceanalytics","jsonVersion":"1.1","serviceFullName":"AWS Marketplace Commerce Analytics","signatureVersion":"v4","signingName":"marketplacecommerceanalytics","targetPrefix":"MarketplaceCommerceAnalytics20150701","protocol":"json"},"operations":{"GenerateDataSet":{"input":{"type":"structure","required":["dataSetType","dataSetPublicationDate","roleNameArn","destinationS3BucketName","snsTopicArn"],"members":{"dataSetType":{},"dataSetPublicationDate":{"type":"timestamp"},"roleNameArn":{},"destinationS3BucketName":{},"destinationS3Prefix":{},"snsTopicArn":{}}},"output":{"type":"structure","members":{"dataSetRequestId":{}}},"http":{}}},"shapes":{},"examples":{}};
 AWS.apiLoader.services['mobileanalytics'] = {};
 AWS.MobileAnalytics = AWS.Service.defineService('mobileanalytics', [ '2014-06-05' ]);
 
@@ -86,7 +94,7 @@ AWS.apiLoader.services['s3'] = {};
 AWS.S3 = AWS.Service.defineService('s3', [ '2006-03-01' ]);
 require('./services/s3');
 
-AWS.apiLoader.services['s3']['2006-03-01'] = {"version":"2.0","metadata":{"apiVersion":"2006-03-01","checksumFormat":"md5","endpointPrefix":"s3","globalEndpoint":"s3.amazonaws.com","serviceAbbreviation":"Amazon S3","serviceFullName":"Amazon Simple Storage Service","signatureVersion":"s3","timestampFormat":"rfc822","protocol":"rest-xml"},"operations":{"AbortMultipartUpload":{"http":{"method":"DELETE","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","Key","UploadId"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"UploadId":{"location":"querystring","locationName":"uploadId"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}}},"output":{"type":"structure","members":{"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}}},"CompleteMultipartUpload":{"http":{"requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","Key","UploadId"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"MultipartUpload":{"locationName":"CompleteMultipartUpload","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"type":"structure","members":{"Parts":{"locationName":"Part","type":"list","member":{"type":"structure","members":{"ETag":{},"PartNumber":{"type":"integer"}}},"flattened":true}}},"UploadId":{"location":"querystring","locationName":"uploadId"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}},"payload":"MultipartUpload"},"output":{"type":"structure","members":{"Location":{},"Bucket":{},"Key":{},"Expiration":{"location":"header","locationName":"x-amz-expiration"},"ETag":{},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"VersionId":{"location":"header","locationName":"x-amz-version-id"},"SSEKMSKeyId":{"shape":"Sj","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}}},"CopyObject":{"http":{"method":"PUT","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","CopySource","Key"],"members":{"ACL":{"location":"header","locationName":"x-amz-acl"},"Bucket":{"location":"uri","locationName":"Bucket"},"CacheControl":{"location":"header","locationName":"Cache-Control"},"ContentDisposition":{"location":"header","locationName":"Content-Disposition"},"ContentEncoding":{"location":"header","locationName":"Content-Encoding"},"ContentLanguage":{"location":"header","locationName":"Content-Language"},"ContentType":{"location":"header","locationName":"Content-Type"},"CopySource":{"location":"header","locationName":"x-amz-copy-source"},"CopySourceIfMatch":{"location":"header","locationName":"x-amz-copy-source-if-match"},"CopySourceIfModifiedSince":{"location":"header","locationName":"x-amz-copy-source-if-modified-since","type":"timestamp"},"CopySourceIfNoneMatch":{"location":"header","locationName":"x-amz-copy-source-if-none-match"},"CopySourceIfUnmodifiedSince":{"location":"header","locationName":"x-amz-copy-source-if-unmodified-since","type":"timestamp"},"Expires":{"location":"header","locationName":"Expires","type":"timestamp"},"GrantFullControl":{"location":"header","locationName":"x-amz-grant-full-control"},"GrantRead":{"location":"header","locationName":"x-amz-grant-read"},"GrantReadACP":{"location":"header","locationName":"x-amz-grant-read-acp"},"GrantWriteACP":{"location":"header","locationName":"x-amz-grant-write-acp"},"Key":{"location":"uri","locationName":"Key"},"Metadata":{"shape":"S11","location":"headers","locationName":"x-amz-meta-"},"MetadataDirective":{"location":"header","locationName":"x-amz-metadata-directive"},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"StorageClass":{"location":"header","locationName":"x-amz-storage-class"},"WebsiteRedirectLocation":{"location":"header","locationName":"x-amz-website-redirect-location"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKey":{"shape":"S18","location":"header","locationName":"x-amz-server-side-encryption-customer-key"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sj","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"CopySourceSSECustomerAlgorithm":{"location":"header","locationName":"x-amz-copy-source-server-side-encryption-customer-algorithm"},"CopySourceSSECustomerKey":{"shape":"S1b","location":"header","locationName":"x-amz-copy-source-server-side-encryption-customer-key"},"CopySourceSSECustomerKeyMD5":{"location":"header","locationName":"x-amz-copy-source-server-side-encryption-customer-key-MD5"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}}},"output":{"type":"structure","members":{"CopyObjectResult":{"type":"structure","members":{"ETag":{},"LastModified":{"type":"timestamp"}}},"Expiration":{"location":"header","locationName":"x-amz-expiration"},"CopySourceVersionId":{"location":"header","locationName":"x-amz-copy-source-version-id"},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sj","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}},"payload":"CopyObjectResult"},"alias":"PutObjectCopy"},"CreateBucket":{"http":{"method":"PUT","requestUri":"/{Bucket}"},"input":{"type":"structure","required":["Bucket"],"members":{"ACL":{"location":"header","locationName":"x-amz-acl"},"Bucket":{"location":"uri","locationName":"Bucket"},"CreateBucketConfiguration":{"xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"CreateBucketConfiguration","type":"structure","members":{"LocationConstraint":{}}},"GrantFullControl":{"location":"header","locationName":"x-amz-grant-full-control"},"GrantRead":{"location":"header","locationName":"x-amz-grant-read"},"GrantReadACP":{"location":"header","locationName":"x-amz-grant-read-acp"},"GrantWrite":{"location":"header","locationName":"x-amz-grant-write"},"GrantWriteACP":{"location":"header","locationName":"x-amz-grant-write-acp"}},"payload":"CreateBucketConfiguration"},"output":{"type":"structure","members":{"Location":{"location":"header","locationName":"Location"}}},"alias":"PutBucket"},"CreateMultipartUpload":{"http":{"requestUri":"/{Bucket}/{Key+}?uploads"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"ACL":{"location":"header","locationName":"x-amz-acl"},"Bucket":{"location":"uri","locationName":"Bucket"},"CacheControl":{"location":"header","locationName":"Cache-Control"},"ContentDisposition":{"location":"header","locationName":"Content-Disposition"},"ContentEncoding":{"location":"header","locationName":"Content-Encoding"},"ContentLanguage":{"location":"header","locationName":"Content-Language"},"ContentType":{"location":"header","locationName":"Content-Type"},"Expires":{"location":"header","locationName":"Expires","type":"timestamp"},"GrantFullControl":{"location":"header","locationName":"x-amz-grant-full-control"},"GrantRead":{"location":"header","locationName":"x-amz-grant-read"},"GrantReadACP":{"location":"header","locationName":"x-amz-grant-read-acp"},"GrantWriteACP":{"location":"header","locationName":"x-amz-grant-write-acp"},"Key":{"location":"uri","locationName":"Key"},"Metadata":{"shape":"S11","location":"headers","locationName":"x-amz-meta-"},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"StorageClass":{"location":"header","locationName":"x-amz-storage-class"},"WebsiteRedirectLocation":{"location":"header","locationName":"x-amz-website-redirect-location"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKey":{"shape":"S18","location":"header","locationName":"x-amz-server-side-encryption-customer-key"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sj","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}}},"output":{"type":"structure","members":{"Bucket":{"locationName":"Bucket"},"Key":{},"UploadId":{},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sj","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}},"alias":"InitiateMultipartUpload"},"DeleteBucket":{"http":{"method":"DELETE","requestUri":"/{Bucket}"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}}},"DeleteBucketCors":{"http":{"method":"DELETE","requestUri":"/{Bucket}?cors"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}}},"DeleteBucketLifecycle":{"http":{"method":"DELETE","requestUri":"/{Bucket}?lifecycle"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}}},"DeleteBucketPolicy":{"http":{"method":"DELETE","requestUri":"/{Bucket}?policy"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}}},"DeleteBucketReplication":{"http":{"method":"DELETE","requestUri":"/{Bucket}?replication"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}}},"DeleteBucketTagging":{"http":{"method":"DELETE","requestUri":"/{Bucket}?tagging"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}}},"DeleteBucketWebsite":{"http":{"method":"DELETE","requestUri":"/{Bucket}?website"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}}},"DeleteObject":{"http":{"method":"DELETE","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"MFA":{"location":"header","locationName":"x-amz-mfa"},"VersionId":{"location":"querystring","locationName":"versionId"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}}},"output":{"type":"structure","members":{"DeleteMarker":{"location":"header","locationName":"x-amz-delete-marker","type":"boolean"},"VersionId":{"location":"header","locationName":"x-amz-version-id"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}}},"DeleteObjects":{"http":{"requestUri":"/{Bucket}?delete"},"input":{"type":"structure","required":["Bucket","Delete"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Delete":{"xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"Delete","type":"structure","required":["Objects"],"members":{"Objects":{"locationName":"Object","type":"list","member":{"type":"structure","required":["Key"],"members":{"Key":{},"VersionId":{}}},"flattened":true},"Quiet":{"type":"boolean"}}},"MFA":{"location":"header","locationName":"x-amz-mfa"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}},"payload":"Delete"},"output":{"type":"structure","members":{"Deleted":{"type":"list","member":{"type":"structure","members":{"Key":{},"VersionId":{},"DeleteMarker":{"type":"boolean"},"DeleteMarkerVersionId":{}}},"flattened":true},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"},"Errors":{"locationName":"Error","type":"list","member":{"type":"structure","members":{"Key":{},"VersionId":{},"Code":{},"Message":{}}},"flattened":true}}},"alias":"DeleteMultipleObjects"},"GetBucketAcl":{"http":{"method":"GET","requestUri":"/{Bucket}?acl"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","members":{"Owner":{"shape":"S2f"},"Grants":{"shape":"S2i","locationName":"AccessControlList"}}}},"GetBucketCors":{"http":{"method":"GET","requestUri":"/{Bucket}?cors"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","members":{"CORSRules":{"shape":"S2r","locationName":"CORSRule"}}}},"GetBucketLifecycle":{"http":{"method":"GET","requestUri":"/{Bucket}?lifecycle"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","members":{"Rules":{"shape":"S34","locationName":"Rule"}}},"deprecated":true},"GetBucketLifecycleConfiguration":{"http":{"method":"GET","requestUri":"/{Bucket}?lifecycle"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","members":{"Rules":{"shape":"S3h","locationName":"Rule"}}}},"GetBucketLocation":{"http":{"method":"GET","requestUri":"/{Bucket}?location"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","members":{"LocationConstraint":{}}}},"GetBucketLogging":{"http":{"method":"GET","requestUri":"/{Bucket}?logging"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","members":{"LoggingEnabled":{"shape":"S3p"}}}},"GetBucketNotification":{"http":{"method":"GET","requestUri":"/{Bucket}?notification"},"input":{"shape":"S3v"},"output":{"shape":"S3w"},"deprecated":true},"GetBucketNotificationConfiguration":{"http":{"method":"GET","requestUri":"/{Bucket}?notification"},"input":{"shape":"S3v"},"output":{"shape":"S47"}},"GetBucketPolicy":{"http":{"method":"GET","requestUri":"/{Bucket}?policy"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","members":{"Policy":{}},"payload":"Policy"}},"GetBucketReplication":{"http":{"method":"GET","requestUri":"/{Bucket}?replication"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","members":{"ReplicationConfiguration":{"shape":"S4q"}},"payload":"ReplicationConfiguration"}},"GetBucketRequestPayment":{"http":{"method":"GET","requestUri":"/{Bucket}?requestPayment"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","members":{"Payer":{}}}},"GetBucketTagging":{"http":{"method":"GET","requestUri":"/{Bucket}?tagging"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","required":["TagSet"],"members":{"TagSet":{"shape":"S51"}}}},"GetBucketVersioning":{"http":{"method":"GET","requestUri":"/{Bucket}?versioning"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","members":{"Status":{},"MFADelete":{"locationName":"MfaDelete"}}}},"GetBucketWebsite":{"http":{"method":"GET","requestUri":"/{Bucket}?website"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","members":{"RedirectAllRequestsTo":{"shape":"S5a"},"IndexDocument":{"shape":"S5d"},"ErrorDocument":{"shape":"S5f"},"RoutingRules":{"shape":"S5g"}}}},"GetObject":{"http":{"method":"GET","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"IfMatch":{"location":"header","locationName":"If-Match"},"IfModifiedSince":{"location":"header","locationName":"If-Modified-Since","type":"timestamp"},"IfNoneMatch":{"location":"header","locationName":"If-None-Match"},"IfUnmodifiedSince":{"location":"header","locationName":"If-Unmodified-Since","type":"timestamp"},"Key":{"location":"uri","locationName":"Key"},"Range":{"location":"header","locationName":"Range"},"ResponseCacheControl":{"location":"querystring","locationName":"response-cache-control"},"ResponseContentDisposition":{"location":"querystring","locationName":"response-content-disposition"},"ResponseContentEncoding":{"location":"querystring","locationName":"response-content-encoding"},"ResponseContentLanguage":{"location":"querystring","locationName":"response-content-language"},"ResponseContentType":{"location":"querystring","locationName":"response-content-type"},"ResponseExpires":{"location":"querystring","locationName":"response-expires","type":"timestamp"},"VersionId":{"location":"querystring","locationName":"versionId"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKey":{"shape":"S18","location":"header","locationName":"x-amz-server-side-encryption-customer-key"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}}},"output":{"type":"structure","members":{"Body":{"streaming":true,"type":"blob"},"DeleteMarker":{"location":"header","locationName":"x-amz-delete-marker","type":"boolean"},"AcceptRanges":{"location":"header","locationName":"accept-ranges"},"Expiration":{"location":"header","locationName":"x-amz-expiration"},"Restore":{"location":"header","locationName":"x-amz-restore"},"LastModified":{"location":"header","locationName":"Last-Modified","type":"timestamp"},"ContentLength":{"location":"header","locationName":"Content-Length","type":"integer"},"ETag":{"location":"header","locationName":"ETag"},"MissingMeta":{"location":"header","locationName":"x-amz-missing-meta","type":"integer"},"VersionId":{"location":"header","locationName":"x-amz-version-id"},"CacheControl":{"location":"header","locationName":"Cache-Control"},"ContentDisposition":{"location":"header","locationName":"Content-Disposition"},"ContentEncoding":{"location":"header","locationName":"Content-Encoding"},"ContentLanguage":{"location":"header","locationName":"Content-Language"},"ContentRange":{"location":"header","locationName":"Content-Range"},"ContentType":{"location":"header","locationName":"Content-Type"},"Expires":{"location":"header","locationName":"Expires","type":"timestamp"},"WebsiteRedirectLocation":{"location":"header","locationName":"x-amz-website-redirect-location"},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"Metadata":{"shape":"S11","location":"headers","locationName":"x-amz-meta-"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sj","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"StorageClass":{"location":"header","locationName":"x-amz-storage-class"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"},"ReplicationStatus":{"location":"header","locationName":"x-amz-replication-status"}},"payload":"Body"}},"GetObjectAcl":{"http":{"method":"GET","requestUri":"/{Bucket}/{Key+}?acl"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"VersionId":{"location":"querystring","locationName":"versionId"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}}},"output":{"type":"structure","members":{"Owner":{"shape":"S2f"},"Grants":{"shape":"S2i","locationName":"AccessControlList"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}}},"GetObjectTorrent":{"http":{"method":"GET","requestUri":"/{Bucket}/{Key+}?torrent"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}}},"output":{"type":"structure","members":{"Body":{"streaming":true,"type":"blob"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}},"payload":"Body"}},"HeadBucket":{"http":{"method":"HEAD","requestUri":"/{Bucket}"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}}},"HeadObject":{"http":{"method":"HEAD","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"IfMatch":{"location":"header","locationName":"If-Match"},"IfModifiedSince":{"location":"header","locationName":"If-Modified-Since","type":"timestamp"},"IfNoneMatch":{"location":"header","locationName":"If-None-Match"},"IfUnmodifiedSince":{"location":"header","locationName":"If-Unmodified-Since","type":"timestamp"},"Key":{"location":"uri","locationName":"Key"},"Range":{"location":"header","locationName":"Range"},"VersionId":{"location":"querystring","locationName":"versionId"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKey":{"shape":"S18","location":"header","locationName":"x-amz-server-side-encryption-customer-key"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}}},"output":{"type":"structure","members":{"DeleteMarker":{"location":"header","locationName":"x-amz-delete-marker","type":"boolean"},"AcceptRanges":{"location":"header","locationName":"accept-ranges"},"Expiration":{"location":"header","locationName":"x-amz-expiration"},"Restore":{"location":"header","locationName":"x-amz-restore"},"LastModified":{"location":"header","locationName":"Last-Modified","type":"timestamp"},"ContentLength":{"location":"header","locationName":"Content-Length","type":"integer"},"ETag":{"location":"header","locationName":"ETag"},"MissingMeta":{"location":"header","locationName":"x-amz-missing-meta","type":"integer"},"VersionId":{"location":"header","locationName":"x-amz-version-id"},"CacheControl":{"location":"header","locationName":"Cache-Control"},"ContentDisposition":{"location":"header","locationName":"Content-Disposition"},"ContentEncoding":{"location":"header","locationName":"Content-Encoding"},"ContentLanguage":{"location":"header","locationName":"Content-Language"},"ContentType":{"location":"header","locationName":"Content-Type"},"Expires":{"location":"header","locationName":"Expires","type":"timestamp"},"WebsiteRedirectLocation":{"location":"header","locationName":"x-amz-website-redirect-location"},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"Metadata":{"shape":"S11","location":"headers","locationName":"x-amz-meta-"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sj","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"StorageClass":{"location":"header","locationName":"x-amz-storage-class"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"},"ReplicationStatus":{"location":"header","locationName":"x-amz-replication-status"}}}},"ListBuckets":{"http":{"method":"GET"},"output":{"type":"structure","members":{"Buckets":{"type":"list","member":{"locationName":"Bucket","type":"structure","members":{"Name":{},"CreationDate":{"type":"timestamp"}}}},"Owner":{"shape":"S2f"}}},"alias":"GetService"},"ListMultipartUploads":{"http":{"method":"GET","requestUri":"/{Bucket}?uploads"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Delimiter":{"location":"querystring","locationName":"delimiter"},"EncodingType":{"location":"querystring","locationName":"encoding-type"},"KeyMarker":{"location":"querystring","locationName":"key-marker"},"MaxUploads":{"location":"querystring","locationName":"max-uploads","type":"integer"},"Prefix":{"location":"querystring","locationName":"prefix"},"UploadIdMarker":{"location":"querystring","locationName":"upload-id-marker"}}},"output":{"type":"structure","members":{"Bucket":{},"KeyMarker":{},"UploadIdMarker":{},"NextKeyMarker":{},"Prefix":{},"Delimiter":{},"NextUploadIdMarker":{},"MaxUploads":{"type":"integer"},"IsTruncated":{"type":"boolean"},"Uploads":{"locationName":"Upload","type":"list","member":{"type":"structure","members":{"UploadId":{},"Key":{},"Initiated":{"type":"timestamp"},"StorageClass":{},"Owner":{"shape":"S2f"},"Initiator":{"shape":"S6x"}}},"flattened":true},"CommonPrefixes":{"shape":"S6y"},"EncodingType":{}}}},"ListObjectVersions":{"http":{"method":"GET","requestUri":"/{Bucket}?versions"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Delimiter":{"location":"querystring","locationName":"delimiter"},"EncodingType":{"location":"querystring","locationName":"encoding-type"},"KeyMarker":{"location":"querystring","locationName":"key-marker"},"MaxKeys":{"location":"querystring","locationName":"max-keys","type":"integer"},"Prefix":{"location":"querystring","locationName":"prefix"},"VersionIdMarker":{"location":"querystring","locationName":"version-id-marker"}}},"output":{"type":"structure","members":{"IsTruncated":{"type":"boolean"},"KeyMarker":{},"VersionIdMarker":{},"NextKeyMarker":{},"NextVersionIdMarker":{},"Versions":{"locationName":"Version","type":"list","member":{"type":"structure","members":{"ETag":{},"Size":{"type":"integer"},"StorageClass":{},"Key":{},"VersionId":{},"IsLatest":{"type":"boolean"},"LastModified":{"type":"timestamp"},"Owner":{"shape":"S2f"}}},"flattened":true},"DeleteMarkers":{"locationName":"DeleteMarker","type":"list","member":{"type":"structure","members":{"Owner":{"shape":"S2f"},"Key":{},"VersionId":{},"IsLatest":{"type":"boolean"},"LastModified":{"type":"timestamp"}}},"flattened":true},"Name":{},"Prefix":{},"Delimiter":{},"MaxKeys":{"type":"integer"},"CommonPrefixes":{"shape":"S6y"},"EncodingType":{}}},"alias":"GetBucketObjectVersions"},"ListObjects":{"http":{"method":"GET","requestUri":"/{Bucket}"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Delimiter":{"location":"querystring","locationName":"delimiter"},"EncodingType":{"location":"querystring","locationName":"encoding-type"},"Marker":{"location":"querystring","locationName":"marker"},"MaxKeys":{"location":"querystring","locationName":"max-keys","type":"integer"},"Prefix":{"location":"querystring","locationName":"prefix"}}},"output":{"type":"structure","members":{"IsTruncated":{"type":"boolean"},"Marker":{},"NextMarker":{},"Contents":{"type":"list","member":{"type":"structure","members":{"Key":{},"LastModified":{"type":"timestamp"},"ETag":{},"Size":{"type":"integer"},"StorageClass":{},"Owner":{"shape":"S2f"}}},"flattened":true},"Name":{},"Prefix":{},"Delimiter":{},"MaxKeys":{"type":"integer"},"CommonPrefixes":{"shape":"S6y"},"EncodingType":{}}},"alias":"GetBucket"},"ListParts":{"http":{"method":"GET","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","Key","UploadId"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"MaxParts":{"location":"querystring","locationName":"max-parts","type":"integer"},"PartNumberMarker":{"location":"querystring","locationName":"part-number-marker","type":"integer"},"UploadId":{"location":"querystring","locationName":"uploadId"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}}},"output":{"type":"structure","members":{"Bucket":{},"Key":{},"UploadId":{},"PartNumberMarker":{"type":"integer"},"NextPartNumberMarker":{"type":"integer"},"MaxParts":{"type":"integer"},"IsTruncated":{"type":"boolean"},"Parts":{"locationName":"Part","type":"list","member":{"type":"structure","members":{"PartNumber":{"type":"integer"},"LastModified":{"type":"timestamp"},"ETag":{},"Size":{"type":"integer"}}},"flattened":true},"Initiator":{"shape":"S6x"},"Owner":{"shape":"S2f"},"StorageClass":{},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}}},"PutBucketAcl":{"http":{"method":"PUT","requestUri":"/{Bucket}?acl"},"input":{"type":"structure","required":["Bucket"],"members":{"ACL":{"location":"header","locationName":"x-amz-acl"},"AccessControlPolicy":{"shape":"S7r","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"AccessControlPolicy"},"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"GrantFullControl":{"location":"header","locationName":"x-amz-grant-full-control"},"GrantRead":{"location":"header","locationName":"x-amz-grant-read"},"GrantReadACP":{"location":"header","locationName":"x-amz-grant-read-acp"},"GrantWrite":{"location":"header","locationName":"x-amz-grant-write"},"GrantWriteACP":{"location":"header","locationName":"x-amz-grant-write-acp"}},"payload":"AccessControlPolicy"}},"PutBucketCors":{"http":{"method":"PUT","requestUri":"/{Bucket}?cors"},"input":{"type":"structure","required":["Bucket","CORSConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"CORSConfiguration":{"xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"CORSConfiguration","type":"structure","required":["CORSRules"],"members":{"CORSRules":{"shape":"S2r","locationName":"CORSRule"}}},"ContentMD5":{"location":"header","locationName":"Content-MD5"}},"payload":"CORSConfiguration"}},"PutBucketLifecycle":{"http":{"method":"PUT","requestUri":"/{Bucket}?lifecycle"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"LifecycleConfiguration":{"xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"LifecycleConfiguration","type":"structure","required":["Rules"],"members":{"Rules":{"shape":"S34","locationName":"Rule"}}}},"payload":"LifecycleConfiguration"},"deprecated":true},"PutBucketLifecycleConfiguration":{"http":{"method":"PUT","requestUri":"/{Bucket}?lifecycle"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"LifecycleConfiguration":{"xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"LifecycleConfiguration","type":"structure","required":["Rules"],"members":{"Rules":{"shape":"S3h","locationName":"Rule"}}}},"payload":"LifecycleConfiguration"}},"PutBucketLogging":{"http":{"method":"PUT","requestUri":"/{Bucket}?logging"},"input":{"type":"structure","required":["Bucket","BucketLoggingStatus"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"BucketLoggingStatus":{"xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"BucketLoggingStatus","type":"structure","members":{"LoggingEnabled":{"shape":"S3p"}}},"ContentMD5":{"location":"header","locationName":"Content-MD5"}},"payload":"BucketLoggingStatus"}},"PutBucketNotification":{"http":{"method":"PUT","requestUri":"/{Bucket}?notification"},"input":{"type":"structure","required":["Bucket","NotificationConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"NotificationConfiguration":{"shape":"S3w","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"NotificationConfiguration"}},"payload":"NotificationConfiguration"},"deprecated":true},"PutBucketNotificationConfiguration":{"http":{"method":"PUT","requestUri":"/{Bucket}?notification"},"input":{"type":"structure","required":["Bucket","NotificationConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"NotificationConfiguration":{"shape":"S47","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"NotificationConfiguration"}},"payload":"NotificationConfiguration"}},"PutBucketPolicy":{"http":{"method":"PUT","requestUri":"/{Bucket}?policy"},"input":{"type":"structure","required":["Bucket","Policy"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"Policy":{}},"payload":"Policy"}},"PutBucketReplication":{"http":{"method":"PUT","requestUri":"/{Bucket}?replication"},"input":{"type":"structure","required":["Bucket","ReplicationConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"ReplicationConfiguration":{"shape":"S4q","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"ReplicationConfiguration"}},"payload":"ReplicationConfiguration"}},"PutBucketRequestPayment":{"http":{"method":"PUT","requestUri":"/{Bucket}?requestPayment"},"input":{"type":"structure","required":["Bucket","RequestPaymentConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"RequestPaymentConfiguration":{"xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"RequestPaymentConfiguration","type":"structure","required":["Payer"],"members":{"Payer":{}}}},"payload":"RequestPaymentConfiguration"}},"PutBucketTagging":{"http":{"method":"PUT","requestUri":"/{Bucket}?tagging"},"input":{"type":"structure","required":["Bucket","Tagging"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"Tagging":{"xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"Tagging","type":"structure","required":["TagSet"],"members":{"TagSet":{"shape":"S51"}}}},"payload":"Tagging"}},"PutBucketVersioning":{"http":{"method":"PUT","requestUri":"/{Bucket}?versioning"},"input":{"type":"structure","required":["Bucket","VersioningConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"MFA":{"location":"header","locationName":"x-amz-mfa"},"VersioningConfiguration":{"xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"VersioningConfiguration","type":"structure","members":{"MFADelete":{"locationName":"MfaDelete"},"Status":{}}}},"payload":"VersioningConfiguration"}},"PutBucketWebsite":{"http":{"method":"PUT","requestUri":"/{Bucket}?website"},"input":{"type":"structure","required":["Bucket","WebsiteConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"WebsiteConfiguration":{"xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"WebsiteConfiguration","type":"structure","members":{"ErrorDocument":{"shape":"S5f"},"IndexDocument":{"shape":"S5d"},"RedirectAllRequestsTo":{"shape":"S5a"},"RoutingRules":{"shape":"S5g"}}}},"payload":"WebsiteConfiguration"}},"PutObject":{"http":{"method":"PUT","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"ACL":{"location":"header","locationName":"x-amz-acl"},"Body":{"streaming":true,"type":"blob"},"Bucket":{"location":"uri","locationName":"Bucket"},"CacheControl":{"location":"header","locationName":"Cache-Control"},"ContentDisposition":{"location":"header","locationName":"Content-Disposition"},"ContentEncoding":{"location":"header","locationName":"Content-Encoding"},"ContentLanguage":{"location":"header","locationName":"Content-Language"},"ContentLength":{"location":"header","locationName":"Content-Length","type":"integer"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"ContentType":{"location":"header","locationName":"Content-Type"},"Expires":{"location":"header","locationName":"Expires","type":"timestamp"},"GrantFullControl":{"location":"header","locationName":"x-amz-grant-full-control"},"GrantRead":{"location":"header","locationName":"x-amz-grant-read"},"GrantReadACP":{"location":"header","locationName":"x-amz-grant-read-acp"},"GrantWriteACP":{"location":"header","locationName":"x-amz-grant-write-acp"},"Key":{"location":"uri","locationName":"Key"},"Metadata":{"shape":"S11","location":"headers","locationName":"x-amz-meta-"},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"StorageClass":{"location":"header","locationName":"x-amz-storage-class"},"WebsiteRedirectLocation":{"location":"header","locationName":"x-amz-website-redirect-location"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKey":{"shape":"S18","location":"header","locationName":"x-amz-server-side-encryption-customer-key"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sj","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}},"payload":"Body"},"output":{"type":"structure","members":{"Expiration":{"location":"header","locationName":"x-amz-expiration"},"ETag":{"location":"header","locationName":"ETag"},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"VersionId":{"location":"header","locationName":"x-amz-version-id"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sj","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}}},"PutObjectAcl":{"http":{"method":"PUT","requestUri":"/{Bucket}/{Key+}?acl"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"ACL":{"location":"header","locationName":"x-amz-acl"},"AccessControlPolicy":{"shape":"S7r","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"AccessControlPolicy"},"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"GrantFullControl":{"location":"header","locationName":"x-amz-grant-full-control"},"GrantRead":{"location":"header","locationName":"x-amz-grant-read"},"GrantReadACP":{"location":"header","locationName":"x-amz-grant-read-acp"},"GrantWrite":{"location":"header","locationName":"x-amz-grant-write"},"GrantWriteACP":{"location":"header","locationName":"x-amz-grant-write-acp"},"Key":{"location":"uri","locationName":"Key"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}},"payload":"AccessControlPolicy"},"output":{"type":"structure","members":{"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}}},"RestoreObject":{"http":{"requestUri":"/{Bucket}/{Key+}?restore"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"VersionId":{"location":"querystring","locationName":"versionId"},"RestoreRequest":{"xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"RestoreRequest","type":"structure","required":["Days"],"members":{"Days":{"type":"integer"}}},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}},"payload":"RestoreRequest"},"output":{"type":"structure","members":{"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}},"alias":"PostObjectRestore"},"UploadPart":{"http":{"method":"PUT","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","Key","PartNumber","UploadId"],"members":{"Body":{"streaming":true,"type":"blob"},"Bucket":{"location":"uri","locationName":"Bucket"},"ContentLength":{"location":"header","locationName":"Content-Length","type":"integer"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"Key":{"location":"uri","locationName":"Key"},"PartNumber":{"location":"querystring","locationName":"partNumber","type":"integer"},"UploadId":{"location":"querystring","locationName":"uploadId"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKey":{"shape":"S18","location":"header","locationName":"x-amz-server-side-encryption-customer-key"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}},"payload":"Body"},"output":{"type":"structure","members":{"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"ETag":{"location":"header","locationName":"ETag"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sj","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}}},"UploadPartCopy":{"http":{"method":"PUT","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","CopySource","Key","PartNumber","UploadId"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"CopySource":{"location":"header","locationName":"x-amz-copy-source"},"CopySourceIfMatch":{"location":"header","locationName":"x-amz-copy-source-if-match"},"CopySourceIfModifiedSince":{"location":"header","locationName":"x-amz-copy-source-if-modified-since","type":"timestamp"},"CopySourceIfNoneMatch":{"location":"header","locationName":"x-amz-copy-source-if-none-match"},"CopySourceIfUnmodifiedSince":{"location":"header","locationName":"x-amz-copy-source-if-unmodified-since","type":"timestamp"},"CopySourceRange":{"location":"header","locationName":"x-amz-copy-source-range"},"Key":{"location":"uri","locationName":"Key"},"PartNumber":{"location":"querystring","locationName":"partNumber","type":"integer"},"UploadId":{"location":"querystring","locationName":"uploadId"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKey":{"shape":"S18","location":"header","locationName":"x-amz-server-side-encryption-customer-key"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"CopySourceSSECustomerAlgorithm":{"location":"header","locationName":"x-amz-copy-source-server-side-encryption-customer-algorithm"},"CopySourceSSECustomerKey":{"shape":"S1b","location":"header","locationName":"x-amz-copy-source-server-side-encryption-customer-key"},"CopySourceSSECustomerKeyMD5":{"location":"header","locationName":"x-amz-copy-source-server-side-encryption-customer-key-MD5"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}}},"output":{"type":"structure","members":{"CopySourceVersionId":{"location":"header","locationName":"x-amz-copy-source-version-id"},"CopyPartResult":{"type":"structure","members":{"ETag":{},"LastModified":{"type":"timestamp"}}},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sj","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}},"payload":"CopyPartResult"}}},"shapes":{"Sj":{"type":"string","sensitive":true},"S11":{"type":"map","key":{},"value":{}},"S18":{"type":"blob","sensitive":true},"S1b":{"type":"blob","sensitive":true},"S2f":{"type":"structure","members":{"DisplayName":{},"ID":{}}},"S2i":{"type":"list","member":{"locationName":"Grant","type":"structure","members":{"Grantee":{"shape":"S2k"},"Permission":{}}}},"S2k":{"type":"structure","required":["Type"],"members":{"DisplayName":{},"EmailAddress":{},"ID":{},"Type":{"xmlAttribute":true,"locationName":"xsi:type"},"URI":{}},"xmlNamespace":{"prefix":"xsi","uri":"http://www.w3.org/2001/XMLSchema-instance"}},"S2r":{"type":"list","member":{"type":"structure","required":["AllowedMethods","AllowedOrigins"],"members":{"AllowedHeaders":{"locationName":"AllowedHeader","type":"list","member":{},"flattened":true},"AllowedMethods":{"locationName":"AllowedMethod","type":"list","member":{},"flattened":true},"AllowedOrigins":{"locationName":"AllowedOrigin","type":"list","member":{},"flattened":true},"ExposeHeaders":{"locationName":"ExposeHeader","type":"list","member":{},"flattened":true},"MaxAgeSeconds":{"type":"integer"}}},"flattened":true},"S34":{"type":"list","member":{"type":"structure","required":["Prefix","Status"],"members":{"Expiration":{"shape":"S36"},"ID":{},"Prefix":{},"Status":{},"Transition":{"shape":"S3b"},"NoncurrentVersionTransition":{"shape":"S3d"},"NoncurrentVersionExpiration":{"shape":"S3e"}}},"flattened":true},"S36":{"type":"structure","members":{"Date":{"shape":"S37"},"Days":{"type":"integer"}}},"S37":{"type":"timestamp","timestampFormat":"iso8601"},"S3b":{"type":"structure","members":{"Date":{"shape":"S37"},"Days":{"type":"integer"},"StorageClass":{}}},"S3d":{"type":"structure","members":{"NoncurrentDays":{"type":"integer"},"StorageClass":{}}},"S3e":{"type":"structure","members":{"NoncurrentDays":{"type":"integer"}}},"S3h":{"type":"list","member":{"type":"structure","required":["Prefix","Status"],"members":{"Expiration":{"shape":"S36"},"ID":{},"Prefix":{},"Status":{},"Transitions":{"locationName":"Transition","type":"list","member":{"shape":"S3b"},"flattened":true},"NoncurrentVersionTransitions":{"locationName":"NoncurrentVersionTransition","type":"list","member":{"shape":"S3d"},"flattened":true},"NoncurrentVersionExpiration":{"shape":"S3e"}}},"flattened":true},"S3p":{"type":"structure","members":{"TargetBucket":{},"TargetGrants":{"type":"list","member":{"locationName":"Grant","type":"structure","members":{"Grantee":{"shape":"S2k"},"Permission":{}}}},"TargetPrefix":{}}},"S3v":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"S3w":{"type":"structure","members":{"TopicConfiguration":{"type":"structure","members":{"Id":{},"Events":{"shape":"S3z","locationName":"Event"},"Event":{"deprecated":true},"Topic":{}}},"QueueConfiguration":{"type":"structure","members":{"Id":{},"Event":{"deprecated":true},"Events":{"shape":"S3z","locationName":"Event"},"Queue":{}}},"CloudFunctionConfiguration":{"type":"structure","members":{"Id":{},"Event":{"deprecated":true},"Events":{"shape":"S3z","locationName":"Event"},"CloudFunction":{},"InvocationRole":{}}}}},"S3z":{"type":"list","member":{},"flattened":true},"S47":{"type":"structure","members":{"TopicConfigurations":{"locationName":"TopicConfiguration","type":"list","member":{"type":"structure","required":["TopicArn","Events"],"members":{"Id":{},"TopicArn":{"locationName":"Topic"},"Events":{"shape":"S3z","locationName":"Event"},"Filter":{"shape":"S4a"}}},"flattened":true},"QueueConfigurations":{"locationName":"QueueConfiguration","type":"list","member":{"type":"structure","required":["QueueArn","Events"],"members":{"Id":{},"QueueArn":{"locationName":"Queue"},"Events":{"shape":"S3z","locationName":"Event"},"Filter":{"shape":"S4a"}}},"flattened":true},"LambdaFunctionConfigurations":{"locationName":"CloudFunctionConfiguration","type":"list","member":{"type":"structure","required":["LambdaFunctionArn","Events"],"members":{"Id":{},"LambdaFunctionArn":{"locationName":"CloudFunction"},"Events":{"shape":"S3z","locationName":"Event"},"Filter":{"shape":"S4a"}}},"flattened":true}}},"S4a":{"type":"structure","members":{"Key":{"locationName":"S3Key","type":"structure","members":{"FilterRules":{"locationName":"FilterRule","type":"list","member":{"type":"structure","members":{"Name":{},"Value":{}}},"flattened":true}}}}},"S4q":{"type":"structure","required":["Role","Rules"],"members":{"Role":{},"Rules":{"locationName":"Rule","type":"list","member":{"type":"structure","required":["Prefix","Status","Destination"],"members":{"ID":{},"Prefix":{},"Status":{},"Destination":{"type":"structure","required":["Bucket"],"members":{"Bucket":{},"StorageClass":{}}}}},"flattened":true}}},"S51":{"type":"list","member":{"locationName":"Tag","type":"structure","required":["Key","Value"],"members":{"Key":{},"Value":{}}}},"S5a":{"type":"structure","required":["HostName"],"members":{"HostName":{},"Protocol":{}}},"S5d":{"type":"structure","required":["Suffix"],"members":{"Suffix":{}}},"S5f":{"type":"structure","required":["Key"],"members":{"Key":{}}},"S5g":{"type":"list","member":{"locationName":"RoutingRule","type":"structure","required":["Redirect"],"members":{"Condition":{"type":"structure","members":{"HttpErrorCodeReturnedEquals":{},"KeyPrefixEquals":{}}},"Redirect":{"type":"structure","members":{"HostName":{},"HttpRedirectCode":{},"Protocol":{},"ReplaceKeyPrefixWith":{},"ReplaceKeyWith":{}}}}}},"S6x":{"type":"structure","members":{"ID":{},"DisplayName":{}}},"S6y":{"type":"list","member":{"type":"structure","members":{"Prefix":{}}},"flattened":true},"S7r":{"type":"structure","members":{"Grants":{"shape":"S2i","locationName":"AccessControlList"},"Owner":{"shape":"S2f"}}}},"examples":{},"paginators":{"ListBuckets":{"result_key":"Buckets"},"ListMultipartUploads":{"limit_key":"MaxUploads","more_results":"IsTruncated","output_token":["NextKeyMarker","NextUploadIdMarker"],"input_token":["KeyMarker","UploadIdMarker"],"result_key":["Uploads","CommonPrefixes"]},"ListObjectVersions":{"more_results":"IsTruncated","limit_key":"MaxKeys","output_token":["NextKeyMarker","NextVersionIdMarker"],"input_token":["KeyMarker","VersionIdMarker"],"result_key":["Versions","DeleteMarkers","CommonPrefixes"]},"ListObjects":{"more_results":"IsTruncated","limit_key":"MaxKeys","output_token":"NextMarker || Contents[-1].Key","input_token":"Marker","result_key":["Contents","CommonPrefixes"]},"ListParts":{"more_results":"IsTruncated","limit_key":"MaxParts","output_token":"NextPartNumberMarker","input_token":"PartNumberMarker","result_key":"Parts"}},"waiters":{"__default__":{"interval":5,"max_attempts":20},"BucketExists":{"operation":"HeadBucket","ignore_errors":[404],"success_type":"output"},"BucketNotExists":{"operation":"HeadBucket","success_type":"error","success_value":404},"ObjectExists":{"operation":"HeadObject","ignore_errors":[404],"success_type":"output"},"ObjectNotExists":{"operation":"HeadObject","success_type":"error","success_value":404}}};
+AWS.apiLoader.services['s3']['2006-03-01'] = {"version":"2.0","metadata":{"apiVersion":"2006-03-01","checksumFormat":"md5","endpointPrefix":"s3","globalEndpoint":"s3.amazonaws.com","serviceAbbreviation":"Amazon S3","serviceFullName":"Amazon Simple Storage Service","signatureVersion":"s3","timestampFormat":"rfc822","protocol":"rest-xml"},"operations":{"AbortMultipartUpload":{"http":{"method":"DELETE","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","Key","UploadId"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"UploadId":{"location":"querystring","locationName":"uploadId"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}}},"output":{"type":"structure","members":{"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}}},"CompleteMultipartUpload":{"http":{"requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","Key","UploadId"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"MultipartUpload":{"locationName":"CompleteMultipartUpload","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"type":"structure","members":{"Parts":{"locationName":"Part","type":"list","member":{"type":"structure","members":{"ETag":{},"PartNumber":{"type":"integer"}}},"flattened":true}}},"UploadId":{"location":"querystring","locationName":"uploadId"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}},"payload":"MultipartUpload"},"output":{"type":"structure","members":{"Location":{},"Bucket":{},"Key":{},"Expiration":{"location":"header","locationName":"x-amz-expiration"},"ETag":{},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"VersionId":{"location":"header","locationName":"x-amz-version-id"},"SSEKMSKeyId":{"shape":"Sj","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}}},"CopyObject":{"http":{"method":"PUT","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","CopySource","Key"],"members":{"ACL":{"location":"header","locationName":"x-amz-acl"},"Bucket":{"location":"uri","locationName":"Bucket"},"CacheControl":{"location":"header","locationName":"Cache-Control"},"ContentDisposition":{"location":"header","locationName":"Content-Disposition"},"ContentEncoding":{"location":"header","locationName":"Content-Encoding"},"ContentLanguage":{"location":"header","locationName":"Content-Language"},"ContentType":{"location":"header","locationName":"Content-Type"},"CopySource":{"location":"header","locationName":"x-amz-copy-source"},"CopySourceIfMatch":{"location":"header","locationName":"x-amz-copy-source-if-match"},"CopySourceIfModifiedSince":{"location":"header","locationName":"x-amz-copy-source-if-modified-since","type":"timestamp"},"CopySourceIfNoneMatch":{"location":"header","locationName":"x-amz-copy-source-if-none-match"},"CopySourceIfUnmodifiedSince":{"location":"header","locationName":"x-amz-copy-source-if-unmodified-since","type":"timestamp"},"Expires":{"location":"header","locationName":"Expires","type":"timestamp"},"GrantFullControl":{"location":"header","locationName":"x-amz-grant-full-control"},"GrantRead":{"location":"header","locationName":"x-amz-grant-read"},"GrantReadACP":{"location":"header","locationName":"x-amz-grant-read-acp"},"GrantWriteACP":{"location":"header","locationName":"x-amz-grant-write-acp"},"Key":{"location":"uri","locationName":"Key"},"Metadata":{"shape":"S11","location":"headers","locationName":"x-amz-meta-"},"MetadataDirective":{"location":"header","locationName":"x-amz-metadata-directive"},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"StorageClass":{"location":"header","locationName":"x-amz-storage-class"},"WebsiteRedirectLocation":{"location":"header","locationName":"x-amz-website-redirect-location"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKey":{"shape":"S18","location":"header","locationName":"x-amz-server-side-encryption-customer-key"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sj","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"CopySourceSSECustomerAlgorithm":{"location":"header","locationName":"x-amz-copy-source-server-side-encryption-customer-algorithm"},"CopySourceSSECustomerKey":{"shape":"S1b","location":"header","locationName":"x-amz-copy-source-server-side-encryption-customer-key"},"CopySourceSSECustomerKeyMD5":{"location":"header","locationName":"x-amz-copy-source-server-side-encryption-customer-key-MD5"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}}},"output":{"type":"structure","members":{"CopyObjectResult":{"type":"structure","members":{"ETag":{},"LastModified":{"type":"timestamp"}}},"Expiration":{"location":"header","locationName":"x-amz-expiration"},"CopySourceVersionId":{"location":"header","locationName":"x-amz-copy-source-version-id"},"VersionId":{"location":"header","locationName":"x-amz-version-id"},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sj","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}},"payload":"CopyObjectResult"},"alias":"PutObjectCopy"},"CreateBucket":{"http":{"method":"PUT","requestUri":"/{Bucket}"},"input":{"type":"structure","required":["Bucket"],"members":{"ACL":{"location":"header","locationName":"x-amz-acl"},"Bucket":{"location":"uri","locationName":"Bucket"},"CreateBucketConfiguration":{"xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"CreateBucketConfiguration","type":"structure","members":{"LocationConstraint":{}}},"GrantFullControl":{"location":"header","locationName":"x-amz-grant-full-control"},"GrantRead":{"location":"header","locationName":"x-amz-grant-read"},"GrantReadACP":{"location":"header","locationName":"x-amz-grant-read-acp"},"GrantWrite":{"location":"header","locationName":"x-amz-grant-write"},"GrantWriteACP":{"location":"header","locationName":"x-amz-grant-write-acp"}},"payload":"CreateBucketConfiguration"},"output":{"type":"structure","members":{"Location":{"location":"header","locationName":"Location"}}},"alias":"PutBucket"},"CreateMultipartUpload":{"http":{"requestUri":"/{Bucket}/{Key+}?uploads"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"ACL":{"location":"header","locationName":"x-amz-acl"},"Bucket":{"location":"uri","locationName":"Bucket"},"CacheControl":{"location":"header","locationName":"Cache-Control"},"ContentDisposition":{"location":"header","locationName":"Content-Disposition"},"ContentEncoding":{"location":"header","locationName":"Content-Encoding"},"ContentLanguage":{"location":"header","locationName":"Content-Language"},"ContentType":{"location":"header","locationName":"Content-Type"},"Expires":{"location":"header","locationName":"Expires","type":"timestamp"},"GrantFullControl":{"location":"header","locationName":"x-amz-grant-full-control"},"GrantRead":{"location":"header","locationName":"x-amz-grant-read"},"GrantReadACP":{"location":"header","locationName":"x-amz-grant-read-acp"},"GrantWriteACP":{"location":"header","locationName":"x-amz-grant-write-acp"},"Key":{"location":"uri","locationName":"Key"},"Metadata":{"shape":"S11","location":"headers","locationName":"x-amz-meta-"},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"StorageClass":{"location":"header","locationName":"x-amz-storage-class"},"WebsiteRedirectLocation":{"location":"header","locationName":"x-amz-website-redirect-location"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKey":{"shape":"S18","location":"header","locationName":"x-amz-server-side-encryption-customer-key"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sj","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}}},"output":{"type":"structure","members":{"Bucket":{"locationName":"Bucket"},"Key":{},"UploadId":{},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sj","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}},"alias":"InitiateMultipartUpload"},"DeleteBucket":{"http":{"method":"DELETE","requestUri":"/{Bucket}"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}}},"DeleteBucketCors":{"http":{"method":"DELETE","requestUri":"/{Bucket}?cors"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}}},"DeleteBucketLifecycle":{"http":{"method":"DELETE","requestUri":"/{Bucket}?lifecycle"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}}},"DeleteBucketPolicy":{"http":{"method":"DELETE","requestUri":"/{Bucket}?policy"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}}},"DeleteBucketReplication":{"http":{"method":"DELETE","requestUri":"/{Bucket}?replication"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}}},"DeleteBucketTagging":{"http":{"method":"DELETE","requestUri":"/{Bucket}?tagging"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}}},"DeleteBucketWebsite":{"http":{"method":"DELETE","requestUri":"/{Bucket}?website"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}}},"DeleteObject":{"http":{"method":"DELETE","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"MFA":{"location":"header","locationName":"x-amz-mfa"},"VersionId":{"location":"querystring","locationName":"versionId"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}}},"output":{"type":"structure","members":{"DeleteMarker":{"location":"header","locationName":"x-amz-delete-marker","type":"boolean"},"VersionId":{"location":"header","locationName":"x-amz-version-id"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}}},"DeleteObjects":{"http":{"requestUri":"/{Bucket}?delete"},"input":{"type":"structure","required":["Bucket","Delete"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Delete":{"xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"Delete","type":"structure","required":["Objects"],"members":{"Objects":{"locationName":"Object","type":"list","member":{"type":"structure","required":["Key"],"members":{"Key":{},"VersionId":{}}},"flattened":true},"Quiet":{"type":"boolean"}}},"MFA":{"location":"header","locationName":"x-amz-mfa"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}},"payload":"Delete"},"output":{"type":"structure","members":{"Deleted":{"type":"list","member":{"type":"structure","members":{"Key":{},"VersionId":{},"DeleteMarker":{"type":"boolean"},"DeleteMarkerVersionId":{}}},"flattened":true},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"},"Errors":{"locationName":"Error","type":"list","member":{"type":"structure","members":{"Key":{},"VersionId":{},"Code":{},"Message":{}}},"flattened":true}}},"alias":"DeleteMultipleObjects"},"GetBucketAcl":{"http":{"method":"GET","requestUri":"/{Bucket}?acl"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","members":{"Owner":{"shape":"S2f"},"Grants":{"shape":"S2i","locationName":"AccessControlList"}}}},"GetBucketCors":{"http":{"method":"GET","requestUri":"/{Bucket}?cors"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","members":{"CORSRules":{"shape":"S2r","locationName":"CORSRule"}}}},"GetBucketLifecycle":{"http":{"method":"GET","requestUri":"/{Bucket}?lifecycle"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","members":{"Rules":{"shape":"S34","locationName":"Rule"}}},"deprecated":true},"GetBucketLifecycleConfiguration":{"http":{"method":"GET","requestUri":"/{Bucket}?lifecycle"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","members":{"Rules":{"shape":"S3h","locationName":"Rule"}}}},"GetBucketLocation":{"http":{"method":"GET","requestUri":"/{Bucket}?location"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","members":{"LocationConstraint":{}}}},"GetBucketLogging":{"http":{"method":"GET","requestUri":"/{Bucket}?logging"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","members":{"LoggingEnabled":{"shape":"S3p"}}}},"GetBucketNotification":{"http":{"method":"GET","requestUri":"/{Bucket}?notification"},"input":{"shape":"S3v"},"output":{"shape":"S3w"},"deprecated":true},"GetBucketNotificationConfiguration":{"http":{"method":"GET","requestUri":"/{Bucket}?notification"},"input":{"shape":"S3v"},"output":{"shape":"S47"}},"GetBucketPolicy":{"http":{"method":"GET","requestUri":"/{Bucket}?policy"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","members":{"Policy":{}},"payload":"Policy"}},"GetBucketReplication":{"http":{"method":"GET","requestUri":"/{Bucket}?replication"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","members":{"ReplicationConfiguration":{"shape":"S4q"}},"payload":"ReplicationConfiguration"}},"GetBucketRequestPayment":{"http":{"method":"GET","requestUri":"/{Bucket}?requestPayment"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","members":{"Payer":{}}}},"GetBucketTagging":{"http":{"method":"GET","requestUri":"/{Bucket}?tagging"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","required":["TagSet"],"members":{"TagSet":{"shape":"S51"}}}},"GetBucketVersioning":{"http":{"method":"GET","requestUri":"/{Bucket}?versioning"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","members":{"Status":{},"MFADelete":{"locationName":"MfaDelete"}}}},"GetBucketWebsite":{"http":{"method":"GET","requestUri":"/{Bucket}?website"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"output":{"type":"structure","members":{"RedirectAllRequestsTo":{"shape":"S5a"},"IndexDocument":{"shape":"S5d"},"ErrorDocument":{"shape":"S5f"},"RoutingRules":{"shape":"S5g"}}}},"GetObject":{"http":{"method":"GET","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"IfMatch":{"location":"header","locationName":"If-Match"},"IfModifiedSince":{"location":"header","locationName":"If-Modified-Since","type":"timestamp"},"IfNoneMatch":{"location":"header","locationName":"If-None-Match"},"IfUnmodifiedSince":{"location":"header","locationName":"If-Unmodified-Since","type":"timestamp"},"Key":{"location":"uri","locationName":"Key"},"Range":{"location":"header","locationName":"Range"},"ResponseCacheControl":{"location":"querystring","locationName":"response-cache-control"},"ResponseContentDisposition":{"location":"querystring","locationName":"response-content-disposition"},"ResponseContentEncoding":{"location":"querystring","locationName":"response-content-encoding"},"ResponseContentLanguage":{"location":"querystring","locationName":"response-content-language"},"ResponseContentType":{"location":"querystring","locationName":"response-content-type"},"ResponseExpires":{"location":"querystring","locationName":"response-expires","type":"timestamp"},"VersionId":{"location":"querystring","locationName":"versionId"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKey":{"shape":"S18","location":"header","locationName":"x-amz-server-side-encryption-customer-key"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}}},"output":{"type":"structure","members":{"Body":{"streaming":true,"type":"blob"},"DeleteMarker":{"location":"header","locationName":"x-amz-delete-marker","type":"boolean"},"AcceptRanges":{"location":"header","locationName":"accept-ranges"},"Expiration":{"location":"header","locationName":"x-amz-expiration"},"Restore":{"location":"header","locationName":"x-amz-restore"},"LastModified":{"location":"header","locationName":"Last-Modified","type":"timestamp"},"ContentLength":{"location":"header","locationName":"Content-Length","type":"integer"},"ETag":{"location":"header","locationName":"ETag"},"MissingMeta":{"location":"header","locationName":"x-amz-missing-meta","type":"integer"},"VersionId":{"location":"header","locationName":"x-amz-version-id"},"CacheControl":{"location":"header","locationName":"Cache-Control"},"ContentDisposition":{"location":"header","locationName":"Content-Disposition"},"ContentEncoding":{"location":"header","locationName":"Content-Encoding"},"ContentLanguage":{"location":"header","locationName":"Content-Language"},"ContentRange":{"location":"header","locationName":"Content-Range"},"ContentType":{"location":"header","locationName":"Content-Type"},"Expires":{"location":"header","locationName":"Expires","type":"timestamp"},"WebsiteRedirectLocation":{"location":"header","locationName":"x-amz-website-redirect-location"},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"Metadata":{"shape":"S11","location":"headers","locationName":"x-amz-meta-"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sj","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"StorageClass":{"location":"header","locationName":"x-amz-storage-class"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"},"ReplicationStatus":{"location":"header","locationName":"x-amz-replication-status"}},"payload":"Body"}},"GetObjectAcl":{"http":{"method":"GET","requestUri":"/{Bucket}/{Key+}?acl"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"VersionId":{"location":"querystring","locationName":"versionId"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}}},"output":{"type":"structure","members":{"Owner":{"shape":"S2f"},"Grants":{"shape":"S2i","locationName":"AccessControlList"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}}},"GetObjectTorrent":{"http":{"method":"GET","requestUri":"/{Bucket}/{Key+}?torrent"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}}},"output":{"type":"structure","members":{"Body":{"streaming":true,"type":"blob"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}},"payload":"Body"}},"HeadBucket":{"http":{"method":"HEAD","requestUri":"/{Bucket}"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}}},"HeadObject":{"http":{"method":"HEAD","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"IfMatch":{"location":"header","locationName":"If-Match"},"IfModifiedSince":{"location":"header","locationName":"If-Modified-Since","type":"timestamp"},"IfNoneMatch":{"location":"header","locationName":"If-None-Match"},"IfUnmodifiedSince":{"location":"header","locationName":"If-Unmodified-Since","type":"timestamp"},"Key":{"location":"uri","locationName":"Key"},"Range":{"location":"header","locationName":"Range"},"VersionId":{"location":"querystring","locationName":"versionId"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKey":{"shape":"S18","location":"header","locationName":"x-amz-server-side-encryption-customer-key"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}}},"output":{"type":"structure","members":{"DeleteMarker":{"location":"header","locationName":"x-amz-delete-marker","type":"boolean"},"AcceptRanges":{"location":"header","locationName":"accept-ranges"},"Expiration":{"location":"header","locationName":"x-amz-expiration"},"Restore":{"location":"header","locationName":"x-amz-restore"},"LastModified":{"location":"header","locationName":"Last-Modified","type":"timestamp"},"ContentLength":{"location":"header","locationName":"Content-Length","type":"integer"},"ETag":{"location":"header","locationName":"ETag"},"MissingMeta":{"location":"header","locationName":"x-amz-missing-meta","type":"integer"},"VersionId":{"location":"header","locationName":"x-amz-version-id"},"CacheControl":{"location":"header","locationName":"Cache-Control"},"ContentDisposition":{"location":"header","locationName":"Content-Disposition"},"ContentEncoding":{"location":"header","locationName":"Content-Encoding"},"ContentLanguage":{"location":"header","locationName":"Content-Language"},"ContentType":{"location":"header","locationName":"Content-Type"},"Expires":{"location":"header","locationName":"Expires","type":"timestamp"},"WebsiteRedirectLocation":{"location":"header","locationName":"x-amz-website-redirect-location"},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"Metadata":{"shape":"S11","location":"headers","locationName":"x-amz-meta-"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sj","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"StorageClass":{"location":"header","locationName":"x-amz-storage-class"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"},"ReplicationStatus":{"location":"header","locationName":"x-amz-replication-status"}}}},"ListBuckets":{"http":{"method":"GET"},"output":{"type":"structure","members":{"Buckets":{"type":"list","member":{"locationName":"Bucket","type":"structure","members":{"Name":{},"CreationDate":{"type":"timestamp"}}}},"Owner":{"shape":"S2f"}}},"alias":"GetService"},"ListMultipartUploads":{"http":{"method":"GET","requestUri":"/{Bucket}?uploads"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Delimiter":{"location":"querystring","locationName":"delimiter"},"EncodingType":{"location":"querystring","locationName":"encoding-type"},"KeyMarker":{"location":"querystring","locationName":"key-marker"},"MaxUploads":{"location":"querystring","locationName":"max-uploads","type":"integer"},"Prefix":{"location":"querystring","locationName":"prefix"},"UploadIdMarker":{"location":"querystring","locationName":"upload-id-marker"}}},"output":{"type":"structure","members":{"Bucket":{},"KeyMarker":{},"UploadIdMarker":{},"NextKeyMarker":{},"Prefix":{},"Delimiter":{},"NextUploadIdMarker":{},"MaxUploads":{"type":"integer"},"IsTruncated":{"type":"boolean"},"Uploads":{"locationName":"Upload","type":"list","member":{"type":"structure","members":{"UploadId":{},"Key":{},"Initiated":{"type":"timestamp"},"StorageClass":{},"Owner":{"shape":"S2f"},"Initiator":{"shape":"S6x"}}},"flattened":true},"CommonPrefixes":{"shape":"S6y"},"EncodingType":{}}}},"ListObjectVersions":{"http":{"method":"GET","requestUri":"/{Bucket}?versions"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Delimiter":{"location":"querystring","locationName":"delimiter"},"EncodingType":{"location":"querystring","locationName":"encoding-type"},"KeyMarker":{"location":"querystring","locationName":"key-marker"},"MaxKeys":{"location":"querystring","locationName":"max-keys","type":"integer"},"Prefix":{"location":"querystring","locationName":"prefix"},"VersionIdMarker":{"location":"querystring","locationName":"version-id-marker"}}},"output":{"type":"structure","members":{"IsTruncated":{"type":"boolean"},"KeyMarker":{},"VersionIdMarker":{},"NextKeyMarker":{},"NextVersionIdMarker":{},"Versions":{"locationName":"Version","type":"list","member":{"type":"structure","members":{"ETag":{},"Size":{"type":"integer"},"StorageClass":{},"Key":{},"VersionId":{},"IsLatest":{"type":"boolean"},"LastModified":{"type":"timestamp"},"Owner":{"shape":"S2f"}}},"flattened":true},"DeleteMarkers":{"locationName":"DeleteMarker","type":"list","member":{"type":"structure","members":{"Owner":{"shape":"S2f"},"Key":{},"VersionId":{},"IsLatest":{"type":"boolean"},"LastModified":{"type":"timestamp"}}},"flattened":true},"Name":{},"Prefix":{},"Delimiter":{},"MaxKeys":{"type":"integer"},"CommonPrefixes":{"shape":"S6y"},"EncodingType":{}}},"alias":"GetBucketObjectVersions"},"ListObjects":{"http":{"method":"GET","requestUri":"/{Bucket}"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Delimiter":{"location":"querystring","locationName":"delimiter"},"EncodingType":{"location":"querystring","locationName":"encoding-type"},"Marker":{"location":"querystring","locationName":"marker"},"MaxKeys":{"location":"querystring","locationName":"max-keys","type":"integer"},"Prefix":{"location":"querystring","locationName":"prefix"}}},"output":{"type":"structure","members":{"IsTruncated":{"type":"boolean"},"Marker":{},"NextMarker":{},"Contents":{"type":"list","member":{"type":"structure","members":{"Key":{},"LastModified":{"type":"timestamp"},"ETag":{},"Size":{"type":"integer"},"StorageClass":{},"Owner":{"shape":"S2f"}}},"flattened":true},"Name":{},"Prefix":{},"Delimiter":{},"MaxKeys":{"type":"integer"},"CommonPrefixes":{"shape":"S6y"},"EncodingType":{}}},"alias":"GetBucket"},"ListParts":{"http":{"method":"GET","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","Key","UploadId"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"MaxParts":{"location":"querystring","locationName":"max-parts","type":"integer"},"PartNumberMarker":{"location":"querystring","locationName":"part-number-marker","type":"integer"},"UploadId":{"location":"querystring","locationName":"uploadId"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}}},"output":{"type":"structure","members":{"Bucket":{},"Key":{},"UploadId":{},"PartNumberMarker":{"type":"integer"},"NextPartNumberMarker":{"type":"integer"},"MaxParts":{"type":"integer"},"IsTruncated":{"type":"boolean"},"Parts":{"locationName":"Part","type":"list","member":{"type":"structure","members":{"PartNumber":{"type":"integer"},"LastModified":{"type":"timestamp"},"ETag":{},"Size":{"type":"integer"}}},"flattened":true},"Initiator":{"shape":"S6x"},"Owner":{"shape":"S2f"},"StorageClass":{},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}}},"PutBucketAcl":{"http":{"method":"PUT","requestUri":"/{Bucket}?acl"},"input":{"type":"structure","required":["Bucket"],"members":{"ACL":{"location":"header","locationName":"x-amz-acl"},"AccessControlPolicy":{"shape":"S7r","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"AccessControlPolicy"},"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"GrantFullControl":{"location":"header","locationName":"x-amz-grant-full-control"},"GrantRead":{"location":"header","locationName":"x-amz-grant-read"},"GrantReadACP":{"location":"header","locationName":"x-amz-grant-read-acp"},"GrantWrite":{"location":"header","locationName":"x-amz-grant-write"},"GrantWriteACP":{"location":"header","locationName":"x-amz-grant-write-acp"}},"payload":"AccessControlPolicy"}},"PutBucketCors":{"http":{"method":"PUT","requestUri":"/{Bucket}?cors"},"input":{"type":"structure","required":["Bucket","CORSConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"CORSConfiguration":{"xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"CORSConfiguration","type":"structure","required":["CORSRules"],"members":{"CORSRules":{"shape":"S2r","locationName":"CORSRule"}}},"ContentMD5":{"location":"header","locationName":"Content-MD5"}},"payload":"CORSConfiguration"}},"PutBucketLifecycle":{"http":{"method":"PUT","requestUri":"/{Bucket}?lifecycle"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"LifecycleConfiguration":{"xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"LifecycleConfiguration","type":"structure","required":["Rules"],"members":{"Rules":{"shape":"S34","locationName":"Rule"}}}},"payload":"LifecycleConfiguration"},"deprecated":true},"PutBucketLifecycleConfiguration":{"http":{"method":"PUT","requestUri":"/{Bucket}?lifecycle"},"input":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"LifecycleConfiguration":{"xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"LifecycleConfiguration","type":"structure","required":["Rules"],"members":{"Rules":{"shape":"S3h","locationName":"Rule"}}}},"payload":"LifecycleConfiguration"}},"PutBucketLogging":{"http":{"method":"PUT","requestUri":"/{Bucket}?logging"},"input":{"type":"structure","required":["Bucket","BucketLoggingStatus"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"BucketLoggingStatus":{"xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"BucketLoggingStatus","type":"structure","members":{"LoggingEnabled":{"shape":"S3p"}}},"ContentMD5":{"location":"header","locationName":"Content-MD5"}},"payload":"BucketLoggingStatus"}},"PutBucketNotification":{"http":{"method":"PUT","requestUri":"/{Bucket}?notification"},"input":{"type":"structure","required":["Bucket","NotificationConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"NotificationConfiguration":{"shape":"S3w","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"NotificationConfiguration"}},"payload":"NotificationConfiguration"},"deprecated":true},"PutBucketNotificationConfiguration":{"http":{"method":"PUT","requestUri":"/{Bucket}?notification"},"input":{"type":"structure","required":["Bucket","NotificationConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"NotificationConfiguration":{"shape":"S47","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"NotificationConfiguration"}},"payload":"NotificationConfiguration"}},"PutBucketPolicy":{"http":{"method":"PUT","requestUri":"/{Bucket}?policy"},"input":{"type":"structure","required":["Bucket","Policy"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"Policy":{}},"payload":"Policy"}},"PutBucketReplication":{"http":{"method":"PUT","requestUri":"/{Bucket}?replication"},"input":{"type":"structure","required":["Bucket","ReplicationConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"ReplicationConfiguration":{"shape":"S4q","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"ReplicationConfiguration"}},"payload":"ReplicationConfiguration"}},"PutBucketRequestPayment":{"http":{"method":"PUT","requestUri":"/{Bucket}?requestPayment"},"input":{"type":"structure","required":["Bucket","RequestPaymentConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"RequestPaymentConfiguration":{"xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"RequestPaymentConfiguration","type":"structure","required":["Payer"],"members":{"Payer":{}}}},"payload":"RequestPaymentConfiguration"}},"PutBucketTagging":{"http":{"method":"PUT","requestUri":"/{Bucket}?tagging"},"input":{"type":"structure","required":["Bucket","Tagging"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"Tagging":{"xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"Tagging","type":"structure","required":["TagSet"],"members":{"TagSet":{"shape":"S51"}}}},"payload":"Tagging"}},"PutBucketVersioning":{"http":{"method":"PUT","requestUri":"/{Bucket}?versioning"},"input":{"type":"structure","required":["Bucket","VersioningConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"MFA":{"location":"header","locationName":"x-amz-mfa"},"VersioningConfiguration":{"xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"VersioningConfiguration","type":"structure","members":{"MFADelete":{"locationName":"MfaDelete"},"Status":{}}}},"payload":"VersioningConfiguration"}},"PutBucketWebsite":{"http":{"method":"PUT","requestUri":"/{Bucket}?website"},"input":{"type":"structure","required":["Bucket","WebsiteConfiguration"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"WebsiteConfiguration":{"xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"WebsiteConfiguration","type":"structure","members":{"ErrorDocument":{"shape":"S5f"},"IndexDocument":{"shape":"S5d"},"RedirectAllRequestsTo":{"shape":"S5a"},"RoutingRules":{"shape":"S5g"}}}},"payload":"WebsiteConfiguration"}},"PutObject":{"http":{"method":"PUT","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"ACL":{"location":"header","locationName":"x-amz-acl"},"Body":{"streaming":true,"type":"blob"},"Bucket":{"location":"uri","locationName":"Bucket"},"CacheControl":{"location":"header","locationName":"Cache-Control"},"ContentDisposition":{"location":"header","locationName":"Content-Disposition"},"ContentEncoding":{"location":"header","locationName":"Content-Encoding"},"ContentLanguage":{"location":"header","locationName":"Content-Language"},"ContentLength":{"location":"header","locationName":"Content-Length","type":"integer"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"ContentType":{"location":"header","locationName":"Content-Type"},"Expires":{"location":"header","locationName":"Expires","type":"timestamp"},"GrantFullControl":{"location":"header","locationName":"x-amz-grant-full-control"},"GrantRead":{"location":"header","locationName":"x-amz-grant-read"},"GrantReadACP":{"location":"header","locationName":"x-amz-grant-read-acp"},"GrantWriteACP":{"location":"header","locationName":"x-amz-grant-write-acp"},"Key":{"location":"uri","locationName":"Key"},"Metadata":{"shape":"S11","location":"headers","locationName":"x-amz-meta-"},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"StorageClass":{"location":"header","locationName":"x-amz-storage-class"},"WebsiteRedirectLocation":{"location":"header","locationName":"x-amz-website-redirect-location"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKey":{"shape":"S18","location":"header","locationName":"x-amz-server-side-encryption-customer-key"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sj","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}},"payload":"Body"},"output":{"type":"structure","members":{"Expiration":{"location":"header","locationName":"x-amz-expiration"},"ETag":{"location":"header","locationName":"ETag"},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"VersionId":{"location":"header","locationName":"x-amz-version-id"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sj","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}}},"PutObjectAcl":{"http":{"method":"PUT","requestUri":"/{Bucket}/{Key+}?acl"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"ACL":{"location":"header","locationName":"x-amz-acl"},"AccessControlPolicy":{"shape":"S7r","xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"AccessControlPolicy"},"Bucket":{"location":"uri","locationName":"Bucket"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"GrantFullControl":{"location":"header","locationName":"x-amz-grant-full-control"},"GrantRead":{"location":"header","locationName":"x-amz-grant-read"},"GrantReadACP":{"location":"header","locationName":"x-amz-grant-read-acp"},"GrantWrite":{"location":"header","locationName":"x-amz-grant-write"},"GrantWriteACP":{"location":"header","locationName":"x-amz-grant-write-acp"},"Key":{"location":"uri","locationName":"Key"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}},"payload":"AccessControlPolicy"},"output":{"type":"structure","members":{"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}}},"RestoreObject":{"http":{"requestUri":"/{Bucket}/{Key+}?restore"},"input":{"type":"structure","required":["Bucket","Key"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"Key":{"location":"uri","locationName":"Key"},"VersionId":{"location":"querystring","locationName":"versionId"},"RestoreRequest":{"xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"},"locationName":"RestoreRequest","type":"structure","required":["Days"],"members":{"Days":{"type":"integer"}}},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}},"payload":"RestoreRequest"},"output":{"type":"structure","members":{"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}},"alias":"PostObjectRestore"},"UploadPart":{"http":{"method":"PUT","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","Key","PartNumber","UploadId"],"members":{"Body":{"streaming":true,"type":"blob"},"Bucket":{"location":"uri","locationName":"Bucket"},"ContentLength":{"location":"header","locationName":"Content-Length","type":"integer"},"ContentMD5":{"location":"header","locationName":"Content-MD5"},"Key":{"location":"uri","locationName":"Key"},"PartNumber":{"location":"querystring","locationName":"partNumber","type":"integer"},"UploadId":{"location":"querystring","locationName":"uploadId"},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKey":{"shape":"S18","location":"header","locationName":"x-amz-server-side-encryption-customer-key"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}},"payload":"Body"},"output":{"type":"structure","members":{"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"ETag":{"location":"header","locationName":"ETag"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sj","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}}}},"UploadPartCopy":{"http":{"method":"PUT","requestUri":"/{Bucket}/{Key+}"},"input":{"type":"structure","required":["Bucket","CopySource","Key","PartNumber","UploadId"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"},"CopySource":{"location":"header","locationName":"x-amz-copy-source"},"CopySourceIfMatch":{"location":"header","locationName":"x-amz-copy-source-if-match"},"CopySourceIfModifiedSince":{"location":"header","locationName":"x-amz-copy-source-if-modified-since","type":"timestamp"},"CopySourceIfNoneMatch":{"location":"header","locationName":"x-amz-copy-source-if-none-match"},"CopySourceIfUnmodifiedSince":{"location":"header","locationName":"x-amz-copy-source-if-unmodified-since","type":"timestamp"},"CopySourceRange":{"location":"header","locationName":"x-amz-copy-source-range"},"Key":{"location":"uri","locationName":"Key"},"PartNumber":{"location":"querystring","locationName":"partNumber","type":"integer"},"UploadId":{"location":"querystring","locationName":"uploadId"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKey":{"shape":"S18","location":"header","locationName":"x-amz-server-side-encryption-customer-key"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"CopySourceSSECustomerAlgorithm":{"location":"header","locationName":"x-amz-copy-source-server-side-encryption-customer-algorithm"},"CopySourceSSECustomerKey":{"shape":"S1b","location":"header","locationName":"x-amz-copy-source-server-side-encryption-customer-key"},"CopySourceSSECustomerKeyMD5":{"location":"header","locationName":"x-amz-copy-source-server-side-encryption-customer-key-MD5"},"RequestPayer":{"location":"header","locationName":"x-amz-request-payer"}}},"output":{"type":"structure","members":{"CopySourceVersionId":{"location":"header","locationName":"x-amz-copy-source-version-id"},"CopyPartResult":{"type":"structure","members":{"ETag":{},"LastModified":{"type":"timestamp"}}},"ServerSideEncryption":{"location":"header","locationName":"x-amz-server-side-encryption"},"SSECustomerAlgorithm":{"location":"header","locationName":"x-amz-server-side-encryption-customer-algorithm"},"SSECustomerKeyMD5":{"location":"header","locationName":"x-amz-server-side-encryption-customer-key-MD5"},"SSEKMSKeyId":{"shape":"Sj","location":"header","locationName":"x-amz-server-side-encryption-aws-kms-key-id"},"RequestCharged":{"location":"header","locationName":"x-amz-request-charged"}},"payload":"CopyPartResult"}}},"shapes":{"Sj":{"type":"string","sensitive":true},"S11":{"type":"map","key":{},"value":{}},"S18":{"type":"blob","sensitive":true},"S1b":{"type":"blob","sensitive":true},"S2f":{"type":"structure","members":{"DisplayName":{},"ID":{}}},"S2i":{"type":"list","member":{"locationName":"Grant","type":"structure","members":{"Grantee":{"shape":"S2k"},"Permission":{}}}},"S2k":{"type":"structure","required":["Type"],"members":{"DisplayName":{},"EmailAddress":{},"ID":{},"Type":{"xmlAttribute":true,"locationName":"xsi:type"},"URI":{}},"xmlNamespace":{"prefix":"xsi","uri":"http://www.w3.org/2001/XMLSchema-instance"}},"S2r":{"type":"list","member":{"type":"structure","required":["AllowedMethods","AllowedOrigins"],"members":{"AllowedHeaders":{"locationName":"AllowedHeader","type":"list","member":{},"flattened":true},"AllowedMethods":{"locationName":"AllowedMethod","type":"list","member":{},"flattened":true},"AllowedOrigins":{"locationName":"AllowedOrigin","type":"list","member":{},"flattened":true},"ExposeHeaders":{"locationName":"ExposeHeader","type":"list","member":{},"flattened":true},"MaxAgeSeconds":{"type":"integer"}}},"flattened":true},"S34":{"type":"list","member":{"type":"structure","required":["Prefix","Status"],"members":{"Expiration":{"shape":"S36"},"ID":{},"Prefix":{},"Status":{},"Transition":{"shape":"S3b"},"NoncurrentVersionTransition":{"shape":"S3d"},"NoncurrentVersionExpiration":{"shape":"S3e"}}},"flattened":true},"S36":{"type":"structure","members":{"Date":{"shape":"S37"},"Days":{"type":"integer"}}},"S37":{"type":"timestamp","timestampFormat":"iso8601"},"S3b":{"type":"structure","members":{"Date":{"shape":"S37"},"Days":{"type":"integer"},"StorageClass":{}}},"S3d":{"type":"structure","members":{"NoncurrentDays":{"type":"integer"},"StorageClass":{}}},"S3e":{"type":"structure","members":{"NoncurrentDays":{"type":"integer"}}},"S3h":{"type":"list","member":{"type":"structure","required":["Prefix","Status"],"members":{"Expiration":{"shape":"S36"},"ID":{},"Prefix":{},"Status":{},"Transitions":{"locationName":"Transition","type":"list","member":{"shape":"S3b"},"flattened":true},"NoncurrentVersionTransitions":{"locationName":"NoncurrentVersionTransition","type":"list","member":{"shape":"S3d"},"flattened":true},"NoncurrentVersionExpiration":{"shape":"S3e"}}},"flattened":true},"S3p":{"type":"structure","members":{"TargetBucket":{},"TargetGrants":{"type":"list","member":{"locationName":"Grant","type":"structure","members":{"Grantee":{"shape":"S2k"},"Permission":{}}}},"TargetPrefix":{}}},"S3v":{"type":"structure","required":["Bucket"],"members":{"Bucket":{"location":"uri","locationName":"Bucket"}}},"S3w":{"type":"structure","members":{"TopicConfiguration":{"type":"structure","members":{"Id":{},"Events":{"shape":"S3z","locationName":"Event"},"Event":{"deprecated":true},"Topic":{}}},"QueueConfiguration":{"type":"structure","members":{"Id":{},"Event":{"deprecated":true},"Events":{"shape":"S3z","locationName":"Event"},"Queue":{}}},"CloudFunctionConfiguration":{"type":"structure","members":{"Id":{},"Event":{"deprecated":true},"Events":{"shape":"S3z","locationName":"Event"},"CloudFunction":{},"InvocationRole":{}}}}},"S3z":{"type":"list","member":{},"flattened":true},"S47":{"type":"structure","members":{"TopicConfigurations":{"locationName":"TopicConfiguration","type":"list","member":{"type":"structure","required":["TopicArn","Events"],"members":{"Id":{},"TopicArn":{"locationName":"Topic"},"Events":{"shape":"S3z","locationName":"Event"},"Filter":{"shape":"S4a"}}},"flattened":true},"QueueConfigurations":{"locationName":"QueueConfiguration","type":"list","member":{"type":"structure","required":["QueueArn","Events"],"members":{"Id":{},"QueueArn":{"locationName":"Queue"},"Events":{"shape":"S3z","locationName":"Event"},"Filter":{"shape":"S4a"}}},"flattened":true},"LambdaFunctionConfigurations":{"locationName":"CloudFunctionConfiguration","type":"list","member":{"type":"structure","required":["LambdaFunctionArn","Events"],"members":{"Id":{},"LambdaFunctionArn":{"locationName":"CloudFunction"},"Events":{"shape":"S3z","locationName":"Event"},"Filter":{"shape":"S4a"}}},"flattened":true}}},"S4a":{"type":"structure","members":{"Key":{"locationName":"S3Key","type":"structure","members":{"FilterRules":{"locationName":"FilterRule","type":"list","member":{"type":"structure","members":{"Name":{},"Value":{}}},"flattened":true}}}}},"S4q":{"type":"structure","required":["Role","Rules"],"members":{"Role":{},"Rules":{"locationName":"Rule","type":"list","member":{"type":"structure","required":["Prefix","Status","Destination"],"members":{"ID":{},"Prefix":{},"Status":{},"Destination":{"type":"structure","required":["Bucket"],"members":{"Bucket":{},"StorageClass":{}}}}},"flattened":true}}},"S51":{"type":"list","member":{"locationName":"Tag","type":"structure","required":["Key","Value"],"members":{"Key":{},"Value":{}}}},"S5a":{"type":"structure","required":["HostName"],"members":{"HostName":{},"Protocol":{}}},"S5d":{"type":"structure","required":["Suffix"],"members":{"Suffix":{}}},"S5f":{"type":"structure","required":["Key"],"members":{"Key":{}}},"S5g":{"type":"list","member":{"locationName":"RoutingRule","type":"structure","required":["Redirect"],"members":{"Condition":{"type":"structure","members":{"HttpErrorCodeReturnedEquals":{},"KeyPrefixEquals":{}}},"Redirect":{"type":"structure","members":{"HostName":{},"HttpRedirectCode":{},"Protocol":{},"ReplaceKeyPrefixWith":{},"ReplaceKeyWith":{}}}}}},"S6x":{"type":"structure","members":{"ID":{},"DisplayName":{}}},"S6y":{"type":"list","member":{"type":"structure","members":{"Prefix":{}}},"flattened":true},"S7r":{"type":"structure","members":{"Grants":{"shape":"S2i","locationName":"AccessControlList"},"Owner":{"shape":"S2f"}}}},"examples":{},"paginators":{"ListBuckets":{"result_key":"Buckets"},"ListMultipartUploads":{"limit_key":"MaxUploads","more_results":"IsTruncated","output_token":["NextKeyMarker","NextUploadIdMarker"],"input_token":["KeyMarker","UploadIdMarker"],"result_key":["Uploads","CommonPrefixes"]},"ListObjectVersions":{"more_results":"IsTruncated","limit_key":"MaxKeys","output_token":["NextKeyMarker","NextVersionIdMarker"],"input_token":["KeyMarker","VersionIdMarker"],"result_key":["Versions","DeleteMarkers","CommonPrefixes"]},"ListObjects":{"more_results":"IsTruncated","limit_key":"MaxKeys","output_token":"NextMarker || Contents[-1].Key","input_token":"Marker","result_key":["Contents","CommonPrefixes"]},"ListParts":{"more_results":"IsTruncated","limit_key":"MaxParts","output_token":"NextPartNumberMarker","input_token":"PartNumberMarker","result_key":"Parts"}},"waiters":{"__default__":{"interval":5,"max_attempts":20},"BucketExists":{"operation":"HeadBucket","ignore_errors":[404],"success_type":"output"},"BucketNotExists":{"operation":"HeadBucket","success_type":"error","success_value":404},"ObjectExists":{"operation":"HeadObject","ignore_errors":[404],"success_type":"output"},"ObjectNotExists":{"operation":"HeadObject","success_type":"error","success_value":404}}};
 AWS.apiLoader.services['sns'] = {};
 AWS.SNS = AWS.Service.defineService('sns', [ '2010-03-31' ]);
 
@@ -100,7 +108,11 @@ AWS.apiLoader.services['sts'] = {};
 AWS.STS = AWS.Service.defineService('sts', [ '2011-06-15' ]);
 require('./services/sts');
 
-AWS.apiLoader.services['sts']['2011-06-15'] = {"version":"2.0","metadata":{"apiVersion":"2011-06-15","endpointPrefix":"sts","globalEndpoint":"sts.amazonaws.com","serviceAbbreviation":"AWS STS","serviceFullName":"AWS Security Token Service","signatureVersion":"v4","xmlNamespace":"https://sts.amazonaws.com/doc/2011-06-15/","protocol":"query"},"operations":{"AssumeRole":{"input":{"type":"structure","required":["RoleArn","RoleSessionName"],"members":{"RoleArn":{},"RoleSessionName":{},"Policy":{},"DurationSeconds":{"type":"integer"},"ExternalId":{},"SerialNumber":{},"TokenCode":{}}},"output":{"resultWrapper":"AssumeRoleResult","type":"structure","members":{"Credentials":{"shape":"Sa"},"AssumedRoleUser":{"shape":"Sf"},"PackedPolicySize":{"type":"integer"}}},"http":{}},"AssumeRoleWithSAML":{"input":{"type":"structure","required":["RoleArn","PrincipalArn","SAMLAssertion"],"members":{"RoleArn":{},"PrincipalArn":{},"SAMLAssertion":{},"Policy":{},"DurationSeconds":{"type":"integer"}}},"output":{"resultWrapper":"AssumeRoleWithSAMLResult","type":"structure","members":{"Credentials":{"shape":"Sa"},"AssumedRoleUser":{"shape":"Sf"},"PackedPolicySize":{"type":"integer"},"Subject":{},"SubjectType":{},"Issuer":{},"Audience":{},"NameQualifier":{}}},"http":{}},"AssumeRoleWithWebIdentity":{"input":{"type":"structure","required":["RoleArn","RoleSessionName","WebIdentityToken"],"members":{"RoleArn":{},"RoleSessionName":{},"WebIdentityToken":{},"ProviderId":{},"Policy":{},"DurationSeconds":{"type":"integer"}}},"output":{"resultWrapper":"AssumeRoleWithWebIdentityResult","type":"structure","members":{"Credentials":{"shape":"Sa"},"SubjectFromWebIdentityToken":{},"AssumedRoleUser":{"shape":"Sf"},"PackedPolicySize":{"type":"integer"},"Provider":{},"Audience":{}}},"http":{}},"DecodeAuthorizationMessage":{"input":{"type":"structure","required":["EncodedMessage"],"members":{"EncodedMessage":{}}},"output":{"resultWrapper":"DecodeAuthorizationMessageResult","type":"structure","members":{"DecodedMessage":{}}},"http":{}},"GetFederationToken":{"input":{"type":"structure","required":["Name"],"members":{"Name":{},"Policy":{},"DurationSeconds":{"type":"integer"}}},"output":{"resultWrapper":"GetFederationTokenResult","type":"structure","members":{"Credentials":{"shape":"Sa"},"FederatedUser":{"type":"structure","required":["FederatedUserId","Arn"],"members":{"FederatedUserId":{},"Arn":{}}},"PackedPolicySize":{"type":"integer"}}},"http":{}},"GetSessionToken":{"input":{"type":"structure","members":{"DurationSeconds":{"type":"integer"},"SerialNumber":{},"TokenCode":{}}},"output":{"resultWrapper":"GetSessionTokenResult","type":"structure","members":{"Credentials":{"shape":"Sa"}}},"http":{}}},"shapes":{"Sa":{"type":"structure","required":["AccessKeyId","SecretAccessKey","SessionToken","Expiration"],"members":{"AccessKeyId":{},"SecretAccessKey":{},"SessionToken":{},"Expiration":{"type":"timestamp"}}},"Sf":{"type":"structure","required":["AssumedRoleId","Arn"],"members":{"AssumedRoleId":{},"Arn":{}}}}};
+AWS.apiLoader.services['sts']['2011-06-15'] = {"version":"2.0","metadata":{"apiVersion":"2011-06-15","endpointPrefix":"sts","globalEndpoint":"sts.amazonaws.com","serviceAbbreviation":"AWS STS","serviceFullName":"AWS Security Token Service","signatureVersion":"v4","xmlNamespace":"https://sts.amazonaws.com/doc/2011-06-15/","protocol":"query"},"operations":{"AssumeRole":{"input":{"type":"structure","required":["RoleArn","RoleSessionName"],"members":{"RoleArn":{},"RoleSessionName":{},"Policy":{},"DurationSeconds":{"type":"integer"},"ExternalId":{},"SerialNumber":{},"TokenCode":{}}},"output":{"resultWrapper":"AssumeRoleResult","type":"structure","members":{"Credentials":{"shape":"Sa"},"AssumedRoleUser":{"shape":"Sf"},"PackedPolicySize":{"type":"integer"}}},"http":{}},"AssumeRoleWithSAML":{"input":{"type":"structure","required":["RoleArn","PrincipalArn","SAMLAssertion"],"members":{"RoleArn":{},"PrincipalArn":{},"SAMLAssertion":{},"Policy":{},"DurationSeconds":{"type":"integer"}}},"output":{"resultWrapper":"AssumeRoleWithSAMLResult","type":"structure","members":{"Credentials":{"shape":"Sa"},"AssumedRoleUser":{"shape":"Sf"},"PackedPolicySize":{"type":"integer"},"Subject":{},"SubjectType":{},"Issuer":{},"Audience":{},"NameQualifier":{}}},"http":{}},"AssumeRoleWithWebIdentity":{"input":{"type":"structure","required":["RoleArn","RoleSessionName","WebIdentityToken"],"members":{"RoleArn":{},"RoleSessionName":{},"WebIdentityToken":{},"ProviderId":{},"Policy":{},"DurationSeconds":{"type":"integer"}}},"output":{"resultWrapper":"AssumeRoleWithWebIdentityResult","type":"structure","members":{"Credentials":{"shape":"Sa"},"SubjectFromWebIdentityToken":{},"AssumedRoleUser":{"shape":"Sf"},"PackedPolicySize":{"type":"integer"},"Provider":{},"Audience":{}}},"http":{}},"DecodeAuthorizationMessage":{"input":{"type":"structure","required":["EncodedMessage"],"members":{"EncodedMessage":{}}},"output":{"resultWrapper":"DecodeAuthorizationMessageResult","type":"structure","members":{"DecodedMessage":{}}},"http":{}},"GetFederationToken":{"input":{"type":"structure","required":["Name"],"members":{"Name":{},"Policy":{},"DurationSeconds":{"type":"integer"}}},"output":{"resultWrapper":"GetFederationTokenResult","type":"structure","members":{"Credentials":{"shape":"Sa"},"FederatedUser":{"type":"structure","required":["FederatedUserId","Arn"],"members":{"FederatedUserId":{},"Arn":{}}},"PackedPolicySize":{"type":"integer"}}},"http":{}},"GetSessionToken":{"input":{"type":"structure","members":{"DurationSeconds":{"type":"integer"},"SerialNumber":{},"TokenCode":{}}},"output":{"resultWrapper":"GetSessionTokenResult","type":"structure","members":{"Credentials":{"shape":"Sa"}}},"http":{}}},"shapes":{"Sa":{"type":"structure","required":["AccessKeyId","SecretAccessKey","SessionToken","Expiration"],"members":{"AccessKeyId":{},"SecretAccessKey":{},"SessionToken":{},"Expiration":{"type":"timestamp"}}},"Sf":{"type":"structure","required":["AssumedRoleId","Arn"],"members":{"AssumedRoleId":{},"Arn":{}}}},"examples":{}};
+AWS.apiLoader.services['waf'] = {};
+AWS.WAF = AWS.Service.defineService('waf', [ '2015-08-24' ]);
+
+AWS.apiLoader.services['waf']['2015-08-24'] = {"version":"2.0","metadata":{"apiVersion":"2015-08-24","endpointPrefix":"waf","jsonVersion":"1.1","serviceAbbreviation":"WAF","serviceFullName":"AWS WAF","signatureVersion":"v4","targetPrefix":"AWSWAF_20150824","protocol":"json"},"operations":{"CreateByteMatchSet":{"input":{"type":"structure","required":["Name","ChangeToken"],"members":{"Name":{},"ChangeToken":{}}},"output":{"type":"structure","members":{"ByteMatchSet":{"shape":"S5"},"ChangeToken":{}}},"http":{}},"CreateIPSet":{"input":{"type":"structure","required":["Name","ChangeToken"],"members":{"Name":{},"ChangeToken":{}}},"output":{"type":"structure","members":{"IPSet":{"shape":"Sh"},"ChangeToken":{}}},"http":{}},"CreateRule":{"input":{"type":"structure","required":["Name","MetricName","ChangeToken"],"members":{"Name":{},"MetricName":{},"ChangeToken":{}}},"output":{"type":"structure","members":{"Rule":{"shape":"Sp"},"ChangeToken":{}}},"http":{}},"CreateSqlInjectionMatchSet":{"input":{"type":"structure","required":["Name","ChangeToken"],"members":{"Name":{},"ChangeToken":{}}},"output":{"type":"structure","members":{"SqlInjectionMatchSet":{"shape":"Sx"},"ChangeToken":{}}},"http":{}},"CreateWebACL":{"input":{"type":"structure","required":["Name","MetricName","DefaultAction","ChangeToken"],"members":{"Name":{},"MetricName":{},"DefaultAction":{"shape":"S11"},"ChangeToken":{}}},"output":{"type":"structure","members":{"WebACL":{"shape":"S14"},"ChangeToken":{}}},"http":{}},"DeleteByteMatchSet":{"input":{"type":"structure","required":["ByteMatchSetId","ChangeToken"],"members":{"ByteMatchSetId":{},"ChangeToken":{}}},"output":{"type":"structure","members":{"ChangeToken":{}}},"http":{}},"DeleteIPSet":{"input":{"type":"structure","required":["IPSetId","ChangeToken"],"members":{"IPSetId":{},"ChangeToken":{}}},"output":{"type":"structure","members":{"ChangeToken":{}}},"http":{}},"DeleteRule":{"input":{"type":"structure","required":["RuleId","ChangeToken"],"members":{"RuleId":{},"ChangeToken":{}}},"output":{"type":"structure","members":{"ChangeToken":{}}},"http":{}},"DeleteSqlInjectionMatchSet":{"input":{"type":"structure","required":["SqlInjectionMatchSetId","ChangeToken"],"members":{"SqlInjectionMatchSetId":{},"ChangeToken":{}}},"output":{"type":"structure","members":{"ChangeToken":{}}},"http":{}},"DeleteWebACL":{"input":{"type":"structure","required":["WebACLId","ChangeToken"],"members":{"WebACLId":{},"ChangeToken":{}}},"output":{"type":"structure","members":{"ChangeToken":{}}},"http":{}},"GetByteMatchSet":{"input":{"type":"structure","required":["ByteMatchSetId"],"members":{"ByteMatchSetId":{}}},"output":{"type":"structure","members":{"ByteMatchSet":{"shape":"S5"}}},"http":{}},"GetChangeToken":{"input":{"type":"structure","members":{}},"output":{"type":"structure","members":{"ChangeToken":{}}},"http":{}},"GetChangeTokenStatus":{"input":{"type":"structure","required":["ChangeToken"],"members":{"ChangeToken":{}}},"output":{"type":"structure","members":{"ChangeTokenStatus":{}}},"http":{}},"GetIPSet":{"input":{"type":"structure","required":["IPSetId"],"members":{"IPSetId":{}}},"output":{"type":"structure","members":{"IPSet":{"shape":"Sh"}}},"http":{}},"GetRule":{"input":{"type":"structure","required":["RuleId"],"members":{"RuleId":{}}},"output":{"type":"structure","members":{"Rule":{"shape":"Sp"}}},"http":{}},"GetSampledRequests":{"input":{"type":"structure","required":["WebAclId","RuleId","TimeWindow","MaxItems"],"members":{"WebAclId":{},"RuleId":{},"TimeWindow":{"shape":"S1u"},"MaxItems":{"type":"long"}}},"output":{"type":"structure","members":{"SampledRequests":{"type":"list","member":{"type":"structure","required":["Request","Weight"],"members":{"Request":{"type":"structure","members":{"ClientIP":{},"Country":{},"URI":{},"Method":{},"HTTPVersion":{},"Headers":{"type":"list","member":{"type":"structure","members":{"Name":{},"Value":{}}}}}},"Weight":{"type":"long"},"Timestamp":{"type":"timestamp"},"Action":{}}}},"PopulationSize":{"type":"long"},"TimeWindow":{"shape":"S1u"}}},"http":{}},"GetSqlInjectionMatchSet":{"input":{"type":"structure","required":["SqlInjectionMatchSetId"],"members":{"SqlInjectionMatchSetId":{}}},"output":{"type":"structure","members":{"SqlInjectionMatchSet":{"shape":"Sx"}}},"http":{}},"GetWebACL":{"input":{"type":"structure","required":["WebACLId"],"members":{"WebACLId":{}}},"output":{"type":"structure","members":{"WebACL":{"shape":"S14"}}},"http":{}},"ListByteMatchSets":{"input":{"type":"structure","required":["Limit"],"members":{"NextMarker":{},"Limit":{"type":"integer"}}},"output":{"type":"structure","members":{"NextMarker":{},"ByteMatchSets":{"type":"list","member":{"type":"structure","required":["ByteMatchSetId","Name"],"members":{"ByteMatchSetId":{},"Name":{}}}}}},"http":{}},"ListIPSets":{"input":{"type":"structure","required":["Limit"],"members":{"NextMarker":{},"Limit":{"type":"integer"}}},"output":{"type":"structure","members":{"NextMarker":{},"IPSets":{"type":"list","member":{"type":"structure","required":["IPSetId","Name"],"members":{"IPSetId":{},"Name":{}}}}}},"http":{}},"ListRules":{"input":{"type":"structure","required":["Limit"],"members":{"NextMarker":{},"Limit":{"type":"integer"}}},"output":{"type":"structure","members":{"NextMarker":{},"Rules":{"type":"list","member":{"type":"structure","required":["RuleId","Name"],"members":{"RuleId":{},"Name":{}}}}}},"http":{}},"ListSqlInjectionMatchSets":{"input":{"type":"structure","required":["Limit"],"members":{"NextMarker":{},"Limit":{"type":"integer"}}},"output":{"type":"structure","members":{"NextMarker":{},"SqlInjectionMatchSets":{"type":"list","member":{"type":"structure","required":["SqlInjectionMatchSetId","Name"],"members":{"SqlInjectionMatchSetId":{},"Name":{}}}}}},"http":{}},"ListWebACLs":{"input":{"type":"structure","required":["Limit"],"members":{"NextMarker":{},"Limit":{"type":"integer"}}},"output":{"type":"structure","members":{"NextMarker":{},"WebACLs":{"type":"list","member":{"type":"structure","required":["WebACLId","Name"],"members":{"WebACLId":{},"Name":{}}}}}},"http":{}},"UpdateByteMatchSet":{"input":{"type":"structure","required":["ByteMatchSetId","ChangeToken","Updates"],"members":{"ByteMatchSetId":{},"ChangeToken":{},"Updates":{"type":"list","member":{"type":"structure","required":["Action","ByteMatchTuple"],"members":{"Action":{},"ByteMatchTuple":{"shape":"S8"}}}}}},"output":{"type":"structure","members":{"ChangeToken":{}}},"http":{}},"UpdateIPSet":{"input":{"type":"structure","required":["IPSetId","ChangeToken","Updates"],"members":{"IPSetId":{},"ChangeToken":{},"Updates":{"type":"list","member":{"type":"structure","required":["Action","IPSetDescriptor"],"members":{"Action":{},"IPSetDescriptor":{"shape":"Sj"}}}}}},"output":{"type":"structure","members":{"ChangeToken":{}}},"http":{}},"UpdateRule":{"input":{"type":"structure","required":["RuleId","ChangeToken","Updates"],"members":{"RuleId":{},"ChangeToken":{},"Updates":{"type":"list","member":{"type":"structure","required":["Action","Predicate"],"members":{"Action":{},"Predicate":{"shape":"Sr"}}}}}},"output":{"type":"structure","members":{"ChangeToken":{}}},"http":{}},"UpdateSqlInjectionMatchSet":{"input":{"type":"structure","required":["SqlInjectionMatchSetId","ChangeToken","Updates"],"members":{"SqlInjectionMatchSetId":{},"ChangeToken":{},"Updates":{"type":"list","member":{"type":"structure","required":["Action","SqlInjectionMatchTuple"],"members":{"Action":{},"SqlInjectionMatchTuple":{"shape":"Sz"}}}}}},"output":{"type":"structure","members":{"ChangeToken":{}}},"http":{}},"UpdateWebACL":{"input":{"type":"structure","required":["WebACLId","ChangeToken"],"members":{"WebACLId":{},"ChangeToken":{},"Updates":{"type":"list","member":{"type":"structure","required":["Action","ActivatedRule"],"members":{"Action":{},"ActivatedRule":{"shape":"S16"}}}},"DefaultAction":{"shape":"S11"}}},"output":{"type":"structure","members":{"ChangeToken":{}}},"http":{}}},"shapes":{"S5":{"type":"structure","required":["ByteMatchSetId","ByteMatchTuples"],"members":{"ByteMatchSetId":{},"Name":{},"ByteMatchTuples":{"type":"list","member":{"shape":"S8"}}}},"S8":{"type":"structure","required":["FieldToMatch","TargetString","TextTransformation","PositionalConstraint"],"members":{"FieldToMatch":{"shape":"S9"},"TargetString":{"type":"blob"},"TextTransformation":{},"PositionalConstraint":{}}},"S9":{"type":"structure","required":["Type"],"members":{"Type":{},"Data":{}}},"Sh":{"type":"structure","required":["IPSetId","IPSetDescriptors"],"members":{"IPSetId":{},"Name":{},"IPSetDescriptors":{"type":"list","member":{"shape":"Sj"}}}},"Sj":{"type":"structure","required":["Type","Value"],"members":{"Type":{},"Value":{}}},"Sp":{"type":"structure","required":["RuleId","Predicates"],"members":{"RuleId":{},"Name":{},"MetricName":{},"Predicates":{"type":"list","member":{"shape":"Sr"}}}},"Sr":{"type":"structure","required":["Negated","Type","DataId"],"members":{"Negated":{"type":"boolean"},"Type":{},"DataId":{}}},"Sx":{"type":"structure","required":["SqlInjectionMatchSetId","SqlInjectionMatchTuples"],"members":{"SqlInjectionMatchSetId":{},"Name":{},"SqlInjectionMatchTuples":{"type":"list","member":{"shape":"Sz"}}}},"Sz":{"type":"structure","required":["FieldToMatch","TextTransformation"],"members":{"FieldToMatch":{"shape":"S9"},"TextTransformation":{}}},"S11":{"type":"structure","required":["Type"],"members":{"Type":{}}},"S14":{"type":"structure","required":["WebACLId","DefaultAction","Rules"],"members":{"WebACLId":{},"Name":{},"MetricName":{},"DefaultAction":{"shape":"S11"},"Rules":{"type":"list","member":{"shape":"S16"}}}},"S16":{"type":"structure","required":["Priority","RuleId","Action"],"members":{"Priority":{"type":"integer"},"RuleId":{},"Action":{"shape":"S11"}}},"S1u":{"type":"structure","required":["StartTime","EndTime"],"members":{"StartTime":{"type":"timestamp"},"EndTime":{"type":"timestamp"}}}},"examples":{}};
 
 },{"./core":3,"./http/xhr":17,"./services/cognitoidentity":41,"./services/dynamodb":42,"./services/ec2":43,"./services/machinelearning":44,"./services/s3":45,"./services/sqs":46,"./services/sts":47,"./xml/browser_parser":57}],2:[function(require,module,exports){
 var AWS = require('./core');
@@ -205,6 +217,11 @@ require('./credentials/credential_provider_chain');
  * @!attribute signatureVersion
  *   @return [String] the signature version to sign requests with (overriding
  *     the API configuration). Possible values are: 'v2', 'v3', 'v4'.
+ *
+ * @!attribute signatureCache
+ *   @return [Boolean] whether the signature to sign requests with (overriding
+ *     the API configuration) is cached. Only applies to the signature version 'v4'.
+ *     Defaults to `true`.
  */
 AWS.Config = AWS.util.inherit({
   /**
@@ -295,6 +312,9 @@ AWS.Config = AWS.util.inherit({
    * @option options signatureVersion [String] the signature version to sign
    *   requests with (overriding the API configuration). Possible values are:
    *   'v2', 'v3', 'v4'.
+   * @option options signatureCache [Boolean] whether the signature to sign
+   *   requests with (overriding the API configuration) is cached. Only applies
+   *   to the signature version 'v4'. Defaults to `true`.
    */
   constructor: function Config(options) {
     if (options === undefined) options = {};
@@ -504,7 +524,8 @@ AWS.Config = AWS.util.inherit({
     correctClockSkew: false,
     dynamoDbCrc32: true,
     systemClockOffset: 0,
-    signatureVersion: null
+    signatureVersion: null,
+    signatureCache: true
   },
 
   /**
@@ -549,7 +570,7 @@ AWS.util.update(AWS, {
   /**
    * @constant
    */
-  VERSION: '2.2.4',
+  VERSION: '2.2.15',
 
   /**
    * @api private
@@ -873,9 +894,13 @@ AWS.CognitoIdentityCredentials = AWS.util.inherit(AWS.Credentials, {
    *       'www.amazon.com': 'AMAZONTOKEN',
    *       'accounts.google.com': 'GOOGLETOKEN'
    *     },
-   *     RoleSessionName: 'web' // optional name, defaults to web-identity
+   *     RoleSessionName: 'web' // optional name, defaults to web-identity,
+   *     // optional, only necessary when application runs in a browser
+   *     // and multiple users are signed in at once
+   *     LoginId: 'example@gmail.com'
    *   });
    * @see AWS.STS.assumeRoleWithWebIdentity
+   * @see AWS.CognitoIdentity.getCredentialsForIdentity
    */
   constructor: function CognitoIdentityCredentials(params) {
     AWS.Credentials.call(this);
@@ -887,7 +912,8 @@ AWS.CognitoIdentityCredentials = AWS.util.inherit(AWS.Credentials, {
   },
 
   /**
-   * Refreshes credentials using {AWS.STS.assumeRoleWithWebIdentity}
+   * Refreshes credentials using {AWS.CognitoIdentity.getCredentialsForIdentity},
+   * or {AWS.STS.assumeRoleWithWebIdentity}.
    *
    * @callback callback function(err)
    *   Called when the STS service responds (or fails). When
@@ -926,8 +952,9 @@ AWS.CognitoIdentityCredentials = AWS.util.inherit(AWS.Credentials, {
     delete this.params.IdentityId;
 
     var poolId = this.params.IdentityPoolId;
-    delete this.storage[this.localStorageKey.id + poolId];
-    delete this.storage[this.localStorageKey.providers + poolId];
+    var loginId = this.params.LoginId || '';
+    delete this.storage[this.localStorageKey.id + poolId + loginId];
+    delete this.storage[this.localStorageKey.providers + poolId + loginId];
   },
 
   /**
@@ -1073,7 +1100,7 @@ AWS.CognitoIdentityCredentials = AWS.util.inherit(AWS.Credentials, {
    * @api private
    */
   getStorage: function getStorage(key) {
-    return this.storage[this.localStorageKey[key] + this.params.IdentityPoolId];
+    return this.storage[this.localStorageKey[key] + this.params.IdentityPoolId + (this.params.LoginId || '')];
   },
 
   /**
@@ -1081,7 +1108,7 @@ AWS.CognitoIdentityCredentials = AWS.util.inherit(AWS.Credentials, {
    */
   setStorage: function setStorage(key, val) {
     try {
-      this.storage[this.localStorageKey[key] + this.params.IdentityPoolId] = val;
+      this.storage[this.localStorageKey[key] + this.params.IdentityPoolId + (this.params.LoginId || '')] = val;
     } catch (_) {}
   },
 
@@ -1347,7 +1374,7 @@ AWS.TemporaryCredentials = AWS.util.inherit(AWS.Credentials, {
    *   {AWS.STS.assumeRole} or {AWS.STS.getSessionToken} operations.
    *   If a `RoleArn` parameter is passed in, credentials will be based on the
    *   IAM role.
-   * @example Creating a new credenials object for generic temporary credentials
+   * @example Creating a new credentials object for generic temporary credentials
    *   AWS.config.credentials = new AWS.TemporaryCredentials();
    * @example Creating a new credentials object for an IAM role
    *   AWS.config.credentials = new AWS.TemporaryCredentials({
@@ -1655,6 +1682,20 @@ var DynamoDBSet = require('./set');
 AWS.DynamoDB.DocumentClient = AWS.util.inherit({
 
   /**
+   * @api private
+   */
+  operations: {
+    batchGetItem: 'batchGet',
+    batchWriteItem: 'batchWrite',
+    putItem: 'put',
+    getItem: 'get',
+    deleteItem: 'delete',
+    updateItem: 'update',
+    scan: 'scan',
+    query: 'query'
+  },
+
+  /**
    * Creates a DynamoDB document client with a set of configuration options.
    *
    * @option options params [map] An optional map of parameters to bind to every
@@ -1734,14 +1775,11 @@ AWS.DynamoDB.DocumentClient = AWS.util.inherit({
    *  });
    *
    */
-  batchGet: function(input, callback) {
+  batchGet: function(params, callback) {
     var self = this;
-    var translator = self.getTranslator();
-    var inputShape = self.service.api.operations.batchGetItem.input;
-    var outputShape = self.service.api.operations.batchGetItem.output;
-    var params = translator.translateInput(input, inputShape);
     var request = self.service.batchGetItem(params);
-    self.setupRequest(request, outputShape, translator);
+    self.setupRequest(request);
+    self.setupResponse(request);
     if (typeof callback === 'function') {
       request.send(callback);
     }
@@ -1788,14 +1826,11 @@ AWS.DynamoDB.DocumentClient = AWS.util.inherit({
    *  });
    *
    */
-  batchWrite: function(input, callback) {
+  batchWrite: function(params, callback) {
     var self = this;
-    var translator = self.getTranslator();
-    var inputShape = self.service.api.operations.batchWriteItem.input;
-    var outputShape = self.service.api.operations.batchWriteItem.output;
-    var params = translator.translateInput(input, inputShape);
     var request = self.service.batchWriteItem(params);
-    self.setupRequest(request, outputShape, translator);
+    self.setupRequest(request);
+    self.setupResponse(request);
     if (typeof callback === 'function') {
       request.send(callback);
     }
@@ -1827,14 +1862,11 @@ AWS.DynamoDB.DocumentClient = AWS.util.inherit({
    *  });
    *
    */
-  delete: function(input, callback) {
+  delete: function(params, callback) {
     var self = this;
-    var translator = self.getTranslator();
-    var inputShape = self.service.api.operations.deleteItem.input;
-    var outputShape = self.service.api.operations.deleteItem.output;
-    var params = translator.translateInput(input, inputShape);
     var request = self.service.deleteItem(params);
-    self.setupRequest(request, outputShape, translator);
+    self.setupRequest(request);
+    self.setupResponse(request);
     if (typeof callback === 'function') {
       request.send(callback);
     }
@@ -1865,14 +1897,11 @@ AWS.DynamoDB.DocumentClient = AWS.util.inherit({
    *  });
    *
    */
-  get: function(input, callback) {
+  get: function(params, callback) {
     var self = this;
-    var translator = self.getTranslator();
-    var inputShape = self.service.api.operations.getItem.input;
-    var outputShape = self.service.api.operations.getItem.output;
-    var params = translator.translateInput(input, inputShape);
     var request = self.service.getItem(params);
-    self.setupRequest(request, outputShape, translator);
+    self.setupRequest(request);
+    self.setupResponse(request);
     if (typeof callback === 'function') {
       request.send(callback);
     }
@@ -1908,14 +1937,11 @@ AWS.DynamoDB.DocumentClient = AWS.util.inherit({
    *  });
    *
    */
-  put: function(input, callback) {
+  put: function put(params, callback) {
     var self = this;
-    var translator = self.getTranslator();
-    var inputShape = self.service.api.operations.putItem.input;
-    var outputShape = self.service.api.operations.putItem.output;
-    var params = translator.translateInput(input, inputShape);
     var request = self.service.putItem(params);
-    self.setupRequest(request, outputShape, translator);
+    self.setupRequest(request);
+    self.setupResponse(request);
     if (typeof callback === 'function') {
       request.send(callback);
     }
@@ -1952,14 +1978,11 @@ AWS.DynamoDB.DocumentClient = AWS.util.inherit({
    *  });
    *
    */
-  update: function(input, callback) {
+  update: function(params, callback) {
     var self = this;
-    var translator = self.getTranslator();
-    var inputShape = self.service.api.operations.updateItem.input;
-    var outputShape = self.service.api.operations.updateItem.output;
-    var params = translator.translateInput(input, inputShape);
     var request = self.service.updateItem(params);
-    self.setupRequest(request, outputShape, translator);
+    self.setupRequest(request);
+    self.setupResponse(request);
     if (typeof callback === 'function') {
       request.send(callback);
     }
@@ -1989,14 +2012,11 @@ AWS.DynamoDB.DocumentClient = AWS.util.inherit({
    *  });
    *
    */
-  scan: function(input, callback) {
+  scan: function(params, callback) {
     var self = this;
-    var translator = self.getTranslator();
-    var inputShape = self.service.api.operations.scan.input;
-    var outputShape = self.service.api.operations.scan.output;
-    var params = translator.translateInput(input, inputShape);
     var request = self.service.scan(params);
-    self.setupRequest(request, outputShape, translator);
+    self.setupRequest(request);
+    self.setupResponse(request);
     if (typeof callback === 'function') {
       request.send(callback);
     }
@@ -2029,14 +2049,11 @@ AWS.DynamoDB.DocumentClient = AWS.util.inherit({
     *  });
     *
     */
-  query: function(input, callback) {
+  query: function(params, callback) {
     var self = this;
-    var translator = self.getTranslator();
-    var inputShape = self.service.api.operations.query.input;
-    var outputShape = self.service.api.operations.query.output;
-    var params = translator.translateInput(input, inputShape);
     var request = self.service.query(params);
-    self.setupRequest(request, outputShape, translator);
+    self.setupRequest(request);
+    self.setupResponse(request);
     if (typeof callback === 'function') {
       request.send(callback);
     }
@@ -2085,11 +2102,57 @@ AWS.DynamoDB.DocumentClient = AWS.util.inherit({
   /**
    * @api private
    */
-  setupRequest: function(request, shape, translator) {
-    request.on('extractData', function(response) {
-      var output = translator.translateOutput(response.data, shape);
-      response.data = output;
+  setupRequest: function setupRequest(request) {
+    var self = this;
+    var translator = self.getTranslator();
+    var operation = request.operation;
+    var inputShape = request.service.api.operations[operation].input;
+    request._events.validate.unshift(function(req) {
+      req.rawParams = AWS.util.copy(req.params);
+      req.params = translator.translateInput(req.rawParams, inputShape);
     });
+  },
+
+  /**
+   * @api private
+   */
+  setupResponse: function setupResponse(request) {
+    var self = this;
+    var translator = self.getTranslator();
+    var outputShape = self.service.api.operations[request.operation].output;
+    request.on('extractData', function(response) {
+      response.data = translator.translateOutput(response.data, outputShape);
+    });
+
+    var response = request.response;
+    response.nextPage = function(cb) {
+      var resp = this;
+      var req = resp.request;
+      var config;
+      var service = req.service;
+      var operation = req.operation;
+      try {
+        config = service.paginationConfig(operation, true);
+      } catch (e) { resp.error = e; }
+
+      if (!resp.hasNextPage()) {
+        if (cb) cb(resp.error, null);
+        else if (resp.error) throw resp.error;
+        return null;
+      }
+
+      var params = AWS.util.copy(req.rawParams);
+      if (!resp.nextPageTokens) {
+        return cb ? cb(null, null) : null;
+      } else {
+        var inputTokens = config.inputToken;
+        if (typeof inputTokens === 'string') inputTokens = [inputTokens];
+        for (var i = 0; i < inputTokens.length; i++) {
+          params[inputTokens[i]] = resp.nextPageTokens[i];
+        }
+        return self[operation](params, cb);
+      }
+    };
   }
 
 });
@@ -2426,7 +2489,8 @@ AWS.EventListeners = {
           var date = AWS.util.date.getDate();
           var SignerClass = req.service.getSignerClass(req);
           var signer = new SignerClass(req.httpRequest,
-            req.service.api.signingName || req.service.api.endpointPrefix);
+            req.service.api.signingName || req.service.api.endpointPrefix,
+            req.service.config.signatureCache);
 
           // clear old authorization headers
           delete req.httpRequest.headers['Authorization'];
@@ -2658,17 +2722,8 @@ AWS.EventListeners = {
   }),
 
   CorePost: new SequentialExecutor().addNamedListeners(function(add) {
-    add('EXTRACT_REQUEST_ID', 'extractData', function EXTRACT_REQUEST_ID(resp) {
-
-      if (!resp.requestId) {
-        resp.requestId = resp.httpResponse.headers['x-amz-request-id'] ||
-                          resp.httpResponse.headers['x-amzn-requestid'];
-      }
-
-      if (!resp.requestId && resp.data && resp.data.ResponseMetadata) {
-        resp.requestId = resp.data.ResponseMetadata.RequestId;
-      }
-    });
+    add('EXTRACT_REQUEST_ID', 'extractData', AWS.util.extractRequestId);
+    add('EXTRACT_REQUEST_ID', 'extractError', AWS.util.extractRequestId);
 
     add('ENOTFOUND_ERROR', 'httpError', function ENOTFOUND_ERROR(err) {
       if (err.code === 'NetworkingError' && err.errno === 'ENOTFOUND') {
@@ -3111,9 +3166,9 @@ function translateStructure(structure, shape) {
     var memberShape = shape.members[name];
     if (memberShape) {
       if (memberShape.location !== 'body') return;
-
+      var locationName = memberShape.isLocationName ? memberShape.name : name;
       var result = translate(value, memberShape);
-      if (result !== undefined) struct[name] = result;
+      if (result !== undefined) struct[locationName] = result;
     }
   });
   return struct;
@@ -3167,9 +3222,11 @@ function translateStructure(structure, shape) {
   if (structure == null) return undefined;
 
   var struct = {};
-  util.each(structure, function(name, value) {
-    var memberShape = shape.members[name];
-    if (memberShape) {
+  var shapeMembers = shape.members;
+  util.each(shapeMembers, function(name, memberShape) {
+    var locationName = memberShape.isLocationName ? memberShape.name : name;
+    if (structure.hasOwnProperty(locationName)) {
+      var value = structure[locationName];
       var result = translate(value, memberShape);
       if (result !== undefined) struct[name] = result;
     }
@@ -4126,6 +4183,16 @@ function populateURI(req) {
         queryString[member.name] = paramValue.map(function(val) {
           return util.uriEscape(String(val));
         });
+      } else if (member.type === 'map') {
+        util.each(paramValue, function(key, value) {
+          if (Array.isArray(value)) {
+            queryString[key] = value.map(function(val) {
+              return util.uriEscape(String(val));
+            });
+          } else {
+            queryString[key] = util.uriEscape(String(value));
+          }
+        });
       } else {
         queryString[member.name] = util.uriEscape(String(paramValue));
       }
@@ -4481,6 +4548,7 @@ module.exports={
       "signatureVersion": "v3https",
       "globalEndpoint": true
     },
+    "*/waf": "globalSSL",
     "us-gov-*/iam": "globalGovCloud",
     "us-gov-*/sts": {
       "endpoint": "{service}.{region}.amazonaws.com"
@@ -5820,6 +5888,7 @@ AWS.S3.ManagedUpload = AWS.util.inherit({
    */
   send: function(callback) {
     var self = this;
+    self.failed = false;
     self.callback = callback || function(err) { if (err) throw err; };
 
     var runFill = true;
@@ -6083,6 +6152,10 @@ AWS.S3.ManagedUpload = AWS.util.inherit({
       return null;
     }
 
+    if (self.completeInfo[partNumber] && self.completeInfo[partNumber].ETag !== null) {
+      return null; // Already uploaded this part.
+    }
+
     self.activeParts++;
     if (!self.service.config.params.UploadId) {
 
@@ -6110,6 +6183,7 @@ AWS.S3.ManagedUpload = AWS.util.inherit({
    */
   uploadPart: function uploadPart(chunk, partNumber) {
     var self = this;
+
     var partParams = {
       Body: chunk,
       ContentLength: AWS.util.string.byteLength(chunk),
@@ -6117,7 +6191,7 @@ AWS.S3.ManagedUpload = AWS.util.inherit({
     };
 
     var partInfo = {ETag: null, PartNumber: partNumber};
-    self.completeInfo.push(partInfo);
+    self.completeInfo[partNumber] = partInfo;
 
     var req = self.service.uploadPart(partParams);
     self.parts[partNumber] = req;
@@ -6184,9 +6258,13 @@ AWS.S3.ManagedUpload = AWS.util.inherit({
       part.abort();
     });
 
+    self.activeParts = 0;
+    self.partPos = 0;
+    self.numParts = 0;
+    self.totalPartNumbers = 0;
     self.parts = {};
-    self.callback(err);
     self.failed = true;
+    self.callback(err);
   },
 
   /**
@@ -6194,7 +6272,7 @@ AWS.S3.ManagedUpload = AWS.util.inherit({
    */
   finishMultiPart: function finishMultiPart() {
     var self = this;
-    var completeParams = { MultipartUpload: { Parts: self.completeInfo } };
+    var completeParams = { MultipartUpload: { Parts: self.completeInfo.slice(1) } };
     self.service.completeMultipartUpload(completeParams, function(err, data) {
       if (err) return self.cleanup(err);
       else self.callback(err, data);
@@ -6207,9 +6285,10 @@ AWS.S3.ManagedUpload = AWS.util.inherit({
   finishSinglePart: function finishSinglePart(err, data) {
     var upload = this.request._managedUpload;
     var httpReq = this.request.httpRequest;
-    var url = AWS.util.urlFormat(httpReq.endpoint);
+    var endpoint = httpReq.endpoint;
     if (err) return upload.callback(err);
-    data.Location = url.substr(0, url.length - 1) + httpReq.path;
+    data.Location =
+      [endpoint.protocol, '//', endpoint.host, httpReq.path].join('');
     upload.callback(err, data);
   },
 
@@ -7315,6 +7394,7 @@ AWS.util.update(AWS.S3.prototype, {
   computableChecksumOperations: {
     putBucketCors: true,
     putBucketLifecycle: true,
+    putBucketLifecycleConfiguration: true,
     putBucketTagging: true,
     deleteObjects: true
   },
@@ -7435,6 +7515,10 @@ AWS.util.update(AWS.S3.prototype, {
       return true;
     } else if (error && error.code === 'RequestTimeout') {
       return true;
+    } else if (error && error.code === 'AuthorizationHeaderMalformed' &&
+        error.region && error.region != request.httpRequest.region) {
+      request.httpRequest.region = error.region;
+      return true;
     } else {
       var _super = AWS.Service.prototype.retryableError;
       return _super.call(this, error, request);
@@ -7484,7 +7568,8 @@ AWS.util.update(AWS.S3.prototype, {
       var data = new AWS.XML.Parser().parse(body.toString());
       resp.error = AWS.util.error(new Error(), {
         code: data.Code || code,
-        message: data.Message || null
+        message: data.Message || null,
+        region: data.Region || null
       });
     }
   },
@@ -7844,6 +7929,9 @@ function signedUrlSigner(request) {
 
   AWS.util.each(request.httpRequest.headers, function (key, value) {
     if (key === expiresHeader) key = 'Expires';
+    if (key.indexOf('x-amz-') === 0) {
+      key = key.toLowerCase();
+    }
     queryParams[key] = value;
   });
   delete request.httpRequest.headers[expiresHeader];
@@ -8268,9 +8356,10 @@ var expiresHeader = 'presigned-expires';
  * @api private
  */
 AWS.Signers.V4 = inherit(AWS.Signers.RequestSigner, {
-  constructor: function V4(request, serviceName) {
+  constructor: function V4(request, serviceName, signatureCache) {
     AWS.Signers.RequestSigner.call(this, request);
     this.serviceName = serviceName;
+    this.signatureCache = signatureCache;
   },
 
   algorithm: 'AWS4-HMAC-SHA256',
@@ -8340,17 +8429,27 @@ AWS.Signers.V4 = inherit(AWS.Signers.RequestSigner, {
   },
 
   signature: function signature(credentials, datetime) {
-    var cache = cachedSecret[this.serviceName];
+    var cache = null;
+    if (this.signatureCache) {
+      var cache = cachedSecret[this.serviceName];
+    }
     var date = datetime.substr(0, 8);
+
     if (!cache ||
         cache.akid !== credentials.accessKeyId ||
         cache.region !== this.request.region ||
         cache.date !== date) {
+
       var kSecret = credentials.secretAccessKey;
       var kDate = AWS.util.crypto.hmac('AWS4' + kSecret, date, 'buffer');
       var kRegion = AWS.util.crypto.hmac(kDate, this.request.region, 'buffer');
       var kService = AWS.util.crypto.hmac(kRegion, this.serviceName, 'buffer');
       var kCredentials = AWS.util.crypto.hmac(kService, 'aws4_request', 'buffer');
+
+      if (!this.signatureCache) {
+        return AWS.util.crypto.hmac(kCredentials, this.stringToSign(datetime), 'hex');
+      }
+
       cachedSecret[this.serviceName] = {
         region: this.request.region, date: date,
         key: kCredentials, akid: credentials.accessKeyId
@@ -8970,6 +9069,8 @@ var util = {
       if (typeof data === 'string') data = new Buffer(data);
       var sliceFn = util.arraySliceFn(data);
       var isBuffer = Buffer.isBuffer(data);
+      //Identifying objects with an ArrayBuffer as buffers
+      if (util.isBrowser() && data && data.buffer instanceof ArrayBuffer) isBuffer = true;
 
       if (callback && typeof data === 'object' &&
           typeof data.on === 'function' && !isBuffer) {
@@ -9285,8 +9386,23 @@ var util = {
   applyClockOffset: function applyClockOffset(serverTime) {
     if (serverTime)
       AWS.config.systemClockOffset = serverTime - new Date().getTime();
-  }
+  },
 
+  /**
+   * @api private
+   */
+  extractRequestId: function extractRequestId(resp) {
+    var requestId = resp.httpResponse.headers['x-amz-request-id'] ||
+                     resp.httpResponse.headers['x-amzn-requestid'];
+
+    if (!requestId && resp.data && resp.data.ResponseMetadata) {
+      requestId = resp.data.ResponseMetadata.RequestId;
+    }
+
+    if (requestId) {
+      resp.requestId = requestId;
+    }
+  }
 };
 
 module.exports = util;
@@ -31228,1047 +31344,6 @@ U.prototype.Ve=function(a,b){x("Firebase.resetPassword",2,2,arguments.length);ng
 module.exports = Firebase;
 
 },{}],284:[function(require,module,exports){
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('lodash'), require('jwt-decode'), require('superagent')) : typeof define === 'function' && define.amd ? define(['lodash', 'jwt-decode', 'superagent'], factory) : global.Matter = factory(global._, global.jwtDecode, global.superagent);
-})(this, function (_, jwtDecode, superagent) {
-	'use strict';
-
-	_ = 'default' in _ ? _['default'] : _;
-	jwtDecode = 'default' in jwtDecode ? jwtDecode['default'] : jwtDecode;
-	superagent = 'default' in superagent ? superagent['default'] : superagent;
-
-	var config = {
-		serverUrl: 'http://tessellate.elasticbeanstalk.com',
-		tokenName: 'tessellate',
-		tokenDataName: 'tessellate-tokenData',
-		tokenUserDataName: 'tessellate-currentUser'
-	};
-
-	//Set default log level to debug
-	var logLevel = 'debug';
-	//Set log level from config
-	if (config.logLevel) {
-		logLevel = config.logLevel;
-	}
-
-	var logger = {
-		log: function log(logData) {
-			var msgArgs = buildMessageArgs(logData);
-			if (config.envName == 'production') {
-				runConsoleMethod('log', msgArgs);
-			} else {
-				runConsoleMethod('log', msgArgs);
-			}
-		},
-		info: function info(logData) {
-			var msgArgs = buildMessageArgs(logData);
-			if (config.envName == 'production') {
-				runConsoleMethod('info', msgArgs);
-			} else {
-				runConsoleMethod('info', msgArgs);
-			}
-		},
-		warn: function warn(logData) {
-			var msgArgs = buildMessageArgs(logData);
-			if (config.envName == 'production') {
-				runConsoleMethod('warn', msgArgs);
-			} else {
-				runConsoleMethod('warn', msgArgs);
-			}
-		},
-		debug: function debug(logData) {
-			var msgArgs = buildMessageArgs(logData);
-			if (config.envName == 'production') {
-				// runConsoleMethod('debug', msgArgs);
-				//Do not display console debugs in production
-			} else {
-					runConsoleMethod('debug', msgArgs);
-				}
-		},
-		error: function error(logData) {
-			var msgArgs = buildMessageArgs(logData);
-			if (config.envName == 'production') {
-				//TODO: Log to external logger
-				runConsoleMethod('error', msgArgs);
-			} else {
-				runConsoleMethod('error', msgArgs);
-			}
-		}
-	};
-
-	function runConsoleMethod(methodName, methodData) {
-		//Safley run console methods or use console log
-		if (methodName && console[methodName]) {
-			return console[methodName].apply(console, methodData);
-		} else {
-			return console.log.apply(console, methodData);
-		}
-	}
-	function buildMessageArgs(logData) {
-		var msgStr = '';
-		var msgObj = {};
-		//TODO: Attach time stamp
-		//Attach location information to the beginning of message
-		if (_.isObject(logData)) {
-			if (logLevel == 'debug') {
-				if (_.has(logData, 'func')) {
-					if (_.has(logData, 'obj')) {
-						//Object and function provided
-						msgStr += '[' + logData.obj + '.' + logData.func + '()]\n ';
-					} else if (_.has(logData, 'file')) {
-						msgStr += '[' + logData.file + ' > ' + logData.func + '()]\n ';
-					} else {
-						msgStr += '[' + logData.func + '()]\n ';
-					}
-				}
-			}
-			//Print each key and its value other than obj and func
-			_.each(_.omit(_.keys(logData)), function (key, ind, list) {
-				if (key != 'func' && key != 'obj') {
-					if (key == 'description' || key == 'message') {
-						msgStr += logData[key];
-					} else if (_.isString(logData[key])) {
-						// msgStr += key + ': ' + logData[key] + ', ';
-						msgObj[key] = logData[key];
-					} else {
-						//Print objects differently
-						// msgStr += key + ': ' + logData[key] + ', ';
-						msgObj[key] = logData[key];
-					}
-				}
-			});
-			msgStr += '\n';
-		} else if (_.isString(logData)) {
-			msgStr = logData;
-		}
-		var msg = [msgStr, msgObj];
-
-		return msg;
-	}
-
-	var domUtil = {
-		/**
-   * @description
-   * Appends given css source to DOM head.
-   *
-   * @param {String} src - url src for css to append
-   *
-   */
-		loadCss: function loadCss(src) {
-			if (!document) {
-				logger.error({ description: 'Document does not exsist to load assets into.', func: 'loadCss', obj: 'dom' });
-				throw new Error('Document object is required to load assets.');
-			} else {
-				var css = document.createElement('link');
-				css.rel = 'stylesheet';
-				css.type = 'text/css';
-				css.href = src;
-				document.getElementsByTagName('head')[0].insertBefore(css, document.getElementsByTagName('head')[0].firstChild);
-				logger.log({ description: 'CSS was loaded into document.', element: css, func: 'loadCss', obj: 'dom' });
-				return css; //Return link element
-			}
-		},
-		/**
-   * @description
-   * Appends given javascript source to DOM head.
-   *
-   * @param {String} src - url src for javascript to append
-   *
-   */
-		loadJs: function loadJs(src) {
-			if (window && !_.has(window, 'document')) {
-				logger.error({ description: 'Document does not exsist to load assets into.', func: 'loadCss', obj: 'dom' });
-				throw new Error('Document object is required to load assets.');
-			} else {
-				var js = window.document.createElement('script');
-				js.src = src;
-				js.type = 'text/javascript';
-				window.document.getElementsByTagName('head')[0].appendChild(js);
-				logger.log({ description: 'JS was loaded into document.', element: js, func: 'loadCss', obj: 'dom' });
-				return js; //Return script element
-			}
-		},
-		/**
-   * @description
-   * Appends given javascript source to DOM head.
-   *
-   * @param {String} src - url src for javascript to append
-   *
-   */
-		asyncLoadJs: function asyncLoadJs(src) {
-			if (!_.has(window, 'document')) {
-				logger.error({ description: 'Document does not exsist to load assets into.', func: 'loadCss', obj: 'dom' });
-				throw new Error('Document object is required to load assets.');
-			} else {
-				var js = window.document.createElement('script');
-				js.src = src;
-				js.type = 'text/javascript';
-				window.document.getElementsByTagName('head')[0].appendChild(js);
-				logger.log({ description: 'JS was loaded into document.', element: js, func: 'loadCss', obj: 'dom' });
-				return new Promise(function (resolve, reject) {
-					window.setTimeout(resolve, 30);
-				});
-			}
-		}
-	};
-
-	var data = {};
-	var storage = Object.defineProperties({
-		/**
-   * @description
-   * Safley sets item to session storage.
-   *
-   * @param {String} itemName The items name
-   * @param {String} itemValue The items value
-   *
-   */
-		item: function item(itemName, itemValue) {
-			return this.setItem(itemName, itemValue);
-		},
-		/**
-   * @description
-   * Safley sets item to session storage. Alias: item()
-   *
-   * @param {String} itemName The items name
-   * @param {String} itemValue The items value
-   *
-   */
-		setItem: function setItem(itemName, itemValue) {
-			data[itemName] = itemValue;
-			if (this.localExists) {
-				//Convert object to string
-				if (_.isObject(itemValue)) {
-					itemValue = JSON.stringify(itemValue);
-				}
-				window.sessionStorage.setItem(itemName, itemValue);
-			}
-		},
-
-		/**
-   * @description
-   * Safley gets an item from session storage. Alias: item()
-   *
-   * @param {String} itemName The items name
-   *
-   * @return {String}
-   *
-   */
-		getItem: function getItem(itemName) {
-			if (data[itemName]) {
-				return data[itemName];
-			} else if (this.localExists) {
-				var itemStr = window.sessionStorage.getItem(itemName);
-				//Check that str is not null before parsing
-				if (itemStr) {
-					var isObj = false;
-					var itemObj = null;
-					//Try parsing to object
-					try {
-						itemObj = JSON.parse(itemStr);
-						isObj = true;
-					} catch (err) {
-						// logger.log({message: 'String could not be parsed.', error: err, func: 'getItem', obj: 'storage'});
-						//Parsing failed, this must just be a string
-						isObj = false;
-					}
-					if (isObj) {
-						return itemObj;
-					}
-				}
-				return itemStr;
-			} else {
-				return null;
-			}
-		},
-		/**
-   * @description
-   * Safley removes item from session storage.
-   *
-   * @param {String} itemName - The items name
-   *
-   */
-		removeItem: function removeItem(itemName) {
-			//TODO: Only remove used items
-			if (data[itemName]) {
-				data[itemName] = null;
-			}
-			if (this.localExists) {
-				try {
-					//Clear session storage
-					window.sessionStorage.removeItem(itemName);
-				} catch (err) {
-					logger.error({ description: 'Error removing item from session storage', error: err, obj: 'storage', func: 'removeItem' });
-				}
-			}
-		},
-		/**
-   * @description
-   * Safley removes item from session storage.
-   *
-   * @param {String} itemName the items name
-   * @param {String} itemValue the items value
-   *
-   */
-		clear: function clear() {
-			//TODO: Only remove used items
-			data = {};
-			if (this.localExists) {
-				try {
-					//Clear session storage
-					window.sessionStorage.clear();
-				} catch (err) {
-					logger.warn('Session storage could not be cleared.', err);
-				}
-			}
-		}
-
-	}, {
-		localExists: {
-			get: function get() {
-				var testKey = 'test';
-				if (typeof window != 'undefined' && typeof window.sessionStorage != 'undefined') {
-					try {
-						window.sessionStorage.setItem(testKey, '1');
-						window.sessionStorage.removeItem(testKey);
-						return true;
-					} catch (err) {
-						logger.error({ description: 'Error saving to session storage', error: err, obj: 'storage', func: 'localExists' });
-						return false;
-					}
-				} else {
-					return false;
-				}
-			},
-			configurable: true,
-			enumerable: true
-		}
-	});
-
-	function decodeToken(tokenStr) {
-		var tokenData = undefined;
-		if (tokenStr && tokenStr != '') {
-			try {
-				tokenData = jwtDecode(tokenStr);
-			} catch (err) {
-				logger.error({ description: 'Error decoding token.', data: tokenData, error: err, func: 'decodeToken', file: 'token' });
-				throw new Error('Invalid token string.');
-			}
-		}
-		return tokenData;
-	}
-	var token = Object.defineProperties({
-		save: function save(tokenStr) {
-			this.string = tokenStr;
-		},
-		'delete': function _delete() {
-			//Remove string token
-			storage.removeItem(config.tokenName);
-			//Remove user data
-			storage.removeItem(config.tokenDataName);
-			logger.log({ description: 'Token was removed.', func: 'delete', obj: 'token' });
-		}
-	}, {
-		string: {
-			get: function get() {
-				return storage.getItem(config.tokenName);
-			},
-			set: function set(tokenData) {
-				var tokenStr = undefined;
-				//Handle object being passed
-				if (!_.isString(tokenData)) {
-					//Token is included in object
-					logger.log({ description: 'Token data is not string.', token: tokenData, func: 'string', obj: 'token' });
-
-					if (_.isObject(tokenData) && _.has(tokenData, 'token')) {
-						tokenStr = tokenData.token;
-					} else {
-						//Input is either not an string or object that contains nessesary info
-						logger.error({ description: 'Invalid value set to token.', token: tokenData, func: 'string', obj: 'token' });
-						return;
-					}
-				} else {
-					tokenStr = tokenData;
-				}
-				logger.log({ description: 'Token was set.', token: tokenData, tokenStr: tokenStr, func: 'string', obj: 'token' });
-				storage.setItem(config.tokenName, tokenStr);
-				this.data = jwtDecode(tokenStr);
-			},
-			configurable: true,
-			enumerable: true
-		},
-		data: {
-			get: function get() {
-				if (storage.getItem(config.tokenDataName)) {
-					return storage.getItem(config.tokenDataName);
-				} else {
-					return decodeToken(this.string);
-				}
-			},
-			set: function set(tokenData) {
-				if (_.isString(tokenData)) {
-					var tokenStr = tokenData;
-					tokenData = decodeToken(tokenStr);
-					logger.info({ description: 'Token data was set as string. Decoding token.', token: tokenStr, tokenData: tokenData, func: 'data', obj: 'token' });
-				} else {
-					logger.log({ description: 'Token data was set.', data: tokenData, func: 'data', obj: 'token' });
-					storage.setItem(config.tokenDataName, tokenData);
-				}
-			},
-			configurable: true,
-			enumerable: true
-		}
-	});
-
-	var request = {
-		get: function get(endpoint, queryData) {
-			var req = superagent.get(endpoint);
-			if (queryData) {
-				req.query(queryData);
-			}
-			req = addAuthHeader(req);
-			return handleResponse(req);
-		},
-		post: function post(endpoint, data) {
-			var req = superagent.post(endpoint).send(data);
-			req = addAuthHeader(req);
-			return handleResponse(req);
-		},
-		put: function put(endpoint, data) {
-			var req = superagent.put(endpoint).send(data);
-			req = addAuthHeader(req);
-			return handleResponse(req);
-		},
-		del: function del(endpoint, data) {
-			var req = superagent.put(endpoint).send(data);
-			req = addAuthHeader(req);
-			return handleResponse(req);
-		}
-	};
-
-	function handleResponse(req) {
-		return new Promise(function (resolve, reject) {
-			req.end(function (err, res) {
-				if (!err) {
-					// logger.log({description: 'Response:', response:res, func:'handleResponse', file: 'request'});
-					return resolve(res.body);
-				} else {
-					if (err.status == 401) {
-						logger.warn({ description: 'Unauthorized. You must be signed into make this request.', func: 'handleResponse' });
-					}
-					if (err && err.response) {
-						return reject(err.response.text);
-					}
-					logger.warn({ description: 'Unauthorized. You must be signed into make this request.', error: err, func: 'handleResponse' });
-					return reject(err);
-				}
-			});
-		});
-	}
-	function addAuthHeader(req) {
-		if (token.string) {
-			req = req.set('Authorization', 'Bearer ' + token.string);
-			console.info({ message: 'Set auth header', func: 'addAuthHeader', file: 'request' });
-		}
-		return req;
-	}
-
-	// import hello from 'hellojs'; //Modifies objects to have id parameter?
-
-	// import hello from 'hellojs'; //After es version of module is created
-	//Private object containing clientIds
-	var clientIds = {};
-
-	var ProviderAuth = (function () {
-		function ProviderAuth(actionData) {
-			_classCallCheck(this, ProviderAuth);
-
-			this.app = actionData.app ? actionData.app : null;
-			this.redirectUri = actionData.redirectUri ? actionData.redirectUri : 'redirect.html';
-			this.provider = actionData.provider ? actionData.provider : null;
-		}
-
-		_createClass(ProviderAuth, [{
-			key: 'loadHello',
-			value: function loadHello() {
-				//Load hellojs script
-				//TODO: Replace this with es6ified version
-				if (window && !window.hello) {
-					return domUtil.asyncLoadJs('https://s3.amazonaws.com/kyper-cdn/js/hello.js');
-				} else {
-					return Promise.resolve();
-				}
-			}
-		}, {
-			key: 'helloLoginListener',
-			value: function helloLoginListener() {
-				//Login Listener
-				window.hello.on('auth.login', function (auth) {
-					logger.info({ description: 'User logged in to google.', func: 'loadHello', obj: 'Google' });
-					// Call user information, for the given network
-					window.hello(auth.network).api('/me').then(function (r) {
-						// Inject it into the container
-						//TODO:Send account informaiton to server
-						var userData = r;
-						userData.provider = auth.network;
-						//Login or Signup endpoint
-						return request.post(this.endpoint + '/provider', userData).then(function (response) {
-							logger.log({ description: 'Provider request successful.', response: response, func: 'signup', obj: 'GoogleUtil' });
-							return response;
-						})['catch'](function (errRes) {
-							logger.error({ description: 'Error requesting login.', error: errRes, func: 'signup', obj: 'Matter' });
-							return Promise.reject(errRes);
-						});
-					});
-				});
-			}
-		}, {
-			key: 'initHello',
-			value: function initHello() {
-				var _this = this;
-
-				return this.loadHello().then(function () {
-					return request.get(_this.app.endpoint + '/providers').then(function (response) {
-						logger.log({ description: 'Provider request successful.', response: response, func: 'signup', obj: 'ProviderAuth' });
-						var provider = response[_this.provider];
-						logger.warn({ description: 'Provider found', provider: provider, func: 'login', obj: 'ProviderAuth' });
-						if (!provider) {
-							logger.error({ description: 'Provider is not setup. Visit tessellate.kyper.io to enter your client id for ' + _this.provider, provider: _this.provider, clientIds: clientIds, func: 'login', obj: 'ProviderAuth' });
-							return Promise.reject({ message: 'Provider is not setup.' });
-						}
-						logger.warn({ description: 'Providers config built', providersConfig: response, func: 'login', obj: 'ProviderAuth' });
-						return window.hello.init(response, { redirect_uri: 'redirect.html' });
-					})['catch'](function (errRes) {
-						logger.error({ description: 'Getting application data.', error: errRes, func: 'signup', obj: 'Matter' });
-						return Promise.reject(errRes);
-					});
-				});
-			}
-		}, {
-			key: 'login',
-			value: function login() {
-				var _this2 = this;
-
-				//Initalize Hello
-				return this.initHello().then(function () {
-					return window.hello.login(_this2.provider);
-				});
-			}
-		}, {
-			key: 'signup',
-			value: function signup() {
-				var _this3 = this;
-
-				//Initalize Hello
-				// if (!_.has(clientIds, this.provider)) {
-				// 	logger.error({description: `${this.provider} is not setup as a provider on Tessellate. Please visit tessellate.kyper.io to enter your provider information.`, provider: this.provider, clientIds: clientIds, func: 'login', obj: 'ProviderAuth'});
-				// 	return Promise.reject();
-				// }
-				//TODO: send info to server
-				return this.initHello().then(function () {
-					return window.hello.login(_this3.provider);
-				}, function (errRes) {
-					logger.error({ description: 'Error signing up.', error: errRes, func: 'signup', obj: 'Matter' });
-					return Promise.reject({ message: 'Error signing up.' });
-				});
-			}
-		}]);
-
-		return ProviderAuth;
-	})();
-
-	var Matter = (function () {
-		/* Constructor
-   * @param {string} appName Name of application
-   */
-
-		function Matter(appName, opts) {
-			_classCallCheck(this, Matter);
-
-			if (!appName) {
-				logger.error({ description: 'Application name requires to use Matter.', func: 'constructor', obj: 'Matter' });
-				throw new Error('Application name is required to use Matter');
-			} else {
-				this.name = appName;
-			}
-			if (opts) {
-				this.options = opts;
-			}
-		}
-
-		/* Endpoint getter
-   *
-   */
-
-		_createClass(Matter, [{
-			key: 'signup',
-
-			/* Signup
-    *
-    */
-			value: function signup(signupData) {
-				logger.log({ description: 'Signup called.', signupData: signupData, func: 'signup', obj: 'Matter' });
-				if (!signupData) {
-					logger.error({ description: 'Signup information is required to signup.', func: 'signup', obj: 'Matter' });
-					return Promise.reject({ message: 'Login data is required to login.' });
-				}
-				if (_.isObject(signupData)) {
-					return request.post(this.endpoint + '/signup', signupData).then(function (response) {
-						logger.log({ description: 'Account request successful.', signupData: signupData, response: response, func: 'signup', obj: 'Matter' });
-						if (_.has(response, 'account')) {
-							return response.account;
-						} else {
-							logger.warn({ description: 'Account was not contained in signup response.', signupData: signupData, response: response, func: 'signup', obj: 'Matter' });
-							return response;
-						}
-					})['catch'](function (errRes) {
-						logger.error({ description: 'Error requesting signup.', signupData: signupData, error: errRes, func: 'signup', obj: 'Matter' });
-						return Promise.reject(errRes);
-					});
-				} else if (_.isString(signupData)) {
-					//Handle 3rd Party signups
-					var auth = new ProviderAuth({ provider: signupData, app: this });
-					return auth.signup(signupData).then(function (res) {
-						logger.info({ description: 'Provider signup successful.', provider: signupData, res: res, func: 'signup', obj: 'Matter' });
-						return Promise.resolve(res);
-					});
-				} else {
-					logger.error({ description: 'Incorrectly formatted signup information.', signupData: signupData, func: 'signup', obj: 'Matter' });
-					return Promise.reject({ message: 'Signup requires an object or a string.' });
-				}
-			}
-
-			/** Login
-    *
-    */
-		}, {
-			key: 'login',
-			value: function login(loginData) {
-				var _this4 = this;
-
-				if (!loginData) {
-					logger.error({ description: 'Username/Email and Password are required to login', func: 'login', obj: 'Matter' });
-					return Promise.reject({ message: 'Login data is required to login.' });
-				}
-				if (_.isObject(loginData)) {
-					if (!loginData.password || !loginData.username) {
-						return Promise.reject({ message: 'Username/Email and Password are required to login' });
-					}
-					//Username/Email Login
-					return request.put(this.endpoint + '/login', loginData).then(function (response) {
-						if (_.has(response, 'data') && _.has(response.data, 'status') && response.data.status == 409) {
-							logger.warn({ description: 'Account not found.', response: response, func: 'login', obj: 'Matter' });
-							return Promise.reject(response.data);
-						} else {
-							logger.log({ description: 'Successful login.', response: response, func: 'login', obj: 'Matter' });
-							if (_.has(response, 'token')) {
-								_this4.token.string = response.token;
-							}
-							if (_.has(response, 'account')) {
-								_this4.storage.setItem(config.tokenUserDataName, response.account);
-							}
-							return response.account;
-						}
-					})['catch'](function (errRes) {
-						logger.error({ description: 'Error requesting login.', error: errRes, status: errRes.status, func: 'login', obj: 'Matter' });
-						if (errRes.status == 409 || errRes.status == 400) {
-							errRes = errRes.response.text;
-						}
-						return Promise.reject(errRes);
-					});
-				} else if (_.isString(loginData)) {
-					//Provider login
-					var auth = new ProviderAuth({ provider: loginData, app: this });
-					return auth.login().then(function (res) {
-						logger.info({ description: 'Provider login successful.', provider: loginData, res: res, func: 'login', obj: 'Matter' });
-						return Promise.resolve(res);
-					});
-				} else {
-					logger.error({ description: 'Incorrectly fomatted login information.', signupData: signupData, func: 'login', obj: 'Matter' });
-					return Promise.reject({ message: 'Login requires an object or a string.' });
-				}
-			}
-
-			/** Logout
-    */
-		}, {
-			key: 'logout',
-			value: function logout() {
-				var _this5 = this;
-
-				//TODO: Handle logging out of providers
-				if (!this.isLoggedIn) {
-					logger.warn({ description: 'No logged in account to log out.', func: 'logout', obj: 'Matter' });
-					return Promise.reject({ message: 'No logged in account to log out.' });
-				}
-				return request.put(this.endpoint + '/logout').then(function (response) {
-					logger.log({ description: 'Logout successful.', response: response, func: 'logout', obj: 'Matter' });
-					_this5.currentUser = null;
-					_this5.token['delete']();
-					return response;
-				})['catch'](function (errRes) {
-					logger.error({ description: 'Error requesting log out: ', error: errRes, func: 'logout', obj: 'Matter' });
-					_this5.storage.removeItem(config.tokenUserDataName);
-					_this5.token['delete']();
-					return Promise.reject(errRes);
-				});
-			}
-		}, {
-			key: 'getCurrentUser',
-			value: function getCurrentUser() {
-				var _this6 = this;
-
-				if (this.storage.item(config.tokenUserDataName)) {
-					return Promise.resove(this.storage.getItem(config.tokenUserDataName));
-				} else {
-					if (this.isLoggedIn) {
-						return request.get(this.endpoint + '/user').then(function (response) {
-							//TODO: Save user information locally
-							logger.log({ description: 'Current User Request responded.', responseData: response, func: 'currentUser', obj: 'Matter' });
-							_this6.currentUser = response;
-							return response;
-						})['catch'](function (errRes) {
-							if (errRes.status == 401) {
-								logger.warn({ description: 'Called for current user without token.', error: errRes, func: 'currentUser', obj: 'Matter' });
-								token['delete']();
-								return Promise.resolve(null);
-							} else {
-								logger.error({ description: 'Error requesting current user.', error: errRes, func: 'currentUser', obj: 'Matter' });
-								return Promise.reject(errRes);
-							}
-						});
-					} else {
-						return Promise.resolve(null);
-					}
-				}
-			}
-
-			/** updateProfile
-    */
-		}, {
-			key: 'updateProfile',
-			value: function updateProfile(updateData) {
-				var _this7 = this;
-
-				if (!this.isLoggedIn) {
-					logger.error({ description: 'No current user profile to update.', func: 'updateProfile', obj: 'Matter' });
-					return Promise.reject({ message: 'Must be logged in to update profile.' });
-				}
-				//Send update request
-				logger.warn({ description: 'Calling update endpoint.', endpoint: this.endpoint + '/user/' + this.token.data.username, func: 'updateProfile', obj: 'Matter' });
-				return request.put(this.endpoint + '/user/' + this.token.data.username, updateData).then(function (response) {
-					logger.log({ description: 'Update profile request responded.', responseData: response, func: 'updateProfile', obj: 'Matter' });
-					_this7.currentUser = response;
-					return response;
-				})['catch'](function (errRes) {
-					logger.error({ description: 'Error requesting current user.', error: errRes, func: 'updateProfile', obj: 'Matter' });
-					return Promise.reject(errRes);
-				});
-			}
-		}, {
-			key: 'changePassword',
-			value: function changePassword() {
-				var _this8 = this;
-
-				if (!this.isLoggedIn) {
-					logger.error({ description: 'No current user profile for which to change password.', func: 'changePassword', obj: 'Matter' });
-					return Promise.reject({ message: 'Must be logged in to change password.' });
-				}
-				//Send update request
-				logger.log({ description: 'Calling update endpoint to change password.', endpoint: this.endpoint + '/user/' + this.token.data.username, func: 'changePassword', obj: 'Matter' });
-				return request.put(this.endpoint + '/user/' + this.token.data.username, updateData).then(function (response) {
-					logger.log({ description: 'Update password request responded.', responseData: response, func: 'changePassword', obj: 'Matter' });
-					_this8.currentUser = response;
-					return response;
-				})['catch'](function (errRes) {
-					logger.error({ description: 'Error requesting password change.', error: errRes, func: 'changePassword', obj: 'Matter' });
-					return Promise.reject(errRes);
-				});
-			}
-		}, {
-			key: 'recoverPassword',
-			value: function recoverPassword() {
-				var _this9 = this;
-
-				if (!this.isLoggedIn) {
-					logger.error({ description: 'No current user for which to recover password.', func: 'recoverPassword', obj: 'Matter' });
-					return Promise.reject({ message: 'Must be logged in to recover password.' });
-				}
-				//Send update request
-				logger.log({ description: 'Calling recover password endpoint.', endpoint: this.endpoint + '/user/' + this.token.data.username, func: 'recoverPassword', obj: 'Matter' });
-				return request.put(this.endpoint + '/account/' + this.token.data.username + '/recover', updateData).then(function (response) {
-					logger.log({ description: 'Recover password request responded.', responseData: response, func: 'recoverPassword', obj: 'Matter' });
-					_this9.currentUser = response;
-					return response;
-				})['catch'](function (errRes) {
-					logger.error({ description: 'Error requesting password recovery.', error: errRes, func: 'recoverPassword', obj: 'Matter' });
-					return Promise.reject(errRes);
-				});
-			}
-
-			/* set currentUser
-    * @description Sets currently user data
-    */
-		}, {
-			key: 'isInGroup',
-
-			//Check that user is in a single group or in all of a list of groups
-			value: function isInGroup(checkGroups) {
-				var _this10 = this;
-
-				if (!this.isLoggedIn) {
-					logger.log({ description: 'No logged in user to check.', func: 'isInGroup', obj: 'Matter' });
-					return false;
-				}
-				//Check if user is
-				if (checkGroups && _.isString(checkGroups)) {
-					var _ret = (function () {
-						var groupName = checkGroups;
-						//Single role or string list of roles
-						var groupsArray = groupName.split(',');
-						if (groupsArray.length > 1) {
-							//String list of groupts
-							logger.info({ description: 'String list of groups.', list: groupsArray, func: 'isInGroup', obj: 'Matter' });
-							return {
-								v: _this10.isInGroups(groupsArray)
-							};
-						} else {
-							//Single group
-							var groups = _this10.token.data.groups || [];
-							logger.log({ description: 'Checking if user is in group.', group: groupName, userGroups: _this10.token.data.groups || [], func: 'isInGroup', obj: 'Matter' });
-							return {
-								v: _.any(groups, function (group) {
-									return groupName == group.name;
-								})
-							};
-						}
-					})();
-
-					if (typeof _ret === 'object') return _ret.v;
-				} else if (checkGroups && _.isArray(checkGroups)) {
-					//Array of roles
-					//Check that user is in every group
-					logger.info({ description: 'Array of groups.', list: checkGroups, func: 'isInGroup', obj: 'Matter' });
-					return this.isInGroups(checkGroups);
-				} else {
-					return false;
-				}
-				//TODO: Handle string and array inputs
-			}
-		}, {
-			key: 'isInGroups',
-			value: function isInGroups(checkGroups) {
-				var _this11 = this;
-
-				//Check if user is in any of the provided groups
-				if (checkGroups && _.isArray(checkGroups)) {
-					return _.map(checkGroups, function (group) {
-						if (_.isString(group)) {
-							//Group is string
-							return _this11.isInGroup(group);
-						} else {
-							//Group is object
-							return _this11.isInGroup(group.name);
-						}
-					});
-				} else if (checkGroups && _.isString(checkGroups)) {
-					//TODO: Handle spaces within string list
-					var groupsArray = checkGroups.split(',');
-					if (groupsArray.length > 1) {
-						return this.isInGroups(groupsArray);
-					}
-					return this.isInGroup(groupsArray[0]);
-				} else {
-					logger.error({ description: 'Invalid groups list.', func: 'isInGroups', obj: 'Matter' });
-				}
-			}
-		}, {
-			key: 'endpoint',
-			get: function get() {
-				var serverUrl = config.serverUrl;
-				if (_.has(this, 'options') && this.options.localServer) {
-					serverUrl = 'http://localhost:4000';
-					logger.info({ description: 'LocalServer option was set to true. Now server url is local server.', url: serverUrl, func: 'endpoint', obj: 'Matter' });
-				}
-				if (this.name == 'tessellate') {
-					//Remove url if host is server
-					if (typeof window !== 'undefined' && _.has(window, 'location') && window.location.host === serverUrl) {
-						serverUrl = '';
-						logger.info({ description: 'Host is Server, serverUrl simplified!', url: serverUrl, func: 'endpoint', obj: 'Matter' });
-					}
-				} else {
-					serverUrl = serverUrl + '/apps/' + this.name;
-					logger.log({ description: 'Server url set.', url: serverUrl, func: 'endpoint', obj: 'Matter' });
-				}
-				return serverUrl;
-			}
-		}, {
-			key: 'currentUser',
-			set: function set(userData) {
-				logger.log({ description: 'Current User set.', user: userData, func: 'currentUser', obj: 'Matter' });
-				this.storage.setItem(config.tokenUserDataName, userData);
-			},
-
-			/* get currentUser
-    * @description Gets currently logged in user or returns null
-    */
-			get: function get() {
-				if (this.storage.getItem(config.tokenUserDataName)) {
-					return this.storage.getItem(config.tokenUserDataName);
-				} else {
-					return null;
-				}
-			}
-
-			/* Storage
-    *
-    */
-		}, {
-			key: 'storage',
-			get: function get() {
-				return storage;
-			}
-
-			/** Token
-    */
-		}, {
-			key: 'token',
-			get: function get() {
-				return token;
-			}
-		}, {
-			key: 'utils',
-			get: function get() {
-				return { logger: logger, request: request, storage: storage, dom: domUtil };
-			}
-		}, {
-			key: 'isLoggedIn',
-			get: function get() {
-				return this.token.string ? true : false;
-			}
-		}]);
-
-		return Matter;
-	})();
-
-	;
-
-	return Matter;
-});
-
-},{"jwt-decode":286,"lodash":289,"superagent":290}],285:[function(require,module,exports){
-var Base64 = require('Base64');
-
-module.exports = function(str) {
-  var output = str.replace(/-/g, "+").replace(/_/g, "/");
-  switch (output.length % 4) {
-    case 0:
-      break;
-    case 2:
-      output += "==";
-      break;
-    case 3:
-      output += "=";
-      break;
-    default:
-      throw "Illegal base64url string!";
-  }
-
-  var result = Base64.atob(output);
-
-  try{
-    return decodeURIComponent(escape(result));
-  } catch (err) {
-    return result;
-  }
-};
-
-},{"Base64":288}],286:[function(require,module,exports){
-'use strict';
-
-var base64_url_decode = require('./base64_url_decode');
-var json_parse = require('./json_parse');
-
-module.exports = function (token) {
-  if (!token) {
-    throw new Error('Invalid token specified');
-  }
-  
-  return json_parse(base64_url_decode(token.split('.')[1]));
-};
-
-},{"./base64_url_decode":285,"./json_parse":287}],287:[function(require,module,exports){
-module.exports = function (str) {
-  var parsed;
-  if (typeof JSON === 'object') {
-    parsed = JSON.parse(str);
-  } else {
-    parsed = eval('(' + str + ')');
-  }
-  return parsed;
-};
-
-},{}],288:[function(require,module,exports){
-;(function () {
-
-  var
-    object = typeof exports != 'undefined' ? exports : this, // #8: web workers
-    chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=',
-    INVALID_CHARACTER_ERR = (function () {
-      // fabricate a suitable error object
-      try { document.createElement('$'); }
-      catch (error) { return error; }}());
-
-  // encoder
-  // [https://gist.github.com/999166] by [https://github.com/nignag]
-  object.btoa || (
-  object.btoa = function (input) {
-    for (
-      // initialize result and counter
-      var block, charCode, idx = 0, map = chars, output = '';
-      // if the next input index does not exist:
-      //   change the mapping table to "="
-      //   check if d has no fractional digits
-      input.charAt(idx | 0) || (map = '=', idx % 1);
-      // "8 - idx % 1 * 8" generates the sequence 2, 4, 6, 8
-      output += map.charAt(63 & block >> 8 - idx % 1 * 8)
-    ) {
-      charCode = input.charCodeAt(idx += 3/4);
-      if (charCode > 0xFF) throw INVALID_CHARACTER_ERR;
-      block = block << 8 | charCode;
-    }
-    return output;
-  });
-
-  // decoder
-  // [https://gist.github.com/1020396] by [https://github.com/atk]
-  object.atob || (
-  object.atob = function (input) {
-    input = input.replace(/=+$/, '')
-    if (input.length % 4 == 1) throw INVALID_CHARACTER_ERR;
-    for (
-      // initialize result and counters
-      var bc = 0, bs, buffer, idx = 0, output = '';
-      // get next character
-      buffer = input.charAt(idx++);
-      // character found in table? initialize bit storage and add its ascii value;
-      ~buffer && (bs = bc % 4 ? bs * 64 + buffer : buffer,
-        // and if not first of each 4 characters,
-        // convert the first 8 bits to one ascii character
-        bc++ % 4) ? output += String.fromCharCode(255 & bs >> (-2 * bc & 6)) : 0
-    ) {
-      // try to find character in table (0-63, not found => -1)
-      buffer = chars.indexOf(buffer);
-    }
-    return output;
-  });
-
-}());
-
-},{}],289:[function(require,module,exports){
 (function (global){
 /**
  * @license
@@ -44623,7 +43698,3118 @@ module.exports = function (str) {
 }.call(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],290:[function(require,module,exports){
+},{}],285:[function(require,module,exports){
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _classesMatter = require('../classes/Matter');
+
+var _classesMatter2 = _interopRequireDefault(_classesMatter);
+
+var _classesAccount = require('../classes/Account');
+
+var _classesAccount2 = _interopRequireDefault(_classesAccount);
+
+var logger = _classesMatter2['default'].utils.logger;
+//Actions for accounts list
+
+var AccountsAction = (function () {
+	function AccountsAction(actionData) {
+		_classCallCheck(this, AccountsAction);
+
+		//Check to see if action is for a specific app
+		if (actionData && _lodash2['default'].isObject(actionData) && _lodash2['default'].has(actionData, 'app')) {
+			this.app = actionData.app;
+			logger.log({ description: 'Provided app data set to app parameter.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction' });
+		} else if (actionData && _lodash2['default'].isString(actionData)) {
+			this.app = { name: actionData };
+			logger.log({ description: 'App name provided as string was set.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction' });
+		}
+		logger.info({ description: 'New Accounts action.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction' });
+	}
+
+	_createClass(AccountsAction, [{
+		key: 'get',
+
+		//Get accounts or single application
+		value: function get() {
+			logger.log({ description: 'Accounts get called.', func: 'get', obj: 'AccountsAction' });
+			return _classesMatter2['default'].utils.request.get(this.accountsEndpoint).then(function (response) {
+				logger.info({ description: 'Accounts loaded successfully.', func: 'get', obj: 'AccountsAction' });
+				return response;
+			})['catch'](function (errRes) {
+				logger.info({ description: 'Error getting accounts.', error: errRes, func: 'get', obj: 'AccountsAction' });
+				return Promise.reject(errRes.message || 'Error getting accounts.');
+			});
+		}
+
+		//Add an application
+	}, {
+		key: 'add',
+		value: function add(accountData) {
+			logger.info({ description: 'Account add called.', accountData: accountData, func: 'add', obj: 'AccountsAction' });
+			return this.utils.request.post(this.accountsEndpoint, accountData).then(function (response) {
+				logger.info({ description: 'Account added successfully.', response: response, newAccount: new _classesAccount2['default'](response), func: 'add', obj: 'AccountsAction' });
+				return new _classesAccount2['default'](response);
+			})['catch'](function (errRes) {
+				logger.error({ description: 'Account add called.', error: errRes, accountData: accountData, func: 'add', obj: 'AccountsAction' });
+				return Promise.reject(errRes.message || 'Error adding account.');
+			});
+		}
+
+		//Search with partial of accountname
+	}, {
+		key: 'search',
+		value: function search(query) {
+			logger.log({ description: 'Accounts search called.', query: query, func: 'search', obj: 'AccountsAction' });
+			var searchEndpoint = this.accountsEndpoint + '/search/';
+			if (query && _lodash2['default'].isString(query)) {
+				searchEndpoint += query;
+			}
+			if (!query || query == '') {
+				logger.log({ description: 'Null query, returning empty array.', func: 'search', obj: 'AccountsAction' });
+				return Promise.resolve([]);
+			}
+			return _classesMatter2['default'].utils.request.get(searchEndpoint).then(function (response) {
+				logger.log({ description: 'Accounts search responded.', response: response, query: query, func: 'search', obj: 'AccountsAction' });
+				return response;
+			})['catch'](function (errRes) {
+				logger.error({ description: 'Error searching Accounts.', error: errRes, query: query, func: 'search', obj: 'AccountsAction' });
+				return Promise.reject(errRes.message || 'Error searching accounts.');
+			});
+		}
+	}, {
+		key: 'accountsEndpoint',
+		get: function get() {
+			var endpointArray = [_classesMatter2['default'].endpoint, 'accounts'];
+			//Check for app account action
+			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
+				//Splice apps, appName into index 1
+				endpointArray.splice(1, 0, 'apps', this.app.name);
+			}
+			//Create string from endpointArray
+			var endpointStr = endpointArray.join('/');
+			logger.log({ description: 'Accounts Endpoint built.', endpoint: endpointStr, func: 'accountsEndpoint', obj: 'AccountsAction' });
+			return endpointStr;
+		}
+	}]);
+
+	return AccountsAction;
+})();
+
+exports['default'] = AccountsAction;
+module.exports = exports['default'];
+
+},{"../classes/Account":290,"../classes/Matter":296,"lodash":284}],286:[function(require,module,exports){
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _classesMatter = require('../classes/Matter');
+
+var _classesMatter2 = _interopRequireDefault(_classesMatter);
+
+var request = _classesMatter2['default'].utils.request;
+var logger = _classesMatter2['default'].utils.logger;
+
+//Actions for applications list
+
+var AppsAction = (function () {
+	function AppsAction() {
+		_classCallCheck(this, AppsAction);
+	}
+
+	_createClass(AppsAction, [{
+		key: 'get',
+
+		//Get applications or single application
+		value: function get() {
+			logger.debug({ description: 'Apps get called.', action: this, func: 'get', obj: 'AppsAction' });
+			return request.get(this.appsEndpoint).then(function (response) {
+				logger.info({ description: 'Apps data loaded successfully.', response: response, func: 'get', obj: 'AppsAction' });
+				//TODO: Return application object
+				// return new Application(response);
+				return response;
+			})['catch'](function (errRes) {
+				logger.error({ description: 'Error getting apps data.', error: errRes, func: 'get', obj: 'AppsAction' });
+				return Promise.reject(errRes);
+			});
+		}
+
+		//Add an application
+	}, {
+		key: 'add',
+		value: function add(appData) {
+			logger.debug({ description: 'Application add called.', appData: appData, func: 'add', obj: 'AppsAction' });
+			return _classesMatter2['default'].utils.request.post(this.appsEndpoint, appData).then(function (response) {
+				logger.info({ description: 'Application added successfully.', response: response, func: 'add', obj: 'AppsAction' });
+				// TODO: Return application object
+				// return new Application(response);
+				return response;
+			})['catch'](function (errRes) {
+				logger.error({ description: 'Error adding app.', error: errRes, func: 'add', obj: 'AppsAction' });
+				return Promise.reject(errRes);
+			});
+		}
+	}, {
+		key: 'appsEndpoint',
+
+		//Call matter with name and settings
+		get: function get() {
+			return _classesMatter2['default'].endpoint + '/apps';
+		}
+	}]);
+
+	return AppsAction;
+})();
+
+exports['default'] = AppsAction;
+module.exports = exports['default'];
+
+},{"../classes/Matter":296}],287:[function(require,module,exports){
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _classesMatter = require('../classes/Matter');
+
+var _classesMatter2 = _interopRequireDefault(_classesMatter);
+
+var request = _classesMatter2['default'].utils.request;
+var logger = _classesMatter2['default'].utils.logger;
+
+//Actions for directories list
+
+var DirectoriesAction = (function () {
+	function DirectoriesAction(actionData) {
+		_classCallCheck(this, DirectoriesAction);
+
+		//Check to see if action is for a specific app
+		if (actionData && _lodash2['default'].isObject(actionData) && _lodash2['default'].has(actionData, 'app')) {
+			this.app = actionData.app;
+			logger.log({ description: 'Provided app data set to app parameter.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction' });
+		} else if (actionData && _lodash2['default'].isString(actionData)) {
+			this.app = { name: actionData };
+			logger.log({ description: 'App name provided as string was set.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction' });
+		}
+		logger.info({ description: 'New directories action.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction' });
+	}
+
+	_createClass(DirectoriesAction, [{
+		key: 'get',
+
+		//Get users or single application
+		value: function get() {
+			logger.debug({ description: 'Directories get called.', action: this, func: 'get', obj: 'DirectoriesAction' });
+			return request.get(this.directoriesEndpoint).then(function (response) {
+				logger.info({ descrption: 'Directories loaded successfully.', response: response, func: 'get', obj: 'DirectoriesAction' });
+				return response;
+			})['catch'](function (errRes) {
+				logger.error({ descrption: 'error getting users', error: errRes, func: 'get', obj: 'DirectoriesAction' });
+				return Promise.reject(errRes);
+			});
+		}
+
+		//Add an application
+	}, {
+		key: 'add',
+		value: function add(appData) {
+			logger.debug({ description: 'Add directory called.', action: this, appData: appData, func: 'get', obj: 'DirectoriesAction' });
+			return request.post(this.directoriesEndpoint, appData).then(function (response) {
+				logger.log({ description: 'Application added successfully.', response: response, func: 'add', obj: 'DirectoriesAction' });
+				//TODO: Return list of group objects
+				return response;
+			})['catch'](function (errRes) {
+				logger.error({ description: 'Error adding group.', error: errRes, func: 'add', obj: 'DirectoriesAction' });
+				return Promise.reject(errRes);
+			});
+		}
+
+		//Search with partial of directory name
+	}, {
+		key: 'search',
+		value: function search(query) {
+			var searchEndpoint = this.directoriesEndpoint + '/search/';
+			if (query && _lodash2['default'].isString(query)) {
+				searchEndpoint += query;
+			}
+			if (!query || query == '') {
+				logger.debug({ description: 'Null query, returning empty array.', func: 'search', obj: 'DirectoriesAction' });
+				return Promise.resolve([]);
+			}
+			return request.get(searchEndpoint).then(function (response) {
+				logger.log({ description: 'Found directories based on search.', response: response, func: 'search', obj: 'DirectoriesAction' });
+				return response;
+			})['catch'](function (errRes) {
+				logger.error({ description: 'Error searching directories.', error: errRes, func: 'search', obj: 'DirectoriesAction' });
+				return Promise.reject(errRes);
+			});
+		}
+	}, {
+		key: 'directoriesEndpoint',
+		get: function get() {
+			var endpointArray = [_classesMatter2['default'].endpoint, 'directories'];
+			//Check for app groups action
+			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
+				endpointArray.splice(1, 0, 'apps', this.app.name);
+			}
+			//Create string from endpointArray
+			var endpointStr = endpointArray.join('/');
+			logger.log({ description: 'Directories endpoint built.', endpoint: endpointStr, func: 'directoriesEndpoint', obj: 'DirectoriesAction' });
+			return endpointStr;
+		}
+	}]);
+
+	return DirectoriesAction;
+})();
+
+exports['default'] = DirectoriesAction;
+module.exports = exports['default'];
+
+},{"../classes/Matter":296,"lodash":284}],288:[function(require,module,exports){
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _classesMatter = require('../classes/Matter');
+
+var _classesMatter2 = _interopRequireDefault(_classesMatter);
+
+var request = _classesMatter2['default'].utils.request;
+var logger = _classesMatter2['default'].utils.logger;
+
+//Actions for users list
+
+var GroupsAction = (function () {
+	function GroupsAction(actionData) {
+		_classCallCheck(this, GroupsAction);
+
+		//Check to see if action is for a specific app
+		if (actionData && _lodash2['default'].isObject(actionData) && _lodash2['default'].has(actionData, 'app')) {
+			this.app = actionData.app;
+			logger.log({
+				description: 'Provided app data set to app parameter.',
+				action: this, providedData: actionData,
+				func: 'constructor', obj: 'GroupsAction'
+			});
+		} else if (actionData && _lodash2['default'].isString(actionData)) {
+			this.app = { name: actionData };
+			logger.log({
+				description: 'App name provided as string was set.',
+				action: this, providedData: actionData,
+				func: 'constructor', obj: 'GroupsAction'
+			});
+		}
+		logger.info({
+			description: 'New Groups action.', action: this,
+			providedData: actionData, func: 'constructor', obj: 'GroupsAction'
+		});
+	}
+
+	_createClass(GroupsAction, [{
+		key: 'get',
+
+		//Get users or single application
+		value: function get() {
+			logger.log({
+				description: 'Get group called.',
+				func: 'get', obj: 'GroupsAction'
+			});
+			return request.get(this.groupsEndpoint).then(function (response) {
+				logger.info({
+					description: 'Groups loaded successfully.',
+					response: response, func: 'get', obj: 'GroupsAction'
+				});
+				return response;
+			})['catch'](function (errRes) {
+				logger.info({
+					description: 'Error getting groups.', error: errRes,
+					func: 'get', obj: 'GroupsAction'
+				});
+				return Promise.reject(errRes);
+			});
+		}
+
+		//Add an application
+	}, {
+		key: 'add',
+		value: function add(groupData) {
+			var newGroupData = groupData;
+			logger.debug({
+				description: 'Add group called.', groupData: groupData,
+				func: 'add', obj: 'GroupsAction'
+			});
+			if (_lodash2['default'].isString(groupData)) {
+				//Group data is string
+				newGroupData = { name: groupData };
+			}
+			logger.debug({
+				description: 'Add group called.', newGroupData: newGroupData,
+				func: 'add', obj: 'GroupsAction'
+			});
+			return request.post(this.groupsEndpoint, newGroupData).then(function (response) {
+				logger.log({
+					description: 'Group added to application successfully.',
+					response: response, func: 'add', obj: 'GroupsAction'
+				});
+				//TODO: Return list of group objects
+				return response;
+			})['catch'](function (errRes) {
+				logger.error({
+					description: 'Error adding group.',
+					error: errRes, func: 'add', obj: 'GroupsAction'
+				});
+				return Promise.reject(errRes);
+			});
+		}
+
+		//Search with partial of username
+	}, {
+		key: 'search',
+		value: function search(query) {
+			logger.debug({
+				description: 'Search groups called.', query: query,
+				func: 'search', obj: 'GroupsAction'
+			});
+			if (!query || query == '' || !_lodash2['default'].isString(query)) {
+				logger.log({
+					description: 'Null or invalid query, returning empty array.',
+					func: 'search', obj: 'GroupsAction'
+				});
+				return Promise.resolve([]);
+			}
+			var searchEndpoint = this.groupsEndpoint + '/search/' + query;
+			logger.debug({
+				description: 'Search endpoint created.',
+				endpoint: searchEndpoint, func: 'search', obj: 'GroupsAction'
+			});
+			return request.get(searchEndpoint).then(function (response) {
+				logger.log({
+					description: 'Found groups based on search.',
+					response: response, func: 'search', obj: 'GroupsAction'
+				});
+				return response;
+			})['catch'](function (errRes) {
+				logger.error({
+					description: 'Error searching groups.',
+					error: errRes, func: 'search', obj: 'GroupsAction'
+				});
+				return Promise.reject(errRes);
+			});
+		}
+	}, {
+		key: 'groupsEndpoint',
+		get: function get() {
+			var endpointArray = [_classesMatter2['default'].endpoint, 'groups'];
+			//Check for app groups action
+			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
+				endpointArray.splice(1, 0, 'apps', this.app.name);
+			}
+			//Create string from endpointArray
+			var endpointStr = endpointArray.join('/');
+			logger.log({
+				description: 'Groups Endpoint built.', endpoint: endpointStr,
+				func: 'groupsEndpoint', obj: 'GroupsAction'
+			});
+			return endpointStr;
+		}
+	}]);
+
+	return GroupsAction;
+})();
+
+exports['default'] = GroupsAction;
+module.exports = exports['default'];
+
+},{"../classes/Matter":296,"lodash":284}],289:[function(require,module,exports){
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _classesMatter = require('../classes/Matter');
+
+var _classesMatter2 = _interopRequireDefault(_classesMatter);
+
+var logger = _classesMatter2['default'].utils.logger;
+var request = _classesMatter2['default'].utils.request;
+
+//Actions for templates list
+
+var TemplatesAction = (function () {
+	function TemplatesAction() {
+		_classCallCheck(this, TemplatesAction);
+	}
+
+	_createClass(TemplatesAction, [{
+		key: 'get',
+
+		//Get templates or single application
+		value: function get() {
+			logger.log({ description: 'Get template called.', func: 'get', obj: 'TemplatesAction' });
+			return request.get(this.templatesEndpoint).then(function (response) {
+				logger.log({ description: 'Templates loaded.', response: response, func: 'get', obj: 'TemplatesAction' });
+				return response;
+			})['catch'](function (errRes) {
+				logger.error({ description: 'Error getting templates.', error: errRes, func: 'get', obj: 'TemplatesAction' });
+				return Promise.reject(errRes);
+			});
+		}
+
+		//Add an application
+	}, {
+		key: 'add',
+		value: function add(appData) {
+			logger.log({ description: 'Add template called.', func: 'add', obj: 'TemplatesAction' });
+			return request.post(this.templatesEndpoint, appData).then(function (response) {
+				logger.log({ description: 'Templates added successfully.', func: 'add', obj: 'TemplatesAction' });
+				return response;
+			})['catch'](function (errRes) {
+				logger.error({ description: 'Error adding template.', error: errRes, func: 'add', obj: 'TemplatesAction' });
+				return Promise.reject(errRes);
+			});
+		}
+
+		//Search with partial of username
+	}, {
+		key: 'search',
+		value: function search(query) {
+			logger.log({ description: 'Search template called.', query: query, func: 'search', obj: 'TemplatesAction' });
+			var searchEndpoint = this.templatesEndpoint + '/search/';
+			if (query && _lodash2['default'].isString(query)) {
+				searchEndpoint += query;
+			}
+			logger.log({ description: 'Search endpoint created.', endpoint: searchEndpoint, func: 'search', obj: 'TemplatesAction' });
+			return request.get(searchEndpoint).then(function (response) {
+				logger.log({ description: 'Template(s) found successfully.', response: response, endpoint: searchEndpoint, func: 'search', obj: 'TemplatesAction' });
+				return response;
+			})['catch'](function (errRes) {
+				logger.log({ description: 'Error searching for templates.', query: query, error: errRes, endpoint: searchEndpoint, func: 'search', obj: 'TemplatesAction' });
+				return Promise.reject(errRes);
+			});
+		}
+	}, {
+		key: 'templatesEndpoint',
+		get: function get() {
+			var endpointArray = [_classesMatter2['default'].endpoint, 'templates'];
+			//Check for app groups action
+			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
+				// endpointArray.splice(1, 0, 'apps', this.app.name);
+				logger.log({ description: 'Templates action is not currently supported for a specific application.', func: 'accountsEndpoint', obj: 'AccountsAction' });
+			}
+			//Create string from endpointArray
+			var endpointStr = endpointArray.join('/');
+			logger.log({ description: 'Templates endpoint built.', endpoint: endpointStr, func: 'templatesEndpoint', obj: 'TemplatesAction' });
+			return endpointStr;
+		}
+	}]);
+
+	return TemplatesAction;
+})();
+
+exports['default'] = TemplatesAction;
+module.exports = exports['default'];
+
+},{"../classes/Matter":296,"lodash":284}],290:[function(require,module,exports){
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _classesMatter = require('../classes/Matter');
+
+var _classesMatter2 = _interopRequireDefault(_classesMatter);
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var request = _classesMatter2['default'].utils.request;
+var logger = _classesMatter2['default'].utils.logger;
+
+//Actions for specific user
+
+var Account = (function () {
+	function Account(accountData) {
+		_classCallCheck(this, Account);
+
+		//Call matter with name and settings
+		if (accountData && _lodash2['default'].isObject(accountData) && _lodash2['default'].has(accountData, 'username')) {
+			_lodash2['default'].extend(this, accountData);
+		} else if (accountData && _lodash2['default'].isString(accountData)) {
+			this.username = accountData;
+		} else {
+			logger.error({
+				description: 'AccountData is required to start an AccountAction',
+				func: 'constructor', obj: 'Account'
+			});
+			throw new Error('username is required to start an AccountAction');
+		}
+	}
+
+	//Build endpoint based on accountData
+
+	_createClass(Account, [{
+		key: 'get',
+
+		//Get a user
+		value: function get() {
+			logger.debug({ description: 'Account data loaded successfully.', func: 'get', obj: 'Account' });
+			return request.get(this.accountEndpoint).then(function (response) {
+				logger.info({ description: 'Account data loaded successfully.', response: response, func: 'get', obj: 'Account' });
+				return new Account(response);
+			})['catch'](function (errRes) {
+				logger.error({ description: 'Error getting user.', error: errRes, func: 'get', obj: 'Account' });
+				return Promise.reject(errRes);
+			});
+		}
+
+		//Update a Account
+	}, {
+		key: 'update',
+		value: function update(accountData) {
+			logger.debug({ description: 'Update user called.', accountData: accountData, func: 'update', obj: 'Account' });
+			return request.put(this.accountEndpoint, accountData).then(function (response) {
+				logger.info({ description: 'Account updated successfully.', func: 'update', obj: 'Account' });
+				//TODO: Extend this with current info before returning
+				return new Account(response);
+			})['catch'](function (errRes) {
+				logger.error({ description: 'Error updating user.', func: 'update', obj: 'Account' });
+				return Promise.reject(errRes);
+			});
+		}
+
+		//Delete a Account
+	}, {
+		key: 'del',
+		value: function del(accountData) {
+			logger.debug({ description: 'Delete user called.', func: 'del', obj: 'Account' });
+			return request.del(this.accountEndpoint, accountData).then(function (response) {
+				logger.info({ description: 'Delete user successful.', response: response, func: 'del', obj: 'Account' });
+				return new Account(response);
+			})['catch'](function (errRes) {
+				logger.error({ description: 'Error deleting user.', accountData: accountData, error: errRes, func: 'del', obj: 'Account' });
+				return Promise.reject(errRes);
+			});
+		}
+	}, {
+		key: 'accountEndpoint',
+		get: function get() {
+			var endpointArray = [_classesMatter2['default'].endpoint, 'accounts', this.username];
+			//Check for app account action
+			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
+				endpointArray.splice(1, 0, 'apps', this.app.name);
+			}
+			//Create string from endpointArray
+			var endpointStr = endpointArray.join('/');
+			logger.log({ description: 'Account Endpoint built.', endpoint: endpointStr, func: 'accountEndpoint', obj: 'Account' });
+			return endpointStr;
+		}
+	}]);
+
+	return Account;
+})();
+
+exports['default'] = Account;
+module.exports = exports['default'];
+
+},{"../classes/Matter":296,"lodash":284}],291:[function(require,module,exports){
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+//Internal libs and config
+
+var _config = require('../config');
+
+var _config2 = _interopRequireDefault(_config);
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _Matter = require('./Matter');
+
+var _Matter2 = _interopRequireDefault(_Matter);
+
+//Actions and Classes
+
+var _actionsGroupsAction = require('../actions/GroupsAction');
+
+var _actionsGroupsAction2 = _interopRequireDefault(_actionsGroupsAction);
+
+var _Group2 = require('./Group');
+
+var _Group3 = _interopRequireDefault(_Group2);
+
+var _actionsDirectoriesAction = require('../actions/DirectoriesAction');
+
+var _actionsDirectoriesAction2 = _interopRequireDefault(_actionsDirectoriesAction);
+
+var _Directory2 = require('./Directory');
+
+var _Directory3 = _interopRequireDefault(_Directory2);
+
+var _actionsAccountsAction = require('../actions/AccountsAction');
+
+var _actionsAccountsAction2 = _interopRequireDefault(_actionsAccountsAction);
+
+var _Account2 = require('./Account');
+
+var _Account3 = _interopRequireDefault(_Account2);
+
+var _Files = require('./Files');
+
+var _Files2 = _interopRequireDefault(_Files);
+
+var _File2 = require('./File');
+
+var _File3 = _interopRequireDefault(_File2);
+
+//External Libs
+
+var _firebase = require('firebase');
+
+var _firebase2 = _interopRequireDefault(_firebase);
+
+//Convenience vars
+var request = _Matter2['default'].utils.request;
+var logger = _Matter2['default'].utils.logger;
+
+/**
+ * Application class.
+ *
+ */
+
+var Application = (function () {
+	function Application(appData) {
+		_classCallCheck(this, Application);
+
+		//Setup application data based on input
+		if (appData && _lodash2['default'].isObject(appData)) {
+			_lodash2['default'].extend(this, appData);
+		} else if (appData && _lodash2['default'].isString(appData)) {
+			this.name = appData;
+		}
+		if (_firebase2['default'] && _lodash2['default'].has(_config2['default'], 'fbUrl') && _lodash2['default'].has(this, 'name')) {
+			this.fbRef = new _firebase2['default'](_config2['default'].fbUrl + this.name);
+		}
+		// logger.debug({description: 'Application object created.', application: this, func: 'constructor', obj: 'Application'});
+	}
+
+	_createClass(Application, [{
+		key: 'get',
+
+		//Get applications or single application
+		value: function get() {
+			logger.debug({
+				description: 'Application get called.', func: 'get', obj: 'Application'
+			});
+			return request.get(this.appEndpoint).then(function (response) {
+				logger.info({
+					description: 'Application loaded successfully.', response: response,
+					application: new Application(response), func: 'get', obj: 'Application'
+				});
+				return new Application(response);
+			})['catch'](function (errRes) {
+				logger.error({
+					description: 'Error getting Application.',
+					message: errRes.response.text, error: errRes,
+					func: 'get', obj: 'Application'
+				});
+				return Promise.reject(errRes.response.text || errRes.response);
+			});
+		}
+
+		//Update an application
+	}, {
+		key: 'update',
+		value: function update(appData) {
+			logger.debug({
+				description: 'Application update called.',
+				func: 'update', obj: 'Application'
+			});
+			return request.put(this.appEndpoint, appData).then(function (response) {
+				logger.info({
+					description: 'Application updated successfully.',
+					response: response, func: 'update', obj: 'Application'
+				});
+				return new Application(response);
+			})['catch'](function (errRes) {
+				logger.error({
+					description: 'Error updating application.',
+					error: errRes, func: 'update', obj: 'Application'
+				});
+				return Promise.reject(errRes.response.text || errRes.response);
+			});
+		}
+	}, {
+		key: 'addStorage',
+		value: function addStorage() {
+			logger.debug({
+				description: 'Application add storage called.', application: this,
+				func: 'addStorage', obj: 'Application'
+			});
+			return request.post(this.appEndpoint + '/storage', {}).then(function (response) {
+				logger.info({
+					description: 'Storage successfully added to application.',
+					response: response, application: new Application(response),
+					func: 'addStorage', obj: 'Application'
+				});
+				return new Application(response);
+			})['catch'](function (errRes) {
+				logger.error({
+					description: 'Error adding storage to application.',
+					error: errRes, func: 'addStorage', obj: 'Application'
+				});
+				return Promise.reject(errRes.response.text || errRes.response);
+			});
+		}
+	}, {
+		key: 'applyTemplate',
+		value: function applyTemplate() {
+			var _this = this;
+
+			logger.error({
+				description: 'Applying templates to existing applications is not currently supported.',
+				func: 'applyTemplate', obj: 'Application'
+			});
+			return request.post(this.appEndpoint, {}).then(function (response) {
+				logger.info({
+					description: 'Template successfully applied to application.',
+					response: response, application: _this,
+					func: 'applyTemplate', obj: 'Application'
+				});
+				return new Application(response);
+			})['catch'](function (errRes) {
+				logger.error({
+					description: 'Error applying template to application.',
+					error: errRes, application: _this,
+					func: 'applyTemplate', obj: 'Application'
+				});
+				return Promise.reject(errRes.response.text || errRes.response);
+			});
+		}
+
+		//Files object that contains files methods
+	}, {
+		key: 'File',
+		value: function File(fileData) {
+			logger.debug({
+				description: 'Applications file action called.',
+				fileData: fileData, application: this,
+				func: 'file', obj: 'Application'
+			});
+			return new _File3['default']({ app: this, fileData: fileData });
+		}
+	}, {
+		key: 'User',
+		value: function User(userData) {
+			logger.debug({
+				description: 'Applications user action called.',
+				userData: userData, application: this, func: 'user',
+				obj: 'Application'
+			});
+			return new _Account3['default']({ app: this, userData: userData });
+		}
+	}, {
+		key: 'Account',
+		value: function Account(userData) {
+			logger.debug({
+				description: 'Applications account action called.',
+				userData: userData, application: this,
+				func: 'user', obj: 'Application'
+			});
+			return new _Account3['default']({ app: this, userData: userData });
+		}
+	}, {
+		key: 'Group',
+		value: function Group(groupData) {
+			logger.debug({
+				description: 'Applications group action called.',
+				groupData: groupData, application: this,
+				func: 'group', obj: 'Application'
+			});
+			return new _Group3['default']({ app: this, groupData: groupData });
+		}
+	}, {
+		key: 'Directory',
+		value: function Directory(directoryData) {
+			logger.debug({
+				description: 'Applications directory action called.',
+				directoryData: directoryData, application: this,
+				func: 'directory', obj: 'Application'
+			});
+			return new _Directory3['default']({ app: this, directoryData: directoryData });
+		}
+	}, {
+		key: 'appEndpoint',
+		get: function get() {
+			return _Matter2['default'].endpoint + '/apps/' + this.name;
+		}
+	}, {
+		key: 'Files',
+		get: function get() {
+			logger.debug({
+				description: 'Applications files action called.',
+				application: this, func: 'files', obj: 'Application'
+			});
+			return new _Files2['default']({ app: this });
+		}
+	}, {
+		key: 'Users',
+		get: function get() {
+			logger.debug({
+				description: 'Applications users action called.',
+				application: this, func: 'user', obj: 'Application'
+			});
+			return new _actionsAccountsAction2['default']({ app: this });
+		}
+	}, {
+		key: 'Accounts',
+		get: function get() {
+			logger.debug({
+				description: 'Applications account action called.',
+				application: this, func: 'user', obj: 'Application'
+			});
+			return new _actionsAccountsAction2['default']({ app: this });
+		}
+	}, {
+		key: 'Groups',
+		get: function get() {
+			logger.debug({
+				description: 'Applications groups action called.',
+				application: this, func: 'groups', obj: 'Application'
+			});
+			return new _actionsGroupsAction2['default']({ app: this });
+		}
+	}, {
+		key: 'Directories',
+		get: function get() {
+			logger.debug({
+				description: 'Applications directories action called.',
+				application: this, func: 'directories', obj: 'Application'
+			});
+			return new _actionsDirectoriesAction2['default']({ app: this });
+		}
+	}]);
+
+	return Application;
+})();
+
+exports['default'] = Application;
+module.exports = exports['default'];
+
+},{"../actions/AccountsAction":285,"../actions/DirectoriesAction":287,"../actions/GroupsAction":288,"../config":298,"./Account":290,"./Directory":292,"./File":293,"./Files":294,"./Group":295,"./Matter":296,"firebase":283,"lodash":284}],292:[function(require,module,exports){
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _Matter = require('./Matter');
+
+var _Matter2 = _interopRequireDefault(_Matter);
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var request = _Matter2['default'].utils.request;
+var logger = _Matter2['default'].utils.logger;
+
+//Actions for specific directory
+
+var Directory = (function () {
+	function Directory(actionData) {
+		_classCallCheck(this, Directory);
+
+		if (actionData && _lodash2['default'].isObject(actionData) && (_lodash2['default'].has(actionData, 'directoryName') || _lodash2['default'].has(actionData, 'name'))) {
+			//Data is object containing directory data
+			this.name = actionData.directoryName || actionData.name;
+			if (_lodash2['default'].has(actionData, 'appName')) {
+				this.appName = actionData.appName;
+			}
+		} else if (actionData && _lodash2['default'].isString(actionData)) {
+			//Data is string name
+			this.name = actionData;
+		} else {
+			logger.error({
+				description: 'Action data object with name is required to start a Directory Action.',
+				func: 'constructor', obj: 'Directory'
+			});
+			throw new Error('Directory Data object with name is required to start a Directory action.');
+		}
+	}
+
+	_createClass(Directory, [{
+		key: 'get',
+
+		//Get userlications or single userlication
+		value: function get() {
+			return request.get(this.directoryEndpoint).then(function (response) {
+				logger.info({
+					description: 'Directory data loaded successfully.',
+					response: response, func: 'get', obj: 'Directory'
+				});
+				return response;
+			})['catch'](function (errRes) {
+				logger.info({
+					description: 'Error getting directory.',
+					error: errRes, func: 'get', obj: 'Directory'
+				});
+				return Promise.reject(errRes);
+			});
+		}
+
+		//Update an Directory
+	}, {
+		key: 'update',
+		value: function update(directoryData) {
+			logger.debug({
+				description: 'Directory updated called.',
+				directoryData: directoryData, func: 'update', obj: 'Directory'
+			});
+			return _Matter2['default'].utils.request.put(this.directoryEndpoint, directoryData).then(function (response) {
+				logger.info({
+					description: 'Directory updated successfully.',
+					directoryData: directoryData, response: response,
+					func: 'update', obj: 'Directory'
+				});
+				return response;
+			})['catch'](function (errRes) {
+				logger.error({
+					description: 'Error updating directory.',
+					directoryData: directoryData, error: errRes,
+					func: 'update', obj: 'Directory'
+				});
+				return Promise.reject(errRes);
+			});
+		}
+
+		//Delete an Directory
+	}, {
+		key: 'del',
+		value: function del(directoryData) {
+			logger.debug({
+				description: 'Delete directory called.',
+				directoryData: directoryData, func: 'del', obj: 'Directory'
+			});
+			return request['delete'](this.directoryEndpoint, directoryData).then(function (response) {
+				logger.info({
+					description: 'Directory deleted successfully.',
+					directoryData: directoryData, func: 'del', obj: 'Directory'
+				});
+				return response;
+			})['catch'](function (errRes) {
+				logger.error({
+					description: 'Error deleting directory.',
+					error: errRes, func: 'del', obj: 'Directory'
+				});
+				return Promise.reject(errRes);
+			});
+		}
+	}, {
+		key: 'directoryEndpoint',
+		get: function get() {
+			var endpointArray = [_Matter2['default'].endpoint, 'directories', this.name];
+			//Check for app account action
+			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
+				endpointArray.splice(1, 0, 'apps', this.app.name);
+			}
+			//Create string from endpointArray
+			var endpointStr = endpointArray.join('/');
+			logger.log({
+				description: 'Directory endpoint built.',
+				endpoint: endpointStr, func: 'directoryEndpoint',
+				obj: 'Directory'
+			});
+			return endpointStr;
+		}
+	}]);
+
+	return Directory;
+})();
+
+exports['default'] = Directory;
+module.exports = exports['default'];
+
+},{"./Matter":296,"lodash":284}],293:[function(require,module,exports){
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _config = require('../config');
+
+var _config2 = _interopRequireDefault(_config);
+
+var _Matter = require('./Matter');
+
+var _Matter2 = _interopRequireDefault(_Matter);
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _awsSdk = require('aws-sdk');
+
+var _awsSdk2 = _interopRequireDefault(_awsSdk);
+
+//Convenience vars
+var logger = _Matter2['default'].utils.logger;
+
+var File = (function () {
+	function File(actionData) {
+		_classCallCheck(this, File);
+
+		if (actionData && _lodash2['default'].isObject(actionData) && _lodash2['default'].has(actionData, 'fileData') && _lodash2['default'].has(actionData, 'app')) {
+			_lodash2['default'].extend(this, actionData.fileData);
+			this.app = actionData.app;
+			this.pathArray = this.path.split('/');
+			//Get name from data or from pathArray
+			this.name = _lodash2['default'].has(actionData.fileData, 'name') ? actionData.fileData.name : this.pathArray[this.pathArray.length - 1];
+		} else if (actionData && !_lodash2['default'].isObject(actionData)) {
+			logger.error({ description: 'File data is not an object. File data must be an object that includes path and appName.', func: 'constructor', obj: 'File' });
+			//TODO: Get appName from path data?
+			throw new Error('File data must be an object that includes path and appName.');
+		} else {
+			logger.error({ description: 'File data that includes path and app is needed to create a File action.', func: 'constructor', obj: 'File' });
+			throw new Error('File data with path and app is needed to create file action.');
+		}
+		this.type = 'file';
+		logger.debug({ description: 'File object constructed.', file: this, func: 'constructor', obj: 'File' });
+	}
+
+	_createClass(File, [{
+		key: 'get',
+		value: function get() {
+			var _this = this;
+
+			if (!this.app || !this.app.frontend) {
+				logger.log({ description: 'Application Frontend data not available. Calling applicaiton get.', func: 'get', obj: 'File' });
+				return this.app.get().then(function (appData) {
+					_this.app = appData;
+					logger.log({ description: 'Application get successful. Getting file.', app: appData, func: 'get', obj: 'File' });
+					return _this.get();
+				}, function (err) {
+					logger.error({ description: 'Application Frontend data not available. Make sure to call .get().', error: err, func: 'get', obj: 'File' });
+					return Promise.reject({ message: 'Front end data is required to get file.' });
+				});
+			} else {
+				var _ret = (function () {
+					//If AWS Credential do not exist, set them
+					if (typeof _awsSdk2['default'].config.credentials == 'undefined' || !_awsSdk2['default'].config.credentials) {
+						logger.debug({ description: 'AWS creds do not exist, so they are being set.', func: 'publish', obj: 'File' });
+						setAWSConfig();
+					}
+					var s3 = new _awsSdk2['default'].S3();
+					var saveParams = {
+						Bucket: _this.app.frontend.bucketName,
+						Key: _this.path
+					};
+					//Set contentType from actionData to ContentType parameter of new object
+					if (_this.contentType) {
+						saveParams.ContentType = _this.contentType;
+					}
+					logger.debug({ description: 'File get params built.', saveParams: saveParams, file: _this, func: 'get', obj: 'File' });
+					return {
+						v: new Promise(function (resolve, reject) {
+							s3.getObject(saveParams, function (err, data) {
+								//[TODO] Add putting object ACL (make public)
+								if (!err) {
+									logger.info({ description: 'File loaded successfully.', fileData: data, func: 'get', obj: 'File' });
+									if (_lodash2['default'].has(data, 'Body')) {
+										logger.info({ description: 'File has content.', fileData: data.Body.toString(), func: 'get', obj: 'File' });
+										resolve(data.Body.toString());
+									} else {
+										resolve(data);
+									}
+								} else {
+									logger.error({ description: 'Error loading file from S3.', error: err, func: 'get', obj: 'File' });
+									return reject(err);
+								}
+							});
+						})
+					};
+				})();
+
+				if (typeof _ret === 'object') return _ret.v;
+			}
+		}
+
+		//Alias for get
+	}, {
+		key: 'open',
+		value: function open() {
+			return this.get();
+		}
+	}, {
+		key: 'publish',
+		value: function publish(fileData) {
+			var _this2 = this;
+
+			//TODO: Publish file to application
+			logger.debug({ description: 'File publish called.', file: this, fileData: fileData, func: 'publish', obj: 'File' });
+			if (!this.app.frontend) {
+				logger.error({ description: 'Application Frontend data not available. Make sure to call .get().', func: 'publish', obj: 'File' });
+				return Promise.reject({ message: 'Front end data is required to publish file.' });
+			} else {
+				var _ret2 = (function () {
+					if (!_lodash2['default'].has(fileData, ['content', 'path'])) {
+						logger.error({ description: 'File data including path and content required to publish.', func: 'publish', obj: 'File' });
+						return {
+							v: Promise.reject({ message: 'File data including path and content required to publish.' })
+						};
+					}
+					var saveParams = {
+						Bucket: _this2.app.frontend.bucketName,
+						Key: fileData.path,
+						Body: fileData.content,
+						ACL: 'public-read'
+					};
+					//Set contentType from fileData to ContentType parameter of new object
+					if (_this2.contentType) {
+						saveParams.ContentType = _this2.contentType;
+					}
+					//If AWS Credential do not exist, set them
+					if (typeof _awsSdk2['default'].config.credentials == 'undefined' || !_awsSdk2['default'].config.credentials) {
+						logger.debug({ description: 'AWS creds do not exist, so they are being set.', func: 'publish', obj: 'File' });
+						setAWSConfig();
+					}
+					var s3 = new _awsSdk2['default'].S3();
+
+					logger.debug({ description: 'File publish params built.', saveParams: saveParams, fileData: _this2, func: 'publish', obj: 'File' });
+					return {
+						v: new Promise(function (resolve, reject) {
+							s3.putObject(saveParams, function (err, data) {
+								//[TODO] Add putting object ACL (make public)
+								if (!err) {
+									logger.log({ description: 'File saved successfully.', response: data, func: 'publish', obj: 'File' });
+									resolve(data);
+								} else {
+									logger.error({ description: 'Error saving file to S3.', error: err, func: 'publish', obj: 'File' });
+									reject(err);
+								}
+							});
+						})
+					};
+				})();
+
+				if (typeof _ret2 === 'object') return _ret2.v;
+			}
+		}
+	}, {
+		key: 'del',
+		value: function del() {
+			var _this3 = this;
+
+			if (!this.app || !this.app.frontend) {
+				logger.log({ description: 'Application Frontend data not available. Calling applicaiton get.', func: 'get', obj: 'File' });
+				return this.app.get().then(function (appData) {
+					_this3.app = appData;
+					logger.log({ description: 'Application get successful. Getting file.', app: appData, func: 'get', obj: 'File' });
+					return _this3.get();
+				}, function (err) {
+					logger.error({ description: 'Application Frontend data not available. Make sure to call .get().', error: err, func: 'get', obj: 'File' });
+					return Promise.reject({ message: 'Front end data is required to get file.' });
+				});
+			} else {
+				var _ret3 = (function () {
+					//If AWS Credential do not exist, set them
+					if (typeof _awsSdk2['default'].config.credentials == 'undefined' || !_awsSdk2['default'].config.credentials) {
+						logger.debug({ description: 'AWS creds do not exist, so they are being set.', func: 'publish', obj: 'File' });
+						setAWSConfig();
+					}
+					var s3 = new _awsSdk2['default'].S3();
+					var saveParams = {
+						Bucket: _this3.app.frontend.bucketName,
+						Key: _this3.path
+					};
+					//Set contentType from actionData to ContentType parameter of new object
+					if (_this3.contentType) {
+						saveParams.ContentType = _this3.contentType;
+					}
+					logger.debug({ description: 'File get params built.', saveParams: saveParams, file: _this3, func: 'get', obj: 'File' });
+					return {
+						v: new Promise(function (resolve, reject) {
+							s3.deleteObject(saveParams, function (err, data) {
+								//[TODO] Add putting object ACL (make public)
+								if (!err) {
+									logger.info({ description: 'File loaded successfully.', fileData: data, func: 'get', obj: 'File' });
+									if (_lodash2['default'].has(data, 'Body')) {
+										logger.info({ description: 'File has content.', fileData: data.Body.toString(), func: 'get', obj: 'File' });
+										resolve(data.Body.toString());
+									} else {
+										resolve(data);
+									}
+								} else {
+									logger.error({ description: 'Error loading file from S3.', error: err, func: 'get', obj: 'File' });
+									return reject(err);
+								}
+							});
+						})
+					};
+				})();
+
+				if (typeof _ret3 === 'object') return _ret3.v;
+			}
+		}
+	}, {
+		key: 'getTypes',
+		value: function getTypes() {
+			//Get content type and file type from extension
+		}
+	}, {
+		key: 'openWithFirepad',
+		value: function openWithFirepad() {
+			//TODO:Create new Firepad instance within div
+		}
+	}, {
+		key: 'getDefaultContent',
+		value: function getDefaultContent() {
+			//TODO: Fill with default data for matching file type
+		}
+	}, {
+		key: 'ext',
+		get: function get() {
+			var re = /(?:\.([^.]+))?$/;
+			this.ext = re.exec(this.name)[1];
+		}
+	}]);
+
+	return File;
+})();
+
+exports['default'] = File;
+
+//------------------ Utility Functions ------------------//
+
+// AWS Config
+function setAWSConfig() {
+	_awsSdk2['default'].config.update({
+		credentials: new _awsSdk2['default'].CognitoIdentityCredentials({
+			IdentityPoolId: _config2['default'].aws.cognito.poolId
+		}),
+		region: _config2['default'].aws.region
+	});
+}
+module.exports = exports['default'];
+
+},{"../config":298,"./Matter":296,"aws-sdk":1,"lodash":284}],294:[function(require,module,exports){
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _config = require('../config');
+
+var _config2 = _interopRequireDefault(_config);
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _Matter = require('./Matter');
+
+var _Matter2 = _interopRequireDefault(_Matter);
+
+var _awsSdk = require('aws-sdk');
+
+var _awsSdk2 = _interopRequireDefault(_awsSdk);
+
+//Convenience vars
+var logger = _Matter2['default'].utils.logger;
+
+var Files = (function () {
+	function Files(filesData) {
+		_classCallCheck(this, Files);
+
+		if (filesData && _lodash2['default'].isObject(filesData) && _lodash2['default'].has(filesData, 'app')) {
+			//Data is object containing directory data
+			this.app = filesData.app;
+		} else if (filesData && _lodash2['default'].isString(filesData)) {
+			//Data is string name
+			this.app = { name: filesData };
+		} else if (filesData && _lodash2['default'].isArray(filesData)) {
+			//TODO: Handle an array of files being passed as data
+			logger.error({ description: 'Action data object with name is required to start a Files Action.', func: 'constructor', obj: 'Files' });
+			throw new Error('Files Data object with application is required to start a Files action.');
+		} else {
+			logger.error({ description: 'Action data object with name is required to start a Files Action.', func: 'constructor', obj: 'Files' });
+			throw new Error('Files Data object with name is required to start a Files action.');
+		}
+		logger.debug({ description: 'Files object constructed.', func: 'constructor', obj: 'Files' });
+	}
+
+	_createClass(Files, [{
+		key: 'publish',
+		value: function publish() {
+			//TODO: Publish all files
+		}
+	}, {
+		key: 'get',
+		value: function get() {
+			var _this = this;
+
+			if (!this.app.frontend || !this.app.frontend.bucketName) {
+				logger.warn({ description: 'Application Frontend data not available. Calling .get().', app: this.app, func: 'get', obj: 'Files' });
+				return this.app.get().then(function (applicationData) {
+					logger.log({ description: 'Application get returned.', data: applicationData, func: 'get', obj: 'Files' });
+					_this.app = applicationData;
+					if (_lodash2['default'].has(applicationData, 'frontend')) {
+						return _this.get();
+					} else {
+						logger.error({ description: 'Application does not have Frontend to get files from.', func: 'get', obj: 'Files' });
+						return Promise.reject({ message: 'Application does not have frontend to get files from.' });
+					}
+				}, function (err) {
+					logger.error({
+						description: 'Application Frontend data not available. Make sure to call .get().',
+						error: err, func: 'get', obj: 'Files' });
+					return Promise.reject({ message: 'Bucket name required to get objects' });
+				});
+			} else {
+				var _ret = (function () {
+					//If AWS Credential do not exist, set them
+					if (typeof _awsSdk2['default'].config.credentials == 'undefined' || !_awsSdk2['default'].config.credentials) {
+						// logger.info('AWS creds are being updated to make request');
+						setAWSConfig();
+					}
+					var s3 = new _awsSdk2['default'].S3();
+					var listParams = { Bucket: _this.app.frontend.bucketName };
+					return {
+						v: new Promise(function (resolve, reject) {
+							s3.listObjects(listParams, function (err, data) {
+								if (!err) {
+									logger.info({ description: 'Files list loaded.', filesData: data, func: 'get', obj: 'Files' });
+									return resolve(data.Contents);
+								} else {
+									logger.error({ description: 'Error getting files from S3.', error: err, func: 'get', obj: 'Files' });
+									return reject(err);
+								}
+							});
+						})
+					};
+				})();
+
+				if (typeof _ret === 'object') return _ret.v;
+			}
+		}
+	}, {
+		key: 'add',
+		value: function add() {
+			//TODO: Add a file to files list
+		}
+	}, {
+		key: 'del',
+		value: function del() {
+			//TODO: Delete a file from files list
+		}
+	}, {
+		key: 'buildStructure',
+		value: function buildStructure() {
+			logger.debug({ description: 'Build Structure called.', func: 'buildStructure', obj: 'Application' });
+			return this.get().then(function (filesArray) {
+				var childStruct = childrenStructureFromArray(filesArray);
+				//TODO: have child objects have correct classes (file/folder)
+				logger.log({ description: 'Child struct from array.', childStructure: childStruct, func: 'buildStructure', obj: 'Application' });
+				return childStruct;
+			}, function (err) {
+				logger.error({ description: 'Error getting application files.', error: err, func: 'buildStructure', obj: 'Application' });
+				return Promise.reject({ message: 'Error getting files.', error: err });
+			});
+		}
+
+		//ALIAS FOR buildStructure
+		// get structure() {
+		// 	return this.buildStructure();
+		// }
+	}]);
+
+	return Files;
+})();
+
+exports['default'] = Files;
+
+//------------------ Utility Functions ------------------//
+
+// AWS Config
+function setAWSConfig() {
+	_awsSdk2['default'].config.update({
+		credentials: new _awsSdk2['default'].CognitoIdentityCredentials({
+			IdentityPoolId: _config2['default'].aws.cognito.poolId
+		}),
+		region: _config2['default'].aws.region
+	});
+}
+//Convert from array file structure (from S3) to 'children' structure used in Editor GUI (angular-tree-control)
+//Examples for two files (index.html and /testFolder/file.js):
+//Array structure: [{path:'index.html'}, {path:'testFolder/file.js'}]
+//Children Structure [{type:'folder', name:'testfolder', children:[{path:'testFolder/file.js', name:'file.js', filetype:'javascript', contentType:'application/javascript'}]}]
+function childrenStructureFromArray(fileArray) {
+	// logger.log('childStructureFromArray called:', fileArray);
+	//Create a object for each file that stores the file in the correct 'children' level
+	var mappedStructure = fileArray.map(function (file) {
+		return buildStructureObject(file);
+	});
+	return combineLikeObjs(mappedStructure);
+}
+//Convert file with key into a folder/file children object
+function buildStructureObject(file) {
+	var pathArray;
+	// console.log('buildStructureObject with:', file);
+	if (_lodash2['default'].has(file, 'path')) {
+		//Coming from files already having path (structure)
+		pathArray = file.path.split('/');
+	} else {
+		//Coming from aws
+		pathArray = file.Key.split('/');
+		// console.log('file before pick:', file);
+		file = _lodash2['default'].pick(file, 'Key');
+		file.path = file.Key;
+		file.name = file.Key;
+	}
+	var currentObj = file;
+	if (pathArray.length == 1) {
+		currentObj.name = pathArray[0];
+		if (!_lodash2['default'].has(currentObj, 'type')) {
+			currentObj.type = 'file';
+		}
+		currentObj.path = pathArray[0];
+		return currentObj;
+	} else {
+		var finalObj = {};
+		_lodash2['default'].each(pathArray, function (loc, ind, list) {
+			if (ind != list.length - 1) {
+				//Not the last loc
+				currentObj.name = loc;
+				currentObj.path = _lodash2['default'].take(list, ind + 1).join('/');
+				currentObj.type = 'folder';
+				currentObj.children = [{}];
+				//TODO: Find out why this works
+				if (ind == 0) {
+					finalObj = currentObj;
+				}
+				currentObj = currentObj.children[0];
+			} else {
+				currentObj.type = 'file';
+				currentObj.name = loc;
+				currentObj.path = pathArray.join('/');
+				if (file.$id) {
+					currentObj.$id = file.$id;
+				}
+			}
+		});
+		return finalObj;
+	}
+}
+//Recursivley combine children of object's that have the same names
+function combineLikeObjs(mappedArray) {
+	var takenNames = [];
+	var finishedArray = [];
+	_lodash2['default'].each(mappedArray, function (obj) {
+		if (takenNames.indexOf(obj.name) == -1) {
+			takenNames.push(obj.name);
+			finishedArray.push(obj);
+		} else {
+			var likeObj = _lodash2['default'].findWhere(mappedArray, { name: obj.name });
+			//Combine children of like objects
+			likeObj.children = _lodash2['default'].union(obj.children, likeObj.children);
+			likeObj.children = combineLikeObjs(likeObj.children);
+			// logger.log('extended obj:',likeObj);
+		}
+	});
+	return finishedArray;
+}
+module.exports = exports['default'];
+
+},{"../config":298,"./Matter":296,"aws-sdk":1,"lodash":284}],295:[function(require,module,exports){
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _Matter = require('./Matter');
+
+var _Matter2 = _interopRequireDefault(_Matter);
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var request = _Matter2['default'].utils.request;
+var logger = _Matter2['default'].utils.logger;
+
+//Actions for specific user
+
+var Group = (function () {
+	function Group(actionData) {
+		_classCallCheck(this, Group);
+
+		//Call matter with name and settings
+		if (actionData && _lodash2['default'].isObject(actionData) && _lodash2['default'].has(actionData, 'groupData')) {
+			//Data is object containing group data
+			this.name = _lodash2['default'].isObject(actionData.groupData) ? actionData.groupData.name : actionData.groupData;
+			if (_lodash2['default'].has(actionData, 'app')) {
+				this.app = actionData.app;
+			}
+		} else if (actionData && _lodash2['default'].isString(actionData)) {
+			//Data is string name
+			this.name = actionData;
+		} else {
+			logger.error({ description: 'Action data is required to start a Group Action.', func: 'constructor', obj: 'Group' });
+			throw new Error('Username is required to start an Group');
+		}
+	}
+
+	_createClass(Group, [{
+		key: 'get',
+
+		//Get userlications or single userlication
+		value: function get() {
+			return request.get(this.groupEndpoint).then(function (response) {
+				logger.info({ description: 'Group data loaded successfully.', response: response, func: 'get', obj: 'Group' });
+				return response;
+			})['catch'](function (errRes) {
+				logger.info({ description: 'Error getting group.', error: errRes, func: 'get', obj: 'Group' });
+				return Promise.reject(errRes.response.text || errRes.response);
+			});
+		}
+
+		//Update an Group
+	}, {
+		key: 'update',
+		value: function update(groupData) {
+			logger.log({ description: 'Group updated called.', groupData: groupData, func: 'update', obj: 'Group' });
+			return _Matter2['default'].utils.request.put(this.groupEndpoint, groupData).then(function (response) {
+				logger.info({ description: 'Group updated successfully.', groupData: groupData, response: response, func: 'update', obj: 'Group' });
+				return response;
+			})['catch'](function (errRes) {
+				logger.error({ description: 'Error updating group.', groupData: groupData, error: errRes, func: 'update', obj: 'Group' });
+				return Promise.reject(errRes.response.text || errRes.response);
+			});
+		}
+
+		//Delete an Group
+	}, {
+		key: 'del',
+		value: function del(groupData) {
+			logger.log({ description: 'Delete group called.', groupData: groupData, func: 'del', obj: 'Group' });
+			return request.del(this.groupEndpoint, {}).then(function (response) {
+				logger.info({ description: 'Group deleted successfully.', groupData: groupData, func: 'del', obj: 'Group' });
+				return response;
+			})['catch'](function (errRes) {
+				logger.error({ description: 'Error deleting group.', error: errRes, text: errRes.response.text, groupData: groupData, func: 'del', obj: 'Group' });
+				return Promise.reject(errRes.response.text || errRes.response);
+			});
+		}
+
+		//Update an Group
+	}, {
+		key: 'addAccounts',
+		value: function addAccounts(accountsData) {
+			logger.log({ description: 'Group updated called.', accountsData: accountsData, func: 'update', obj: 'Group' });
+			var accountsArray = accountsData;
+			//Handle provided data being a string list
+			if (_lodash2['default'].isString(accountsData)) {
+				accountsArray = accountsData.split(',');
+			}
+			//Check item in array to see if it is a string (username) instead of _id
+			if (_lodash2['default'].isString(accountsArray[0])) {
+				logger.error({ description: 'Accounts array only currently supports account._id not account.username.', accountsData: accountsData, func: 'update', obj: 'Group' });
+				return Promise.reject({ message: 'Accounts array only currently supports account._id not account.username.' });
+			}
+			logger.log({ description: 'Updating group with accounts array.', accountsArray: accountsArray, func: 'update', obj: 'Group' });
+			return this.update({ accounts: accountsArray }).then(function (response) {
+				logger.info({ description: 'Account(s) added to group successfully.', response: response, func: 'addAccounts', obj: 'Group' });
+				return response;
+			})['catch'](function (errRes) {
+				logger.error({ description: 'Error addAccountseting group.', error: errRes, func: 'addAccounts', obj: 'Group' });
+				return Promise.reject(errRes.response.text || errRes.response);
+			});
+		}
+	}, {
+		key: 'groupEndpoint',
+		get: function get() {
+			var endpointArray = [_Matter2['default'].endpoint, 'groups', this.name];
+			//Check for app account action
+
+			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
+				endpointArray.splice(1, 0, 'apps', this.app.name);
+			}
+			//Create string from endpointArray
+			var endpointStr = endpointArray.join('/');
+			logger.log({ description: 'Group Endpoint built.', endpoint: endpointStr, func: 'groupEndpoint', obj: 'Group' });
+			return endpointStr;
+		}
+	}]);
+
+	return Group;
+})();
+
+exports['default'] = Group;
+module.exports = exports['default'];
+
+},{"./Matter":296,"lodash":284}],296:[function(require,module,exports){
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _config = require('../config');
+
+var _config2 = _interopRequireDefault(_config);
+
+var _kyperMatter = require('kyper-matter');
+
+var _kyperMatter2 = _interopRequireDefault(_kyperMatter);
+
+var matter = new _kyperMatter2['default'](_config2['default'].appName, _config2['default'].matterOptions);
+exports['default'] = matter;
+module.exports = exports['default'];
+
+},{"../config":298,"kyper-matter":300}],297:[function(require,module,exports){
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _Matter = require('./Matter');
+
+var _Matter2 = _interopRequireDefault(_Matter);
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var request = _Matter2['default'].utils.request;
+var logger = _Matter2['default'].utils.logger;
+//Actions for specific user
+
+var Template = (function () {
+	function Template(templateData) {
+		_classCallCheck(this, Template);
+
+		//Call matter with name and settings
+		if (templateData && _lodash2['default'].isString(templateData)) {
+			this.name = templateData;
+		} else {
+			logger.error({
+				description: 'Template data is required to start a Template action.',
+				func: 'constructor', obj: 'Template'
+			});
+			throw new Error('Template data is required to start a Template action.');
+		}
+	}
+
+	_createClass(Template, [{
+		key: 'get',
+
+		//Get userlications or single userlication
+		value: function get() {
+			logger.log({ description: 'Get template called.', name: this.name, func: 'get', obj: 'Template' });
+			return request.get(this.templateEndpoint).then(function (response) {
+				logger.log({ description: 'Get template responded.', response: response, func: 'get', obj: 'Template' });
+				return response;
+			})['catch'](function (errRes) {
+				logger.error({ description: 'Error getting template.', error: errRes, func: 'get', obj: 'Template' });
+				return Promise.reject(errRes);
+			});
+		}
+
+		//Update an userlication
+	}, {
+		key: 'update',
+		value: function update(templateData) {
+			logger.log({ description: 'Update template called.', templateData: templateData, func: 'update', obj: 'Template' });
+			return request.put(this.templateEndpoint, templateData).then(function (response) {
+				logger.log({ description: 'Update template responded.', response: response, templateData: templateData, func: 'update', obj: 'Template' });
+				//TODO: Return template object
+				return response;
+			})['catch'](function (errRes) {
+				logger.error({ description: 'Error updating template.', error: errRes, func: 'update', obj: 'Template' });
+				return Promise.reject(errRes);
+			});
+		}
+
+		//Delete a template
+	}, {
+		key: 'del',
+		value: function del(templateData) {
+			logger.log({ description: 'Delete template called.', templateData: templateData, func: 'del', obj: 'Template' });
+			return request['delete'](this.endpoint, templateData).then(function (response) {
+				logger.log({ description: 'Template deleted successfully.', response: response, func: 'del', obj: 'Template' });
+				//TODO: Return template object
+				return response;
+			})['catch'](function (errRes) {
+				logger.error({ description: 'Error deleting template.', error: errRes, func: 'del', obj: 'Template' });
+				return Promise.reject(errRes);
+			});
+		}
+	}, {
+		key: 'templateEndpoint',
+		get: function get() {
+			return _Matter2['default'].endpoint + '/templates/' + this.name;
+		}
+	}]);
+
+	return Template;
+})();
+
+exports['default'] = Template;
+module.exports = exports['default'];
+
+},{"./Matter":296,"lodash":284}],298:[function(require,module,exports){
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+var config = {
+	serverUrl: 'http://tessellate.elasticbeanstalk.com',
+	tokenName: 'grout',
+	fbUrl: 'https://kyper-tech.firebaseio.com/tessellate',
+	appName: 'tessellate',
+	matterOptions: {
+		localServer: false
+	},
+	aws: {
+		region: 'us-east-1',
+		cognito: {
+			poolId: 'us-east-1:72a20ffd-c638-48b0-b234-3312b3e64b2e',
+			params: {
+				AuthRoleArn: 'arn:aws:iam::823322155619:role/Cognito_TessellateUnauth_Role',
+				UnauthRoleArn: 'arn:aws:iam::823322155619:role/Cognito_TessellateAuth_Role'
+			}
+		}
+	}
+};
+//Set server to local server if developing
+// if (typeof window != 'undefined' && (window.location.hostname == '' || window.location.hostname == 'localhost')) {
+// 	config.serverUrl = 'http://localhost:4000';
+// }
+exports['default'] = config;
+module.exports = exports['default'];
+
+},{}],299:[function(require,module,exports){
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _config = require('./config');
+
+var _config2 = _interopRequireDefault(_config);
+
+var _kyperMatter = require('kyper-matter');
+
+var _kyperMatter2 = _interopRequireDefault(_kyperMatter);
+
+var _actionsAppsAction = require('./actions/AppsAction');
+
+var _actionsAppsAction2 = _interopRequireDefault(_actionsAppsAction);
+
+var _classesApplication = require('./classes/Application');
+
+var _classesApplication2 = _interopRequireDefault(_classesApplication);
+
+var _actionsAccountsAction = require('./actions/AccountsAction');
+
+var _actionsAccountsAction2 = _interopRequireDefault(_actionsAccountsAction);
+
+var _classesAccount = require('./classes/Account');
+
+var _classesAccount2 = _interopRequireDefault(_classesAccount);
+
+var _actionsGroupsAction = require('./actions/GroupsAction');
+
+var _actionsGroupsAction2 = _interopRequireDefault(_actionsGroupsAction);
+
+var _classesGroup = require('./classes/Group');
+
+var _classesGroup2 = _interopRequireDefault(_classesGroup);
+
+var _actionsDirectoriesAction = require('./actions/DirectoriesAction');
+
+var _actionsDirectoriesAction2 = _interopRequireDefault(_actionsDirectoriesAction);
+
+var _classesDirectory = require('./classes/Directory');
+
+var _classesDirectory2 = _interopRequireDefault(_classesDirectory);
+
+var _actionsTemplatesAction = require('./actions/TemplatesAction');
+
+var _actionsTemplatesAction2 = _interopRequireDefault(_actionsTemplatesAction);
+
+var _classesTemplate = require('./classes/Template');
+
+var _classesTemplate2 = _interopRequireDefault(_classesTemplate);
+
+/**Grout Client Class
+ * @ description Extending matter provides token storage and login/logout/signup capabilities
+ */
+
+var Grout = (function (_Matter) {
+	_inherits(Grout, _Matter);
+
+	//TODO: Use getter/setter to make this not a function
+
+	function Grout() {
+		_classCallCheck(this, Grout);
+
+		//Call matter with tessellate
+		_get(Object.getPrototypeOf(Grout.prototype), 'constructor', this).call(this, _config2['default'].appName, _config2['default'].matterOptions);
+	}
+
+	//Start a new Apps Action
+
+	_createClass(Grout, [{
+		key: 'App',
+
+		//Start a new App action
+		value: function App(appName) {
+			this.utils.logger.debug({ description: 'Application action called.', appName: appName, template: new _classesApplication2['default'](appName), func: 'App', obj: 'Grout' });
+			return new _classesApplication2['default'](appName);
+		}
+
+		//Start a new Apps Action
+	}, {
+		key: 'Template',
+
+		//Start a new App action
+		value: function Template(templateData) {
+			this.utils.logger.debug({ description: 'Template Action called.', templateData: templateData, template: new _classesTemplate2['default'](templateData), func: 'Template', obj: 'Grout' });
+			return new _classesTemplate2['default'](templateData);
+		}
+
+		//Start a new Accounts action
+	}, {
+		key: 'Account',
+
+		//Start a new Account action
+		value: function Account(userData) {
+			this.utils.logger.debug({ description: 'Account Action called.', userData: userData, user: new _classesAccount2['default'](userData), func: 'user', obj: 'Grout' });
+			return new _classesAccount2['default'](userData);
+		}
+
+		//ALIAS OF ACCOUNTS
+		//Start a new Accounts action
+	}, {
+		key: 'User',
+
+		//ALIAS OF ACCOUNT
+		//Start a new Account action
+		value: function User(userData) {
+			this.utils.logger.debug({ description: 'Account Action called.', userData: userData, user: new _classesAccount2['default'](userData), func: 'user', obj: 'Grout' });
+			return new _classesAccount2['default'](userData);
+		}
+
+		//Start a new Groups action
+	}, {
+		key: 'Group',
+
+		//Start a new Group action
+		value: function Group(groupData) {
+			this.utils.logger.debug({
+				description: 'Group Action called.', groupData: groupData,
+				action: new _classesGroup2['default']({ app: this, groupData: groupData }),
+				func: 'group', obj: 'Grout'
+			});
+			return new _classesGroup2['default'](groupData);
+		}
+
+		//Start a new Directories action
+	}, {
+		key: 'Directory',
+
+		//Start a new Group action
+		value: function Directory(directoryData) {
+			this.utils.logger.debug({
+				description: 'Directory Action called.', directoryData: directoryData,
+				action: new _classesDirectory2['default'](directoryData), func: 'directory', obj: 'Grout'
+			});
+			return new _classesDirectory2['default'](directoryData);
+		}
+	}, {
+		key: 'Apps',
+		get: function get() {
+			this.utils.logger.debug({
+				description: 'Apps Action called.', action: new _actionsAppsAction2['default'](),
+				func: 'Apps', obj: 'Grout'
+			});
+			return new _actionsAppsAction2['default']();
+		}
+	}, {
+		key: 'Templates',
+		get: function get() {
+			this.utils.logger.debug({ description: 'Templates Action called.', action: new _actionsTemplatesAction2['default'](), func: 'Templates', obj: 'Grout' });
+			return new _actionsTemplatesAction2['default']();
+		}
+	}, {
+		key: 'Accounts',
+		get: function get() {
+			this.utils.logger.debug({ description: 'Account Action called.', action: new _actionsAccountsAction2['default'](), func: 'users', obj: 'Grout' });
+			return new _actionsAccountsAction2['default']();
+		}
+	}, {
+		key: 'Users',
+		get: function get() {
+			this.utils.logger.debug({ description: 'Accounts Action called.', action: new _actionsAccountsAction2['default'](), func: 'Users', obj: 'Grout' });
+			return new _actionsAccountsAction2['default']();
+		}
+	}, {
+		key: 'Groups',
+		get: function get() {
+			this.utils.logger.debug({
+				description: 'Groups Action called.', action: new _actionsGroupsAction2['default'](), func: 'groups', obj: 'Grout'
+			});
+			return new _actionsGroupsAction2['default']();
+		}
+	}, {
+		key: 'Directories',
+		get: function get() {
+			this.utils.logger.debug({
+				description: 'Directories Action called.',
+				action: new _actionsDirectoriesAction2['default'](), func: 'directories', obj: 'Grout'
+			});
+			return new _actionsDirectoriesAction2['default']();
+		}
+	}]);
+
+	return Grout;
+})(_kyperMatter2['default']);
+
+exports['default'] = Grout;
+module.exports = exports['default'];
+
+},{"./actions/AccountsAction":285,"./actions/AppsAction":286,"./actions/DirectoriesAction":287,"./actions/GroupsAction":288,"./actions/TemplatesAction":289,"./classes/Account":290,"./classes/Application":291,"./classes/Directory":292,"./classes/Group":295,"./classes/Template":297,"./config":298,"kyper-matter":300}],300:[function(require,module,exports){
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('lodash'), require('jwt-decode'), require('superagent')) : typeof define === 'function' && define.amd ? define(['lodash', 'jwt-decode', 'superagent'], factory) : global.Matter = factory(global._, global.jwtDecode, global.superagent);
+})(this, function (_, jwtDecode, superagent) {
+	'use strict';
+
+	_ = 'default' in _ ? _['default'] : _;
+	jwtDecode = 'default' in jwtDecode ? jwtDecode['default'] : jwtDecode;
+	superagent = 'default' in superagent ? superagent['default'] : superagent;
+
+	var config = {
+		serverUrl: 'http://tessellate.elasticbeanstalk.com',
+		tokenName: 'tessellate',
+		tokenDataName: 'tessellate-tokenData',
+		tokenUserDataName: 'tessellate-currentUser',
+		logLevel: 'debug'
+	};
+
+	//Set default log level to debug
+	var logLevel = 'debug';
+	//Set log level from config
+	if (config.logLevel) {
+		logLevel = config.logLevel;
+	}
+	var logger = {
+		log: function log(logData) {
+			var msgArgs = buildMessageArgs(logData);
+			if (config.envName == 'production') {
+				runConsoleMethod('log', msgArgs);
+			} else {
+				runConsoleMethod('log', msgArgs);
+			}
+		},
+		info: function info(logData) {
+			var msgArgs = buildMessageArgs(logData);
+			if (config.envName == 'production') {
+				runConsoleMethod('info', msgArgs);
+			} else {
+				runConsoleMethod('info', msgArgs);
+			}
+		},
+		warn: function warn(logData) {
+			var msgArgs = buildMessageArgs(logData);
+			if (config.envName == 'production') {
+				runConsoleMethod('warn', msgArgs);
+			} else {
+				runConsoleMethod('warn', msgArgs);
+			}
+		},
+		debug: function debug(logData) {
+			var msgArgs = buildMessageArgs(logData);
+			if (config.envName == 'production') {
+				// runConsoleMethod('debug', msgArgs);
+				//Do not display console debugs in production
+			} else {
+					runConsoleMethod('debug', msgArgs);
+				}
+		},
+		error: function error(logData) {
+			var msgArgs = buildMessageArgs(logData);
+			if (config.envName == 'production') {
+				//TODO: Log to external logger
+				runConsoleMethod('error', msgArgs);
+			} else {
+				runConsoleMethod('error', msgArgs);
+			}
+		}
+	};
+
+	function runConsoleMethod(methodName, methodData) {
+		//Safley run console methods or use console log
+		if (methodName && console[methodName]) {
+			return console[methodName].apply(console, methodData);
+		} else {
+			return console.log.apply(console, methodData);
+		}
+	}
+	function buildMessageArgs(logData) {
+		var msgStr = '';
+		var msgObj = {};
+		//TODO: Attach time stamp
+		//Attach location information to the beginning of message
+		if (_.isObject(logData)) {
+			if (logLevel == 'debug') {
+				if (_.has(logData, 'func')) {
+					if (_.has(logData, 'obj')) {
+						//Object and function provided
+						msgStr += '[' + logData.obj + '.' + logData.func + '()]\n ';
+					} else if (_.has(logData, 'file')) {
+						msgStr += '[' + logData.file + ' > ' + logData.func + '()]\n ';
+					} else {
+						msgStr += '[' + logData.func + '()]\n ';
+					}
+				}
+			}
+			//Print each key and its value other than obj and func
+			_.each(_.omit(_.keys(logData)), function (key, ind, list) {
+				if (key != 'func' && key != 'obj') {
+					if (key == 'description' || key == 'message') {
+						msgStr += logData[key];
+					} else if (_.isString(logData[key])) {
+						// msgStr += key + ': ' + logData[key] + ', ';
+						msgObj[key] = logData[key];
+					} else {
+						//Print objects differently
+						// msgStr += key + ': ' + logData[key] + ', ';
+						msgObj[key] = logData[key];
+					}
+				}
+			});
+			msgStr += '\n';
+		} else if (_.isString(logData)) {
+			msgStr = logData;
+		}
+		var msg = [msgStr, msgObj];
+
+		return msg;
+	}
+
+	var domUtil = {
+		/**
+   * @description
+   * Appends given css source to DOM head.
+   *
+   * @param {String} src - url src for css to append
+   *
+   */
+		loadCss: function loadCss(src) {
+			if (typeof document == 'undefined') {
+				logger.error({ description: 'Document does not exsist to load assets into.', func: 'loadCss', obj: 'dom' });
+				throw new Error('Document object is required to load assets.');
+			} else {
+				var css = document.createElement('link');
+				css.rel = 'stylesheet';
+				css.type = 'text/css';
+				css.href = src;
+				document.getElementsByTagName('head')[0].insertBefore(css, document.getElementsByTagName('head')[0].firstChild);
+				logger.log({ description: 'CSS was loaded into document.', element: css, func: 'loadCss', obj: 'dom' });
+				return css; //Return link element
+			}
+		},
+		/**
+   * @description
+   * Appends given javascript source to DOM head.
+   *
+   * @param {String} src - url src for javascript to append
+   *
+   */
+		loadJs: function loadJs(src) {
+			if (typeof window == 'undefined' || !_.has(window, 'document')) {
+				logger.error({ description: 'Document does not exsist to load assets into.', func: 'loadCss', obj: 'dom' });
+				throw new Error('Document object is required to load assets.');
+			} else {
+				var js = window.document.createElement('script');
+				js.src = src;
+				js.type = 'text/javascript';
+				window.document.getElementsByTagName('head')[0].appendChild(js);
+				logger.log({ description: 'JS was loaded into document.', element: js, func: 'loadCss', obj: 'dom' });
+				return js; //Return script element
+			}
+		},
+		/**
+   * @description
+   * Appends given javascript source to DOM head.
+   *
+   * @param {String} src - url src for javascript to append
+   *
+   */
+		asyncLoadJs: function asyncLoadJs(src) {
+			if (typeof window == 'undefined' || !_.has(window, 'document')) {
+				logger.error({ description: 'Document does not exsist to load assets into.', func: 'loadCss', obj: 'dom' });
+				throw new Error('Document object is required to load assets.');
+			} else {
+				var js = window.document.createElement('script');
+				js.src = src;
+				js.type = 'text/javascript';
+				window.document.getElementsByTagName('head')[0].appendChild(js);
+				logger.log({ description: 'JS was loaded into document.', element: js, func: 'loadCss', obj: 'dom' });
+				return new Promise(function (resolve, reject) {
+					window.setTimeout(resolve, 30);
+				});
+			}
+		}
+	};
+
+	var data = {};
+
+	var storage = Object.defineProperties({
+		/**
+   * @description
+   * Safley sets item to session storage.
+   *
+   * @param {String} itemName The items name
+   * @param {String} itemValue The items value
+   *
+   */
+		item: function item(itemName, itemValue) {
+			return this.setItem(itemName, itemValue);
+		},
+		/**
+   * @description
+   * Safley sets item to session storage. Alias: item()
+   *
+   * @param {String} itemName The items name
+   * @param {String} itemValue The items value
+   *
+   */
+		setItem: function setItem(itemName, itemValue) {
+			data[itemName] = itemValue;
+			if (this.localExists) {
+				//Convert object to string
+				if (_.isObject(itemValue)) {
+					itemValue = JSON.stringify(itemValue);
+				}
+				window.sessionStorage.setItem(itemName, itemValue);
+			}
+		},
+		/**
+   * @description
+   * Safley gets an item from session storage. Alias: item()
+   *
+   * @param {String} itemName The items name
+   * @return {String}
+   *
+   */
+		getItem: function getItem(itemName) {
+			if (data[itemName]) {
+				return data[itemName];
+			} else if (this.localExists) {
+				var itemStr = window.sessionStorage.getItem(itemName);
+				//Check that str is not null before parsing
+				if (itemStr) {
+					var isObj = false;
+					var itemObj = null;
+					//Try parsing to object
+					try {
+						itemObj = JSON.parse(itemStr);
+						isObj = true;
+					} catch (err) {
+						// logger.log({message: 'String could not be parsed.', error: err, func: 'getItem', obj: 'storage'});
+						//Parsing failed, this must just be a string
+						isObj = false;
+					}
+					if (isObj) {
+						return itemObj;
+					}
+				}
+				return itemStr;
+			} else {
+				return null;
+			}
+		},
+		/**
+   * @description
+   * Safley removes item from session storage.
+   *
+   * @param {String} itemName - The items name
+   *
+   */
+		removeItem: function removeItem(itemName) {
+			//TODO: Only remove used items
+			if (data[itemName]) {
+				data[itemName] = null;
+			}
+			if (this.localExists) {
+				try {
+					//Clear session storage
+					window.sessionStorage.removeItem(itemName);
+				} catch (err) {
+					logger.error({ description: 'Error removing item from session storage', error: err, obj: 'storage', func: 'removeItem' });
+				}
+			}
+		},
+		/**
+   * @description
+   * Safley removes item from session storage.
+   *
+   * @param {String} itemName the items name
+   * @param {String} itemValue the items value
+   *
+   */
+		clear: function clear() {
+			//TODO: Only remove used items
+			data = {};
+			if (this.localExists) {
+				try {
+					//Clear session storage
+					window.sessionStorage.clear();
+				} catch (err) {
+					logger.warn({ description: 'Session storage could not be cleared.', error: err });
+				}
+			}
+		}
+	}, {
+		localExists: {
+			/**
+    * @description
+    * Gets whether or not local storage exists.
+    *
+    * @param {String} itemName The items name
+    * @param {String} itemValue The items value
+    *
+    */
+
+			get: function get() {
+				var testKey = 'test';
+				if (typeof window != 'undefined' && typeof window.sessionStorage != 'undefined') {
+					try {
+						window.sessionStorage.setItem(testKey, '1');
+						window.sessionStorage.removeItem(testKey);
+						return true;
+					} catch (err) {
+						logger.error({ description: 'Error saving to session storage', error: err, obj: 'storage', func: 'localExists' });
+						return false;
+					}
+				} else {
+					return false;
+				}
+			},
+			configurable: true,
+			enumerable: true
+		}
+	});
+
+	function decodeToken(tokenStr) {
+		var tokenData = undefined;
+		if (tokenStr && tokenStr != '') {
+			try {
+				tokenData = jwtDecode(tokenStr);
+			} catch (err) {
+				logger.error({ description: 'Error decoding token.', data: tokenData, error: err, func: 'decodeToken', file: 'token' });
+				throw new Error('Invalid token string.');
+			}
+		}
+		return tokenData;
+	}
+	var token = Object.defineProperties({
+		save: function save(tokenStr) {
+			this.string = tokenStr;
+		},
+		'delete': function _delete() {
+			//Remove string token
+			storage.removeItem(config.tokenName);
+			//Remove user data
+			storage.removeItem(config.tokenDataName);
+			logger.log({ description: 'Token was removed.', func: 'delete', obj: 'token' });
+		}
+	}, {
+		string: {
+			get: function get() {
+				return storage.getItem(config.tokenName);
+			},
+			set: function set(tokenData) {
+				var tokenStr = undefined;
+				//Handle object being passed
+				if (!_.isString(tokenData)) {
+					//Token is included in object
+					logger.log({ description: 'Token data is not string.', token: tokenData, func: 'string', obj: 'token' });
+
+					if (_.isObject(tokenData) && _.has(tokenData, 'token')) {
+						tokenStr = tokenData.token;
+					} else {
+						//Input is either not an string or object that contains nessesary info
+						logger.error({ description: 'Invalid value set to token.', token: tokenData, func: 'string', obj: 'token' });
+						return;
+					}
+				} else {
+					tokenStr = tokenData;
+				}
+				logger.log({ description: 'Token was set.', token: tokenData, tokenStr: tokenStr, func: 'string', obj: 'token' });
+				storage.setItem(config.tokenName, tokenStr);
+				this.data = jwtDecode(tokenStr);
+			},
+			configurable: true,
+			enumerable: true
+		},
+		data: {
+			get: function get() {
+				if (storage.getItem(config.tokenDataName)) {
+					return storage.getItem(config.tokenDataName);
+				} else {
+					return decodeToken(this.string);
+				}
+			},
+			set: function set(tokenData) {
+				if (_.isString(tokenData)) {
+					var tokenStr = tokenData;
+					tokenData = decodeToken(tokenStr);
+					logger.info({ description: 'Token data was set as string. Decoding token.', token: tokenStr, tokenData: tokenData, func: 'data', obj: 'token' });
+				} else {
+					logger.log({ description: 'Token data was set.', data: tokenData, func: 'data', obj: 'token' });
+					storage.setItem(config.tokenDataName, tokenData);
+				}
+			},
+			configurable: true,
+			enumerable: true
+		}
+	});
+
+	var request = {
+		get: function get(endpoint, queryData) {
+			var req = superagent.get(endpoint);
+			if (queryData) {
+				req.query(queryData);
+			}
+			req = addAuthHeader(req);
+			return handleResponse(req);
+		},
+		post: function post(endpoint, data) {
+			var req = superagent.post(endpoint).send(data);
+			req = addAuthHeader(req);
+			return handleResponse(req);
+		},
+		put: function put(endpoint, data) {
+			var req = superagent.put(endpoint, data);
+			req = addAuthHeader(req);
+			return handleResponse(req);
+		},
+		del: function del(endpoint, data) {
+			var req = superagent.put(endpoint, data);
+			req = addAuthHeader(req);
+			return handleResponse(req);
+		}
+	};
+
+	function handleResponse(req) {
+		return new Promise(function (resolve, reject) {
+			req.end(function (err, res) {
+				if (!err) {
+					// logger.log({description: 'Response:', response:res, func:'handleResponse', file: 'request'});
+					return resolve(res.body);
+				} else {
+					if (err.status == 401) {
+						logger.warn({ description: 'Unauthorized. You must be signed into make this request.', func: 'handleResponse' });
+					}
+					if (err && err.response) {
+						return reject(err.response.text);
+					}
+					logger.warn({ description: 'Unauthorized. You must be signed into make this request.', error: err, func: 'handleResponse' });
+					return reject(err);
+				}
+			});
+		});
+	}
+	function addAuthHeader(req) {
+		if (token.string) {
+			req = req.set('Authorization', 'Bearer ' + token.string);
+			console.info({ message: 'Set auth header', func: 'addAuthHeader', file: 'request' });
+		}
+		return req;
+	}
+
+	// import hello from 'hellojs'; //Modifies objects to have id parameter?
+
+	// import hello from 'hellojs'; //After es version of module is created
+	//Private object containing clientIds
+	var clientIds = {};
+
+	var ProviderAuth = (function () {
+		function ProviderAuth(actionData) {
+			_classCallCheck(this, ProviderAuth);
+
+			this.app = actionData.app ? actionData.app : null;
+			this.redirectUri = actionData.redirectUri ? actionData.redirectUri : 'redirect.html';
+			this.provider = actionData.provider ? actionData.provider : null;
+		}
+
+		_createClass(ProviderAuth, [{
+			key: 'loadHello',
+			value: function loadHello() {
+				//Load hellojs script
+				//TODO: Replace this with es6ified version
+				if (typeof window != 'undefined' && !window.hello) {
+					return domUtil.asyncLoadJs('https://s3.amazonaws.com/kyper-cdn/js/hello.js');
+				} else {
+					return Promise.reject();
+				}
+			}
+		}, {
+			key: 'helloLoginListener',
+			value: function helloLoginListener() {
+				//Login Listener
+				window.hello.on('auth.login', function (auth) {
+					logger.info({ description: 'User logged in to google.', func: 'loadHello', obj: 'Google' });
+					// Call user information, for the given network
+					window.hello(auth.network).api('/me').then(function (r) {
+						// Inject it into the container
+						//TODO:Send account informaiton to server
+						var userData = r;
+						userData.provider = auth.network;
+						//Login or Signup endpoint
+						return request.post(this.endpoint + '/provider', userData).then(function (response) {
+							logger.log({ description: 'Provider request successful.', response: response, func: 'signup', obj: 'GoogleUtil' });
+							return response;
+						})['catch'](function (errRes) {
+							logger.error({ description: 'Error requesting login.', error: errRes, func: 'signup', obj: 'Matter' });
+							return Promise.reject(errRes);
+						});
+					});
+				});
+			}
+		}, {
+			key: 'initHello',
+			value: function initHello() {
+				var _this = this;
+
+				return this.loadHello().then(function () {
+					return request.get(_this.app.endpoint + '/providers').then(function (response) {
+						logger.log({ description: 'Provider request successful.', response: response, func: 'initHello', obj: 'ProviderAuth' });
+						var provider = response[_this.provider];
+						if (!provider) {
+							logger.error({ description: 'Provider is not setup. Visit tessellate.kyper.io to enter your client id for ' + _this.provider, provider: _this.provider, clientIds: clientIds, func: 'login', obj: 'ProviderAuth' });
+							return Promise.reject({ message: 'Provider is not setup.' });
+						}
+						logger.log({ description: 'Providers config built', providersConfig: response, func: 'initHello', obj: 'ProviderAuth' });
+						return window.hello.init(response, { redirect_uri: 'redirect.html' });
+					}, function (err) {
+						logger.error({ description: 'Error loading hellojs.', error: errRes, func: 'initHello', obj: 'ProviderAuth' });
+						return Promise.reject({ message: 'Error requesting application third party providers.' });
+					})['catch'](function (errRes) {
+						logger.error({ description: 'Error loading hellojs.', error: errRes, func: 'initHello', obj: 'ProviderAuth' });
+						return Promise.reject({ message: 'Error loading third party login capability.' });
+					});
+				});
+			}
+		}, {
+			key: 'login',
+			value: function login() {
+				var _this2 = this;
+
+				//Initalize Hello
+				return this.initHello().then(function () {
+					return window.hello.login(_this2.provider);
+				}, function (err) {
+					logger.error({ description: 'Error initalizing hellojs.', error: err, func: 'login', obj: 'Matter' });
+					return Promise.reject({ message: 'Error with third party login.' });
+				});
+			}
+		}, {
+			key: 'signup',
+			value: function signup() {
+				//TODO: send info to server
+				return this.login();
+			}
+		}]);
+
+		return ProviderAuth;
+	})();
+
+	var Matter = (function () {
+		/* Constructor
+   * @param {string} appName Name of application
+   */
+
+		function Matter(appName, opts) {
+			_classCallCheck(this, Matter);
+
+			if (!appName) {
+				logger.error({ description: 'Application name requires to use Matter.', func: 'constructor', obj: 'Matter' });
+				throw new Error('Application name is required to use Matter');
+			} else {
+				this.name = appName;
+			}
+			if (opts) {
+				this.options = opts;
+			}
+		}
+
+		/* Endpoint getter
+   *
+   */
+
+		_createClass(Matter, [{
+			key: 'signup',
+
+			/* Signup
+    *
+    */
+			value: function signup(signupData) {
+				logger.log({ description: 'Signup called.', signupData: signupData, func: 'signup', obj: 'Matter' });
+				if (!signupData || !_.isObject(signupData) && !_.isString(signupData)) {
+					logger.error({ description: 'Signup information is required to signup.', func: 'signup', obj: 'Matter' });
+					return Promise.reject({ message: 'Login data is required to login.' });
+				}
+				if (_.isObject(signupData)) {
+					return request.post(this.endpoint + '/signup', signupData).then(function (response) {
+						logger.log({ description: 'Account request successful.', signupData: signupData, response: response, func: 'signup', obj: 'Matter' });
+						if (_.has(response, 'account')) {
+							return response.account;
+						} else {
+							logger.warn({ description: 'Account was not contained in signup response.', signupData: signupData, response: response, func: 'signup', obj: 'Matter' });
+							return response;
+						}
+					})['catch'](function (errRes) {
+						logger.error({ description: 'Error requesting signup.', signupData: signupData, error: errRes, func: 'signup', obj: 'Matter' });
+						return Promise.reject(errRes);
+					});
+				} else {
+					//Handle 3rd Party signups
+					var auth = new ProviderAuth({ provider: signupData, app: this });
+					return auth.signup(signupData).then(function (res) {
+						logger.info({ description: 'Provider signup successful.', provider: signupData, res: res, func: 'signup', obj: 'Matter' });
+						return Promise.resolve(res);
+					});
+				}
+			}
+
+			/** Login
+    *
+    */
+		}, {
+			key: 'login',
+			value: function login(loginData) {
+				var _this3 = this;
+
+				if (!loginData || !_.isObject(loginData) && !_.isString(loginData)) {
+					logger.error({ description: 'Username/Email and Password are required to login', func: 'login', obj: 'Matter' });
+					return Promise.reject({ message: 'Login data is required to login.' });
+				}
+				if (_.isObject(loginData)) {
+					if (!loginData.password || !loginData.username) {
+						return Promise.reject({ message: 'Username/Email and Password are required to login' });
+					}
+					//Username/Email Login
+					return request.put(this.endpoint + '/login', loginData).then(function (response) {
+						if (_.has(response, 'data') && _.has(response.data, 'status') && response.data.status == 409) {
+							logger.warn({ description: 'Account not found.', response: response, func: 'login', obj: 'Matter' });
+							return Promise.reject(response.data);
+						} else {
+							logger.log({ description: 'Successful login.', response: response, func: 'login', obj: 'Matter' });
+							if (_.has(response, 'token')) {
+								_this3.token.string = response.token;
+							}
+							if (_.has(response, 'account')) {
+								_this3.storage.setItem(config.tokenUserDataName, response.account);
+							}
+							return response.account;
+						}
+					})['catch'](function (errRes) {
+						logger.error({ description: 'Error requesting login.', error: errRes, status: errRes.status, func: 'login', obj: 'Matter' });
+						if (errRes.status == 409 || errRes.status == 400) {
+							errRes = errRes.response.text;
+						}
+						return Promise.reject(errRes);
+					});
+				} else {
+					//Provider login
+					var auth = new ProviderAuth({ provider: loginData, app: this });
+					return auth.login().then(function (res) {
+						logger.info({ description: 'Provider login successful.', provider: loginData, res: res, func: 'login', obj: 'Matter' });
+						return Promise.resolve(res);
+					});
+				}
+			}
+
+			/** Logout
+    */
+		}, {
+			key: 'logout',
+			value: function logout() {
+				var _this4 = this;
+
+				//TODO: Handle logging out of providers
+				if (!this.isLoggedIn) {
+					logger.warn({ description: 'No logged in account to log out.', func: 'logout', obj: 'Matter' });
+					return Promise.reject({ message: 'No logged in account to log out.' });
+				}
+				return request.put(this.endpoint + '/logout').then(function (response) {
+					logger.log({ description: 'Logout successful.', response: response, func: 'logout', obj: 'Matter' });
+					_this4.currentUser = null;
+					_this4.token['delete']();
+					return response;
+				})['catch'](function (errRes) {
+					logger.error({ description: 'Error requesting log out: ', error: errRes, func: 'logout', obj: 'Matter' });
+					_this4.storage.removeItem(config.tokenUserDataName);
+					_this4.token['delete']();
+					return Promise.reject(errRes);
+				});
+			}
+		}, {
+			key: 'getCurrentUser',
+			value: function getCurrentUser() {
+				var _this5 = this;
+
+				if (this.currentUser) {
+					return Promise.resolve(this.currentUser);
+				} else {
+					if (this.isLoggedIn) {
+						return request.get(this.endpoint + '/user').then(function (response) {
+							//TODO: Save user information locally
+							logger.log({ description: 'Current User Request responded.', responseData: response, func: 'currentUser', obj: 'Matter' });
+							_this5.currentUser = response;
+							return response;
+						})['catch'](function (errRes) {
+							if (errRes.status == 401) {
+								logger.warn({ description: 'Called for current user without token.', error: errRes, func: 'currentUser', obj: 'Matter' });
+								token['delete']();
+								return Promise.resolve(null);
+							} else {
+								logger.error({ description: 'Error requesting current user.', error: errRes, func: 'currentUser', obj: 'Matter' });
+								return Promise.reject(errRes);
+							}
+						});
+					} else {
+						return Promise.resolve(null);
+					}
+				}
+			}
+
+			/** updateProfile
+    */
+		}, {
+			key: 'updateProfile',
+			value: function updateProfile(updateData) {
+				var _this6 = this;
+
+				if (!this.isLoggedIn) {
+					logger.error({ description: 'No current user profile to update.', func: 'updateProfile', obj: 'Matter' });
+					return Promise.reject({ message: 'Must be logged in to update profile.' });
+				}
+				//Send update request
+				return request.put(this.endpoint + '/user/' + this.token.data.username, updateData).then(function (response) {
+					logger.log({ description: 'Update profile request responded.', responseData: response, func: 'updateProfile', obj: 'Matter' });
+					_this6.currentUser = response;
+					return response;
+				})['catch'](function (errRes) {
+					logger.error({ description: 'Error requesting current user.', error: errRes, func: 'updateProfile', obj: 'Matter' });
+					return Promise.reject(errRes);
+				});
+			}
+		}, {
+			key: 'changePassword',
+			value: function changePassword(updateData) {
+				if (!this.isLoggedIn) {
+					logger.error({ description: 'No current user profile for which to change password.', func: 'changePassword', obj: 'Matter' });
+					return Promise.reject({ message: 'Must be logged in to change password.' });
+				}
+				//Send update request
+				return request.put(this.endpoint + '/user/' + this.token.data.username, updateData).then(function (response) {
+					logger.log({ description: 'Update password request responded.', responseData: response, func: 'changePassword', obj: 'Matter' });
+					return response;
+				})['catch'](function (errRes) {
+					logger.error({ description: 'Error requesting password change.', error: errRes, func: 'changePassword', obj: 'Matter' });
+					return Promise.reject(errRes);
+				});
+			}
+		}, {
+			key: 'recoverPassword',
+			value: function recoverPassword() {
+				if (!this.isLoggedIn) {
+					logger.error({ description: 'No current user for which to recover password.', func: 'recoverPassword', obj: 'Matter' });
+					return Promise.reject({ message: 'Must be logged in to recover password.' });
+				}
+				//Send update request
+				return request.post(this.endpoint + '/accounts/' + this.token.data.username + '/recover').then(function (response) {
+					logger.log({ description: 'Recover password request responded.', responseData: response, func: 'recoverPassword', obj: 'Matter' });
+					return response;
+				})['catch'](function (errRes) {
+					logger.error({ description: 'Error requesting password recovery.', error: errRes, func: 'recoverPassword', obj: 'Matter' });
+					return Promise.reject(errRes);
+				});
+			}
+
+			/* set currentUser
+    * @description Sets currently user data
+    */
+		}, {
+			key: 'isInGroup',
+
+			//Check that user is in a single group or in all of a list of groups
+			value: function isInGroup(checkGroups) {
+				var _this7 = this;
+
+				if (!this.isLoggedIn) {
+					logger.log({ description: 'No logged in user to check.', func: 'isInGroup', obj: 'Matter' });
+					return false;
+				}
+				//Check if user is
+				if (checkGroups && _.isString(checkGroups)) {
+					var _ret = (function () {
+						var groupName = checkGroups;
+						//Single role or string list of roles
+						var groupsArray = groupName.split(',');
+						if (groupsArray.length > 1) {
+							//String list of groupts
+							logger.info({ description: 'String list of groups.', list: groupsArray, func: 'isInGroup', obj: 'Matter' });
+							return {
+								v: _this7.isInGroups(groupsArray)
+							};
+						} else {
+							//Single group
+							var groups = _this7.token.data.groups || [];
+							logger.log({ description: 'Checking if user is in group.', group: groupName, userGroups: _this7.token.data.groups || [], func: 'isInGroup', obj: 'Matter' });
+							return {
+								v: _.any(groups, function (group) {
+									return groupName == group.name;
+								})
+							};
+						}
+					})();
+
+					if (typeof _ret === 'object') return _ret.v;
+				} else if (checkGroups && _.isArray(checkGroups)) {
+					//Array of roles
+					//Check that user is in every group
+					logger.info({ description: 'Array of groups.', list: checkGroups, func: 'isInGroup', obj: 'Matter' });
+					return this.isInGroups(checkGroups);
+				} else {
+					return false;
+				}
+				//TODO: Handle string and array inputs
+			}
+		}, {
+			key: 'isInGroups',
+			value: function isInGroups(checkGroups) {
+				var _this8 = this;
+
+				if (!this.isLoggedIn) {
+					logger.log({ description: 'No logged in user to check.', func: 'isInGroups', obj: 'Matter' });
+					return false;
+				}
+				//Check if user is in any of the provided groups
+				if (checkGroups && _.isArray(checkGroups)) {
+					return _.every(_.map(checkGroups, function (group) {
+						if (_.isString(group)) {
+							//Group is string
+							return _this8.isInGroup(group);
+						} else {
+							//Group is object
+							if (_.has(group, 'name')) {
+								return _this8.isInGroup(group.name);
+							} else {
+								logger.error({ description: 'Invalid group object.', group: group, func: 'isInGroups', obj: 'Matter' });
+								return false;
+							}
+						}
+					}), true);
+				} else if (checkGroups && _.isString(checkGroups)) {
+					//TODO: Handle spaces within string list
+					var groupsArray = checkGroups.split(',');
+					if (groupsArray.length > 1) {
+						return this.isInGroups(groupsArray);
+					}
+					return this.isInGroup(groupsArray[0]);
+				} else {
+					logger.error({ description: 'Invalid groups list.', func: 'isInGroups', obj: 'Matter' });
+					return false;
+				}
+			}
+		}, {
+			key: 'endpoint',
+			get: function get() {
+				var serverUrl = config.serverUrl;
+				if (_.has(this, 'options') && this.options.localServer) {
+					serverUrl = 'http://localhost:4000';
+					logger.info({ description: 'LocalServer option was set to true. Now server url is local server.', url: serverUrl, func: 'endpoint', obj: 'Matter' });
+				}
+				if (this.name == 'tessellate') {
+					//Remove url if host is a tessellate server
+					if (typeof window !== 'undefined' && _.has(window, 'location') && window.location.host.indexOf('tessellate') !== -1) {
+						serverUrl = '';
+						logger.info({ description: 'Host is Tessellate Server, serverUrl simplified!', url: serverUrl, func: 'endpoint', obj: 'Matter' });
+					}
+				} else {
+					serverUrl = serverUrl + '/apps/' + this.name;
+					logger.log({ description: 'Server url set.', url: serverUrl, func: 'endpoint', obj: 'Matter' });
+				}
+				return serverUrl;
+			}
+		}, {
+			key: 'currentUser',
+			set: function set(userData) {
+				logger.log({ description: 'Current User set.', user: userData, func: 'currentUser', obj: 'Matter' });
+				this.storage.setItem(config.tokenUserDataName, userData);
+			},
+
+			/* get currentUser
+    * @description Gets currently logged in user or returns null
+    */
+			get: function get() {
+				if (this.storage.getItem(config.tokenUserDataName)) {
+					return this.storage.getItem(config.tokenUserDataName);
+				} else {
+					return null;
+				}
+			}
+
+			/* Storage
+    *
+    */
+		}, {
+			key: 'storage',
+			get: function get() {
+				return storage;
+			}
+
+			/** Token
+    */
+		}, {
+			key: 'token',
+			get: function get() {
+				return token;
+			}
+		}, {
+			key: 'utils',
+			get: function get() {
+				return { logger: logger, request: request, storage: storage, dom: domUtil };
+			}
+		}, {
+			key: 'isLoggedIn',
+			get: function get() {
+				return this.token.string ? true : false;
+			}
+		}]);
+
+		return Matter;
+	})();
+
+	return Matter;
+});
+
+
+},{"jwt-decode":302,"lodash":305,"superagent":306}],301:[function(require,module,exports){
+var Base64 = require('Base64');
+
+module.exports = function(str) {
+  var output = str.replace(/-/g, "+").replace(/_/g, "/");
+  switch (output.length % 4) {
+    case 0:
+      break;
+    case 2:
+      output += "==";
+      break;
+    case 3:
+      output += "=";
+      break;
+    default:
+      throw "Illegal base64url string!";
+  }
+
+  var result = Base64.atob(output);
+
+  try{
+    return decodeURIComponent(escape(result));
+  } catch (err) {
+    return result;
+  }
+};
+
+},{"Base64":304}],302:[function(require,module,exports){
+'use strict';
+
+var base64_url_decode = require('./base64_url_decode');
+var json_parse = require('./json_parse');
+
+module.exports = function (token) {
+  if (!token) {
+    throw new Error('Invalid token specified');
+  }
+  
+  return json_parse(base64_url_decode(token.split('.')[1]));
+};
+
+},{"./base64_url_decode":301,"./json_parse":303}],303:[function(require,module,exports){
+module.exports = function (str) {
+  var parsed;
+  if (typeof JSON === 'object') {
+    parsed = JSON.parse(str);
+  } else {
+    parsed = eval('(' + str + ')');
+  }
+  return parsed;
+};
+
+},{}],304:[function(require,module,exports){
+;(function () {
+
+  var
+    object = typeof exports != 'undefined' ? exports : this, // #8: web workers
+    chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=',
+    INVALID_CHARACTER_ERR = (function () {
+      // fabricate a suitable error object
+      try { document.createElement('$'); }
+      catch (error) { return error; }}());
+
+  // encoder
+  // [https://gist.github.com/999166] by [https://github.com/nignag]
+  object.btoa || (
+  object.btoa = function (input) {
+    for (
+      // initialize result and counter
+      var block, charCode, idx = 0, map = chars, output = '';
+      // if the next input index does not exist:
+      //   change the mapping table to "="
+      //   check if d has no fractional digits
+      input.charAt(idx | 0) || (map = '=', idx % 1);
+      // "8 - idx % 1 * 8" generates the sequence 2, 4, 6, 8
+      output += map.charAt(63 & block >> 8 - idx % 1 * 8)
+    ) {
+      charCode = input.charCodeAt(idx += 3/4);
+      if (charCode > 0xFF) throw INVALID_CHARACTER_ERR;
+      block = block << 8 | charCode;
+    }
+    return output;
+  });
+
+  // decoder
+  // [https://gist.github.com/1020396] by [https://github.com/atk]
+  object.atob || (
+  object.atob = function (input) {
+    input = input.replace(/=+$/, '')
+    if (input.length % 4 == 1) throw INVALID_CHARACTER_ERR;
+    for (
+      // initialize result and counters
+      var bc = 0, bs, buffer, idx = 0, output = '';
+      // get next character
+      buffer = input.charAt(idx++);
+      // character found in table? initialize bit storage and add its ascii value;
+      ~buffer && (bs = bc % 4 ? bs * 64 + buffer : buffer,
+        // and if not first of each 4 characters,
+        // convert the first 8 bits to one ascii character
+        bc++ % 4) ? output += String.fromCharCode(255 & bs >> (-2 * bc & 6)) : 0
+    ) {
+      // try to find character in table (0-63, not found => -1)
+      buffer = chars.indexOf(buffer);
+    }
+    return output;
+  });
+
+}());
+
+},{}],305:[function(require,module,exports){
+arguments[4][284][0].apply(exports,arguments)
+},{"dup":284}],306:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -45782,7 +47968,7 @@ request.put = function(url, data, fn){
 
 module.exports = request;
 
-},{"emitter":291,"reduce":292}],291:[function(require,module,exports){
+},{"emitter":307,"reduce":308}],307:[function(require,module,exports){
 
 /**
  * Expose `Emitter`.
@@ -45948,7 +48134,7 @@ Emitter.prototype.hasListeners = function(event){
   return !! this.listeners(event).length;
 };
 
-},{}],292:[function(require,module,exports){
+},{}],308:[function(require,module,exports){
 
 /**
  * Reduce `arr` with `fn`.
@@ -45973,1947 +48159,5 @@ module.exports = function(arr, fn, initial){
   
   return curr;
 };
-},{}],293:[function(require,module,exports){
-Object.defineProperty(exports, '__esModule', {
-	value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _config = require('../config');
-
-var _config2 = _interopRequireDefault(_config);
-
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-var _classesMatter = require('../classes/Matter');
-
-var _classesMatter2 = _interopRequireDefault(_classesMatter);
-
-var _classesAccount = require('../classes/Account');
-
-var _classesAccount2 = _interopRequireDefault(_classesAccount);
-
-var logger = _classesMatter2['default'].utils.logger;
-//Actions for accounts list
-
-var AccountsAction = (function () {
-	function AccountsAction(actionData) {
-		_classCallCheck(this, AccountsAction);
-
-		//Check to see if action is for a specific app
-		if (actionData && _lodash2['default'].isObject(actionData) && _lodash2['default'].has(actionData, 'app')) {
-			this.app = actionData.app;
-			logger.log({ description: 'Provided app data set to app parameter.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction' });
-		} else if (actionData && _lodash2['default'].isString(actionData)) {
-			this.app = { name: actionData };
-			logger.log({ description: 'App name provided as string was set.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction' });
-		}
-		logger.info({ description: 'New Accounts action.', action: this, providedData: actionData, func: 'constructor', obj: 'AccountsAction' });
-	}
-
-	_createClass(AccountsAction, [{
-		key: 'get',
-
-		//Get accounts or single application
-		value: function get() {
-			logger.log({ description: 'Accounts get called.', func: 'get', obj: 'AccountsAction' });
-			return _classesMatter2['default'].utils.request.get(this.accountsEndpoint).then(function (response) {
-				logger.info({ description: 'Accounts loaded successfully.', func: 'get', obj: 'AccountsAction' });
-				return response;
-			})['catch'](function (errRes) {
-				logger.info({ description: 'Error getting accounts.', error: errRes, func: 'get', obj: 'AccountsAction' });
-				return Promise.reject(errRes.message || 'Error getting accounts.');
-			});
-		}
-
-		//Add an application
-	}, {
-		key: 'add',
-		value: function add(accountData) {
-			logger.info({ description: 'Account add called.', accountData: accountData, func: 'add', obj: 'AccountsAction' });
-			return this.utils.request.post(this.accountsEndpoint, accountData).then(function (response) {
-				logger.info({ description: 'Account added successfully.', response: response, newAccount: new _classesAccount2['default'](response), func: 'add', obj: 'AccountsAction' });
-				return new _classesAccount2['default'](response);
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Account add called.', error: errRes, accountData: accountData, func: 'add', obj: 'AccountsAction' });
-				return Promise.reject(errRes.message || 'Error adding account.');
-			});
-		}
-
-		//Search with partial of accountname
-	}, {
-		key: 'search',
-		value: function search(query) {
-			logger.log({ description: 'Accounts search called.', query: query, func: 'search', obj: 'AccountsAction' });
-			var searchEndpoint = this.accountsEndpoint + '/search/';
-			if (query && _lodash2['default'].isString(query)) {
-				searchEndpoint += query;
-			}
-			if (!query || query == '') {
-				logger.log({ description: 'Null query, returning empty array.', func: 'search', obj: 'AccountsAction' });
-				return Promise.resolve([]);
-			}
-			return _classesMatter2['default'].utils.request.get(searchEndpoint).then(function (response) {
-				logger.log({ description: 'Accounts search responded.', response: response, query: query, func: 'search', obj: 'AccountsAction' });
-				return response;
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error searching Accounts.', error: errRes, query: query, func: 'search', obj: 'AccountsAction' });
-				return Promise.reject(errRes.message || 'Error searching accounts.');
-			});
-		}
-	}, {
-		key: 'accountsEndpoint',
-		get: function get() {
-			var endpointArray = [_classesMatter2['default'].endpoint, 'accounts'];
-			//Check for app account action
-			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
-				//Splice apps, appName into index 1
-				endpointArray.splice(1, 0, 'apps', this.app.name);
-			}
-			//Create string from endpointArray
-			var endpointStr = endpointArray.join('/');
-			logger.log({ description: 'Accounts Endpoint built.', endpoint: endpointStr, func: 'accountsEndpoint', obj: 'AccountsAction' });
-			return endpointStr;
-		}
-	}]);
-
-	return AccountsAction;
-})();
-
-exports['default'] = AccountsAction;
-module.exports = exports['default'];
-
-},{"../classes/Account":298,"../classes/Matter":304,"../config":306,"lodash":289}],294:[function(require,module,exports){
-Object.defineProperty(exports, '__esModule', {
-	value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _config = require('../config');
-
-var _config2 = _interopRequireDefault(_config);
-
-var _classesMatter = require('../classes/Matter');
-
-var _classesMatter2 = _interopRequireDefault(_classesMatter);
-
-var _classesApplication = require('../classes/Application');
-
-var _classesApplication2 = _interopRequireDefault(_classesApplication);
-
-var request = _classesMatter2['default'].utils.request;
-var logger = _classesMatter2['default'].utils.logger;
-
-//Actions for applications list
-
-var AppsAction = (function () {
-	function AppsAction() {
-		_classCallCheck(this, AppsAction);
-	}
-
-	_createClass(AppsAction, [{
-		key: 'get',
-
-		//Get applications or single application
-		value: function get() {
-			logger.debug({ description: 'Apps get called.', action: this, func: 'get', obj: 'AppsAction' });
-			return request.get(this.appsEndpoint).then(function (response) {
-				logger.info({ description: 'Apps data loaded successfully.', response: response, func: 'get', obj: 'AppsAction' });
-				//TODO: Return application object
-				// return new Application(response);
-				return response;
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error getting apps data.', error: errRes, func: 'get', obj: 'AppsAction' });
-				return Promise.reject(errRes);
-			});
-		}
-
-		//Add an application
-	}, {
-		key: 'add',
-		value: function add(appData) {
-			logger.debug({ description: 'Application add called.', appData: appData, func: 'add', obj: 'AppsAction' });
-			return _classesMatter2['default'].utils.request.post(this.appsEndpoint, appData).then(function (response) {
-				logger.info({ description: 'Application added successfully.', response: response, func: 'add', obj: 'AppsAction' });
-				// TODO: Return application object
-				// return new Application(response);
-				return response;
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error adding app.', error: errRes, func: 'add', obj: 'AppsAction' });
-				return Promise.reject(errRes);
-			});
-		}
-	}, {
-		key: 'appsEndpoint',
-
-		//Call matter with name and settings
-		get: function get() {
-			return _classesMatter2['default'].endpoint + '/apps';
-		}
-	}]);
-
-	return AppsAction;
-})();
-
-exports['default'] = AppsAction;
-module.exports = exports['default'];
-
-},{"../classes/Application":299,"../classes/Matter":304,"../config":306}],295:[function(require,module,exports){
-Object.defineProperty(exports, '__esModule', {
-	value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _config = require('../config');
-
-var _config2 = _interopRequireDefault(_config);
-
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-var _classesMatter = require('../classes/Matter');
-
-var _classesMatter2 = _interopRequireDefault(_classesMatter);
-
-var request = _classesMatter2['default'].utils.request;
-var logger = _classesMatter2['default'].utils.logger;
-
-//Actions for directories list
-
-var DirectoriesAction = (function () {
-	function DirectoriesAction(actionData) {
-		_classCallCheck(this, DirectoriesAction);
-
-		//Check to see if action is for a specific app
-		if (actionData && _lodash2['default'].isObject(actionData) && _lodash2['default'].has(actionData, 'app')) {
-			this.app = actionData.app;
-			logger.log({ description: 'Provided app data set to app parameter.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction' });
-		} else if (actionData && _lodash2['default'].isString(actionData)) {
-			this.app = { name: actionData };
-			logger.log({ description: 'App name provided as string was set.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction' });
-		}
-		logger.info({ description: 'New directories action.', action: this, providedData: actionData, func: 'constructor', obj: 'DirectoriesAction' });
-	}
-
-	_createClass(DirectoriesAction, [{
-		key: 'get',
-
-		//Get users or single application
-		value: function get() {
-			logger.debug({ description: 'Directories get called.', action: this, func: 'get', obj: 'DirectoriesAction' });
-			return request.get(this.directoriesEndpoint).then(function (response) {
-				logger.info({ descrption: 'Directories loaded successfully.', response: response, func: 'get', obj: 'DirectoriesAction' });
-				return response;
-			})['catch'](function (errRes) {
-				logger.error({ descrption: 'error getting users', error: errRes, func: 'get', obj: 'DirectoriesAction' });
-				return Promise.reject(errRes);
-			});
-		}
-
-		//Add an application
-	}, {
-		key: 'add',
-		value: function add(appData) {
-			logger.debug({ description: 'Add directory called.', action: this, appData: appData, func: 'get', obj: 'DirectoriesAction' });
-			return request.post(this.directoriesEndpoint, appData).then(function (response) {
-				logger.log({ description: 'Application added successfully.', response: response, func: 'add', obj: 'DirectoriesAction' });
-				//TODO: Return list of group objects
-				return response;
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error adding group.', error: errRes, func: 'add', obj: 'DirectoriesAction' });
-				return Promise.reject(errRes);
-			});
-		}
-
-		//Search with partial of directory name
-	}, {
-		key: 'search',
-		value: function search(query) {
-			var searchEndpoint = this.directoriesEndpoint + '/search/';
-			if (query && _lodash2['default'].isString(query)) {
-				searchEndpoint += query;
-			}
-			if (!query || query == '') {
-				logger.debug({ description: 'Null query, returning empty array.', func: 'search', obj: 'DirectoriesAction' });
-				return Promise.resolve([]);
-			}
-			return request.get(searchEndpoint).then(function (response) {
-				logger.log({ description: 'Found directories based on search.', response: response, func: 'search', obj: 'DirectoriesAction' });
-				return response;
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error searching directories.', error: errRes, func: 'search', obj: 'DirectoriesAction' });
-				return Promise.reject(errRes);
-			});
-		}
-	}, {
-		key: 'directoriesEndpoint',
-		get: function get() {
-			var endpointArray = [_classesMatter2['default'].endpoint, 'directories'];
-			//Check for app groups action
-			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
-				endpointArray.splice(1, 0, 'apps', this.app.name);
-			}
-			//Create string from endpointArray
-			var endpointStr = endpointArray.join('/');
-			logger.log({ description: 'Directories endpoint built.', endpoint: endpointStr, func: 'directoriesEndpoint', obj: 'DirectoriesAction' });
-			return endpointStr;
-		}
-	}]);
-
-	return DirectoriesAction;
-})();
-
-exports['default'] = DirectoriesAction;
-module.exports = exports['default'];
-
-},{"../classes/Matter":304,"../config":306,"lodash":289}],296:[function(require,module,exports){
-Object.defineProperty(exports, '__esModule', {
-	value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _config = require('../config');
-
-var _config2 = _interopRequireDefault(_config);
-
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-var _classesMatter = require('../classes/Matter');
-
-var _classesMatter2 = _interopRequireDefault(_classesMatter);
-
-var request = _classesMatter2['default'].utils.request;
-var logger = _classesMatter2['default'].utils.logger;
-
-//Actions for users list
-
-var GroupsAction = (function () {
-	function GroupsAction(actionData) {
-		_classCallCheck(this, GroupsAction);
-
-		//Check to see if action is for a specific app
-		if (actionData && _lodash2['default'].isObject(actionData) && _lodash2['default'].has(actionData, 'app')) {
-			this.app = actionData.app;
-			logger.log({ description: 'Provided app data set to app parameter.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
-		} else if (actionData && _lodash2['default'].isString(actionData)) {
-			this.app = { name: actionData };
-			logger.log({ description: 'App name provided as string was set.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
-		}
-		logger.info({ description: 'New Groups action.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
-	}
-
-	_createClass(GroupsAction, [{
-		key: 'get',
-
-		//Get users or single application
-		value: function get() {
-			logger.debug({ description: 'Get group called.', func: 'get', obj: 'GroupsAction' });
-			return request.get(this.groupsEndpoint).then(function (response) {
-				logger.info({ description: 'Groups loaded successfully.', response: response, func: 'get', obj: 'GroupsAction' });
-				return response;
-			})['catch'](function (errRes) {
-				logger.info({ description: 'Error getting groups.', error: errRes, func: 'get', obj: 'GroupsAction' });
-				return Promise.reject(errRes);
-			});
-		}
-
-		//Add an application
-	}, {
-		key: 'add',
-		value: function add(groupData) {
-			var newGroupData = groupData;
-			logger.debug({ description: 'Add group called.', groupData: groupData, func: 'add', obj: 'GroupsAction' });
-			if (_lodash2['default'].isString(groupData)) {
-				//Group data is string
-				newGroupData = { name: groupData };
-			}
-			logger.debug({ description: 'Add group called.', newGroupData: newGroupData, func: 'add', obj: 'GroupsAction' });
-			return request.post(this.groupsEndpoint, newGroupData).then(function (response) {
-				logger.log({ description: 'Group added to application successfully.', response: response, func: 'add', obj: 'GroupsAction' });
-				//TODO: Return list of group objects
-				return response;
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error adding group.', error: errRes, func: 'add', obj: 'GroupsAction' });
-				return Promise.reject(errRes);
-			});
-		}
-
-		//Search with partial of username
-	}, {
-		key: 'search',
-		value: function search(query) {
-			logger.debug({ description: 'Add group called.', groupData: groupData, func: 'search', obj: 'GroupsAction' });
-			if (!query || query == '' || !_lodash2['default'].isString(query)) {
-				logger.log({ description: 'Null or invalid query, returning empty array.', func: 'search', obj: 'GroupsAction' });
-				return Promise.resolve([]);
-			}
-			var searchEndpoint = this.groupsEndpoint + '/search/' + query;
-			logger.debug({ description: 'Search endpoint created.', endpoint: searchEndpoint, func: 'search', obj: 'GroupsAction' });
-			return request.get(searchEndpoint).then(function (response) {
-				logger.log({ description: 'Found groups based on search.', response: response, func: 'search', obj: 'GroupsAction' });
-				return response;
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error searching groups.', error: errRes, func: 'search', obj: 'GroupsAction' });
-				return Promise.reject(errRes);
-			});
-		}
-	}, {
-		key: 'groupsEndpoint',
-		get: function get() {
-			var endpointArray = [_classesMatter2['default'].endpoint, 'groups'];
-			//Check for app groups action
-			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
-				endpointArray.splice(1, 0, 'apps', this.app.name);
-			}
-			//Create string from endpointArray
-			var endpointStr = endpointArray.join('/');
-			logger.log({ description: 'Groups Endpoint built.', endpoint: endpointStr, func: 'groupsEndpoint', obj: 'GroupsAction' });
-			return endpointStr;
-		}
-	}]);
-
-	return GroupsAction;
-})();
-
-exports['default'] = GroupsAction;
-module.exports = exports['default'];
-
-},{"../classes/Matter":304,"../config":306,"lodash":289}],297:[function(require,module,exports){
-Object.defineProperty(exports, '__esModule', {
-	value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _config = require('../config');
-
-var _config2 = _interopRequireDefault(_config);
-
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-var _classesMatter = require('../classes/Matter');
-
-var _classesMatter2 = _interopRequireDefault(_classesMatter);
-
-var logger = _classesMatter2['default'].utils.logger;
-var request = _classesMatter2['default'].utils.request;
-
-//Actions for templates list
-
-var TemplatesAction = (function () {
-	function TemplatesAction() {
-		_classCallCheck(this, TemplatesAction);
-	}
-
-	_createClass(TemplatesAction, [{
-		key: 'get',
-
-		//Get templates or single application
-		value: function get() {
-			logger.log({ description: 'Get template called.', func: 'get', obj: 'TemplatesAction' });
-			return request.get(this.templatesEndpoint).then(function (response) {
-				logger.log({ description: 'Templates loaded.', response: response, func: 'get', obj: 'TemplatesAction' });
-				return response;
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error getting templates.', error: errRes, func: 'get', obj: 'TemplatesAction' });
-				return Promise.reject(errRes);
-			});
-		}
-
-		//Add an application
-	}, {
-		key: 'add',
-		value: function add(appData) {
-			logger.log({ description: 'Add template called.', func: 'add', obj: 'TemplatesAction' });
-			return request.post(this.templatesEndpoint, appData).then(function (response) {
-				logger.log({ description: 'Templates added successfully.', func: 'add', obj: 'TemplatesAction' });
-				return response;
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error adding template.', error: errRes, func: 'add', obj: 'TemplatesAction' });
-				return Promise.reject(errRes);
-			});
-		}
-
-		//Search with partial of username
-	}, {
-		key: 'search',
-		value: function search(query) {
-			logger.log({ description: 'Search template called.', query: query, func: 'search', obj: 'TemplatesAction' });
-			var searchEndpoint = this.templatesEndpoint + '/search/';
-			if (query && _lodash2['default'].isString(query)) {
-				searchEndpoint += query;
-			}
-			logger.log({ description: 'Search endpoint created.', endpoint: searchEndpoint, func: 'search', obj: 'TemplatesAction' });
-			return request.get(searchEndpoint).then(function (response) {
-				logger.log({ description: 'Template(s) found successfully.', response: response, endpoint: searchEndpoint, func: 'search', obj: 'TemplatesAction' });
-				return response;
-			})['catch'](function (errRes) {
-				logger.log({ description: 'Error searching for templates.', query: query, error: errRes, endpoint: searchEndpoint, func: 'search', obj: 'TemplatesAction' });
-				return Promise.reject(errRes);
-			});
-		}
-	}, {
-		key: 'templatesEndpoint',
-		get: function get() {
-			var endpointArray = [_classesMatter2['default'].endpoint, 'templates'];
-			//Check for app groups action
-			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
-				// endpointArray.splice(1, 0, 'apps', this.app.name);
-				logger.log({ description: 'Templates action is not currently supported for a specific application.', func: 'accountsEndpoint', obj: 'AccountsAction' });
-			}
-			//Create string from endpointArray
-			var endpointStr = endpointArray.join('/');
-			logger.log({ description: 'Templates endpoint built.', endpoint: endpointStr, func: 'templatesEndpoint', obj: 'TemplatesAction' });
-			return endpointStr;
-		}
-	}]);
-
-	return TemplatesAction;
-})();
-
-exports['default'] = TemplatesAction;
-module.exports = exports['default'];
-
-},{"../classes/Matter":304,"../config":306,"lodash":289}],298:[function(require,module,exports){
-Object.defineProperty(exports, '__esModule', {
-	value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _config = require('../config');
-
-var _config2 = _interopRequireDefault(_config);
-
-var _classesMatter = require('../classes/Matter');
-
-var _classesMatter2 = _interopRequireDefault(_classesMatter);
-
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-var request = _classesMatter2['default'].utils.request;
-var logger = _classesMatter2['default'].utils.logger;
-
-//Actions for specific user
-
-var Account = (function () {
-	function Account(accountData) {
-		_classCallCheck(this, Account);
-
-		//Call matter with name and settings
-		if (accountData && _lodash2['default'].isObject(accountData) && _lodash2['default'].has(accountData, 'username')) {
-			_lodash2['default'].extend(this, accountData);
-		} else if (accountData && _lodash2['default'].isString(accountData)) {
-			this.username = accountData;
-		} else {
-			logger.error({ description: 'AccountData is required to start an AccountAction', func: 'constructor', obj: 'Account' });
-			throw new Error('username is required to start an AccountAction');
-		}
-	}
-
-	//Build endpoint based on accountData
-
-	_createClass(Account, [{
-		key: 'get',
-
-		//Get a user
-		value: function get() {
-			logger.debug({ description: 'Account data loaded successfully.', func: 'get', obj: 'Account' });
-			return request.get(this.accountEndpoint).then(function (response) {
-				logger.info({ description: 'Account data loaded successfully.', response: response, func: 'get', obj: 'Account' });
-				return new Account(response);
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error getting user.', error: errRes, func: 'get', obj: 'Account' });
-				return Promise.reject(errRes);
-			});
-		}
-
-		//Update a Account
-	}, {
-		key: 'update',
-		value: function update(accountData) {
-			logger.debug({ description: 'Update user called.', accountData: accountData, func: 'update', obj: 'Account' });
-			return request.put(this.accountEndpoint, accountData).then(function (response) {
-				logger.info({ description: 'Account updated successfully.', func: 'update', obj: 'Account' });
-				//TODO: Extend this with current info before returning
-				return new Account(response);
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error updating user.', func: 'update', obj: 'Account' });
-				return Promise.reject(errRes);
-			});
-		}
-
-		//Delete a Account
-	}, {
-		key: 'del',
-		value: function del(accountData) {
-			logger.debug({ description: 'Delete user called.', func: 'del', obj: 'Account' });
-			return request.del(this.accountEndpoint, accountData).then(function (response) {
-				logger.info({ description: 'Delete user successful.', response: response, func: 'del', obj: 'Account' });
-				return new Account(response);
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error deleting user.', accountData: accountData, error: errRes, func: 'del', obj: 'Account' });
-				return Promise.reject(errRes);
-			});
-		}
-	}, {
-		key: 'accountEndpoint',
-		get: function get() {
-			var endpointArray = [_classesMatter2['default'].endpoint, 'accounts', this.username];
-			//Check for app account action
-			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
-				endpointArray.splice(1, 0, 'apps', this.app.name);
-			}
-			//Create string from endpointArray
-			var endpointStr = endpointArray.join('/');
-			logger.log({ description: 'Account Endpoint built.', endpoint: endpointStr, func: 'accountEndpoint', obj: 'Account' });
-			return endpointStr;
-		}
-	}]);
-
-	return Account;
-})();
-
-exports['default'] = Account;
-module.exports = exports['default'];
-
-},{"../classes/Matter":304,"../config":306,"lodash":289}],299:[function(require,module,exports){
-Object.defineProperty(exports, '__esModule', {
-	value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-//Internal libs and config
-
-var _config = require('../config');
-
-var _config2 = _interopRequireDefault(_config);
-
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-var _Matter = require('./Matter');
-
-var _Matter2 = _interopRequireDefault(_Matter);
-
-//Actions and Classes
-
-var _actionsGroupsAction = require('../actions/GroupsAction');
-
-var _actionsGroupsAction2 = _interopRequireDefault(_actionsGroupsAction);
-
-var _Group2 = require('./Group');
-
-var _Group3 = _interopRequireDefault(_Group2);
-
-var _actionsDirectoriesAction = require('../actions/DirectoriesAction');
-
-var _actionsDirectoriesAction2 = _interopRequireDefault(_actionsDirectoriesAction);
-
-var _Directory2 = require('./Directory');
-
-var _Directory3 = _interopRequireDefault(_Directory2);
-
-var _actionsAccountsAction = require('../actions/AccountsAction');
-
-var _actionsAccountsAction2 = _interopRequireDefault(_actionsAccountsAction);
-
-var _Account2 = require('./Account');
-
-var _Account3 = _interopRequireDefault(_Account2);
-
-var _Files = require('./Files');
-
-var _Files2 = _interopRequireDefault(_Files);
-
-var _File2 = require('./File');
-
-var _File3 = _interopRequireDefault(_File2);
-
-//External Libs
-
-var _firebase = require('firebase');
-
-var _firebase2 = _interopRequireDefault(_firebase);
-
-var _awsSdk = require('aws-sdk');
-
-var _awsSdk2 = _interopRequireDefault(_awsSdk);
-
-//Convenience vars
-var request = _Matter2['default'].utils.request;
-var logger = _Matter2['default'].utils.logger;
-
-/**
- * Application class.
- *
- */
-
-var Application = (function () {
-	function Application(appData) {
-		_classCallCheck(this, Application);
-
-		//Setup application data based on input
-		if (appData && _lodash2['default'].isObject(appData)) {
-			_lodash2['default'].extend(this, appData);
-		} else if (appData && _lodash2['default'].isString(appData)) {
-			this.name = appData;
-		}
-		if (_firebase2['default'] && _lodash2['default'].has(_config2['default'], 'fbUrl') && _lodash2['default'].has(this, 'name')) {
-			this.fbRef = new _firebase2['default'](_config2['default'].fbUrl + this.name);
-		}
-		// logger.debug({description: 'Application object created.', application: this, func: 'constructor', obj: 'Application'});
-	}
-
-	_createClass(Application, [{
-		key: 'get',
-
-		//Get applications or single application
-		value: function get() {
-			logger.debug({ description: 'Application get called.', func: 'get', obj: 'Application' });
-			return request.get(this.appEndpoint).then(function (response) {
-				logger.info({ description: 'Application loaded successfully.', response: response, application: new Application(response), func: 'get', obj: 'Application' });
-				return new Application(response);
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error getting Application.', message: errRes.response.text, error: errRes, func: 'get', obj: 'Application' });
-				return Promise.reject(errRes.response.text || errRes.response);
-			});
-		}
-
-		//Update an application
-	}, {
-		key: 'update',
-		value: function update(appData) {
-			logger.debug({ description: 'Application update called.', func: 'update', obj: 'Application' });
-			return request.put(this.appEndpoint, appData).then(function (response) {
-				logger.info({ description: 'Application updated successfully.', response: response, func: 'update', obj: 'Application' });
-				return new Application(response);
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error updating application.', error: errRes, func: 'update', obj: 'Application' });
-				return Promise.reject(errRes.response.text || errRes.response);
-			});
-		}
-	}, {
-		key: 'addStorage',
-		value: function addStorage() {
-			logger.debug({ description: 'Application add storage called.', application: this, func: 'addStorage', obj: 'Application' });
-			return request.post(this.appEndpoint + '/storage', appData).then(function (response) {
-				logger.info({ description: 'Storage successfully added to application.', response: response, application: new Application(response), func: 'addStorage', obj: 'Application' });
-				return new Application(response);
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error adding storage to application.', error: errRes, func: 'addStorage', obj: 'Application' });
-				return Promise.reject(errRes.response.text || errRes.response);
-			});
-		}
-	}, {
-		key: 'applyTemplate',
-		value: function applyTemplate() {
-			var _this = this;
-
-			logger.error({ description: 'Applying templates to existing applications is not currently supported.', func: 'applyTemplate', obj: 'Application' });
-			return request.post(this.appEndpoint, appData).then(function (response) {
-				logger.info({ description: 'Template successfully applied to application.', response: response, application: _this, func: 'applyTemplate', obj: 'Application' });
-				return new Application(response);
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error applying template to application.', error: errRes, application: _this, func: 'applyTemplate', obj: 'Application' });
-				return Promise.reject(errRes.response.text || errRes.response);
-			});
-		}
-
-		//Files object that contains files methods
-	}, {
-		key: 'File',
-		value: function File(fileData) {
-			logger.debug({ description: 'Applications file action called.', fileData: fileData, application: this, func: 'file', obj: 'Application' });
-			return new _File3['default']({ app: this, fileData: fileData });
-		}
-	}, {
-		key: 'User',
-		value: function User(userData) {
-			logger.debug({ description: 'Applications user action called.', userData: userData, application: this, func: 'user', obj: 'Application' });
-			return new _Account3['default']({ app: this, userData: userData });
-		}
-	}, {
-		key: 'Account',
-		value: function Account(userData) {
-			logger.debug({ description: 'Applications account action called.', userData: userData, application: this, func: 'user', obj: 'Application' });
-			return new _Account3['default']({ app: this, userData: userData });
-		}
-	}, {
-		key: 'Group',
-		value: function Group(groupData) {
-			logger.debug({ description: 'Applications group action called.', groupData: groupData, application: this, func: 'group', obj: 'Application' });
-			return new _Group3['default']({ app: this, groupData: groupData });
-		}
-	}, {
-		key: 'Directory',
-		value: function Directory(directoryData) {
-			logger.debug({ description: 'Applications directory action called.', directoryData: directoryData, application: this, func: 'directory', obj: 'Application' });
-			return new _Directory3['default']({ app: this, directoryData: directoryData });
-		}
-	}, {
-		key: 'appEndpoint',
-		get: function get() {
-			return _Matter2['default'].endpoint + '/apps/' + this.name;
-		}
-	}, {
-		key: 'Files',
-		get: function get() {
-			logger.debug({ description: 'Applications files action called.', application: this, func: 'files', obj: 'Application' });
-			return new _Files2['default']({ app: this });
-		}
-	}, {
-		key: 'Users',
-		get: function get() {
-			logger.debug({ description: 'Applications users action called.', application: this, func: 'user', obj: 'Application' });
-			return new _actionsAccountsAction2['default']({ app: this });
-		}
-	}, {
-		key: 'Accounts',
-		get: function get() {
-			logger.debug({ description: 'Applications account action called.', application: this, func: 'user', obj: 'Application' });
-			return new _actionsAccountsAction2['default']({ app: this });
-		}
-	}, {
-		key: 'Groups',
-		get: function get() {
-			logger.debug({ description: 'Applications groups action called.', application: this, func: 'groups', obj: 'Application' });
-			return new _actionsGroupsAction2['default']({ app: this });
-		}
-	}, {
-		key: 'Directories',
-		get: function get() {
-			logger.debug({ description: 'Applications directories action called.', application: this, func: 'directories', obj: 'Application' });
-			return new _actionsDirectoriesAction2['default']({ app: this });
-		}
-	}]);
-
-	return Application;
-})();
-
-exports['default'] = Application;
-module.exports = exports['default'];
-
-},{"../actions/AccountsAction":293,"../actions/DirectoriesAction":295,"../actions/GroupsAction":296,"../config":306,"./Account":298,"./Directory":300,"./File":301,"./Files":302,"./Group":303,"./Matter":304,"aws-sdk":1,"firebase":283,"lodash":289}],300:[function(require,module,exports){
-Object.defineProperty(exports, '__esModule', {
-	value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _config = require('../config');
-
-var _config2 = _interopRequireDefault(_config);
-
-var _Matter = require('./Matter');
-
-var _Matter2 = _interopRequireDefault(_Matter);
-
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-var request = _Matter2['default'].utils.request;
-var logger = _Matter2['default'].utils.logger;
-
-//Actions for specific directory
-
-var Directory = (function () {
-	function Directory(actionData) {
-		_classCallCheck(this, Directory);
-
-		if (actionData && _lodash2['default'].isObject(actionData) && (_lodash2['default'].has(actionData, 'directoryName') || _lodash2['default'].has(actionData, 'name'))) {
-			//Data is object containing directory data
-			this.name = actionData.directoryName || actionData.name;
-			if (_lodash2['default'].has(actionData, 'appName')) {
-				this.appName = actionData.appName;
-			}
-		} else if (actionData && _lodash2['default'].isString(actionData)) {
-			//Data is string name
-			this.name = actionData;
-		} else {
-			logger.error({ description: 'Action data object with name is required to start a Directory Action.', func: 'constructor', obj: 'Directory' });
-			throw new Error('Directory Data object with name is required to start a Directory action.');
-		}
-	}
-
-	_createClass(Directory, [{
-		key: 'get',
-
-		//Get userlications or single userlication
-		value: function get() {
-			return request.get(this.directoryEndpoint).then(function (response) {
-				logger.info({ description: 'Directory data loaded successfully.', directoryData: directoryData, response: response, func: 'get', obj: 'Directory' });
-				return response;
-			})['catch'](function (errRes) {
-				logger.info({ description: 'Error getting directory.', directoryData: directoryData, error: errRes, func: 'get', obj: 'Directory' });
-				return Promise.reject(errRes);
-			});
-		}
-
-		//Update an Directory
-	}, {
-		key: 'update',
-		value: function update(directoryData) {
-			logger.debug({ description: 'Directory updated called.', directoryData: directoryData, func: 'update', obj: 'Directory' });
-			return _Matter2['default'].utils.request.put(this.directoryEndpoint, directoryData).then(function (response) {
-				logger.info({ description: 'Directory updated successfully.', directoryData: directoryData, response: response, func: 'update', obj: 'Directory' });
-				return response;
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error updating directory.', directoryData: directoryData, error: errRes, func: 'update', obj: 'Directory' });
-				return Promise.reject(errRes);
-			});
-		}
-
-		//Delete an Directory
-	}, {
-		key: 'del',
-		value: function del(directoryData) {
-			logger.debug({ description: 'Delete directory called.', directoryData: directoryData, func: 'del', obj: 'Directory' });
-			return request['delete'](this.directoryEndpoint, userData).then(function (response) {
-				logger.info({ description: 'Directory deleted successfully.', directoryData: directoryData, func: 'del', obj: 'Directory' });
-				return response;
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error deleting directory.', directoryData: directoryData, error: errRes, func: 'del', obj: 'Directory' });
-				return Promise.reject(errRes);
-			});
-		}
-	}, {
-		key: 'directoryEndpoint',
-		get: function get() {
-			var endpointArray = [_Matter2['default'].endpoint, 'directories', this.name];
-			//Check for app account action
-			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
-				endpointArray.splice(1, 0, 'apps', this.app.name);
-			}
-			//Create string from endpointArray
-			var endpointStr = endpointArray.join('/');
-			logger.log({ description: 'Directory endpoint built.', endpoint: endpointStr, func: 'directoryEndpoint', obj: 'Directory' });
-			return endpointStr;
-		}
-	}]);
-
-	return Directory;
-})();
-
-exports['default'] = Directory;
-module.exports = exports['default'];
-
-},{"../config":306,"./Matter":304,"lodash":289}],301:[function(require,module,exports){
-Object.defineProperty(exports, '__esModule', {
-	value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _config = require('../config');
-
-var _config2 = _interopRequireDefault(_config);
-
-var _Matter = require('./Matter');
-
-var _Matter2 = _interopRequireDefault(_Matter);
-
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-var _awsSdk = require('aws-sdk');
-
-var _awsSdk2 = _interopRequireDefault(_awsSdk);
-
-//Convenience vars
-var request = _Matter2['default'].utils.request;
-var logger = _Matter2['default'].utils.logger;
-
-var File = (function () {
-	function File(actionData) {
-		_classCallCheck(this, File);
-
-		if (actionData && _lodash2['default'].isObject(actionData) && _lodash2['default'].has(actionData, 'fileData') && _lodash2['default'].has(actionData, 'app')) {
-			_lodash2['default'].extend(this, actionData.fileData);
-			this.app = actionData.app;
-			this.pathArray = this.path.split('/');
-			//Get name from data or from pathArray
-			this.name = _lodash2['default'].has(actionData.fileData, 'name') ? actionData.fileData.name : this.pathArray[this.pathArray.length - 1];
-		} else if (actionData && !_lodash2['default'].isObject(actionData)) {
-			logger.error({ description: 'File data is not an object. File data must be an object that includes path and appName.', func: 'constructor', obj: 'File' });
-			//TODO: Get appName from path data?
-			throw new Error('File data must be an object that includes path and appName.');
-		} else {
-			logger.error({ description: 'File data that includes path and app is needed to create a File action.', func: 'constructor', obj: 'File' });
-			throw new Error('File data with path and app is needed to create file action.');
-		}
-		this.type = 'file';
-		logger.debug({ description: 'File object constructed.', file: this, func: 'constructor', obj: 'File' });
-	}
-
-	_createClass(File, [{
-		key: 'get',
-		value: function get() {
-			var _this = this;
-
-			if (!this.app || !this.app.frontend) {
-				logger.log({ description: 'Application Frontend data not available. Calling applicaiton get.', func: 'get', obj: 'File' });
-				return this.app.get().then(function (appData) {
-					_this.app = appData;
-					logger.log({ description: 'Application get successful. Getting file.', app: appData, func: 'get', obj: 'File' });
-					return _this.get();
-				}, function (err) {
-					logger.error({ description: 'Application Frontend data not available. Make sure to call .get().', error: err, func: 'get', obj: 'File' });
-					return Promise.reject({ message: 'Front end data is required to get file.' });
-				});
-			} else {
-				var _ret = (function () {
-					//If AWS Credential do not exist, set them
-					if (typeof _awsSdk2['default'].config.credentials == 'undefined' || !_awsSdk2['default'].config.credentials) {
-						logger.debug({ description: 'AWS creds do not exist, so they are being set.', func: 'publish', obj: 'File' });
-						setAWSConfig();
-					}
-					var s3 = new _awsSdk2['default'].S3();
-					var saveParams = {
-						Bucket: _this.app.frontend.bucketName,
-						Key: _this.path
-					};
-					//Set contentType from actionData to ContentType parameter of new object
-					if (_this.contentType) {
-						saveParams.ContentType = _this.contentType;
-					}
-					logger.debug({ description: 'File get params built.', saveParams: saveParams, file: _this, func: 'get', obj: 'File' });
-					return {
-						v: new Promise(function (resolve, reject) {
-							s3.getObject(saveParams, function (err, data) {
-								//[TODO] Add putting object ACL (make public)
-								if (!err) {
-									logger.info({ description: 'File loaded successfully.', fileData: data, func: 'get', obj: 'File' });
-									if (_lodash2['default'].has(data, 'Body')) {
-										logger.info({ description: 'File has content.', fileData: data.Body.toString(), func: 'get', obj: 'File' });
-										resolve(data.Body.toString());
-									} else {
-										resolve(data);
-									}
-								} else {
-									logger.error({ description: 'Error loading file from S3.', error: err, func: 'get', obj: 'File' });
-									return reject(err);
-								}
-							});
-						})
-					};
-				})();
-
-				if (typeof _ret === 'object') return _ret.v;
-			}
-		}
-
-		//Alias for get
-	}, {
-		key: 'open',
-		value: function open() {
-			return this.get();
-		}
-	}, {
-		key: 'publish',
-		value: function publish(fileData) {
-			var _this2 = this;
-
-			//TODO: Publish file to application
-			logger.debug({ description: 'File publish called.', file: this, fileData: fileData, func: 'publish', obj: 'File' });
-			if (!this.app.frontend) {
-				logger.error({ description: 'Application Frontend data not available. Make sure to call .get().', func: 'publish', obj: 'File' });
-				return Promise.reject({ message: 'Front end data is required to publish file.' });
-			} else {
-				var _ret2 = (function () {
-					if (!_lodash2['default'].has(fileData, ['content', 'path'])) {
-						logger.error({ description: 'File data including path and content required to publish.', func: 'publish', obj: 'File' });
-						return {
-							v: Promise.reject({ message: 'File data including path and content required to publish.' })
-						};
-					}
-					var saveParams = {
-						Bucket: _this2.app.frontend.bucketName,
-						Key: fileData.path,
-						Body: fileData.content,
-						ACL: 'public-read'
-					};
-					//Set contentType from fileData to ContentType parameter of new object
-					if (_this2.contentType) {
-						saveParams.ContentType = _this2.contentType;
-					}
-					//If AWS Credential do not exist, set them
-					if (typeof _awsSdk2['default'].config.credentials == 'undefined' || !_awsSdk2['default'].config.credentials) {
-						logger.debug({ description: 'AWS creds do not exist, so they are being set.', func: 'publish', obj: 'File' });
-						setAWSConfig();
-					}
-					var s3 = new _awsSdk2['default'].S3();
-
-					logger.debug({ description: 'File publish params built.', saveParams: saveParams, fileData: _this2, func: 'publish', obj: 'File' });
-					return {
-						v: new Promise(function (resolve, reject) {
-							s3.putObject(saveParams, function (err, data) {
-								//[TODO] Add putting object ACL (make public)
-								if (!err) {
-									logger.log({ description: 'File saved successfully.', response: data, func: 'publish', obj: 'File' });
-									resolve(data);
-								} else {
-									logger.error({ description: 'Error saving file to S3.', error: err, func: 'publish', obj: 'File' });
-									reject(err);
-								}
-							});
-						})
-					};
-				})();
-
-				if (typeof _ret2 === 'object') return _ret2.v;
-			}
-		}
-	}, {
-		key: 'del',
-		value: function del() {
-			var _this3 = this;
-
-			if (!this.app || !this.app.frontend) {
-				logger.log({ description: 'Application Frontend data not available. Calling applicaiton get.', func: 'get', obj: 'File' });
-				return this.app.get().then(function (appData) {
-					_this3.app = appData;
-					logger.log({ description: 'Application get successful. Getting file.', app: appData, func: 'get', obj: 'File' });
-					return _this3.get();
-				}, function (err) {
-					logger.error({ description: 'Application Frontend data not available. Make sure to call .get().', error: err, func: 'get', obj: 'File' });
-					return Promise.reject({ message: 'Front end data is required to get file.' });
-				});
-			} else {
-				var _ret3 = (function () {
-					//If AWS Credential do not exist, set them
-					if (typeof _awsSdk2['default'].config.credentials == 'undefined' || !_awsSdk2['default'].config.credentials) {
-						logger.debug({ description: 'AWS creds do not exist, so they are being set.', func: 'publish', obj: 'File' });
-						setAWSConfig();
-					}
-					var s3 = new _awsSdk2['default'].S3();
-					var saveParams = {
-						Bucket: _this3.app.frontend.bucketName,
-						Key: _this3.path
-					};
-					//Set contentType from actionData to ContentType parameter of new object
-					if (_this3.contentType) {
-						saveParams.ContentType = _this3.contentType;
-					}
-					logger.debug({ description: 'File get params built.', saveParams: saveParams, file: _this3, func: 'get', obj: 'File' });
-					return {
-						v: new Promise(function (resolve, reject) {
-							s3.deleteObject(saveParams, function (err, data) {
-								//[TODO] Add putting object ACL (make public)
-								if (!err) {
-									logger.info({ description: 'File loaded successfully.', fileData: data, func: 'get', obj: 'File' });
-									if (_lodash2['default'].has(data, 'Body')) {
-										logger.info({ description: 'File has content.', fileData: data.Body.toString(), func: 'get', obj: 'File' });
-										resolve(data.Body.toString());
-									} else {
-										resolve(data);
-									}
-								} else {
-									logger.error({ description: 'Error loading file from S3.', error: err, func: 'get', obj: 'File' });
-									return reject(err);
-								}
-							});
-						})
-					};
-				})();
-
-				if (typeof _ret3 === 'object') return _ret3.v;
-			}
-		}
-	}, {
-		key: 'getTypes',
-		value: function getTypes() {
-			//Get content type and file type from extension
-		}
-	}, {
-		key: 'openWithFirepad',
-		value: function openWithFirepad(divId) {
-			//TODO:Create new Firepad instance within div
-		}
-	}, {
-		key: 'getDefaultContent',
-		value: function getDefaultContent() {
-			//TODO: Fill with default data for matching file type
-		}
-	}, {
-		key: 'ext',
-		get: function get() {
-			var re = /(?:\.([^.]+))?$/;
-			this.ext = re.exec(this.name)[1];
-		}
-	}]);
-
-	return File;
-})();
-
-exports['default'] = File;
-
-//------------------ Utility Functions ------------------//
-
-// AWS Config
-function setAWSConfig() {
-	_awsSdk2['default'].config.update({
-		credentials: new _awsSdk2['default'].CognitoIdentityCredentials({
-			IdentityPoolId: _config2['default'].aws.cognito.poolId
-		}),
-		region: _config2['default'].aws.region
-	});
-}
-module.exports = exports['default'];
-
-},{"../config":306,"./Matter":304,"aws-sdk":1,"lodash":289}],302:[function(require,module,exports){
-Object.defineProperty(exports, '__esModule', {
-	value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _config = require('../config');
-
-var _config2 = _interopRequireDefault(_config);
-
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-var _Matter = require('./Matter');
-
-var _Matter2 = _interopRequireDefault(_Matter);
-
-var _awsSdk = require('aws-sdk');
-
-var _awsSdk2 = _interopRequireDefault(_awsSdk);
-
-//Convenience vars
-var request = _Matter2['default'].utils.request;
-var logger = _Matter2['default'].utils.logger;
-
-var Files = (function () {
-	function Files(filesData) {
-		_classCallCheck(this, Files);
-
-		if (filesData && _lodash2['default'].isObject(filesData) && _lodash2['default'].has(filesData, 'app')) {
-			//Data is object containing directory data
-			this.app = filesData.app;
-		} else if (filesData && _lodash2['default'].isString(filesData)) {
-			//Data is string name
-			this.app = { name: filesData };
-		} else if (filesData && _lodash2['default'].isArray(filesData)) {
-			//TODO: Handle an array of files being passed as data
-			logger.error({ description: 'Action data object with name is required to start a Files Action.', func: 'constructor', obj: 'Files' });
-			throw new Error('Files Data object with application is required to start a Files action.');
-		} else {
-			logger.error({ description: 'Action data object with name is required to start a Files Action.', func: 'constructor', obj: 'Files' });
-			throw new Error('Files Data object with name is required to start a Files action.');
-		}
-		logger.debug({ description: 'Files object constructed.', func: 'constructor', obj: 'Files' });
-	}
-
-	_createClass(Files, [{
-		key: 'publish',
-		value: function publish() {
-			//TODO: Publish all files
-		}
-	}, {
-		key: 'get',
-		value: function get() {
-			var _this = this;
-
-			if (!this.app.frontend || !this.app.frontend.bucketName) {
-				logger.warn({ description: 'Application Frontend data not available. Calling .get().', app: this.app, func: 'get', obj: 'Files' });
-				return this.app.get().then(function (applicationData) {
-					logger.log({ description: 'Application get returned.', data: applicationData, func: 'get', obj: 'Files' });
-					_this.app = applicationData;
-					if (_lodash2['default'].has(applicationData, 'frontend')) {
-						return _this.get();
-					} else {
-						logger.error({ description: 'Application does not have Frontend to get files from.', func: 'get', obj: 'Files' });
-						return Promise.reject({ message: 'Application does not have frontend to get files from.' });
-					}
-				}, function (err) {
-					logger.error({ description: 'Application Frontend data not available. Make sure to call .get().', func: 'get', obj: 'Files' });
-					return Promise.reject({ message: 'Bucket name required to get objects' });
-				});
-			} else {
-				var _ret = (function () {
-					//If AWS Credential do not exist, set them
-					if (typeof _awsSdk2['default'].config.credentials == 'undefined' || !_awsSdk2['default'].config.credentials) {
-						// logger.info('AWS creds are being updated to make request');
-						setAWSConfig();
-					}
-					var s3 = new _awsSdk2['default'].S3();
-					var listParams = { Bucket: _this.app.frontend.bucketName };
-					return {
-						v: new Promise(function (resolve, reject) {
-							s3.listObjects(listParams, function (err, data) {
-								if (!err) {
-									logger.info({ description: 'Files list loaded.', filesData: data, func: 'get', obj: 'Files' });
-									return resolve(data.Contents);
-								} else {
-									logger.error({ description: 'Error getting files from S3.', error: err, func: 'get', obj: 'Files' });
-									return reject(err);
-								}
-							});
-						})
-					};
-				})();
-
-				if (typeof _ret === 'object') return _ret.v;
-			}
-		}
-	}, {
-		key: 'add',
-		value: function add(fileData) {
-			//TODO: Add a file to files list
-		}
-	}, {
-		key: 'del',
-		value: function del() {
-			//TODO: Delete a file from files list
-		}
-	}, {
-		key: 'buildStructure',
-		value: function buildStructure() {
-			logger.debug({ description: 'Build Structure called.', func: 'buildStructure', obj: 'Application' });
-			return this.get().then(function (filesArray) {
-				var childStruct = childrenStructureFromArray(filesArray);
-				//TODO: have child objects have correct classes (file/folder)
-				logger.log({ description: 'Child struct from array.', childStructure: childStruct, func: 'buildStructure', obj: 'Application' });
-				return childStruct;
-			}, function (err) {
-				logger.error({ description: 'Error getting application files.', error: err, func: 'buildStructure', obj: 'Application' });
-				return Promise.reject({ message: 'Error getting files.', error: err });
-			});
-		}
-
-		//ALIAS FOR buildStructure
-		// get structure() {
-		// 	return this.buildStructure();
-		// }
-	}]);
-
-	return Files;
-})();
-
-exports['default'] = Files;
-
-//------------------ Utility Functions ------------------//
-
-// AWS Config
-function setAWSConfig() {
-	_awsSdk2['default'].config.update({
-		credentials: new _awsSdk2['default'].CognitoIdentityCredentials({
-			IdentityPoolId: _config2['default'].aws.cognito.poolId
-		}),
-		region: _config2['default'].aws.region
-	});
-}
-//Convert from array file structure (from S3) to 'children' structure used in Editor GUI (angular-tree-control)
-//Examples for two files (index.html and /testFolder/file.js):
-//Array structure: [{path:'index.html'}, {path:'testFolder/file.js'}]
-//Children Structure [{type:'folder', name:'testfolder', children:[{path:'testFolder/file.js', name:'file.js', filetype:'javascript', contentType:'application/javascript'}]}]
-function childrenStructureFromArray(fileArray) {
-	// logger.log('childStructureFromArray called:', fileArray);
-	//Create a object for each file that stores the file in the correct 'children' level
-	var mappedStructure = fileArray.map(function (file) {
-		return buildStructureObject(file);
-	});
-	return combineLikeObjs(mappedStructure);
-}
-//Convert file with key into a folder/file children object
-function buildStructureObject(file) {
-	var pathArray;
-	// console.log('buildStructureObject with:', file);
-	if (_lodash2['default'].has(file, 'path')) {
-		//Coming from files already having path (structure)
-		pathArray = file.path.split('/');
-	} else {
-		//Coming from aws
-		pathArray = file.Key.split('/');
-		// console.log('file before pick:', file);
-		file = _lodash2['default'].pick(file, 'Key');
-		file.path = file.Key;
-		file.name = file.Key;
-	}
-	var currentObj = file;
-	if (pathArray.length == 1) {
-		currentObj.name = pathArray[0];
-		if (!_lodash2['default'].has(currentObj, 'type')) {
-			currentObj.type = 'file';
-		}
-		currentObj.path = pathArray[0];
-		return currentObj;
-	} else {
-		var finalObj = {};
-		_lodash2['default'].each(pathArray, function (loc, ind, list) {
-			if (ind != list.length - 1) {
-				//Not the last loc
-				currentObj.name = loc;
-				currentObj.path = _lodash2['default'].take(list, ind + 1).join('/');
-				currentObj.type = 'folder';
-				currentObj.children = [{}];
-				//TODO: Find out why this works
-				if (ind == 0) {
-					finalObj = currentObj;
-				}
-				currentObj = currentObj.children[0];
-			} else {
-				currentObj.type = 'file';
-				currentObj.name = loc;
-				currentObj.path = pathArray.join('/');
-				if (file.$id) {
-					currentObj.$id = file.$id;
-				}
-			}
-		});
-		return finalObj;
-	}
-}
-//Recursivley combine children of object's that have the same names
-function combineLikeObjs(mappedArray) {
-	var takenNames = [];
-	var finishedArray = [];
-	_lodash2['default'].each(mappedArray, function (obj, ind, list) {
-		if (takenNames.indexOf(obj.name) == -1) {
-			takenNames.push(obj.name);
-			finishedArray.push(obj);
-		} else {
-			var likeObj = _lodash2['default'].findWhere(mappedArray, { name: obj.name });
-			//Combine children of like objects
-			likeObj.children = _lodash2['default'].union(obj.children, likeObj.children);
-			likeObj.children = combineLikeObjs(likeObj.children);
-			// logger.log('extended obj:',likeObj);
-		}
-	});
-	return finishedArray;
-}
-module.exports = exports['default'];
-
-},{"../config":306,"./Matter":304,"aws-sdk":1,"lodash":289}],303:[function(require,module,exports){
-Object.defineProperty(exports, '__esModule', {
-	value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _config = require('../config');
-
-var _config2 = _interopRequireDefault(_config);
-
-var _Matter = require('./Matter');
-
-var _Matter2 = _interopRequireDefault(_Matter);
-
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-var request = _Matter2['default'].utils.request;
-var logger = _Matter2['default'].utils.logger;
-
-//Actions for specific user
-
-var Group = (function () {
-	function Group(actionData) {
-		_classCallCheck(this, Group);
-
-		//Call matter with name and settings
-		if (actionData && _lodash2['default'].isObject(actionData) && _lodash2['default'].has(actionData, 'groupData')) {
-			//Data is object containing group data
-			this.name = _lodash2['default'].isObject(actionData.groupData) ? actionData.groupData.name : actionData.groupData;
-			if (_lodash2['default'].has(actionData, 'app')) {
-				this.app = actionData.app;
-			}
-		} else if (actionData && _lodash2['default'].isString(actionData)) {
-			//Data is string name
-			this.name = actionData;
-		} else {
-			logger.error({ description: 'Action data is required to start a Group Action.', func: 'constructor', obj: 'Group' });
-			throw new Error('Username is required to start an Group');
-		}
-	}
-
-	_createClass(Group, [{
-		key: 'get',
-
-		//Get userlications or single userlication
-		value: function get() {
-			return request.get(this.groupEndpoint).then(function (response) {
-				logger.info({ description: 'Group data loaded successfully.', response: response, func: 'get', obj: 'Group' });
-				return response;
-			})['catch'](function (errRes) {
-				logger.info({ description: 'Error getting group.', error: errRes, func: 'get', obj: 'Group' });
-				return Promise.reject(errRes.response.text || errRes.response);
-			});
-		}
-
-		//Update an Group
-	}, {
-		key: 'update',
-		value: function update(groupData) {
-			logger.log({ description: 'Group updated called.', groupData: groupData, func: 'update', obj: 'Group' });
-			return _Matter2['default'].utils.request.put(this.groupEndpoint, groupData).then(function (response) {
-				logger.info({ description: 'Group updated successfully.', groupData: groupData, response: response, func: 'update', obj: 'Group' });
-				return response;
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error updating group.', groupData: groupData, error: errRes, func: 'update', obj: 'Group' });
-				return Promise.reject(errRes.response.text || errRes.response);
-			});
-		}
-
-		//Delete an Group
-	}, {
-		key: 'del',
-		value: function del(groupData) {
-			logger.log({ description: 'Delete group called.', groupData: groupData, func: 'del', obj: 'Group' });
-			return request.del(this.groupEndpoint, {}).then(function (response) {
-				logger.info({ description: 'Group deleted successfully.', groupData: groupData, func: 'del', obj: 'Group' });
-				return response;
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error deleting group.', error: errRes, text: errRes.response.text, groupData: groupData, func: 'del', obj: 'Group' });
-				return Promise.reject(errRes.response.text || errRes.response);
-			});
-		}
-
-		//Update an Group
-	}, {
-		key: 'addAccounts',
-		value: function addAccounts(accountsData) {
-			logger.log({ description: 'Group updated called.', accountsData: accountsData, func: 'update', obj: 'Group' });
-			var accountsArray = accountsData;
-			//Handle provided data being a string list
-			if (_lodash2['default'].isString(accountsData)) {
-				accountsArray = accountsData.split(',');
-			}
-			//Check item in array to see if it is a string (username) instead of _id
-			if (_lodash2['default'].isString(accountsArray[0])) {
-				logger.error({ description: 'Accounts array only currently supports account._id not account.username.', accountsData: accountsData, func: 'update', obj: 'Group' });
-				return Promise.reject({ message: 'Accounts array only currently supports account._id not account.username.' });
-			}
-			logger.log({ description: 'Updating group with accounts array.', accountsArray: accountsArray, func: 'update', obj: 'Group' });
-			return this.update({ accounts: accountsArray }).then(function (response) {
-				logger.info({ description: 'Account(s) added to group successfully.', response: response, func: 'addAccounts', obj: 'Group' });
-				return response;
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error addAccountseting group.', error: errRes, func: 'addAccounts', obj: 'Group' });
-				return Promise.reject(errRes.response.text || errRes.response);
-			});
-		}
-	}, {
-		key: 'groupEndpoint',
-		get: function get() {
-			var endpointArray = [_Matter2['default'].endpoint, 'groups', this.name];
-			//Check for app account action
-
-			if (_lodash2['default'].has(this, 'app') && _lodash2['default'].has(this.app, 'name')) {
-				endpointArray.splice(1, 0, 'apps', this.app.name);
-			}
-			//Create string from endpointArray
-			var endpointStr = endpointArray.join('/');
-			logger.log({ description: 'Group Endpoint built.', endpoint: endpointStr, func: 'groupEndpoint', obj: 'Group' });
-			return endpointStr;
-		}
-	}]);
-
-	return Group;
-})();
-
-exports['default'] = Group;
-module.exports = exports['default'];
-
-},{"../config":306,"./Matter":304,"lodash":289}],304:[function(require,module,exports){
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _config = require('../config');
-
-var _config2 = _interopRequireDefault(_config);
-
-var _kyperMatter = require('kyper-matter');
-
-var _kyperMatter2 = _interopRequireDefault(_kyperMatter);
-
-var matter = new _kyperMatter2['default'](_config2['default'].appName, _config2['default'].matterOptions);
-exports['default'] = matter;
-module.exports = exports['default'];
-
-},{"../config":306,"kyper-matter":284}],305:[function(require,module,exports){
-Object.defineProperty(exports, '__esModule', {
-	value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _config = require('../config');
-
-var _config2 = _interopRequireDefault(_config);
-
-var _Matter = require('./Matter');
-
-var _Matter2 = _interopRequireDefault(_Matter);
-
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-var request = _Matter2['default'].utils.request;
-var logger = _Matter2['default'].utils.logger;
-//Actions for specific user
-
-var Template = (function () {
-	function Template(templateData) {
-		_classCallCheck(this, Template);
-
-		//Call matter with name and settings
-		if (templateData && _lodash2['default'].isString(templateData)) {
-			this.name = templateData;
-		} else {
-			logger.error({ description: 'Template data is required to start a Template action.', func: 'construcotr', obj: '' });
-			throw new Error('Template data is required to start a Template action.');
-		}
-	}
-
-	_createClass(Template, [{
-		key: 'get',
-
-		//Get userlications or single userlication
-		value: function get() {
-			logger.log({ description: 'Get template called.', name: this.name, func: 'get', obj: 'Template' });
-			return request.get(this.templateEndpoint).then(function (response) {
-				logger.log({ description: 'Get template responded.', response: response, func: 'get', obj: 'Template' });
-				return response;
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error getting template.', error: errRes, func: 'get', obj: 'Template' });
-				return Promise.reject(errRes);
-			});
-		}
-
-		//Update an userlication
-	}, {
-		key: 'update',
-		value: function update(templateData) {
-			logger.log({ description: 'Update template called.', templateData: templateData, func: 'update', obj: 'Template' });
-			return request.put(this.templateEndpoint, templateData).then(function (response) {
-				logger.log({ description: 'Update template responded.', response: response, templateData: templateData, func: 'update', obj: 'Template' });
-				//TODO: Return template object
-				return response;
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error updating template.', error: errRes, func: 'update', obj: 'Template' });
-				return Promise.reject(errRes);
-			});
-		}
-
-		//Delete a template
-	}, {
-		key: 'del',
-		value: function del(templateData) {
-			logger.log({ description: 'Delete template called.', templateData: templateData, func: 'del', obj: 'Template' });
-			return request['delete'](this.endpoint, templateData).then(function (response) {
-				logger.log({ description: 'Template deleted successfully.', response: response, func: 'del', obj: 'Template' });
-				//TODO: Return template object
-				return response;
-			})['catch'](function (errRes) {
-				logger.error({ description: 'Error deleting template.', error: errRes, func: 'del', obj: 'Template' });
-				return Promise.reject(errRes);
-			});
-		}
-	}, {
-		key: 'templateEndpoint',
-		get: function get() {
-			return _Matter2['default'].endpoint + '/templates/' + this.name;
-		}
-	}]);
-
-	return Template;
-})();
-
-exports['default'] = Template;
-module.exports = exports['default'];
-
-},{"../config":306,"./Matter":304,"lodash":289}],306:[function(require,module,exports){
-Object.defineProperty(exports, '__esModule', {
-	value: true
-});
-var config = {
-	serverUrl: 'http://tessellate.elasticbeanstalk.com',
-	tokenName: 'grout',
-	fbUrl: 'https://kyper-tech.firebaseio.com/tessellate',
-	appName: 'tessellate',
-	matterOptions: {
-		localServer: false
-	},
-	aws: {
-		region: 'us-east-1',
-		cognito: {
-			poolId: 'us-east-1:72a20ffd-c638-48b0-b234-3312b3e64b2e',
-			params: {
-				AuthRoleArn: 'arn:aws:iam::823322155619:role/Cognito_TessellateUnauth_Role',
-				UnauthRoleArn: 'arn:aws:iam::823322155619:role/Cognito_TessellateAuth_Role'
-			}
-		}
-	}
-};
-//Set server to local server if developing
-// if (typeof window != 'undefined' && (window.location.hostname == '' || window.location.hostname == 'localhost')) {
-// 	config.serverUrl = 'http://localhost:4000';
-// }
-exports['default'] = config;
-module.exports = exports['default'];
-
-},{}],307:[function(require,module,exports){
-Object.defineProperty(exports, '__esModule', {
-	value: true
-});
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var _config = require('./config');
-
-var _config2 = _interopRequireDefault(_config);
-
-var _kyperMatter = require('kyper-matter');
-
-var _kyperMatter2 = _interopRequireDefault(_kyperMatter);
-
-var _actionsAppsAction = require('./actions/AppsAction');
-
-var _actionsAppsAction2 = _interopRequireDefault(_actionsAppsAction);
-
-var _classesApplication = require('./classes/Application');
-
-var _classesApplication2 = _interopRequireDefault(_classesApplication);
-
-var _actionsAccountsAction = require('./actions/AccountsAction');
-
-var _actionsAccountsAction2 = _interopRequireDefault(_actionsAccountsAction);
-
-var _classesAccount = require('./classes/Account');
-
-var _classesAccount2 = _interopRequireDefault(_classesAccount);
-
-var _actionsGroupsAction = require('./actions/GroupsAction');
-
-var _actionsGroupsAction2 = _interopRequireDefault(_actionsGroupsAction);
-
-var _classesGroup = require('./classes/Group');
-
-var _classesGroup2 = _interopRequireDefault(_classesGroup);
-
-var _actionsDirectoriesAction = require('./actions/DirectoriesAction');
-
-var _actionsDirectoriesAction2 = _interopRequireDefault(_actionsDirectoriesAction);
-
-var _classesDirectory = require('./classes/Directory');
-
-var _classesDirectory2 = _interopRequireDefault(_classesDirectory);
-
-var _actionsTemplatesAction = require('./actions/TemplatesAction');
-
-var _actionsTemplatesAction2 = _interopRequireDefault(_actionsTemplatesAction);
-
-var _classesTemplate = require('./classes/Template');
-
-var _classesTemplate2 = _interopRequireDefault(_classesTemplate);
-
-/**Grout Client Class
- * @ description Extending matter provides token storage and login/logout/signup capabilities
- */
-
-var Grout = (function (_Matter) {
-	_inherits(Grout, _Matter);
-
-	//TODO: Use getter/setter to make this not a function
-
-	function Grout() {
-		_classCallCheck(this, Grout);
-
-		//Call matter with tessellate
-		_get(Object.getPrototypeOf(Grout.prototype), 'constructor', this).call(this, _config2['default'].appName, _config2['default'].matterOptions);
-	}
-
-	//Start a new Apps Action
-
-	_createClass(Grout, [{
-		key: 'App',
-
-		//Start a new App action
-		value: function App(appName) {
-			this.utils.logger.debug({ description: 'Application action called.', appName: appName, template: new _classesApplication2['default'](appName), func: 'App', obj: 'Grout' });
-			return new _classesApplication2['default'](appName);
-		}
-
-		//Start a new Apps Action
-	}, {
-		key: 'Template',
-
-		//Start a new App action
-		value: function Template(templateData) {
-			this.utils.logger.debug({ description: 'Template Action called.', templateData: templateData, template: new _classesTemplate2['default'](templateData), func: 'Template', obj: 'Grout' });
-			return new _classesTemplate2['default'](templateData);
-		}
-
-		//Start a new Accounts action
-	}, {
-		key: 'Account',
-
-		//Start a new Account action
-		value: function Account(userData) {
-			this.utils.logger.debug({ description: 'Account Action called.', userData: userData, user: new _classesAccount2['default'](userData), func: 'user', obj: 'Grout' });
-			return new _classesAccount2['default'](userData);
-		}
-
-		//ALIAS OF ACCOUNTS
-		//Start a new Accounts action
-	}, {
-		key: 'User',
-
-		//ALIAS OF ACCOUNT
-		//Start a new Account action
-		value: function User(userData) {
-			this.utils.logger.debug({ description: 'Account Action called.', userData: userData, user: new _classesAccount2['default'](userData), func: 'user', obj: 'Grout' });
-			return new _classesAccount2['default'](userData);
-		}
-
-		//Start a new Groups action
-	}, {
-		key: 'Group',
-
-		//Start a new Group action
-		value: function Group(groupData) {
-			this.utils.logger.debug({ description: 'Group Action called.', groupData: groupData, action: new _classesGroup2['default']({ app: this, groupData: groupData }), func: 'group', obj: 'Grout' });
-			return new _classesGroup2['default'](groupData);
-		}
-
-		//Start a new Directories action
-	}, {
-		key: 'Directory',
-
-		//Start a new Group action
-		value: function Directory(directoryData) {
-			this.utils.logger.debug({ description: 'Directory Action called.', directoryData: directoryData, action: new _classesDirectory2['default'](directoryData), func: 'directory', obj: 'Grout' });
-			return new _classesDirectory2['default'](directoryData);
-		}
-	}, {
-		key: 'Apps',
-		get: function get() {
-			this.utils.logger.debug({ description: 'Apps Action called.', action: new _actionsAppsAction2['default'](), func: 'Apps', obj: 'Grout' });
-			return new _actionsAppsAction2['default']();
-		}
-	}, {
-		key: 'Templates',
-		get: function get() {
-			this.utils.logger.debug({ description: 'Templates Action called.', action: new _actionsTemplatesAction2['default'](), func: 'Templates', obj: 'Grout' });
-			return new _actionsTemplatesAction2['default']();
-		}
-	}, {
-		key: 'Accounts',
-		get: function get() {
-			this.utils.logger.debug({ description: 'Account Action called.', action: new _actionsAccountsAction2['default'](), func: 'users', obj: 'Grout' });
-			return new _actionsAccountsAction2['default']();
-		}
-	}, {
-		key: 'Users',
-		get: function get() {
-			this.utils.logger.debug({ description: 'Accounts Action called.', action: new _actionsAccountsAction2['default'](), func: 'Users', obj: 'Grout' });
-			return new _actionsAccountsAction2['default']();
-		}
-	}, {
-		key: 'Groups',
-		get: function get() {
-			this.utils.logger.debug({ description: 'Groups Action called.', action: new _actionsGroupsAction2['default'](), func: 'groups', obj: 'Grout' });
-			return new _actionsGroupsAction2['default']();
-		}
-	}, {
-		key: 'Directories',
-		get: function get() {
-			this.utils.logger.debug({ description: 'Directories Action called.', action: new _actionsDirectoriesAction2['default'](), func: 'directories', obj: 'Grout' });
-			return new _actionsDirectoriesAction2['default']();
-		}
-	}]);
-
-	return Grout;
-})(_kyperMatter2['default']);
-
-;
-
-exports['default'] = Grout;
-module.exports = exports['default'];
-
-},{"./actions/AccountsAction":293,"./actions/AppsAction":294,"./actions/DirectoriesAction":295,"./actions/GroupsAction":296,"./actions/TemplatesAction":297,"./classes/Account":298,"./classes/Application":299,"./classes/Directory":300,"./classes/Group":303,"./classes/Template":305,"./config":306,"kyper-matter":284}]},{},[307])(307)
+},{}]},{},[299])(299)
 });

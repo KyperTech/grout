@@ -1,4 +1,3 @@
-import config from '../config';
 import matter from './Matter';
 import _ from 'lodash';
 let request = matter.utils.request;

@@ -4,7 +4,6 @@ import _ from 'lodash';
 
 import AWS from 'aws-sdk';
 //Convenience vars
-let request = matter.utils.request;
 let logger = matter.utils.logger;
 
 class File {
@@ -172,7 +171,7 @@ class File {
 	getTypes() {
 		//Get content type and file type from extension
 	}
-	openWithFirepad(divId) {
+	openWithFirepad() {
 		//TODO:Create new Firepad instance within div
 	}
 	getDefaultContent() {
@@ -185,9 +184,9 @@ export default File;
 // AWS Config
 function setAWSConfig() {
 	AWS.config.update({
-	  credentials: new AWS.CognitoIdentityCredentials({
-	  IdentityPoolId: config.aws.cognito.poolId
-	  }),
-	  region: config.aws.region
+		credentials: new AWS.CognitoIdentityCredentials({
+		IdentityPoolId: config.aws.cognito.poolId
+	}),
+		region: config.aws.region
 	});
 }

@@ -1,11 +1,10 @@
-import config from '../config';
-import _ from 'lodash';
+import {extend, isString} from 'lodash';
 
 class Folder {
 	constructor(fileData) {
 		this.type = 'folder';
-		if (fileData && !_.isString(fileData)) {
-			_.extend(this, fileData);
+		if (fileData && !isString(fileData)) {
+			extend(this, fileData);
 		}
 	}
 }

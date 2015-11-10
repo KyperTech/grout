@@ -1,4 +1,3 @@
-import config from '../config';
 import matter from './Matter';
 import _ from 'lodash';
 
@@ -11,7 +10,10 @@ class Template {
 		if (templateData && _.isString(templateData)) {
 			this.name = templateData;
 		} else {
-			logger.error({description: 'Template data is required to start a Template action.', func: 'construcotr', obj: ''});
+			logger.error({
+				description: 'Template data is required to start a Template action.',
+				func: 'constructor', obj: 'Template'
+			});
 			throw new Error('Template data is required to start a Template action.');
 		}
 	}

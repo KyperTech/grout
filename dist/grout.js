@@ -7,931 +7,14 @@ function _inherits(subClass, superClass) { if (typeof superClass !== 'function' 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('lodash'), require('jwt-decode'), require('superagent'), require('aws-sdk'), require('firebase')) : typeof define === 'function' && define.amd ? define(['lodash', 'jwt-decode', 'superagent', 'aws-sdk', 'firebase'], factory) : global.Grout = factory(global._, global.jwtDecode, global.superagent, global.AWS, global.Firebase);
-})(this, function (_, jwtDecode, superagent, AWS, Firebase) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('kyper-matter'), require('lodash'), require('aws-sdk'), require('firebase')) : typeof define === 'function' && define.amd ? define(['kyper-matter', 'lodash', 'aws-sdk', 'firebase'], factory) : global.Grout = factory(global.Matter, global._, global.AWS, global.Firebase);
+})(this, function (Matter, _, AWS, Firebase) {
 	'use strict';
 
+	Matter = 'default' in Matter ? Matter['default'] : Matter;
 	_ = 'default' in _ ? _['default'] : _;
-	jwtDecode = 'default' in jwtDecode ? jwtDecode['default'] : jwtDecode;
-	superagent = 'default' in superagent ? superagent['default'] : superagent;
 	AWS = 'default' in AWS ? AWS['default'] : AWS;
 	Firebase = 'default' in Firebase ? Firebase['default'] : Firebase;
-
-	var _config = {
-		serverUrl: 'http://tessellate.elasticbeanstalk.com',
-		tokenName: 'tessellate',
-		tokenDataName: 'tessellate-tokenData',
-		tokenUserDataName: 'tessellate-currentUser'
-	};
-
-	//Set default log level to debug
-	var logLevel = 'debug';
-	//Set log level from config
-	if (_config.logLevel) {
-		logLevel = _config.logLevel;
-	}
-
-	var ____________logger = {
-		log: function log(logData) {
-			var msgArgs = buildMessageArgs(logData);
-			if (_config.envName == 'production') {
-				runConsoleMethod('log', msgArgs);
-			} else {
-				runConsoleMethod('log', msgArgs);
-			}
-		},
-		info: function info(logData) {
-			var msgArgs = buildMessageArgs(logData);
-			if (_config.envName == 'production') {
-				runConsoleMethod('info', msgArgs);
-			} else {
-				runConsoleMethod('info', msgArgs);
-			}
-		},
-		warn: function warn(logData) {
-			var msgArgs = buildMessageArgs(logData);
-			if (_config.envName == 'production') {
-				runConsoleMethod('warn', msgArgs);
-			} else {
-				runConsoleMethod('warn', msgArgs);
-			}
-		},
-		debug: function debug(logData) {
-			var msgArgs = buildMessageArgs(logData);
-			if (_config.envName == 'production') {
-				// runConsoleMethod('debug', msgArgs);
-				//Do not display console debugs in production
-			} else {
-					runConsoleMethod('debug', msgArgs);
-				}
-		},
-		error: function error(logData) {
-			var msgArgs = buildMessageArgs(logData);
-			if (_config.envName == 'production') {
-				//TODO: Log to external logger
-				runConsoleMethod('error', msgArgs);
-			} else {
-				runConsoleMethod('error', msgArgs);
-			}
-		}
-	};
-
-	function runConsoleMethod(methodName, methodData) {
-		//Safley run console methods or use console log
-		if (methodName && console[methodName]) {
-			return console[methodName].apply(console, methodData);
-		} else {
-			return console.log.apply(console, methodData);
-		}
-	}
-	function buildMessageArgs(logData) {
-		var msgStr = '';
-		var msgObj = {};
-		//TODO: Attach time stamp
-		//Attach location information to the beginning of message
-		if (_.isObject(logData)) {
-			if (logLevel == 'debug') {
-				if (_.has(logData, 'func')) {
-					if (_.has(logData, 'obj')) {
-						//Object and function provided
-						msgStr += '[' + logData.obj + '.' + logData.func + '()]\n ';
-					} else if (_.has(logData, 'file')) {
-						msgStr += '[' + logData.file + ' > ' + logData.func + '()]\n ';
-					} else {
-						msgStr += '[' + logData.func + '()]\n ';
-					}
-				}
-			}
-			//Print each key and its value other than obj and func
-			_.each(_.omit(_.keys(logData)), function (key, ind, list) {
-				if (key != 'func' && key != 'obj') {
-					if (key == 'description' || key == 'message') {
-						msgStr += logData[key];
-					} else if (_.isString(logData[key])) {
-						// msgStr += key + ': ' + logData[key] + ', ';
-						msgObj[key] = logData[key];
-					} else {
-						//Print objects differently
-						// msgStr += key + ': ' + logData[key] + ', ';
-						msgObj[key] = logData[key];
-					}
-				}
-			});
-			msgStr += '\n';
-		} else if (_.isString(logData)) {
-			msgStr = logData;
-		}
-		var msg = [msgStr, msgObj];
-
-		return msg;
-	}
-
-	var domUtil = {
-		/**
-   * @description
-   * Appends given css source to DOM head.
-   *
-   * @param {String} src - url src for css to append
-   *
-   */
-		loadCss: function loadCss(src) {
-			if (typeof document == 'undefined') {
-				____________logger.error({ description: 'Document does not exsist to load assets into.', func: 'loadCss', obj: 'dom' });
-				throw new Error('Document object is required to load assets.');
-			} else {
-				var css = document.createElement('link');
-				css.rel = 'stylesheet';
-				css.type = 'text/css';
-				css.href = src;
-				document.getElementsByTagName('head')[0].insertBefore(css, document.getElementsByTagName('head')[0].firstChild);
-				____________logger.log({ description: 'CSS was loaded into document.', element: css, func: 'loadCss', obj: 'dom' });
-				return css; //Return link element
-			}
-		},
-		/**
-   * @description
-   * Appends given javascript source to DOM head.
-   *
-   * @param {String} src - url src for javascript to append
-   *
-   */
-		loadJs: function loadJs(src) {
-			if (typeof window == 'undefined' || !_.has(window, 'document')) {
-				____________logger.error({ description: 'Document does not exsist to load assets into.', func: 'loadCss', obj: 'dom' });
-				throw new Error('Document object is required to load assets.');
-			} else {
-				var js = window.document.createElement('script');
-				js.src = src;
-				js.type = 'text/javascript';
-				window.document.getElementsByTagName('head')[0].appendChild(js);
-				____________logger.log({ description: 'JS was loaded into document.', element: js, func: 'loadCss', obj: 'dom' });
-				return js; //Return script element
-			}
-		},
-		/**
-   * @description
-   * Appends given javascript source to DOM head.
-   *
-   * @param {String} src - url src for javascript to append
-   *
-   */
-		asyncLoadJs: function asyncLoadJs(src) {
-			if (typeof window == 'undefined' || !_.has(window, 'document')) {
-				____________logger.error({ description: 'Document does not exsist to load assets into.', func: 'loadCss', obj: 'dom' });
-				throw new Error('Document object is required to load assets.');
-			} else {
-				var js = window.document.createElement('script');
-				js.src = src;
-				js.type = 'text/javascript';
-				window.document.getElementsByTagName('head')[0].appendChild(js);
-				____________logger.log({ description: 'JS was loaded into document.', element: js, func: 'loadCss', obj: 'dom' });
-				return new Promise(function (resolve, reject) {
-					window.setTimeout(resolve, 30);
-				});
-			}
-		}
-	};
-
-	var data = {};
-	var storage = Object.defineProperties({
-		/**
-   * @description
-   * Safley sets item to session storage.
-   *
-   * @param {String} itemName The items name
-   * @param {String} itemValue The items value
-   *
-   */
-		item: function item(itemName, itemValue) {
-			return this.setItem(itemName, itemValue);
-		},
-		/**
-   * @description
-   * Safley sets item to session storage. Alias: item()
-   *
-   * @param {String} itemName The items name
-   * @param {String} itemValue The items value
-   *
-   */
-		setItem: function setItem(itemName, itemValue) {
-			data[itemName] = itemValue;
-			if (this.localExists) {
-				//Convert object to string
-				if (_.isObject(itemValue)) {
-					itemValue = JSON.stringify(itemValue);
-				}
-				window.sessionStorage.setItem(itemName, itemValue);
-			}
-		},
-
-		/**
-   * @description
-   * Safley gets an item from session storage. Alias: item()
-   *
-   * @param {String} itemName The items name
-   *
-   * @return {String}
-   *
-   */
-		getItem: function getItem(itemName) {
-			if (data[itemName]) {
-				return data[itemName];
-			} else if (this.localExists) {
-				var itemStr = window.sessionStorage.getItem(itemName);
-				//Check that str is not null before parsing
-				if (itemStr) {
-					var isObj = false;
-					var itemObj = null;
-					//Try parsing to object
-					try {
-						itemObj = JSON.parse(itemStr);
-						isObj = true;
-					} catch (err) {
-						// logger.log({message: 'String could not be parsed.', error: err, func: 'getItem', obj: 'storage'});
-						//Parsing failed, this must just be a string
-						isObj = false;
-					}
-					if (isObj) {
-						return itemObj;
-					}
-				}
-				return itemStr;
-			} else {
-				return null;
-			}
-		},
-		/**
-   * @description
-   * Safley removes item from session storage.
-   *
-   * @param {String} itemName - The items name
-   *
-   */
-		removeItem: function removeItem(itemName) {
-			//TODO: Only remove used items
-			if (data[itemName]) {
-				data[itemName] = null;
-			}
-			if (this.localExists) {
-				try {
-					//Clear session storage
-					window.sessionStorage.removeItem(itemName);
-				} catch (err) {
-					____________logger.error({ description: 'Error removing item from session storage', error: err, obj: 'storage', func: 'removeItem' });
-				}
-			}
-		},
-		/**
-   * @description
-   * Safley removes item from session storage.
-   *
-   * @param {String} itemName the items name
-   * @param {String} itemValue the items value
-   *
-   */
-		clear: function clear() {
-			//TODO: Only remove used items
-			data = {};
-			if (this.localExists) {
-				try {
-					//Clear session storage
-					window.sessionStorage.clear();
-				} catch (err) {
-					____________logger.warn('Session storage could not be cleared.', err);
-				}
-			}
-		}
-
-	}, {
-		localExists: {
-			get: function get() {
-				var testKey = 'test';
-				if (typeof window != 'undefined' && typeof window.sessionStorage != 'undefined') {
-					try {
-						window.sessionStorage.setItem(testKey, '1');
-						window.sessionStorage.removeItem(testKey);
-						return true;
-					} catch (err) {
-						____________logger.error({ description: 'Error saving to session storage', error: err, obj: 'storage', func: 'localExists' });
-						return false;
-					}
-				} else {
-					return false;
-				}
-			},
-			configurable: true,
-			enumerable: true
-		}
-	});
-
-	function decodeToken(tokenStr) {
-		var tokenData = undefined;
-		if (tokenStr && tokenStr != '') {
-			try {
-				tokenData = jwtDecode(tokenStr);
-			} catch (err) {
-				____________logger.error({ description: 'Error decoding token.', data: tokenData, error: err, func: 'decodeToken', file: 'token' });
-				throw new Error('Invalid token string.');
-			}
-		}
-		return tokenData;
-	}
-	var token = Object.defineProperties({
-		save: function save(tokenStr) {
-			this.string = tokenStr;
-		},
-		'delete': function _delete() {
-			//Remove string token
-			storage.removeItem(_config.tokenName);
-			//Remove user data
-			storage.removeItem(_config.tokenDataName);
-			____________logger.log({ description: 'Token was removed.', func: 'delete', obj: 'token' });
-		}
-	}, {
-		string: {
-			get: function get() {
-				return storage.getItem(_config.tokenName);
-			},
-			set: function set(tokenData) {
-				var tokenStr = undefined;
-				//Handle object being passed
-				if (!_.isString(tokenData)) {
-					//Token is included in object
-					____________logger.log({ description: 'Token data is not string.', token: tokenData, func: 'string', obj: 'token' });
-
-					if (_.isObject(tokenData) && _.has(tokenData, 'token')) {
-						tokenStr = tokenData.token;
-					} else {
-						//Input is either not an string or object that contains nessesary info
-						____________logger.error({ description: 'Invalid value set to token.', token: tokenData, func: 'string', obj: 'token' });
-						return;
-					}
-				} else {
-					tokenStr = tokenData;
-				}
-				____________logger.log({ description: 'Token was set.', token: tokenData, tokenStr: tokenStr, func: 'string', obj: 'token' });
-				storage.setItem(_config.tokenName, tokenStr);
-				this.data = jwtDecode(tokenStr);
-			},
-			configurable: true,
-			enumerable: true
-		},
-		data: {
-			get: function get() {
-				if (storage.getItem(_config.tokenDataName)) {
-					return storage.getItem(_config.tokenDataName);
-				} else {
-					return decodeToken(this.string);
-				}
-			},
-			set: function set(tokenData) {
-				if (_.isString(tokenData)) {
-					var tokenStr = tokenData;
-					tokenData = decodeToken(tokenStr);
-					____________logger.info({ description: 'Token data was set as string. Decoding token.', token: tokenStr, tokenData: tokenData, func: 'data', obj: 'token' });
-				} else {
-					____________logger.log({ description: 'Token data was set.', data: tokenData, func: 'data', obj: 'token' });
-					storage.setItem(_config.tokenDataName, tokenData);
-				}
-			},
-			configurable: true,
-			enumerable: true
-		}
-	});
-
-	var ___________request = {
-		get: function get(endpoint, queryData) {
-			var req = superagent.get(endpoint);
-			if (queryData) {
-				req.query(queryData);
-			}
-			req = addAuthHeader(req);
-			return handleResponse(req);
-		},
-		post: function post(endpoint, data) {
-			var req = superagent.post(endpoint).send(data);
-			req = addAuthHeader(req);
-			return handleResponse(req);
-		},
-		put: function put(endpoint, data) {
-			var req = superagent.put(endpoint).send(data);
-			req = addAuthHeader(req);
-			return handleResponse(req);
-		},
-		del: function del(endpoint, data) {
-			var req = superagent.put(endpoint).send(data);
-			req = addAuthHeader(req);
-			return handleResponse(req);
-		}
-	};
-
-	function handleResponse(req) {
-		return new Promise(function (resolve, reject) {
-			req.end(function (err, res) {
-				if (!err) {
-					// logger.log({description: 'Response:', response:res, func:'handleResponse', file: 'request'});
-					return resolve(res.body);
-				} else {
-					if (err.status == 401) {
-						____________logger.warn({ description: 'Unauthorized. You must be signed into make this request.', func: 'handleResponse' });
-					}
-					if (err && err.response) {
-						return reject(err.response.text);
-					}
-					____________logger.warn({ description: 'Unauthorized. You must be signed into make this request.', error: err, func: 'handleResponse' });
-					return reject(err);
-				}
-			});
-		});
-	}
-	function addAuthHeader(req) {
-		if (token.string) {
-			req = req.set('Authorization', 'Bearer ' + token.string);
-			console.info({ message: 'Set auth header', func: 'addAuthHeader', file: 'request' });
-		}
-		return req;
-	}
-
-	// import hello from 'hellojs'; //Modifies objects to have id parameter?
-
-	// import hello from 'hellojs'; //After es version of module is created
-	//Private object containing clientIds
-	var clientIds = {};
-
-	var ProviderAuth = (function () {
-		function ProviderAuth(actionData) {
-			_classCallCheck(this, ProviderAuth);
-
-			this.app = actionData.app ? actionData.app : null;
-			this.redirectUri = actionData.redirectUri ? actionData.redirectUri : 'redirect.html';
-			this.provider = actionData.provider ? actionData.provider : null;
-		}
-
-		_createClass(ProviderAuth, [{
-			key: 'loadHello',
-			value: function loadHello() {
-				//Load hellojs script
-				//TODO: Replace this with es6ified version
-				if (typeof window != 'undefined' && !window.hello) {
-					return domUtil.asyncLoadJs('https://s3.amazonaws.com/kyper-cdn/js/hello.js');
-				} else {
-					return Promise.reject();
-				}
-			}
-		}, {
-			key: 'helloLoginListener',
-			value: function helloLoginListener() {
-				//Login Listener
-				window.hello.on('auth.login', function (auth) {
-					____________logger.info({ description: 'User logged in to google.', func: 'loadHello', obj: 'Google' });
-					// Call user information, for the given network
-					window.hello(auth.network).api('/me').then(function (r) {
-						// Inject it into the container
-						//TODO:Send account informaiton to server
-						var userData = r;
-						userData.provider = auth.network;
-						//Login or Signup endpoint
-						return ___________request.post(this.endpoint + '/provider', userData).then(function (response) {
-							____________logger.log({ description: 'Provider request successful.', response: response, func: 'signup', obj: 'GoogleUtil' });
-							return response;
-						})['catch'](function (errRes) {
-							____________logger.error({ description: 'Error requesting login.', error: errRes, func: 'signup', obj: 'Matter' });
-							return Promise.reject(errRes);
-						});
-					});
-				});
-			}
-		}, {
-			key: 'initHello',
-			value: function initHello() {
-				var _this = this;
-
-				return this.loadHello().then(function () {
-					return ___________request.get(_this.app.endpoint + '/providers').then(function (response) {
-						____________logger.log({ description: 'Provider request successful.', response: response, func: 'initHello', obj: 'ProviderAuth' });
-						var provider = response[_this.provider];
-						if (!provider) {
-							____________logger.error({ description: 'Provider is not setup. Visit tessellate.kyper.io to enter your client id for ' + _this.provider, provider: _this.provider, clientIds: clientIds, func: 'login', obj: 'ProviderAuth' });
-							return Promise.reject({ message: 'Provider is not setup.' });
-						}
-						____________logger.log({ description: 'Providers config built', providersConfig: response, func: 'initHello', obj: 'ProviderAuth' });
-						return window.hello.init(response, { redirect_uri: 'redirect.html' });
-					}, function (err) {
-						____________logger.error({ description: 'Error loading hellojs.', error: errRes, func: 'initHello', obj: 'ProviderAuth' });
-						return Promise.reject({ message: 'Error requesting application third party providers.' });
-					})['catch'](function (errRes) {
-						____________logger.error({ description: 'Error loading hellojs.', error: errRes, func: 'initHello', obj: 'ProviderAuth' });
-						return Promise.reject({ message: 'Error loading third party login capability.' });
-					});
-				});
-			}
-		}, {
-			key: 'login',
-			value: function login() {
-				var _this2 = this;
-
-				//Initalize Hello
-				return this.initHello().then(function () {
-					return window.hello.login(_this2.provider);
-				}, function (err) {
-					____________logger.error({ description: 'Error initalizing hellojs.', error: err, func: 'login', obj: 'Matter' });
-					return Promise.reject({ message: 'Error with third party login.' });
-				});
-			}
-		}, {
-			key: 'signup',
-			value: function signup() {
-				var _this3 = this;
-
-				//Initalize Hello
-				// if (!_.has(clientIds, this.provider)) {
-				// 	logger.error({description: `${this.provider} is not setup as a provider on Tessellate. Please visit tessellate.kyper.io to enter your provider information.`, provider: this.provider, clientIds: clientIds, func: 'login', obj: 'ProviderAuth'});
-				// 	return Promise.reject();
-				// }
-				//TODO: send info to server
-				return this.initHello().then(function () {
-					return window.hello.login(_this3.provider);
-				}, function (errRes) {
-					____________logger.error({ description: 'Error signing up.', error: errRes, func: 'signup', obj: 'Matter' });
-					return Promise.reject({ message: 'Error signing up.' });
-				});
-			}
-		}]);
-
-		return ProviderAuth;
-	})();
-
-	var Matter = (function () {
-		/* Constructor
-   * @param {string} appName Name of application
-   */
-
-		function Matter(appName, opts) {
-			_classCallCheck(this, Matter);
-
-			if (!appName) {
-				____________logger.error({ description: 'Application name requires to use Matter.', func: 'constructor', obj: 'Matter' });
-				throw new Error('Application name is required to use Matter');
-			} else {
-				this.name = appName;
-			}
-			if (opts) {
-				this.options = opts;
-			}
-		}
-
-		/* Endpoint getter
-   *
-   */
-
-		_createClass(Matter, [{
-			key: 'signup',
-
-			/* Signup
-    *
-    */
-			value: function signup(signupData) {
-				____________logger.log({ description: 'Signup called.', signupData: signupData, func: 'signup', obj: 'Matter' });
-				if (!signupData || !_.isObject(signupData) && !_.isString(signupData)) {
-					____________logger.error({ description: 'Signup information is required to signup.', func: 'signup', obj: 'Matter' });
-					return Promise.reject({ message: 'Login data is required to login.' });
-				}
-				if (_.isObject(signupData)) {
-					return ___________request.post(this.endpoint + '/signup', signupData).then(function (response) {
-						____________logger.log({ description: 'Account request successful.', signupData: signupData, response: response, func: 'signup', obj: 'Matter' });
-						if (_.has(response, 'account')) {
-							return response.account;
-						} else {
-							____________logger.warn({ description: 'Account was not contained in signup response.', signupData: signupData, response: response, func: 'signup', obj: 'Matter' });
-							return response;
-						}
-					})['catch'](function (errRes) {
-						____________logger.error({ description: 'Error requesting signup.', signupData: signupData, error: errRes, func: 'signup', obj: 'Matter' });
-						return Promise.reject(errRes);
-					});
-				} else {
-					//Handle 3rd Party signups
-					var auth = new ProviderAuth({ provider: signupData, app: this });
-					return auth.signup(signupData).then(function (res) {
-						____________logger.info({ description: 'Provider signup successful.', provider: signupData, res: res, func: 'signup', obj: 'Matter' });
-						return Promise.resolve(res);
-					});
-				}
-			}
-
-			/** Login
-    *
-    */
-		}, {
-			key: 'login',
-			value: function login(loginData) {
-				var _this4 = this;
-
-				if (!loginData || !_.isObject(loginData) && !_.isString(loginData)) {
-					____________logger.error({ description: 'Username/Email and Password are required to login', func: 'login', obj: 'Matter' });
-					return Promise.reject({ message: 'Login data is required to login.' });
-				}
-				if (_.isObject(loginData)) {
-					if (!loginData.password || !loginData.username) {
-						return Promise.reject({ message: 'Username/Email and Password are required to login' });
-					}
-					//Username/Email Login
-					return ___________request.put(this.endpoint + '/login', loginData).then(function (response) {
-						if (_.has(response, 'data') && _.has(response.data, 'status') && response.data.status == 409) {
-							____________logger.warn({ description: 'Account not found.', response: response, func: 'login', obj: 'Matter' });
-							return Promise.reject(response.data);
-						} else {
-							____________logger.log({ description: 'Successful login.', response: response, func: 'login', obj: 'Matter' });
-							if (_.has(response, 'token')) {
-								_this4.token.string = response.token;
-							}
-							if (_.has(response, 'account')) {
-								_this4.storage.setItem(_config.tokenUserDataName, response.account);
-							}
-							return response.account;
-						}
-					})['catch'](function (errRes) {
-						____________logger.error({ description: 'Error requesting login.', error: errRes, status: errRes.status, func: 'login', obj: 'Matter' });
-						if (errRes.status == 409 || errRes.status == 400) {
-							errRes = errRes.response.text;
-						}
-						return Promise.reject(errRes);
-					});
-				} else {
-					//Provider login
-					var auth = new ProviderAuth({ provider: loginData, app: this });
-					return auth.login().then(function (res) {
-						____________logger.info({ description: 'Provider login successful.', provider: loginData, res: res, func: 'login', obj: 'Matter' });
-						return Promise.resolve(res);
-					});
-				}
-			}
-
-			/** Logout
-    */
-		}, {
-			key: 'logout',
-			value: function logout() {
-				var _this5 = this;
-
-				//TODO: Handle logging out of providers
-				if (!this.isLoggedIn) {
-					____________logger.warn({ description: 'No logged in account to log out.', func: 'logout', obj: 'Matter' });
-					return Promise.reject({ message: 'No logged in account to log out.' });
-				}
-				return ___________request.put(this.endpoint + '/logout').then(function (response) {
-					____________logger.log({ description: 'Logout successful.', response: response, func: 'logout', obj: 'Matter' });
-					_this5.currentUser = null;
-					_this5.token['delete']();
-					return response;
-				})['catch'](function (errRes) {
-					____________logger.error({ description: 'Error requesting log out: ', error: errRes, func: 'logout', obj: 'Matter' });
-					_this5.storage.removeItem(_config.tokenUserDataName);
-					_this5.token['delete']();
-					return Promise.reject(errRes);
-				});
-			}
-		}, {
-			key: 'getCurrentUser',
-			value: function getCurrentUser() {
-				var _this6 = this;
-
-				if (this.currentUser) {
-					return Promise.resolve(this.currentUser);
-				} else {
-					if (this.isLoggedIn) {
-						return ___________request.get(this.endpoint + '/user').then(function (response) {
-							//TODO: Save user information locally
-							____________logger.log({ description: 'Current User Request responded.', responseData: response, func: 'currentUser', obj: 'Matter' });
-							_this6.currentUser = response;
-							return response;
-						})['catch'](function (errRes) {
-							if (errRes.status == 401) {
-								____________logger.warn({ description: 'Called for current user without token.', error: errRes, func: 'currentUser', obj: 'Matter' });
-								token['delete']();
-								return Promise.resolve(null);
-							} else {
-								____________logger.error({ description: 'Error requesting current user.', error: errRes, func: 'currentUser', obj: 'Matter' });
-								return Promise.reject(errRes);
-							}
-						});
-					} else {
-						return Promise.resolve(null);
-					}
-				}
-			}
-
-			/** updateProfile
-    */
-		}, {
-			key: 'updateProfile',
-			value: function updateProfile(updateData) {
-				var _this7 = this;
-
-				if (!this.isLoggedIn) {
-					____________logger.error({ description: 'No current user profile to update.', func: 'updateProfile', obj: 'Matter' });
-					return Promise.reject({ message: 'Must be logged in to update profile.' });
-				}
-				//Send update request
-				____________logger.warn({ description: 'Calling update endpoint.', endpoint: this.endpoint + '/user/' + this.token.data.username, func: 'updateProfile', obj: 'Matter' });
-				return ___________request.put(this.endpoint + '/user/' + this.token.data.username, updateData).then(function (response) {
-					____________logger.log({ description: 'Update profile request responded.', responseData: response, func: 'updateProfile', obj: 'Matter' });
-					_this7.currentUser = response;
-					return response;
-				})['catch'](function (errRes) {
-					____________logger.error({ description: 'Error requesting current user.', error: errRes, func: 'updateProfile', obj: 'Matter' });
-					return Promise.reject(errRes);
-				});
-			}
-		}, {
-			key: 'changePassword',
-			value: function changePassword(updateData) {
-				if (!this.isLoggedIn) {
-					____________logger.error({ description: 'No current user profile for which to change password.', func: 'changePassword', obj: 'Matter' });
-					return Promise.reject({ message: 'Must be logged in to change password.' });
-				}
-				//Send update request
-				____________logger.log({ description: 'Calling update endpoint to change password.', endpoint: this.endpoint + '/user/' + this.token.data.username, func: 'changePassword', obj: 'Matter' });
-				return ___________request.put(this.endpoint + '/user/' + this.token.data.username, updateData).then(function (response) {
-					____________logger.log({ description: 'Update password request responded.', responseData: response, func: 'changePassword', obj: 'Matter' });
-					return response;
-				})['catch'](function (errRes) {
-					____________logger.error({ description: 'Error requesting password change.', error: errRes, func: 'changePassword', obj: 'Matter' });
-					return Promise.reject(errRes);
-				});
-			}
-		}, {
-			key: 'recoverPassword',
-			value: function recoverPassword() {
-				if (!this.isLoggedIn) {
-					____________logger.error({ description: 'No current user for which to recover password.', func: 'recoverPassword', obj: 'Matter' });
-					return Promise.reject({ message: 'Must be logged in to recover password.' });
-				}
-				//Send update request
-				____________logger.log({ description: 'Calling recover password endpoint.', endpoint: this.endpoint + '/accounts/' + this.token.data.username + '/recover', func: 'recoverPassword', obj: 'Matter' });
-				return ___________request.post(this.endpoint + '/accounts/' + this.token.data.username + '/recover').then(function (response) {
-					____________logger.log({ description: 'Recover password request responded.', responseData: response, func: 'recoverPassword', obj: 'Matter' });
-					return response;
-				})['catch'](function (errRes) {
-					____________logger.error({ description: 'Error requesting password recovery.', error: errRes, func: 'recoverPassword', obj: 'Matter' });
-					return Promise.reject(errRes);
-				});
-			}
-
-			/* set currentUser
-    * @description Sets currently user data
-    */
-		}, {
-			key: 'isInGroup',
-
-			//Check that user is in a single group or in all of a list of groups
-			value: function isInGroup(checkGroups) {
-				var _this8 = this;
-
-				if (!this.isLoggedIn) {
-					____________logger.log({ description: 'No logged in user to check.', func: 'isInGroup', obj: 'Matter' });
-					return false;
-				}
-				//Check if user is
-				if (checkGroups && _.isString(checkGroups)) {
-					var _ret = (function () {
-						var groupName = checkGroups;
-						//Single role or string list of roles
-						var groupsArray = groupName.split(',');
-						if (groupsArray.length > 1) {
-							//String list of groupts
-							____________logger.info({ description: 'String list of groups.', list: groupsArray, func: 'isInGroup', obj: 'Matter' });
-							return {
-								v: _this8.isInGroups(groupsArray)
-							};
-						} else {
-							//Single group
-							var groups = _this8.token.data.groups || [];
-							____________logger.log({ description: 'Checking if user is in group.', group: groupName, userGroups: _this8.token.data.groups || [], func: 'isInGroup', obj: 'Matter' });
-							return {
-								v: _.any(groups, function (group) {
-									return groupName == group.name;
-								})
-							};
-						}
-					})();
-
-					if (typeof _ret === 'object') return _ret.v;
-				} else if (checkGroups && _.isArray(checkGroups)) {
-					//Array of roles
-					//Check that user is in every group
-					____________logger.info({ description: 'Array of groups.', list: checkGroups, func: 'isInGroup', obj: 'Matter' });
-					return this.isInGroups(checkGroups);
-				} else {
-					return false;
-				}
-				//TODO: Handle string and array inputs
-			}
-		}, {
-			key: 'isInGroups',
-			value: function isInGroups(checkGroups) {
-				var _this9 = this;
-
-				if (!this.isLoggedIn) {
-					____________logger.log({ description: 'No logged in user to check.', func: 'isInGroups', obj: 'Matter' });
-					return false;
-				}
-				//Check if user is in any of the provided groups
-				if (checkGroups && _.isArray(checkGroups)) {
-					return _.every(_.map(checkGroups, function (group) {
-						if (_.isString(group)) {
-							//Group is string
-							return _this9.isInGroup(group);
-						} else {
-							//Group is object
-							if (_.has(group, 'name')) {
-								return _this9.isInGroup(group.name);
-							} else {
-								____________logger.error({ description: 'Invalid group object.', group: group, func: 'isInGroups', obj: 'Matter' });
-								return false;
-							}
-						}
-					}), true);
-				} else if (checkGroups && _.isString(checkGroups)) {
-					//TODO: Handle spaces within string list
-					var groupsArray = checkGroups.split(',');
-					if (groupsArray.length > 1) {
-						return this.isInGroups(groupsArray);
-					}
-					return this.isInGroup(groupsArray[0]);
-				} else {
-					____________logger.error({ description: 'Invalid groups list.', func: 'isInGroups', obj: 'Matter' });
-					return false;
-				}
-			}
-		}, {
-			key: 'endpoint',
-			get: function get() {
-				var serverUrl = _config.serverUrl;
-				if (_.has(this, 'options') && this.options.localServer) {
-					serverUrl = 'http://localhost:4000';
-					____________logger.info({ description: 'LocalServer option was set to true. Now server url is local server.', url: serverUrl, func: 'endpoint', obj: 'Matter' });
-				}
-				if (this.name == 'tessellate') {
-					//Remove url if host is server
-					if (typeof window !== 'undefined' && _.has(window, 'location') && window.location.host === serverUrl) {
-						serverUrl = '';
-						____________logger.info({ description: 'Host is Server, serverUrl simplified!', url: serverUrl, func: 'endpoint', obj: 'Matter' });
-					}
-				} else {
-					serverUrl = serverUrl + '/apps/' + this.name;
-					____________logger.log({ description: 'Server url set.', url: serverUrl, func: 'endpoint', obj: 'Matter' });
-				}
-				return serverUrl;
-			}
-		}, {
-			key: 'currentUser',
-			set: function set(userData) {
-				____________logger.log({ description: 'Current User set.', user: userData, func: 'currentUser', obj: 'Matter' });
-				this.storage.setItem(_config.tokenUserDataName, userData);
-			},
-
-			/* get currentUser
-    * @description Gets currently logged in user or returns null
-    */
-			get: function get() {
-				if (this.storage.getItem(_config.tokenUserDataName)) {
-					return this.storage.getItem(_config.tokenUserDataName);
-				} else {
-					return null;
-				}
-			}
-
-			/* Storage
-    *
-    */
-		}, {
-			key: 'storage',
-			get: function get() {
-				return storage;
-			}
-
-			/** Token
-    */
-		}, {
-			key: 'token',
-			get: function get() {
-				return token;
-			}
-		}, {
-			key: 'utils',
-			get: function get() {
-				return { logger: ____________logger, request: ___________request, storage: storage, dom: domUtil };
-			}
-		}, {
-			key: 'isLoggedIn',
-			get: function get() {
-				return this.token.string ? true : false;
-			}
-		}]);
-
-		return Matter;
-	})();
 
 	var config = {
 		serverUrl: 'http://tessellate.elasticbeanstalk.com',
@@ -955,7 +38,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 	var matter = new Matter(config.appName, config.matterOptions);
 
-	var __________request = matter.utils.request;
+	var ________request = matter.utils.request;
 	var ___________logger = matter.utils.logger;
 
 	//Actions for specific directory
@@ -974,7 +57,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				//Data is string name
 				this.name = actionData;
 			} else {
-				___________logger.error({ description: 'Action data object with name is required to start a Directory Action.', func: 'constructor', obj: 'Directory' });
+				___________logger.error({
+					description: 'Action data object with name is required to start a Directory Action.',
+					func: 'constructor', obj: 'Directory'
+				});
 				throw new Error('Directory Data object with name is required to start a Directory action.');
 			}
 		}
@@ -984,11 +70,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			//Get userlications or single userlication
 			value: function get() {
-				return __________request.get(this.directoryEndpoint).then(function (response) {
-					___________logger.info({ description: 'Directory data loaded successfully.', directoryData: directoryData, response: response, func: 'get', obj: 'Directory' });
+				return ________request.get(this.directoryEndpoint).then(function (response) {
+					___________logger.info({
+						description: 'Directory data loaded successfully.',
+						response: response, func: 'get', obj: 'Directory'
+					});
 					return response;
 				})['catch'](function (errRes) {
-					___________logger.info({ description: 'Error getting directory.', directoryData: directoryData, error: errRes, func: 'get', obj: 'Directory' });
+					___________logger.info({
+						description: 'Error getting directory.',
+						error: errRes, func: 'get', obj: 'Directory'
+					});
 					return Promise.reject(errRes);
 				});
 			}
@@ -997,12 +89,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'update',
 			value: function update(directoryData) {
-				___________logger.debug({ description: 'Directory updated called.', directoryData: directoryData, func: 'update', obj: 'Directory' });
+				___________logger.debug({
+					description: 'Directory updated called.',
+					directoryData: directoryData, func: 'update', obj: 'Directory'
+				});
 				return matter.utils.request.put(this.directoryEndpoint, directoryData).then(function (response) {
-					___________logger.info({ description: 'Directory updated successfully.', directoryData: directoryData, response: response, func: 'update', obj: 'Directory' });
+					___________logger.info({
+						description: 'Directory updated successfully.',
+						directoryData: directoryData, response: response,
+						func: 'update', obj: 'Directory'
+					});
 					return response;
 				})['catch'](function (errRes) {
-					___________logger.error({ description: 'Error updating directory.', directoryData: directoryData, error: errRes, func: 'update', obj: 'Directory' });
+					___________logger.error({
+						description: 'Error updating directory.',
+						directoryData: directoryData, error: errRes,
+						func: 'update', obj: 'Directory'
+					});
 					return Promise.reject(errRes);
 				});
 			}
@@ -1011,12 +114,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'del',
 			value: function del(directoryData) {
-				___________logger.debug({ description: 'Delete directory called.', directoryData: directoryData, func: 'del', obj: 'Directory' });
-				return __________request['delete'](this.directoryEndpoint, userData).then(function (response) {
-					___________logger.info({ description: 'Directory deleted successfully.', directoryData: directoryData, func: 'del', obj: 'Directory' });
+				___________logger.debug({
+					description: 'Delete directory called.',
+					directoryData: directoryData, func: 'del', obj: 'Directory'
+				});
+				return ________request['delete'](this.directoryEndpoint, directoryData).then(function (response) {
+					___________logger.info({
+						description: 'Directory deleted successfully.',
+						directoryData: directoryData, func: 'del', obj: 'Directory'
+					});
 					return response;
 				})['catch'](function (errRes) {
-					___________logger.error({ description: 'Error deleting directory.', directoryData: directoryData, error: errRes, func: 'del', obj: 'Directory' });
+					___________logger.error({
+						description: 'Error deleting directory.',
+						error: errRes, func: 'del', obj: 'Directory'
+					});
 					return Promise.reject(errRes);
 				});
 			}
@@ -1030,7 +142,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				}
 				//Create string from endpointArray
 				var endpointStr = endpointArray.join('/');
-				___________logger.log({ description: 'Directory endpoint built.', endpoint: endpointStr, func: 'directoryEndpoint', obj: 'Directory' });
+				___________logger.log({
+					description: 'Directory endpoint built.',
+					endpoint: endpointStr, func: 'directoryEndpoint',
+					obj: 'Directory'
+				});
 				return endpointStr;
 			}
 		}]);
@@ -1038,7 +154,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return _Directory;
 	})();
 
-	var _________request = matter.utils.request;
+	var _______request = matter.utils.request;
 	var __________logger = matter.utils.logger;
 
 	//Actions for directories list
@@ -1064,7 +180,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			//Get users or single application
 			value: function get() {
 				__________logger.debug({ description: 'Directories get called.', action: this, func: 'get', obj: 'DirectoriesAction' });
-				return _________request.get(this.directoriesEndpoint).then(function (response) {
+				return _______request.get(this.directoriesEndpoint).then(function (response) {
 					__________logger.info({ descrption: 'Directories loaded successfully.', response: response, func: 'get', obj: 'DirectoriesAction' });
 					return response;
 				})['catch'](function (errRes) {
@@ -1078,7 +194,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'add',
 			value: function add(appData) {
 				__________logger.debug({ description: 'Add directory called.', action: this, appData: appData, func: 'get', obj: 'DirectoriesAction' });
-				return _________request.post(this.directoriesEndpoint, appData).then(function (response) {
+				return _______request.post(this.directoriesEndpoint, appData).then(function (response) {
 					__________logger.log({ description: 'Application added successfully.', response: response, func: 'add', obj: 'DirectoriesAction' });
 					//TODO: Return list of group objects
 					return response;
@@ -1100,7 +216,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					__________logger.debug({ description: 'Null query, returning empty array.', func: 'search', obj: 'DirectoriesAction' });
 					return Promise.resolve([]);
 				}
-				return _________request.get(searchEndpoint).then(function (response) {
+				return _______request.get(searchEndpoint).then(function (response) {
 					__________logger.log({ description: 'Found directories based on search.', response: response, func: 'search', obj: 'DirectoriesAction' });
 					return response;
 				})['catch'](function (errRes) {
@@ -1126,7 +242,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return DirectoriesAction;
 	})();
 
-	var ________request = matter.utils.request;
+	var ______request = matter.utils.request;
 	var _________logger = matter.utils.logger;
 
 	//Actions for specific user
@@ -1156,7 +272,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			//Get userlications or single userlication
 			value: function get() {
-				return ________request.get(this.groupEndpoint).then(function (response) {
+				return ______request.get(this.groupEndpoint).then(function (response) {
 					_________logger.info({ description: 'Group data loaded successfully.', response: response, func: 'get', obj: 'Group' });
 					return response;
 				})['catch'](function (errRes) {
@@ -1184,7 +300,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'del',
 			value: function del(groupData) {
 				_________logger.log({ description: 'Delete group called.', groupData: groupData, func: 'del', obj: 'Group' });
-				return ________request.del(this.groupEndpoint, {}).then(function (response) {
+				return ______request.del(this.groupEndpoint, {}).then(function (response) {
 					_________logger.info({ description: 'Group deleted successfully.', groupData: groupData, func: 'del', obj: 'Group' });
 					return response;
 				})['catch'](function (errRes) {
@@ -1236,7 +352,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return _Group;
 	})();
 
-	var _______request = matter.utils.request;
+	var _____request = matter.utils.request;
 	var ________logger = matter.utils.logger;
 
 	//Actions for users list
@@ -1248,12 +364,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			//Check to see if action is for a specific app
 			if (actionData && _.isObject(actionData) && _.has(actionData, 'app')) {
 				this.app = actionData.app;
-				________logger.log({ description: 'Provided app data set to app parameter.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
+				________logger.log({
+					description: 'Provided app data set to app parameter.',
+					action: this, providedData: actionData,
+					func: 'constructor', obj: 'GroupsAction'
+				});
 			} else if (actionData && _.isString(actionData)) {
 				this.app = { name: actionData };
-				________logger.log({ description: 'App name provided as string was set.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
+				________logger.log({
+					description: 'App name provided as string was set.',
+					action: this, providedData: actionData,
+					func: 'constructor', obj: 'GroupsAction'
+				});
 			}
-			________logger.info({ description: 'New Groups action.', action: this, providedData: actionData, func: 'constructor', obj: 'GroupsAction' });
+			________logger.info({
+				description: 'New Groups action.', action: this,
+				providedData: actionData, func: 'constructor', obj: 'GroupsAction'
+			});
 		}
 
 		_createClass(GroupsAction, [{
@@ -1261,12 +388,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			//Get users or single application
 			value: function get() {
-				________logger.debug({ description: 'Get group called.', func: 'get', obj: 'GroupsAction' });
-				return _______request.get(this.groupsEndpoint).then(function (response) {
-					________logger.info({ description: 'Groups loaded successfully.', response: response, func: 'get', obj: 'GroupsAction' });
+				________logger.log({
+					description: 'Get group called.',
+					func: 'get', obj: 'GroupsAction'
+				});
+				return _____request.get(this.groupsEndpoint).then(function (response) {
+					________logger.info({
+						description: 'Groups loaded successfully.',
+						response: response, func: 'get', obj: 'GroupsAction'
+					});
 					return response;
 				})['catch'](function (errRes) {
-					________logger.info({ description: 'Error getting groups.', error: errRes, func: 'get', obj: 'GroupsAction' });
+					________logger.info({
+						description: 'Error getting groups.', error: errRes,
+						func: 'get', obj: 'GroupsAction'
+					});
 					return Promise.reject(errRes);
 				});
 			}
@@ -1276,18 +412,30 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'add',
 			value: function add(groupData) {
 				var newGroupData = groupData;
-				________logger.debug({ description: 'Add group called.', groupData: groupData, func: 'add', obj: 'GroupsAction' });
+				________logger.debug({
+					description: 'Add group called.', groupData: groupData,
+					func: 'add', obj: 'GroupsAction'
+				});
 				if (_.isString(groupData)) {
 					//Group data is string
 					newGroupData = { name: groupData };
 				}
-				________logger.debug({ description: 'Add group called.', newGroupData: newGroupData, func: 'add', obj: 'GroupsAction' });
-				return _______request.post(this.groupsEndpoint, newGroupData).then(function (response) {
-					________logger.log({ description: 'Group added to application successfully.', response: response, func: 'add', obj: 'GroupsAction' });
+				________logger.debug({
+					description: 'Add group called.', newGroupData: newGroupData,
+					func: 'add', obj: 'GroupsAction'
+				});
+				return _____request.post(this.groupsEndpoint, newGroupData).then(function (response) {
+					________logger.log({
+						description: 'Group added to application successfully.',
+						response: response, func: 'add', obj: 'GroupsAction'
+					});
 					//TODO: Return list of group objects
 					return response;
 				})['catch'](function (errRes) {
-					________logger.error({ description: 'Error adding group.', error: errRes, func: 'add', obj: 'GroupsAction' });
+					________logger.error({
+						description: 'Error adding group.',
+						error: errRes, func: 'add', obj: 'GroupsAction'
+					});
 					return Promise.reject(errRes);
 				});
 			}
@@ -1296,18 +444,33 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'search',
 			value: function search(query) {
-				________logger.debug({ description: 'Add group called.', groupData: groupData, func: 'search', obj: 'GroupsAction' });
+				________logger.debug({
+					description: 'Search groups called.', query: query,
+					func: 'search', obj: 'GroupsAction'
+				});
 				if (!query || query == '' || !_.isString(query)) {
-					________logger.log({ description: 'Null or invalid query, returning empty array.', func: 'search', obj: 'GroupsAction' });
+					________logger.log({
+						description: 'Null or invalid query, returning empty array.',
+						func: 'search', obj: 'GroupsAction'
+					});
 					return Promise.resolve([]);
 				}
 				var searchEndpoint = this.groupsEndpoint + '/search/' + query;
-				________logger.debug({ description: 'Search endpoint created.', endpoint: searchEndpoint, func: 'search', obj: 'GroupsAction' });
-				return _______request.get(searchEndpoint).then(function (response) {
-					________logger.log({ description: 'Found groups based on search.', response: response, func: 'search', obj: 'GroupsAction' });
+				________logger.debug({
+					description: 'Search endpoint created.',
+					endpoint: searchEndpoint, func: 'search', obj: 'GroupsAction'
+				});
+				return _____request.get(searchEndpoint).then(function (response) {
+					________logger.log({
+						description: 'Found groups based on search.',
+						response: response, func: 'search', obj: 'GroupsAction'
+					});
 					return response;
 				})['catch'](function (errRes) {
-					________logger.error({ description: 'Error searching groups.', error: errRes, func: 'search', obj: 'GroupsAction' });
+					________logger.error({
+						description: 'Error searching groups.',
+						error: errRes, func: 'search', obj: 'GroupsAction'
+					});
 					return Promise.reject(errRes);
 				});
 			}
@@ -1321,7 +484,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				}
 				//Create string from endpointArray
 				var endpointStr = endpointArray.join('/');
-				________logger.log({ description: 'Groups Endpoint built.', endpoint: endpointStr, func: 'groupsEndpoint', obj: 'GroupsAction' });
+				________logger.log({
+					description: 'Groups Endpoint built.', endpoint: endpointStr,
+					func: 'groupsEndpoint', obj: 'GroupsAction'
+				});
 				return endpointStr;
 			}
 		}]);
@@ -1329,7 +495,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return GroupsAction;
 	})();
 
-	var ______request = matter.utils.request;
+	var ____request = matter.utils.request;
 	var _______logger = matter.utils.logger;
 
 	//Actions for specific user
@@ -1344,7 +510,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			} else if (accountData && _.isString(accountData)) {
 				this.username = accountData;
 			} else {
-				_______logger.error({ description: 'AccountData is required to start an AccountAction', func: 'constructor', obj: 'Account' });
+				_______logger.error({
+					description: 'AccountData is required to start an AccountAction',
+					func: 'constructor', obj: 'Account'
+				});
 				throw new Error('username is required to start an AccountAction');
 			}
 		}
@@ -1357,7 +526,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			//Get a user
 			value: function get() {
 				_______logger.debug({ description: 'Account data loaded successfully.', func: 'get', obj: 'Account' });
-				return ______request.get(this.accountEndpoint).then(function (response) {
+				return ____request.get(this.accountEndpoint).then(function (response) {
 					_______logger.info({ description: 'Account data loaded successfully.', response: response, func: 'get', obj: 'Account' });
 					return new _Account(response);
 				})['catch'](function (errRes) {
@@ -1371,7 +540,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'update',
 			value: function update(accountData) {
 				_______logger.debug({ description: 'Update user called.', accountData: accountData, func: 'update', obj: 'Account' });
-				return ______request.put(this.accountEndpoint, accountData).then(function (response) {
+				return ____request.put(this.accountEndpoint, accountData).then(function (response) {
 					_______logger.info({ description: 'Account updated successfully.', func: 'update', obj: 'Account' });
 					//TODO: Extend this with current info before returning
 					return new _Account(response);
@@ -1386,7 +555,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'del',
 			value: function del(accountData) {
 				_______logger.debug({ description: 'Delete user called.', func: 'del', obj: 'Account' });
-				return ______request.del(this.accountEndpoint, accountData).then(function (response) {
+				return ____request.del(this.accountEndpoint, accountData).then(function (response) {
 					_______logger.info({ description: 'Delete user successful.', response: response, func: 'del', obj: 'Account' });
 					return new _Account(response);
 				})['catch'](function (errRes) {
@@ -1499,7 +668,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		return AccountsAction;
 	})();
 
-	var _____request = matter.utils.request;
+	var ___request = matter.utils.request;
 	var _____logger = matter.utils.logger;
 	//Actions for specific user
 
@@ -1511,7 +680,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			if (templateData && _.isString(templateData)) {
 				this.name = templateData;
 			} else {
-				_____logger.error({ description: 'Template data is required to start a Template action.', func: 'construcotr', obj: '' });
+				_____logger.error({
+					description: 'Template data is required to start a Template action.',
+					func: 'constructor', obj: 'Template'
+				});
 				throw new Error('Template data is required to start a Template action.');
 			}
 		}
@@ -1522,7 +694,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			//Get userlications or single userlication
 			value: function get() {
 				_____logger.log({ description: 'Get template called.', name: this.name, func: 'get', obj: 'Template' });
-				return _____request.get(this.templateEndpoint).then(function (response) {
+				return ___request.get(this.templateEndpoint).then(function (response) {
 					_____logger.log({ description: 'Get template responded.', response: response, func: 'get', obj: 'Template' });
 					return response;
 				})['catch'](function (errRes) {
@@ -1536,7 +708,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'update',
 			value: function update(templateData) {
 				_____logger.log({ description: 'Update template called.', templateData: templateData, func: 'update', obj: 'Template' });
-				return _____request.put(this.templateEndpoint, templateData).then(function (response) {
+				return ___request.put(this.templateEndpoint, templateData).then(function (response) {
 					_____logger.log({ description: 'Update template responded.', response: response, templateData: templateData, func: 'update', obj: 'Template' });
 					//TODO: Return template object
 					return response;
@@ -1551,7 +723,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'del',
 			value: function del(templateData) {
 				_____logger.log({ description: 'Delete template called.', templateData: templateData, func: 'del', obj: 'Template' });
-				return _____request['delete'](this.endpoint, templateData).then(function (response) {
+				return ___request['delete'](this.endpoint, templateData).then(function (response) {
 					_____logger.log({ description: 'Template deleted successfully.', response: response, func: 'del', obj: 'Template' });
 					//TODO: Return template object
 					return response;
@@ -1571,7 +743,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	})();
 
 	var ____logger = matter.utils.logger;
-	var ____request = matter.utils.request;
+	var __request = matter.utils.request;
 
 	//Actions for templates list
 
@@ -1580,13 +752,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			_classCallCheck(this, TemplatesAction);
 		}
 
+		//Convenience vars
+
 		_createClass(TemplatesAction, [{
 			key: 'get',
 
 			//Get templates or single application
 			value: function get() {
 				____logger.log({ description: 'Get template called.', func: 'get', obj: 'TemplatesAction' });
-				return ____request.get(this.templatesEndpoint).then(function (response) {
+				return __request.get(this.templatesEndpoint).then(function (response) {
 					____logger.log({ description: 'Templates loaded.', response: response, func: 'get', obj: 'TemplatesAction' });
 					return response;
 				})['catch'](function (errRes) {
@@ -1600,7 +774,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'add',
 			value: function add(appData) {
 				____logger.log({ description: 'Add template called.', func: 'add', obj: 'TemplatesAction' });
-				return ____request.post(this.templatesEndpoint, appData).then(function (response) {
+				return __request.post(this.templatesEndpoint, appData).then(function (response) {
 					____logger.log({ description: 'Templates added successfully.', func: 'add', obj: 'TemplatesAction' });
 					return response;
 				})['catch'](function (errRes) {
@@ -1619,7 +793,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					searchEndpoint += query;
 				}
 				____logger.log({ description: 'Search endpoint created.', endpoint: searchEndpoint, func: 'search', obj: 'TemplatesAction' });
-				return ____request.get(searchEndpoint).then(function (response) {
+				return __request.get(searchEndpoint).then(function (response) {
 					____logger.log({ description: 'Template(s) found successfully.', response: response, endpoint: searchEndpoint, func: 'search', obj: 'TemplatesAction' });
 					return response;
 				})['catch'](function (errRes) {
@@ -1677,20 +851,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		_createClass(_File, [{
 			key: 'get',
 			value: function get() {
-				var _this10 = this;
+				var _this = this;
 
 				if (!this.app || !this.app.frontend) {
 					___logger.log({ description: 'Application Frontend data not available. Calling applicaiton get.', func: 'get', obj: 'File' });
 					return this.app.get().then(function (appData) {
-						_this10.app = appData;
+						_this.app = appData;
 						___logger.log({ description: 'Application get successful. Getting file.', app: appData, func: 'get', obj: 'File' });
-						return _this10.get();
+						return _this.get();
 					}, function (err) {
 						___logger.error({ description: 'Application Frontend data not available. Make sure to call .get().', error: err, func: 'get', obj: 'File' });
 						return Promise.reject({ message: 'Front end data is required to get file.' });
 					});
 				} else {
-					var _ret2 = (function () {
+					var _ret = (function () {
 						//If AWS Credential do not exist, set them
 						if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
 							___logger.debug({ description: 'AWS creds do not exist, so they are being set.', func: 'publish', obj: 'File' });
@@ -1698,14 +872,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						}
 						var s3 = new AWS.S3();
 						var saveParams = {
-							Bucket: _this10.app.frontend.bucketName,
-							Key: _this10.path
+							Bucket: _this.app.frontend.bucketName,
+							Key: _this.path
 						};
 						//Set contentType from actionData to ContentType parameter of new object
-						if (_this10.contentType) {
-							saveParams.ContentType = _this10.contentType;
+						if (_this.contentType) {
+							saveParams.ContentType = _this.contentType;
 						}
-						___logger.debug({ description: 'File get params built.', saveParams: saveParams, file: _this10, func: 'get', obj: 'File' });
+						___logger.debug({ description: 'File get params built.', saveParams: saveParams, file: _this, func: 'get', obj: 'File' });
 						return {
 							v: new Promise(function (resolve, reject) {
 								s3.getObject(saveParams, function (err, data) {
@@ -1727,7 +901,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						};
 					})();
 
-					if (typeof _ret2 === 'object') return _ret2.v;
+					if (typeof _ret === 'object') return _ret.v;
 				}
 			}
 
@@ -1740,7 +914,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'publish',
 			value: function publish(fileData) {
-				var _this11 = this;
+				var _this2 = this;
 
 				//TODO: Publish file to application
 				___logger.debug({ description: 'File publish called.', file: this, fileData: fileData, func: 'publish', obj: 'File' });
@@ -1748,7 +922,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					___logger.error({ description: 'Application Frontend data not available. Make sure to call .get().', func: 'publish', obj: 'File' });
 					return Promise.reject({ message: 'Front end data is required to publish file.' });
 				} else {
-					var _ret3 = (function () {
+					var _ret2 = (function () {
 						if (!_.has(fileData, ['content', 'path'])) {
 							___logger.error({ description: 'File data including path and content required to publish.', func: 'publish', obj: 'File' });
 							return {
@@ -1756,14 +930,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 							};
 						}
 						var saveParams = {
-							Bucket: _this11.app.frontend.bucketName,
+							Bucket: _this2.app.frontend.bucketName,
 							Key: fileData.path,
 							Body: fileData.content,
 							ACL: 'public-read'
 						};
 						//Set contentType from fileData to ContentType parameter of new object
-						if (_this11.contentType) {
-							saveParams.ContentType = _this11.contentType;
+						if (_this2.contentType) {
+							saveParams.ContentType = _this2.contentType;
 						}
 						//If AWS Credential do not exist, set them
 						if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
@@ -1772,7 +946,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						}
 						var s3 = new AWS.S3();
 
-						___logger.debug({ description: 'File publish params built.', saveParams: saveParams, fileData: _this11, func: 'publish', obj: 'File' });
+						___logger.debug({ description: 'File publish params built.', saveParams: saveParams, fileData: _this2, func: 'publish', obj: 'File' });
 						return {
 							v: new Promise(function (resolve, reject) {
 								s3.putObject(saveParams, function (err, data) {
@@ -1789,26 +963,26 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						};
 					})();
 
-					if (typeof _ret3 === 'object') return _ret3.v;
+					if (typeof _ret2 === 'object') return _ret2.v;
 				}
 			}
 		}, {
 			key: 'del',
 			value: function del() {
-				var _this12 = this;
+				var _this3 = this;
 
 				if (!this.app || !this.app.frontend) {
 					___logger.log({ description: 'Application Frontend data not available. Calling applicaiton get.', func: 'get', obj: 'File' });
 					return this.app.get().then(function (appData) {
-						_this12.app = appData;
+						_this3.app = appData;
 						___logger.log({ description: 'Application get successful. Getting file.', app: appData, func: 'get', obj: 'File' });
-						return _this12.get();
+						return _this3.get();
 					}, function (err) {
 						___logger.error({ description: 'Application Frontend data not available. Make sure to call .get().', error: err, func: 'get', obj: 'File' });
 						return Promise.reject({ message: 'Front end data is required to get file.' });
 					});
 				} else {
-					var _ret4 = (function () {
+					var _ret3 = (function () {
 						//If AWS Credential do not exist, set them
 						if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
 							___logger.debug({ description: 'AWS creds do not exist, so they are being set.', func: 'publish', obj: 'File' });
@@ -1816,14 +990,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						}
 						var s3 = new AWS.S3();
 						var saveParams = {
-							Bucket: _this12.app.frontend.bucketName,
-							Key: _this12.path
+							Bucket: _this3.app.frontend.bucketName,
+							Key: _this3.path
 						};
 						//Set contentType from actionData to ContentType parameter of new object
-						if (_this12.contentType) {
-							saveParams.ContentType = _this12.contentType;
+						if (_this3.contentType) {
+							saveParams.ContentType = _this3.contentType;
 						}
-						___logger.debug({ description: 'File get params built.', saveParams: saveParams, file: _this12, func: 'get', obj: 'File' });
+						___logger.debug({ description: 'File get params built.', saveParams: saveParams, file: _this3, func: 'get', obj: 'File' });
 						return {
 							v: new Promise(function (resolve, reject) {
 								s3.deleteObject(saveParams, function (err, data) {
@@ -1845,7 +1019,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						};
 					})();
 
-					if (typeof _ret4 === 'object') return _ret4.v;
+					if (typeof _ret3 === 'object') return _ret3.v;
 				}
 			}
 		}, {
@@ -1855,7 +1029,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			}
 		}, {
 			key: 'openWithFirepad',
-			value: function openWithFirepad(divId) {
+			value: function openWithFirepad() {
 				//TODO:Create new Firepad instance within div
 			}
 		}, {
@@ -1883,6 +1057,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		});
 	}
 
+	//Convenience vars
 	var __logger = matter.utils.logger;
 
 	var Files = (function () {
@@ -1918,32 +1093,34 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'get',
 			value: function get() {
-				var _this13 = this;
+				var _this4 = this;
 
 				if (!this.app.frontend || !this.app.frontend.bucketName) {
 					__logger.warn({ description: 'Application Frontend data not available. Calling .get().', app: this.app, func: 'get', obj: 'Files' });
 					return this.app.get().then(function (applicationData) {
 						__logger.log({ description: 'Application get returned.', data: applicationData, func: 'get', obj: 'Files' });
-						_this13.app = applicationData;
+						_this4.app = applicationData;
 						if (_.has(applicationData, 'frontend')) {
-							return _this13.get();
+							return _this4.get();
 						} else {
 							__logger.error({ description: 'Application does not have Frontend to get files from.', func: 'get', obj: 'Files' });
 							return Promise.reject({ message: 'Application does not have frontend to get files from.' });
 						}
 					}, function (err) {
-						__logger.error({ description: 'Application Frontend data not available. Make sure to call .get().', func: 'get', obj: 'Files' });
+						__logger.error({
+							description: 'Application Frontend data not available. Make sure to call .get().',
+							error: err, func: 'get', obj: 'Files' });
 						return Promise.reject({ message: 'Bucket name required to get objects' });
 					});
 				} else {
-					var _ret5 = (function () {
+					var _ret4 = (function () {
 						//If AWS Credential do not exist, set them
 						if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
 							// logger.info('AWS creds are being updated to make request');
 							setAWSConfig();
 						}
 						var s3 = new AWS.S3();
-						var listParams = { Bucket: _this13.app.frontend.bucketName };
+						var listParams = { Bucket: _this4.app.frontend.bucketName };
 						return {
 							v: new Promise(function (resolve, reject) {
 								s3.listObjects(listParams, function (err, data) {
@@ -1959,12 +1136,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						};
 					})();
 
-					if (typeof _ret5 === 'object') return _ret5.v;
+					if (typeof _ret4 === 'object') return _ret4.v;
 				}
 			}
 		}, {
 			key: 'add',
-			value: function add(fileData) {
+			value: function add() {
 				//TODO: Add a file to files list
 			}
 		}, {
@@ -2069,7 +1246,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	function combineLikeObjs(mappedArray) {
 		var takenNames = [];
 		var finishedArray = [];
-		_.each(mappedArray, function (obj, ind, list) {
+		_.each(mappedArray, function (obj) {
 			if (takenNames.indexOf(obj.name) == -1) {
 				takenNames.push(obj.name);
 				finishedArray.push(obj);
@@ -2114,12 +1291,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			//Get applications or single application
 			value: function get() {
-				_logger.debug({ description: 'Application get called.', func: 'get', obj: 'Application' });
+				_logger.debug({
+					description: 'Application get called.', func: 'get', obj: 'Application'
+				});
 				return _request.get(this.appEndpoint).then(function (response) {
-					_logger.info({ description: 'Application loaded successfully.', response: response, application: new Application(response), func: 'get', obj: 'Application' });
+					_logger.info({
+						description: 'Application loaded successfully.', response: response,
+						application: new Application(response), func: 'get', obj: 'Application'
+					});
 					return new Application(response);
 				})['catch'](function (errRes) {
-					_logger.error({ description: 'Error getting Application.', message: errRes.response.text, error: errRes, func: 'get', obj: 'Application' });
+					_logger.error({
+						description: 'Error getting Application.',
+						message: errRes.response.text, error: errRes,
+						func: 'get', obj: 'Application'
+					});
 					return Promise.reject(errRes.response.text || errRes.response);
 				});
 			}
@@ -2128,38 +1314,68 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'update',
 			value: function update(appData) {
-				_logger.debug({ description: 'Application update called.', func: 'update', obj: 'Application' });
+				_logger.debug({
+					description: 'Application update called.',
+					func: 'update', obj: 'Application'
+				});
 				return _request.put(this.appEndpoint, appData).then(function (response) {
-					_logger.info({ description: 'Application updated successfully.', response: response, func: 'update', obj: 'Application' });
+					_logger.info({
+						description: 'Application updated successfully.',
+						response: response, func: 'update', obj: 'Application'
+					});
 					return new Application(response);
 				})['catch'](function (errRes) {
-					_logger.error({ description: 'Error updating application.', error: errRes, func: 'update', obj: 'Application' });
+					_logger.error({
+						description: 'Error updating application.',
+						error: errRes, func: 'update', obj: 'Application'
+					});
 					return Promise.reject(errRes.response.text || errRes.response);
 				});
 			}
 		}, {
 			key: 'addStorage',
 			value: function addStorage() {
-				_logger.debug({ description: 'Application add storage called.', application: this, func: 'addStorage', obj: 'Application' });
-				return _request.post(this.appEndpoint + '/storage', appData).then(function (response) {
-					_logger.info({ description: 'Storage successfully added to application.', response: response, application: new Application(response), func: 'addStorage', obj: 'Application' });
+				_logger.debug({
+					description: 'Application add storage called.', application: this,
+					func: 'addStorage', obj: 'Application'
+				});
+				return _request.post(this.appEndpoint + '/storage', {}).then(function (response) {
+					_logger.info({
+						description: 'Storage successfully added to application.',
+						response: response, application: new Application(response),
+						func: 'addStorage', obj: 'Application'
+					});
 					return new Application(response);
 				})['catch'](function (errRes) {
-					_logger.error({ description: 'Error adding storage to application.', error: errRes, func: 'addStorage', obj: 'Application' });
+					_logger.error({
+						description: 'Error adding storage to application.',
+						error: errRes, func: 'addStorage', obj: 'Application'
+					});
 					return Promise.reject(errRes.response.text || errRes.response);
 				});
 			}
 		}, {
 			key: 'applyTemplate',
 			value: function applyTemplate() {
-				var _this14 = this;
+				var _this5 = this;
 
-				_logger.error({ description: 'Applying templates to existing applications is not currently supported.', func: 'applyTemplate', obj: 'Application' });
-				return _request.post(this.appEndpoint, appData).then(function (response) {
-					_logger.info({ description: 'Template successfully applied to application.', response: response, application: _this14, func: 'applyTemplate', obj: 'Application' });
+				_logger.error({
+					description: 'Applying templates to existing applications is not currently supported.',
+					func: 'applyTemplate', obj: 'Application'
+				});
+				return _request.post(this.appEndpoint, {}).then(function (response) {
+					_logger.info({
+						description: 'Template successfully applied to application.',
+						response: response, application: _this5,
+						func: 'applyTemplate', obj: 'Application'
+					});
 					return new Application(response);
 				})['catch'](function (errRes) {
-					_logger.error({ description: 'Error applying template to application.', error: errRes, application: _this14, func: 'applyTemplate', obj: 'Application' });
+					_logger.error({
+						description: 'Error applying template to application.',
+						error: errRes, application: _this5,
+						func: 'applyTemplate', obj: 'Application'
+					});
 					return Promise.reject(errRes.response.text || errRes.response);
 				});
 			}
@@ -2168,31 +1384,51 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'File',
 			value: function File(fileData) {
-				_logger.debug({ description: 'Applications file action called.', fileData: fileData, application: this, func: 'file', obj: 'Application' });
+				_logger.debug({
+					description: 'Applications file action called.',
+					fileData: fileData, application: this,
+					func: 'file', obj: 'Application'
+				});
 				return new _File({ app: this, fileData: fileData });
 			}
 		}, {
 			key: 'User',
 			value: function User(userData) {
-				_logger.debug({ description: 'Applications user action called.', userData: userData, application: this, func: 'user', obj: 'Application' });
+				_logger.debug({
+					description: 'Applications user action called.',
+					userData: userData, application: this, func: 'user',
+					obj: 'Application'
+				});
 				return new _Account({ app: this, userData: userData });
 			}
 		}, {
 			key: 'Account',
 			value: function Account(userData) {
-				_logger.debug({ description: 'Applications account action called.', userData: userData, application: this, func: 'user', obj: 'Application' });
+				_logger.debug({
+					description: 'Applications account action called.',
+					userData: userData, application: this,
+					func: 'user', obj: 'Application'
+				});
 				return new _Account({ app: this, userData: userData });
 			}
 		}, {
 			key: 'Group',
 			value: function Group(groupData) {
-				_logger.debug({ description: 'Applications group action called.', groupData: groupData, application: this, func: 'group', obj: 'Application' });
+				_logger.debug({
+					description: 'Applications group action called.',
+					groupData: groupData, application: this,
+					func: 'group', obj: 'Application'
+				});
 				return new _Group({ app: this, groupData: groupData });
 			}
 		}, {
 			key: 'Directory',
 			value: function Directory(directoryData) {
-				_logger.debug({ description: 'Applications directory action called.', directoryData: directoryData, application: this, func: 'directory', obj: 'Application' });
+				_logger.debug({
+					description: 'Applications directory action called.',
+					directoryData: directoryData, application: this,
+					func: 'directory', obj: 'Application'
+				});
 				return new _Directory({ app: this, directoryData: directoryData });
 			}
 		}, {
@@ -2203,31 +1439,46 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'Files',
 			get: function get() {
-				_logger.debug({ description: 'Applications files action called.', application: this, func: 'files', obj: 'Application' });
+				_logger.debug({
+					description: 'Applications files action called.',
+					application: this, func: 'files', obj: 'Application'
+				});
 				return new Files({ app: this });
 			}
 		}, {
 			key: 'Users',
 			get: function get() {
-				_logger.debug({ description: 'Applications users action called.', application: this, func: 'user', obj: 'Application' });
+				_logger.debug({
+					description: 'Applications users action called.',
+					application: this, func: 'user', obj: 'Application'
+				});
 				return new AccountsAction({ app: this });
 			}
 		}, {
 			key: 'Accounts',
 			get: function get() {
-				_logger.debug({ description: 'Applications account action called.', application: this, func: 'user', obj: 'Application' });
+				_logger.debug({
+					description: 'Applications account action called.',
+					application: this, func: 'user', obj: 'Application'
+				});
 				return new AccountsAction({ app: this });
 			}
 		}, {
 			key: 'Groups',
 			get: function get() {
-				_logger.debug({ description: 'Applications groups action called.', application: this, func: 'groups', obj: 'Application' });
+				_logger.debug({
+					description: 'Applications groups action called.',
+					application: this, func: 'groups', obj: 'Application'
+				});
 				return new GroupsAction({ app: this });
 			}
 		}, {
 			key: 'Directories',
 			get: function get() {
-				_logger.debug({ description: 'Applications directories action called.', application: this, func: 'directories', obj: 'Application' });
+				_logger.debug({
+					description: 'Applications directories action called.',
+					application: this, func: 'directories', obj: 'Application'
+				});
 				return new DirectoriesAction({ app: this });
 			}
 		}]);
@@ -2354,7 +1605,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			//Start a new Group action
 			value: function Group(groupData) {
-				this.utils.logger.debug({ description: 'Group Action called.', groupData: groupData, action: new _Group({ app: this, groupData: groupData }), func: 'group', obj: 'Grout' });
+				this.utils.logger.debug({
+					description: 'Group Action called.', groupData: groupData,
+					action: new _Group({ app: this, groupData: groupData }),
+					func: 'group', obj: 'Grout'
+				});
 				return new _Group(groupData);
 			}
 
@@ -2364,13 +1619,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			//Start a new Group action
 			value: function Directory(directoryData) {
-				this.utils.logger.debug({ description: 'Directory Action called.', directoryData: directoryData, action: new _Directory(directoryData), func: 'directory', obj: 'Grout' });
+				this.utils.logger.debug({
+					description: 'Directory Action called.', directoryData: directoryData,
+					action: new _Directory(directoryData), func: 'directory', obj: 'Grout'
+				});
 				return new _Directory(directoryData);
 			}
 		}, {
 			key: 'Apps',
 			get: function get() {
-				this.utils.logger.debug({ description: 'Apps Action called.', action: new AppsAction(), func: 'Apps', obj: 'Grout' });
+				this.utils.logger.debug({
+					description: 'Apps Action called.', action: new AppsAction(),
+					func: 'Apps', obj: 'Grout'
+				});
 				return new AppsAction();
 			}
 		}, {
@@ -2394,21 +1655,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'Groups',
 			get: function get() {
-				this.utils.logger.debug({ description: 'Groups Action called.', action: new GroupsAction(), func: 'groups', obj: 'Grout' });
+				this.utils.logger.debug({
+					description: 'Groups Action called.', action: new GroupsAction(), func: 'groups', obj: 'Grout'
+				});
 				return new GroupsAction();
 			}
 		}, {
 			key: 'Directories',
 			get: function get() {
-				this.utils.logger.debug({ description: 'Directories Action called.', action: new DirectoriesAction(), func: 'directories', obj: 'Grout' });
+				this.utils.logger.debug({
+					description: 'Directories Action called.',
+					action: new DirectoriesAction(), func: 'directories', obj: 'Grout'
+				});
 				return new DirectoriesAction();
 			}
 		}]);
 
 		return Grout;
 	})(Matter);
-
-	;
 
 	return Grout;
 });

@@ -22,7 +22,10 @@ class Grout extends Matter {
 	}
 	//Start a new Apps Action
 	get Apps() {
-		this.utils.logger.debug({description: 'Apps Action called.', action: new AppsAction(), func: 'Apps', obj: 'Grout'});
+		this.utils.logger.debug({
+			description: 'Apps Action called.', action: new AppsAction(),
+			func: 'Apps', obj: 'Grout'
+		});
 		return new AppsAction();
 	}
 	//Start a new App action
@@ -64,25 +67,36 @@ class Grout extends Matter {
 	}
 	//Start a new Groups action
 	get Groups() {
-		this.utils.logger.debug({description: 'Groups Action called.', action: new GroupsAction(), func: 'groups', obj: 'Grout'});
+		this.utils.logger.debug({
+			description: 'Groups Action called.', action: new GroupsAction(), func: 'groups', obj: 'Grout'
+		});
 		return new GroupsAction();
 	}
 	//Start a new Group action
 	Group(groupData) {
-		this.utils.logger.debug({description: 'Group Action called.', groupData: groupData, action: new Group({app: this, groupData: groupData}), func: 'group', obj: 'Grout'});
+		this.utils.logger.debug({
+			description: 'Group Action called.', groupData: groupData,
+			action: new Group({app: this, groupData: groupData}),
+			func: 'group', obj: 'Grout'
+		});
 		return new Group(groupData);
 	}
 	//Start a new Directories action
 	get Directories() {
-		this.utils.logger.debug({description: 'Directories Action called.', action: new DirectoriesAction(), func: 'directories', obj: 'Grout'});
+		this.utils.logger.debug({
+			description: 'Directories Action called.',
+			action: new DirectoriesAction(), func: 'directories', obj: 'Grout'
+		});
 		return new DirectoriesAction();
 	}
 	//Start a new Group action
 	Directory(directoryData) {
-		this.utils.logger.debug({description: 'Directory Action called.', directoryData: directoryData, action: new Directory(directoryData), func: 'directory', obj: 'Grout'});
+		this.utils.logger.debug({
+			description: 'Directory Action called.', directoryData: directoryData,
+			action: new Directory(directoryData), func: 'directory', obj: 'Grout'
+		});
 		return new Directory(directoryData);
 	}
-
-};
+}
 
 export default Grout;

@@ -4,7 +4,6 @@ import matter from './Matter';
 
 import AWS from 'aws-sdk';
 //Convenience vars
-let request = matter.utils.request;
 let logger = matter.utils.logger;
 
 class Files {
@@ -39,7 +38,9 @@ class Files {
 					return Promise.reject({message: 'Application does not have frontend to get files from.'});
 				}
 			}, (err) => {
-				logger.error({description: 'Application Frontend data not available. Make sure to call .get().', func: 'get', obj: 'Files'});
+				logger.error({
+					description: 'Application Frontend data not available. Make sure to call .get().',
+					error: err, func: 'get', obj: 'Files'});
 				return Promise.reject({message: 'Bucket name required to get objects'});
 			});
 		} else {
@@ -63,7 +64,7 @@ class Files {
 			});
 		}
 	}
-	add(fileData) {
+	add() {
 		//TODO: Add a file to files list
 	}
 	del() {
@@ -92,10 +93,10 @@ export default Files;
 // AWS Config
 function setAWSConfig() {
 	AWS.config.update({
-	  credentials: new AWS.CognitoIdentityCredentials({
-	  IdentityPoolId: config.aws.cognito.poolId
-	  }),
-	  region: config.aws.region
+		credentials: new AWS.CognitoIdentityCredentials({
+		IdentityPoolId: config.aws.cognito.poolId
+	}),
+		region: config.aws.region
 	});
 }
 //Convert from array file structure (from S3) to 'children' structure used in Editor GUI (angular-tree-control)
@@ -162,7 +163,7 @@ function buildStructureObject(file) {
 function combineLikeObjs(mappedArray) {
 	var takenNames = [];
 	var finishedArray = [];
-	_.each(mappedArray, (obj, ind, list) => {
+	_.each(mappedArray, (obj) => {
 		if (takenNames.indexOf(obj.name) == -1) {
 			takenNames.push(obj.name);
 			finishedArray.push(obj);

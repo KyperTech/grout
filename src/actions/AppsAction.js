@@ -1,6 +1,4 @@
-import config from '../config';
 import matter from '../classes/Matter';
-import Application from '../classes/Application';
 
 let request = matter.utils.request;
 let logger = matter.utils.logger;

@@ -2,10 +2,19 @@
   "parser": "babel-eslint",
   "rules": {
     "strict": 0,
-    "quotes": [2, "single"]
+    "quotes": [2, "single"],
+    "no-unused-expressions": 0,
+    "indent": [1,"tab"]
   },
   "env": {
+    "es6": true,
     "browser": true,
-    "node": true
+    "node": true,
+    "mocha": true
+  },
+  "globals": {
+    "spy": true,
+    "expect": true,
+    "sinon": true
   }
 }

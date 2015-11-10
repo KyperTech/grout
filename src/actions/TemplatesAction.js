@@ -1,4 +1,3 @@
-import config from '../config';
 import _ from 'lodash';
 import matter from '../classes/Matter';
 let logger = matter.utils.logger;

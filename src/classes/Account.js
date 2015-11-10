@@ -1,4 +1,3 @@
-import config from '../config';
 import matter from '../classes/Matter';
 import _ from 'lodash';
 let request = matter.utils.request;
@@ -13,7 +12,10 @@ class Account {
 		} else if (accountData && _.isString(accountData)) {
 			this.username = accountData;
 		} else {
-			logger.error({description: 'AccountData is required to start an AccountAction', func: 'constructor', obj: 'Account'});
+			logger.error({
+				description: 'AccountData is required to start an AccountAction',
+				func: 'constructor', obj: 'Account'
+			});
 			throw new Error('username is required to start an AccountAction');
 		}
 	}
