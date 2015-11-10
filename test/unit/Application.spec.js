@@ -1,4 +1,3 @@
-import config from '../../src/config';
 import Grout from '../../src/grout';
 import Matter from 'kyper-matter';
 import App from '../../src/classes/Application';
