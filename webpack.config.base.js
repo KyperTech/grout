@@ -19,7 +19,7 @@ module.exports = {
     ]
   },
   output: {
-    library: 'Matter',
+    library: 'Grout',
     libraryTarget: 'umd'
   },
   resolve: {

@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define(["aws-sdk"], factory);
 	else if(typeof exports === 'object')
-		exports["Matter"] = factory(require("aws-sdk"));
+		exports["Grout"] = factory(require("aws-sdk"));
 	else
-		root["Matter"] = factory(root["AWS"]);
+		root["Grout"] = factory(root["AWS"]);
 })(this, function(__WEBPACK_EXTERNAL_MODULE_11__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
