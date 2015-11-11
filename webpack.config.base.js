@@ -7,11 +7,18 @@ var awsExternal = {
   commonjs2: 'aws-sdk',
   commonjs: 'aws-sdk',
   amd: 'aws-sdk'
+};
+var matterExternal = {
+  root: 'Matter',
+  commonjs2: 'kyper-matter',
+  commonjs: 'kyper-matter',
+  amd: 'kyper-matter'
 }
 
 module.exports = {
   externals: {
-    'aws-sdk': awsExternal
+    'aws-sdk': awsExternal,
+    'kyper-matter': matterExternal
   },
   module: {
     loaders: [
