@@ -34,16 +34,27 @@ class Files {
 				if (_.has(applicationData, 'frontend')) {
 					return this.get();
 				} else {
-					logger.error({description: 'Application does not have Frontend to get files from.', func: 'get', obj: 'Files'});
+					logger.error({
+						description: 'Application does not have Frontend to get files from.',
+						func: 'get', obj: 'Files'
+					});
 					return Promise.reject({message: 'Application does not have frontend to get files from.'});
 				}
 			}, (err) => {
 				logger.error({
 					description: 'Application Frontend data not available. Make sure to call .get().',
-					error: err, func: 'get', obj: 'Files'});
+					error: err, func: 'get', obj: 'Files'
+				});
 				return Promise.reject({message: 'Bucket name required to get objects'});
 			});
 		} else {
+			if(typeof AWS == 'undefined'){
+				logger.error({
+					description: 'AWS is required to load files.',
+					func: 'get', obj: 'Files'
+				});
+				return Promise.reject({message: 'AWS is required to load files.'});
+			}
 			//If AWS Credential do not exist, set them
 			if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
 				// logger.info('AWS creds are being updated to make request');

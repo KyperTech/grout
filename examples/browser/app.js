@@ -1,6 +1,6 @@
     var grout = new Grout();
     //Set logged in status when dom is loaded
-    document.addEventListener("DOMContentLoaded", function(event) { 
+    document.addEventListener("DOMContentLoaded", function(event) {
       setStatus();
     });
     //Set status styles
@@ -24,7 +24,7 @@
       console.log('Login called');
       var username = document.getElementById('login-username').value;
       var password = document.getElementById('login-password').value;
-      
+
       grout.login({username:username, password:password}).then(function (loginInfo){
         console.log('successful login:', loginInfo);
         setStatus();
@@ -40,7 +40,7 @@
         setStatus();
       }, function (err){
         console.error('logout() : Error logging out:', err);
-      });   
+      });
     }
     //Signup and login as a new user
     function signup(){
@@ -56,7 +56,7 @@
         setStatus();
       }, function(err){
         console.error('logout() : Error logging out:', err);
-      });   
+      });
     }
     //Get list of applications
     function getApps(){
@@ -72,12 +72,12 @@
           outHtml += '</ul>';
         }
         document.getElementById("output").innerHTML = outHtml;
-      });   
+      });
     }
     //Get File/Folder structure for application
     function getStructure(){
       console.log('getStructure called');
-      grout.App('exampleApp').Files.buildStructure().then(function(app){
+      grout.App('Aventura').Files.buildStructure().then(function(app){
         console.log('apps list loaded:', app);
         document.getElementById("output").innerHTML = JSON.stringify(app);
       });
