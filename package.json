@@ -1,6 +1,6 @@
 {
   "name": "kyper-grout",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Library to communicate with tessellate application building/managing service.",
   "main": "dist/grout.js",
   "scripts": {
@@ -35,7 +35,7 @@
   "dependencies": {
     "aws-sdk": "^2.2.15",
     "firebase": "^2.2.9",
-    "kyper-matter": "0.1.4",
+    "kyper-matter": "0.1.5",
     "lodash": "^3.10.1",
     "qs": "^5.0.0",
     "superagent": "^1.3.0"
