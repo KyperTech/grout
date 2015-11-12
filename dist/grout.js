@@ -1,4 +1,4 @@
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -833,7 +833,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				//Get name from data or from pathArray
 				this.name = _.has(actionData.fileData, 'name') ? actionData.fileData.name : this.pathArray[this.pathArray.length - 1];
 			} else if (actionData && !_.isObject(actionData)) {
-				___logger.error({ description: 'File data is not an object. File data must be an object that includes path and appName.', func: 'constructor', obj: 'File' });
+				___logger.error({
+					description: 'File data is not an object. File data must be an object that includes path and appName.',
+					func: 'constructor', obj: 'File'
+				});
 				//TODO: Get appName from path data?
 				throw new Error('File data must be an object that includes path and appName.');
 			} else {
@@ -854,46 +857,79 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var _this = this;
 
 				if (!this.app || !this.app.frontend) {
-					___logger.log({ description: 'Application Frontend data not available. Calling applicaiton get.', func: 'get', obj: 'File' });
+					___logger.log({
+						description: 'Application Frontend data not available. Calling applicaiton get.', func: 'get', obj: 'File'
+					});
 					return this.app.get().then(function (appData) {
 						_this.app = appData;
-						___logger.log({ description: 'Application get successful. Getting file.', app: appData, func: 'get', obj: 'File' });
+						___logger.log({
+							description: 'Application get successful. Getting file.',
+							app: appData, func: 'get', obj: 'File'
+						});
 						return _this.get();
 					}, function (err) {
-						___logger.error({ description: 'Application Frontend data not available. Make sure to call .get().', error: err, func: 'get', obj: 'File' });
+						___logger.error({
+							description: 'Application Frontend data not available.',
+							error: err, func: 'get', obj: 'File'
+						});
 						return Promise.reject({ message: 'Front end data is required to get file.' });
 					});
 				} else {
 					var _ret = (function () {
 						//If AWS Credential do not exist, set them
 						if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
-							___logger.debug({ description: 'AWS creds do not exist, so they are being set.', func: 'publish', obj: 'File' });
+							___logger.log({
+								description: 'AWS creds do not exist, so they are being set.',
+								func: 'publish', obj: 'File'
+							});
 							_setAWSConfig();
 						}
 						var s3 = new AWS.S3();
-						var saveParams = {
+						var getData = {
 							Bucket: _this.app.frontend.bucketName,
 							Key: _this.path
 						};
 						//Set contentType from actionData to ContentType parameter of new object
 						if (_this.contentType) {
-							saveParams.ContentType = _this.contentType;
+							getData.ContentType = _this.contentType;
 						}
-						___logger.debug({ description: 'File get params built.', saveParams: saveParams, file: _this, func: 'get', obj: 'File' });
+						___logger.debug({
+							description: 'File get params built.', getData: getData,
+							file: _this, func: 'get', obj: 'File'
+						});
+						var finalData = _this;
+
 						return {
 							v: new Promise(function (resolve, reject) {
-								s3.getObject(saveParams, function (err, data) {
+								s3.getObject(getData, function (err, data) {
 									//[TODO] Add putting object ACL (make public)
 									if (!err) {
-										___logger.info({ description: 'File loaded successfully.', fileData: data, func: 'get', obj: 'File' });
+										___logger.info({
+											description: 'File loaded successfully.',
+											data: data, func: 'get', obj: 'File'
+										});
 										if (_.has(data, 'Body')) {
-											___logger.info({ description: 'File has content.', fileData: data.Body.toString(), func: 'get', obj: 'File' });
-											resolve(data.Body.toString());
+											___logger.info({
+												description: 'File has content.',
+												content: data.Body.toString(),
+												metaData: data.Metadata.toString(),
+												func: 'get', obj: 'File'
+											});
+											finalData.content = data.Body.toString();
+											___logger.info({
+												description: 'File content has been added to file.',
+												file: finalData,
+												func: 'get', obj: 'File'
+											});
+											resolve(finalData);
 										} else {
 											resolve(data);
 										}
 									} else {
-										___logger.error({ description: 'Error loading file from S3.', error: err, func: 'get', obj: 'File' });
+										___logger.error({
+											description: 'Error loading file from S3.',
+											error: err, func: 'get', obj: 'File'
+										});
 										return reject(err);
 									}
 								});
@@ -1038,10 +1074,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				//TODO: Fill with default data for matching file type
 			}
 		}, {
+			key: 'fileType',
+			get: function get() {
+				if (this.ext == 'js') {
+					return 'javascript';
+				} else {
+					return this.ext;
+				}
+			}
+		}, {
 			key: 'ext',
 			get: function get() {
 				var re = /(?:\.([^.]+))?$/;
-				this.ext = re.exec(this.name)[1];
+				return re.exec(this.name)[1];
 			}
 		}]);
 

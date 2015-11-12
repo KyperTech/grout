@@ -15,7 +15,10 @@ class File {
 			//Get name from data or from pathArray
 			this.name = _.has(actionData.fileData, 'name') ? actionData.fileData.name : this.pathArray[this.pathArray.length - 1];
 		} else if (actionData && !_.isObject(actionData)) {
-			logger.error({description: 'File data is not an object. File data must be an object that includes path and appName.', func: 'constructor', obj: 'File'});
+			logger.error({
+				description: 'File data is not an object. File data must be an object that includes path and appName.',
+				func: 'constructor', obj: 'File'
+			});
 			//TODO: Get appName from path data?
 			throw new Error('File data must be an object that includes path and appName.');
 		} else {
@@ -25,50 +28,80 @@ class File {
 		this.type = 'file';
 		logger.debug({description: 'File object constructed.', file: this, func: 'constructor', obj: 'File'});
 	}
-	get ext() {
-		let re = /(?:\.([^.]+))?$/;
-		this.ext = re.exec(this.name)[1];
-	}
+
 	get() {
 		if (!this.app || !this.app.frontend) {
-			logger.log({description: 'Application Frontend data not available. Calling applicaiton get.', func: 'get', obj: 'File'});
+			logger.log({
+				description: 'Application Frontend data not available. Calling applicaiton get.', func: 'get', obj: 'File'
+			});
 			return this.app.get().then((appData) => {
 				this.app = appData;
-				logger.log({description: 'Application get successful. Getting file.', app: appData, func: 'get', obj: 'File'});
+				logger.log({
+					description: 'Application get successful. Getting file.',
+					app: appData, func: 'get', obj: 'File'
+				});
 				return this.get();
 			}, (err) => {
-				logger.error({description: 'Application Frontend data not available. Make sure to call .get().', error: err, func: 'get', obj: 'File'});
+				logger.error({
+					description: 'Application Frontend data not available.',
+					error: err, func: 'get', obj: 'File'
+				});
 				return Promise.reject({message: 'Front end data is required to get file.'});
 			});
 		} else {
 			//If AWS Credential do not exist, set them
 			if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
-				logger.debug({description: 'AWS creds do not exist, so they are being set.', func: 'publish', obj: 'File'});
+				logger.log({
+					description: 'AWS creds do not exist, so they are being set.',
+					func: 'publish', obj: 'File'
+				});
 				setAWSConfig();
 			}
 			let s3 = new AWS.S3();
-			let saveParams = {
+			let getData = {
 				Bucket: this.app.frontend.bucketName,
 				Key: this.path
 			};
 			//Set contentType from actionData to ContentType parameter of new object
 			if (this.contentType) {
-				saveParams.ContentType = this.contentType;
+				getData.ContentType = this.contentType;
 			}
-			logger.debug({description: 'File get params built.', saveParams: saveParams, file: this, func: 'get', obj: 'File'});
+			logger.debug({
+				description: 'File get params built.', getData: getData,
+				file: this, func: 'get', obj: 'File'
+			});
+			let finalData = this;
+
 			return new Promise((resolve, reject) => {
-				s3.getObject(saveParams, function(err, data) {
+				s3.getObject(getData, (err, data) => {
 					//[TODO] Add putting object ACL (make public)
 					if (!err) {
-						logger.info({description: 'File loaded successfully.', fileData: data, func: 'get', obj: 'File'});
+						logger.info({
+							description: 'File loaded successfully.',
+							data: data, func: 'get', obj: 'File'
+						});
 						if (_.has(data, 'Body')) {
-							logger.info({description: 'File has content.', fileData: data.Body.toString(), func: 'get', obj: 'File'});
-							resolve(data.Body.toString());
+							logger.info({
+								description: 'File has content.',
+								content: data.Body.toString(),
+								metaData: data.Metadata.toString(),
+								func: 'get', obj: 'File'
+							});
+							finalData.content = data.Body.toString();
+							logger.info({
+								description: 'File content has been added to file.',
+								file: finalData,
+								func: 'get', obj: 'File'
+							});
+							resolve(finalData);
 						} else {
 							resolve(data);
 						}
-					}	else {
-						logger.error({description: 'Error loading file from S3.', error: err, func: 'get', obj: 'File'});
+					} else {
+						logger.error({
+							description: 'Error loading file from S3.',
+							error: err, func: 'get', obj: 'File'
+						});
 						return reject(err);
 					}
 				});
@@ -167,6 +200,17 @@ class File {
 				});
 			});
 		}
+	}
+	get fileType() {
+		if (this.ext == 'js') {
+			return 'javascript';
+		} else {
+			return this.ext;
+		}
+	}
+	get ext() {
+		let re = /(?:\.([^.]+))?$/;
+		return re.exec(this.name)[1];
 	}
 	getTypes() {
 		//Get content type and file type from extension
