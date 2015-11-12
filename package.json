@@ -1,6 +1,6 @@
 {
   "name": "kyper-grout",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Library to communicate with tessellate application building/managing service.",
   "main": "dist/grout.js",
   "scripts": {
