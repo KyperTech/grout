@@ -7,12 +7,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== 'function' 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('kyper-matter'), require('lodash'), require('firebase'), require('aws-sdk')) : typeof define === 'function' && define.amd ? define(['kyper-matter', 'lodash', 'firebase', 'aws-sdk'], factory) : global.Grout = factory(global.Matter, global._, global.Firebase, global.AWS);
-})(this, function (Matter, _, Firebase, AWS) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('kyper-matter'), require('lodash'), require('firepad'), require('firebase'), require('aws-sdk')) : typeof define === 'function' && define.amd ? define(['kyper-matter', 'lodash', 'firepad', 'firebase', 'aws-sdk'], factory) : global.Grout = factory(global.Matter, global._, global.Firepad, global.Firebase, global.AWS);
+})(this, function (Matter, _, Firepad, Firebase, AWS) {
 	'use strict';
 
 	Matter = 'default' in Matter ? Matter['default'] : Matter;
 	_ = 'default' in _ ? _['default'] : _;
+	Firepad = 'default' in Firepad ? Firepad['default'] : Firepad;
 	Firebase = 'default' in Firebase ? Firebase['default'] : Firebase;
 	AWS = 'default' in AWS ? AWS['default'] : AWS;
 
@@ -1092,9 +1093,68 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				}
 			}
 		}, {
-			key: 'openWithFirepad',
-			value: function openWithFirepad() {
+			key: 'firepadFromAce',
+			value: function firepadFromAce(editor) {
 				//TODO:Create new Firepad instance within div
+				if (!editor || typeof editor.setTheme !== 'function') {
+					___logger.error({
+						description: 'Valid ace editor instance required to create firepad.',
+						func: 'fbRef', obj: 'File', editor: editor
+					});
+					return;
+				}
+				if (typeof Firepad.fromACE !== 'function') {
+					___logger.error({
+						description: 'Firepad does not have fromACE method.',
+						firepad: Firepad, func: 'fbRef', obj: 'File'
+					});
+					return;
+				}
+				var settings = {};
+				if (this.content) {
+					settings.defaultText = this.content;
+				}
+				if (matter.isLoggedIn) {
+					settings.userId = matter.currentUser._id || matter.currentUser.username;
+				}
+				// logger.log({
+				// 	description: 'Creating firepad from ace.',
+				// 	settings: settings, func: 'fbRef', obj: 'File'
+				// });
+				return Firepad.fromACE(this.fbRef, editor, settings);
+			}
+		}, {
+			key: 'getConnectedUsers',
+			value: function getConnectedUsers() {
+				var _this4 = this;
+
+				return new Promise(function (resolve, reject) {
+					_this4.fbRef.child('users').on('value', function (usersSnap) {
+						if (usersSnap.val() === null) {
+							resolve([]);
+						} else {
+							(function () {
+								var usersArray = [];
+								usersSnap.forEach(function (userSnap) {
+									var user = userSnap.val();
+									user.username = userSnap.key();
+									usersArray.push(user);
+								});
+								___logger.log({
+									description: 'Connected users array built.',
+									users: usersArray, func: 'connectedUsers', obj: 'File'
+								});
+								resolve(usersArray);
+							})();
+						}
+					}, function (err) {
+						___logger.error({
+							description: 'Error loading connected users.',
+							error: err, func: 'connectedUsers', obj: 'File'
+						});
+						reject(err);
+					});
+				});
 			}
 		}, {
 			key: 'getDefaultContent',
@@ -1117,9 +1177,27 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				return re.exec(this.name)[1];
 			}
 		}, {
+			key: 'safePathArray',
+			get: function get() {
+				var safeArray = this.pathArray.map(function (loc) {
+					//Replace periods with colons and other unsafe chars as --
+					return loc.replace(/[.]/g, ':').replace(/[#$\[\]]/g, '--');
+				});
+				___logger.log({
+					description: 'Safe path array created.',
+					safeArray: safeArray, func: 'safePathArray', obj: 'File'
+				});
+				return safeArray;
+			}
+		}, {
+			key: 'safePath',
+			get: function get() {
+				return this.safePathArray.join('/');
+			}
+		}, {
 			key: 'fbUrl',
 			get: function get() {
-				var url = [config.fbUrl, this.app.name, this.pathArray.join('/')].join('/');
+				var url = [config.fbUrl, 'files', this.app.name, this.safePath].join('/');
 				___logger.log({
 					description: 'File ref url generated',
 					url: url, func: 'fbRef', obj: 'File'
@@ -1185,15 +1263,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'get',
 			value: function get() {
-				var _this4 = this;
+				var _this5 = this;
 
 				if (!this.app.frontend || !this.app.frontend.bucketName) {
 					__logger.warn({ description: 'Application Frontend data not available. Calling .get().', app: this.app, func: 'get', obj: 'Files' });
 					return this.app.get().then(function (applicationData) {
 						__logger.log({ description: 'Application get returned.', data: applicationData, func: 'get', obj: 'Files' });
-						_this4.app = applicationData;
+						_this5.app = applicationData;
 						if (_.has(applicationData, 'frontend')) {
-							return _this4.get();
+							return _this5.get();
 						} else {
 							__logger.error({ description: 'Application does not have Frontend to get files from.', func: 'get', obj: 'Files' });
 							return Promise.reject({ message: 'Application does not have frontend to get files from.' });
@@ -1205,14 +1283,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						return Promise.reject({ message: 'Bucket name required to get objects' });
 					});
 				} else {
-					var _ret4 = (function () {
+					var _ret5 = (function () {
 						//If AWS Credential do not exist, set them
 						if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
 							// logger.info('AWS creds are being updated to make request');
 							setAWSConfig();
 						}
 						var s3 = new AWS.S3();
-						var listParams = { Bucket: _this4.app.frontend.bucketName };
+						var listParams = { Bucket: _this5.app.frontend.bucketName };
 						return {
 							v: new Promise(function (resolve, reject) {
 								s3.listObjects(listParams, function (err, data) {
@@ -1228,7 +1306,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						};
 					})();
 
-					if (typeof _ret4 === 'object') return _ret4.v;
+					if (typeof _ret5 === 'object') return _ret5.v;
 				}
 			}
 		}, {
@@ -1449,7 +1527,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'applyTemplate',
 			value: function applyTemplate() {
-				var _this5 = this;
+				var _this6 = this;
 
 				_logger.error({
 					description: 'Applying templates to existing applications is not currently supported.',
@@ -1458,14 +1536,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				return _request.post(this.appEndpoint, {}).then(function (response) {
 					_logger.info({
 						description: 'Template successfully applied to application.',
-						response: response, application: _this5,
+						response: response, application: _this6,
 						func: 'applyTemplate', obj: 'Application'
 					});
 					return new Application(response);
 				})['catch'](function (errRes) {
 					_logger.error({
 						description: 'Error applying template to application.',
-						error: errRes, application: _this5,
+						error: errRes, application: _this6,
 						func: 'applyTemplate', obj: 'Application'
 					});
 					return Promise.reject(errRes.response.text || errRes.response);

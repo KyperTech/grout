@@ -2,6 +2,7 @@ import config from '../config';
 import matter from './Matter';
 import _ from 'lodash';
 import Firebase from 'firebase';
+import Firepad from 'firepad';
 import AWS from 'aws-sdk';
 //Convenience vars
 let logger = matter.utils.logger;
@@ -260,7 +261,7 @@ class File {
 		return this.safePathArray.join('/');
 	}
 	get fbUrl() {
-		let url = [config.fbUrl, this.app.name, this.safePath].join('/');
+		let url = [config.fbUrl, 'files', this.app.name, this.safePath].join('/');
 		logger.log({
 			description: 'File ref url generated',
 			url: url, func: 'fbRef', obj: 'File'
@@ -274,8 +275,61 @@ class File {
 		});
 		return new Firebase(this.fbUrl);
 	}
-	openWithFirepad() {
+	firepadFromAce(editor) {
 		//TODO:Create new Firepad instance within div
+		if (!editor || typeof editor.setTheme !== 'function') {
+			logger.error({
+				description: 'Valid ace editor instance required to create firepad.',
+				func: 'fbRef', obj: 'File', editor: editor
+			});
+			return;
+		}
+		if (typeof Firepad.fromACE !== 'function') {
+			logger.error({
+				description: 'Firepad does not have fromACE method.',
+				firepad: Firepad, func: 'fbRef', obj: 'File'
+			});
+			return;
+		}
+		let settings = {};
+		if (this.content) {
+			settings.defaultText = this.content;
+		}
+		if (matter.isLoggedIn && matter.currentUser) {
+			settings.userId = matter.currentUser.username || matter.currentUser.name;
+		}
+		// logger.log({
+		// 	description: 'Creating firepad from ace.',
+		// 	settings: settings, func: 'fbRef', obj: 'File'
+		// });
+		return Firepad.fromACE(this.fbRef, editor, settings);
+	}
+	getConnectedUsers() {
+		return new Promise((resolve, reject) => {
+			this.fbRef.child('users').on('value', (usersSnap) => {
+				if (usersSnap.val() === null) {
+					resolve([]);
+				} else {
+					let usersArray = [];
+					usersSnap.forEach((userSnap) => {
+						let user = userSnap.val();
+						user.username = userSnap.key();
+						usersArray.push(user);
+					});
+					logger.log({
+						description: 'Connected users array built.',
+						users: usersArray, func: 'connectedUsers', obj: 'File'
+					});
+					resolve(usersArray);
+				}
+			}, (err) => {
+				logger.error({
+					description: 'Error loading connected users.',
+					error: err, func: 'connectedUsers', obj: 'File'
+				});
+				reject(err);
+			});
+		});
 	}
 	getDefaultContent() {
 		//TODO: Fill with default data for matching file type

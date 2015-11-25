@@ -1,4 +1,7 @@
     var grout = new Grout();
+    console.log('utils', grout.utils);
+
+
     //Set logged in status when dom is loaded
     document.addEventListener("DOMContentLoaded", function(event) {
       setStatus();
@@ -81,7 +84,7 @@
       //   console.log('apps list loaded:', app);
       //   document.getElementById("output").innerHTML = JSON.stringify(app);
       // });
-      var file = grout.App('Aventura').File({name: 'index.html', key: 'index.html', path: 'index.html'});
+      var file = grout.App('Aventura').File({key: 'index.html', path: 'index.html'});
       console.log('fbUrl', file.safePathArray);
       console.log('fbUrl', file.safePath);
       console.log('fbUrl', file.fbUrl);
@@ -89,6 +92,33 @@
       // file.get().then(function(app){
       //   console.log('apps list loaded:', app);
       //   document.getElementById("output").innerHTML = JSON.stringify(app);
+      // });
+    }
+    //Get File/Folder structure for application
+    function getFirepad(){
+      console.log('getStructure called');
+      // grout.App('exampleApp').Files.buildStructure().then(function(app){
+      //   console.log('apps list loaded:', app);
+      //   document.getElementById("output").innerHTML = JSON.stringify(app);
+      // });
+      var file = grout.App('Aventura').File({name: 'index.html', key: 'index.html', path: 'index.html'});
+      //// Create ACE
+      var editor = ace.edit("firepad-container");
+      editor.setTheme("ace/theme/textmate");
+      var session = editor.getSession();
+      session.setUseWrapMode(true);
+      session.setUseWorker(false);
+      session.setMode("ace/mode/javascript");
+      file.firepadFromAce(editor);
+      file.getConnectedUsers().then((users) => {
+        document.getElementById("output").innerHTML = JSON.stringify(users);
+      });
+
+      console.log('fbUrl', file.fbUrl);
+      console.log('fbRef', file.fbRef);
+      // file.get().then(function(fileRes){
+      //   console.log('file loaded', fileRes);
+      //   fileRes.firepadFromAce(editor);
       // });
     }
     //Get list of users
