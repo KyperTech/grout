@@ -1117,14 +1117,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				return re.exec(this.name)[1];
 			}
 		}, {
-			key: 'fbRef',
+			key: 'fbUrl',
 			get: function get() {
-				var url = [config.fbUrl, this.app.name, this.pathArray].join('/');
+				var url = [config.fbUrl, this.app.name, this.pathArray.join('/')].join('/');
 				___logger.log({
 					description: 'File ref url generated',
 					url: url, func: 'fbRef', obj: 'File'
 				});
-				return new Firebase(url);
+				return url;
+			}
+		}, {
+			key: 'fbRef',
+			get: function get() {
+				___logger.log({
+					description: 'Fb ref generatating.',
+					url: this.fbUrl, func: 'fbRef', obj: 'File'
+				});
+				return new Firebase(this.fbUrl);
 			}
 		}]);
 

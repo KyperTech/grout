@@ -245,13 +245,34 @@ class File {
 		let re = /(?:\.([^.]+))?$/;
 		return re.exec(this.name)[1];
 	}
-	get fbRef() {
-		let url = [config.fbUrl, this.app.name, this.pathArray].join('/');
+	get safePathArray() {
+		let safeArray = this.pathArray.map((loc) => {
+			//Replace periods with colons and other unsafe chars as --
+			return loc.replace(/[.]/g, ':').replace(/[#$\[\]]/g, '--');
+		});
+		logger.log({
+			description: 'Safe path array created.',
+			safeArray: safeArray, func: 'safePathArray', obj: 'File'
+		});
+		return safeArray;
+	}
+	get safePath() {
+		return this.safePathArray.join('/');
+	}
+	get fbUrl() {
+		let url = [config.fbUrl, this.app.name, this.safePath].join('/');
 		logger.log({
 			description: 'File ref url generated',
 			url: url, func: 'fbRef', obj: 'File'
 		});
-		return new Firebase(url);
+		return url;
+	}
+	get fbRef() {
+		logger.log({
+			description: 'Fb ref generatating.',
+			url: this.fbUrl, func: 'fbRef', obj: 'File'
+		});
+		return new Firebase(this.fbUrl);
 	}
 	openWithFirepad() {
 		//TODO:Create new Firepad instance within div
