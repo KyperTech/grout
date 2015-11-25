@@ -7,14 +7,14 @@ function _inherits(subClass, superClass) { if (typeof superClass !== 'function' 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('kyper-matter'), require('lodash'), require('aws-sdk'), require('firebase')) : typeof define === 'function' && define.amd ? define(['kyper-matter', 'lodash', 'aws-sdk', 'firebase'], factory) : global.Grout = factory(global.Matter, global._, global.AWS, global.Firebase);
-})(this, function (Matter, _, AWS, Firebase) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('kyper-matter'), require('lodash'), require('firebase'), require('aws-sdk')) : typeof define === 'function' && define.amd ? define(['kyper-matter', 'lodash', 'firebase', 'aws-sdk'], factory) : global.Grout = factory(global.Matter, global._, global.Firebase, global.AWS);
+})(this, function (Matter, _, Firebase, AWS) {
 	'use strict';
 
 	Matter = 'default' in Matter ? Matter['default'] : Matter;
 	_ = 'default' in _ ? _['default'] : _;
-	AWS = 'default' in AWS ? AWS['default'] : AWS;
 	Firebase = 'default' in Firebase ? Firebase['default'] : Firebase;
+	AWS = 'default' in AWS ? AWS['default'] : AWS;
 
 	var config = {
 		serverUrl: 'http://tessellate.elasticbeanstalk.com',
@@ -898,7 +898,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 							file: _this, func: 'get', obj: 'File'
 						});
 						var finalData = _this;
-
 						return {
 							v: new Promise(function (resolve, reject) {
 								s3.getObject(getData, function (err, data) {
@@ -953,14 +952,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				var _this2 = this;
 
 				//TODO: Publish file to application
-				___logger.debug({ description: 'File publish called.', file: this, fileData: fileData, func: 'publish', obj: 'File' });
+				___logger.debug({
+					description: 'File publish called.', file: this,
+					fileData: fileData, func: 'publish', obj: 'File'
+				});
 				if (!this.app.frontend) {
-					___logger.error({ description: 'Application Frontend data not available. Make sure to call .get().', func: 'publish', obj: 'File' });
+					___logger.error({
+						description: 'Application Frontend data not available. Make sure to call .get().',
+						func: 'publish', obj: 'File'
+					});
 					return Promise.reject({ message: 'Front end data is required to publish file.' });
 				} else {
 					var _ret2 = (function () {
 						if (!_.has(fileData, ['content', 'path'])) {
-							___logger.error({ description: 'File data including path and content required to publish.', func: 'publish', obj: 'File' });
+							___logger.error({
+								description: 'File data including path and content required to publish.',
+								func: 'publish', obj: 'File'
+							});
 							return {
 								v: Promise.reject({ message: 'File data including path and content required to publish.' })
 							};
@@ -977,21 +985,33 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						}
 						//If AWS Credential do not exist, set them
 						if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
-							___logger.debug({ description: 'AWS creds do not exist, so they are being set.', func: 'publish', obj: 'File' });
+							___logger.debug({
+								description: 'AWS creds do not exist, so they are being set.',
+								func: 'publish', obj: 'File'
+							});
 							_setAWSConfig();
 						}
 						var s3 = new AWS.S3();
-
-						___logger.debug({ description: 'File publish params built.', saveParams: saveParams, fileData: _this2, func: 'publish', obj: 'File' });
+						___logger.debug({
+							description: 'File publish params built.',
+							saveParams: saveParams, fileData: _this2,
+							func: 'publish', obj: 'File'
+						});
 						return {
 							v: new Promise(function (resolve, reject) {
 								s3.putObject(saveParams, function (err, data) {
 									//[TODO] Add putting object ACL (make public)
 									if (!err) {
-										___logger.log({ description: 'File saved successfully.', response: data, func: 'publish', obj: 'File' });
+										___logger.log({
+											description: 'File saved successfully.',
+											response: data, func: 'publish', obj: 'File'
+										});
 										resolve(data);
 									} else {
-										___logger.error({ description: 'Error saving file to S3.', error: err, func: 'publish', obj: 'File' });
+										___logger.error({
+											description: 'Error saving file to S3.',
+											error: err, func: 'publish', obj: 'File'
+										});
 										reject(err);
 									}
 								});
@@ -1033,21 +1053,34 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						if (_this3.contentType) {
 							saveParams.ContentType = _this3.contentType;
 						}
-						___logger.debug({ description: 'File get params built.', saveParams: saveParams, file: _this3, func: 'get', obj: 'File' });
+						___logger.debug({
+							description: 'File get params built.',
+							saveParams: saveParams, file: _this3,
+							func: 'get', obj: 'File'
+						});
 						return {
 							v: new Promise(function (resolve, reject) {
 								s3.deleteObject(saveParams, function (err, data) {
 									//[TODO] Add putting object ACL (make public)
 									if (!err) {
-										___logger.info({ description: 'File loaded successfully.', fileData: data, func: 'get', obj: 'File' });
+										___logger.info({
+											description: 'File loaded successfully.',
+											fileData: data, func: 'get', obj: 'File'
+										});
 										if (_.has(data, 'Body')) {
-											___logger.info({ description: 'File has content.', fileData: data.Body.toString(), func: 'get', obj: 'File' });
+											___logger.info({
+												description: 'File has content.',
+												fileData: data.Body.toString(), func: 'get', obj: 'File'
+											});
 											resolve(data.Body.toString());
 										} else {
 											resolve(data);
 										}
 									} else {
-										___logger.error({ description: 'Error loading file from S3.', error: err, func: 'get', obj: 'File' });
+										___logger.error({
+											description: 'Error loading file from S3.',
+											error: err, func: 'get', obj: 'File'
+										});
 										return reject(err);
 									}
 								});
@@ -1057,11 +1090,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 					if (typeof _ret3 === 'object') return _ret3.v;
 				}
-			}
-		}, {
-			key: 'getTypes',
-			value: function getTypes() {
-				//Get content type and file type from extension
 			}
 		}, {
 			key: 'openWithFirepad',
@@ -1087,6 +1115,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			get: function get() {
 				var re = /(?:\.([^.]+))?$/;
 				return re.exec(this.name)[1];
+			}
+		}, {
+			key: 'fbRef',
+			get: function get() {
+				var url = [config.fbUrl, this.app.name, this.pathArray].join('/');
+				___logger.log({
+					description: 'File ref url generated',
+					url: url, func: 'fbRef', obj: 'File'
+				});
+				return new Firebase(url);
 			}
 		}]);
 

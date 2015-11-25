@@ -1,7 +1,7 @@
 import config from '../config';
 import matter from './Matter';
 import _ from 'lodash';
-
+import Firebase from 'firebase';
 import AWS from 'aws-sdk';
 //Convenience vars
 let logger = matter.utils.logger;
@@ -71,7 +71,6 @@ class File {
 				file: this, func: 'get', obj: 'File'
 			});
 			let finalData = this;
-
 			return new Promise((resolve, reject) => {
 				s3.getObject(getData, (err, data) => {
 					//[TODO] Add putting object ACL (make public)
@@ -114,13 +113,22 @@ class File {
 	}
 	publish(fileData) {
 		//TODO: Publish file to application
-		logger.debug({description: 'File publish called.', file: this, fileData: fileData, func: 'publish', obj: 'File'});
+		logger.debug({
+			description: 'File publish called.', file: this,
+			fileData: fileData, func: 'publish', obj: 'File'
+		});
 		if (!this.app.frontend) {
-			logger.error({description: 'Application Frontend data not available. Make sure to call .get().', func: 'publish', obj: 'File'});
+			logger.error({
+				description: 'Application Frontend data not available. Make sure to call .get().',
+				func: 'publish', obj: 'File'
+			});
 			return Promise.reject({message: 'Front end data is required to publish file.'});
 		} else {
 			if (!_.has(fileData, ['content', 'path'])) {
-				logger.error({description: 'File data including path and content required to publish.', func: 'publish', obj: 'File'});
+				logger.error({
+					description: 'File data including path and content required to publish.',
+					func: 'publish', obj: 'File'
+				});
 				return Promise.reject({message: 'File data including path and content required to publish.'});
 			}
 			let saveParams = {
@@ -135,20 +143,32 @@ class File {
 			}
 			//If AWS Credential do not exist, set them
 			if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
-				logger.debug({description: 'AWS creds do not exist, so they are being set.', func: 'publish', obj: 'File'});
+				logger.debug({
+					description: 'AWS creds do not exist, so they are being set.',
+					func: 'publish', obj: 'File'
+				});
 				setAWSConfig();
 			}
 			let s3 = new AWS.S3();
-
-			logger.debug({description: 'File publish params built.', saveParams: saveParams, fileData: this, func: 'publish', obj: 'File'});
+			logger.debug({
+				description: 'File publish params built.',
+				saveParams: saveParams, fileData: this,
+				func: 'publish', obj: 'File'
+			});
 			return new Promise((resolve, reject) => {
 				s3.putObject(saveParams, function(err, data) {
 					//[TODO] Add putting object ACL (make public)
 					if (!err) {
-						logger.log({description: 'File saved successfully.', response: data, func: 'publish', obj: 'File'});
+						logger.log({
+							description: 'File saved successfully.',
+							response: data, func: 'publish', obj: 'File'
+						});
 						resolve(data);
 					}	else {
-						logger.error({description: 'Error saving file to S3.', error: err, func: 'publish', obj: 'File'});
+						logger.error({
+							description: 'Error saving file to S3.',
+							error: err, func: 'publish', obj: 'File'
+						});
 						reject(err);
 					}
 				});
@@ -181,20 +201,33 @@ class File {
 			if (this.contentType) {
 				saveParams.ContentType = this.contentType;
 			}
-			logger.debug({description: 'File get params built.', saveParams: saveParams, file: this, func: 'get', obj: 'File'});
+			logger.debug({
+				description: 'File get params built.',
+				saveParams: saveParams, file: this,
+				func: 'get', obj: 'File'
+			});
 			return new Promise((resolve, reject) => {
 				s3.deleteObject(saveParams, function(err, data) {
 					//[TODO] Add putting object ACL (make public)
 					if (!err) {
-						logger.info({description: 'File loaded successfully.', fileData: data, func: 'get', obj: 'File'});
+						logger.info({
+							description: 'File loaded successfully.',
+							fileData: data, func: 'get', obj: 'File'
+						});
 						if (_.has(data, 'Body')) {
-							logger.info({description: 'File has content.', fileData: data.Body.toString(), func: 'get', obj: 'File'});
+							logger.info({
+								description: 'File has content.',
+								fileData: data.Body.toString(), func: 'get', obj: 'File'
+							});
 							resolve(data.Body.toString());
 						} else {
 							resolve(data);
 						}
 					}	else {
-						logger.error({description: 'Error loading file from S3.', error: err, func: 'get', obj: 'File'});
+						logger.error({
+							description: 'Error loading file from S3.',
+							error: err, func: 'get', obj: 'File'
+						});
 						return reject(err);
 					}
 				});
@@ -212,8 +245,13 @@ class File {
 		let re = /(?:\.([^.]+))?$/;
 		return re.exec(this.name)[1];
 	}
-	getTypes() {
-		//Get content type and file type from extension
+	get fbRef() {
+		let url = [config.fbUrl, this.app.name, this.pathArray].join('/');
+		logger.log({
+			description: 'File ref url generated',
+			url: url, func: 'fbRef', obj: 'File'
+		});
+		return new Firebase(url);
 	}
 	openWithFirepad() {
 		//TODO:Create new Firepad instance within div
