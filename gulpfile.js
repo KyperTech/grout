@@ -8,6 +8,7 @@ const glob = require('glob');
 const path = require('path');
 const isparta = require('isparta');
 const babelify = require('babelify');
+const browserSync = require('browser-sync');
 const watchify = require('watchify');
 const buffer = require('vinyl-buffer');
 const rollup = require('rollup');

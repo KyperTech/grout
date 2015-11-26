@@ -109,10 +109,12 @@
       session.setUseWrapMode(true);
       session.setUseWorker(false);
       session.setMode("ace/mode/javascript");
-      file.firepadFromAce(editor);
-      file.getConnectedUsers().then((users) => {
-        document.getElementById("output").innerHTML = JSON.stringify(users);
+      file.openInFirepad(editor).then(function(openFile){
+        file.getConnectedUsers().then(function(users){
+          document.getElementById("output").innerHTML = JSON.stringify(users);
+        });
       });
+
 
       console.log('fbUrl', file.fbUrl);
       console.log('fbRef', file.fbRef);

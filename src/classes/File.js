@@ -289,6 +289,7 @@ class File {
 				//Wait for firepad to be ready
 				firepad.on('ready', () => {
 					resolve(file);
+					// firepad.setText()
 				});
 			}, (err) => {
 				logger.error({
@@ -322,10 +323,10 @@ class File {
 		if (matter.isLoggedIn && matter.currentUser) {
 			settings.userId = matter.currentUser.username || matter.currentUser.name;
 		}
-		// logger.log({
-		// 	description: 'Creating firepad from ace.',
-		// 	settings: settings, func: 'fbRef', obj: 'File'
-		// });
+		logger.log({
+			description: 'Creating firepad from ace.',
+			settings: settings, func: 'fbRef', obj: 'File'
+		});
 		return Firepad.fromACE(this.fbRef, editor, settings);
 	}
 	getConnectedUsers() {

@@ -98572,6 +98572,7 @@ var File = (function () {
 					//Wait for firepad to be ready
 					firepad.on('ready', function () {
 						resolve(file);
+						// firepad.setText()
 					});
 				}, function (err) {
 					logger.error({
@@ -98607,10 +98608,10 @@ var File = (function () {
 			if (_Matter2['default'].isLoggedIn && _Matter2['default'].currentUser) {
 				settings.userId = _Matter2['default'].currentUser.username || _Matter2['default'].currentUser.name;
 			}
-			// logger.log({
-			// 	description: 'Creating firepad from ace.',
-			// 	settings: settings, func: 'fbRef', obj: 'File'
-			// });
+			logger.log({
+				description: 'Creating firepad from ace.',
+				settings: settings, func: 'fbRef', obj: 'File'
+			});
 			return _firepad2['default'].fromACE(this.fbRef, editor, settings);
 		}
 	}, {

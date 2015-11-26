@@ -1110,6 +1110,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						//Wait for firepad to be ready
 						firepad.on('ready', function () {
 							resolve(file);
+							// firepad.setText()
 						});
 					}, function (err) {
 						___logger.error({
@@ -1145,10 +1146,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				if (matter.isLoggedIn && matter.currentUser) {
 					settings.userId = matter.currentUser.username || matter.currentUser.name;
 				}
-				// logger.log({
-				// 	description: 'Creating firepad from ace.',
-				// 	settings: settings, func: 'fbRef', obj: 'File'
-				// });
+				___logger.log({
+					description: 'Creating firepad from ace.',
+					settings: settings, func: 'fbRef', obj: 'File'
+				});
 				return Firepad.fromACE(this.fbRef, editor, settings);
 			}
 		}, {
