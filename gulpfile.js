@@ -73,7 +73,7 @@ gulp.task('build:bundle', function (callback) {
 // Ensure that linting occurs before browserify runs. This prevents
 // the build from breaking due to poorly formatted code.
 gulp.task('build', function (callback) {
-  runSequence(['lint-src', 'lint-test'], 'test', 'build:main', 'build:bundle', 'watch', callback);
+  runSequence('build:main', 'build:bundle', 'watch', callback);
 });
 
 //Browserify with external modules included

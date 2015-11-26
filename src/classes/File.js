@@ -275,6 +275,30 @@ class File {
 		});
 		return new Firebase(this.fbUrl);
 	}
+	openInFirepad(editor) {
+		//Load file contents from s3
+		return new Promise((resolve, reject) => {
+			this.get().then((file) => {
+				logger.log({
+					description: 'File contents loaded. Opening firepad.',
+					editor: editor, file: file,
+					func: 'openInFirepad', obj: 'File'
+				});
+				//Open firepad from ace with file content as default
+				let firepad = file.firepadFromAce(editor);
+				//Wait for firepad to be ready
+				firepad.on('ready', () => {
+					resolve(file);
+				});
+			}, (err) => {
+				logger.error({
+					description: 'Valid ace editor instance required to create firepad.',
+					func: 'openInFirepad', obj: 'File', editor: editor
+				});
+				reject(err);
+			});
+		});
+	}
 	firepadFromAce(editor) {
 		//TODO:Create new Firepad instance within div
 		if (!editor || typeof editor.setTheme !== 'function') {

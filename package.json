@@ -4,9 +4,8 @@
   "description": "Library to communicate with tessellate application building/managing service.",
   "main": "dist/grout.js",
   "scripts": {
-    "test": "gulp",
-    "test-browser": "gulp test-browser",
     "build": "gulp build",
+    "test": "gulp coverage",
     "coverage": "gulp coverage"
   },
   "repository": {

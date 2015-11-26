@@ -1093,6 +1093,34 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				}
 			}
 		}, {
+			key: 'openInFirepad',
+			value: function openInFirepad(editor) {
+				var _this4 = this;
+
+				//Load file contents from s3
+				return new Promise(function (resolve, reject) {
+					_this4.get().then(function (file) {
+						___logger.log({
+							description: 'File contents loaded. Opening firepad.',
+							editor: editor, file: file,
+							func: 'openInFirepad', obj: 'File'
+						});
+						//Open firepad from ace with file content as default
+						var firepad = file.firepadFromAce(editor);
+						//Wait for firepad to be ready
+						firepad.on('ready', function () {
+							resolve(file);
+						});
+					}, function (err) {
+						___logger.error({
+							description: 'Valid ace editor instance required to create firepad.',
+							func: 'openInFirepad', obj: 'File', editor: editor
+						});
+						reject(err);
+					});
+				});
+			}
+		}, {
 			key: 'firepadFromAce',
 			value: function firepadFromAce(editor) {
 				//TODO:Create new Firepad instance within div
@@ -1114,8 +1142,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				if (this.content) {
 					settings.defaultText = this.content;
 				}
-				if (matter.isLoggedIn) {
-					settings.userId = matter.currentUser._id || matter.currentUser.username;
+				if (matter.isLoggedIn && matter.currentUser) {
+					settings.userId = matter.currentUser.username || matter.currentUser.name;
 				}
 				// logger.log({
 				// 	description: 'Creating firepad from ace.',
@@ -1126,10 +1154,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'getConnectedUsers',
 			value: function getConnectedUsers() {
-				var _this4 = this;
+				var _this5 = this;
 
 				return new Promise(function (resolve, reject) {
-					_this4.fbRef.child('users').on('value', function (usersSnap) {
+					_this5.fbRef.child('users').on('value', function (usersSnap) {
 						if (usersSnap.val() === null) {
 							resolve([]);
 						} else {
@@ -1263,15 +1291,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'get',
 			value: function get() {
-				var _this5 = this;
+				var _this6 = this;
 
 				if (!this.app.frontend || !this.app.frontend.bucketName) {
 					__logger.warn({ description: 'Application Frontend data not available. Calling .get().', app: this.app, func: 'get', obj: 'Files' });
 					return this.app.get().then(function (applicationData) {
 						__logger.log({ description: 'Application get returned.', data: applicationData, func: 'get', obj: 'Files' });
-						_this5.app = applicationData;
+						_this6.app = applicationData;
 						if (_.has(applicationData, 'frontend')) {
-							return _this5.get();
+							return _this6.get();
 						} else {
 							__logger.error({ description: 'Application does not have Frontend to get files from.', func: 'get', obj: 'Files' });
 							return Promise.reject({ message: 'Application does not have frontend to get files from.' });
@@ -1290,7 +1318,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 							setAWSConfig();
 						}
 						var s3 = new AWS.S3();
-						var listParams = { Bucket: _this5.app.frontend.bucketName };
+						var listParams = { Bucket: _this6.app.frontend.bucketName };
 						return {
 							v: new Promise(function (resolve, reject) {
 								s3.listObjects(listParams, function (err, data) {
@@ -1527,7 +1555,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'applyTemplate',
 			value: function applyTemplate() {
-				var _this6 = this;
+				var _this7 = this;
 
 				_logger.error({
 					description: 'Applying templates to existing applications is not currently supported.',
@@ -1536,14 +1564,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				return _request.post(this.appEndpoint, {}).then(function (response) {
 					_logger.info({
 						description: 'Template successfully applied to application.',
-						response: response, application: _this6,
+						response: response, application: _this7,
 						func: 'applyTemplate', obj: 'Application'
 					});
 					return new Application(response);
 				})['catch'](function (errRes) {
 					_logger.error({
 						description: 'Error applying template to application.',
-						error: errRes, application: _this6,
+						error: errRes, application: _this7,
 						func: 'applyTemplate', obj: 'Application'
 					});
 					return Promise.reject(errRes.response.text || errRes.response);
