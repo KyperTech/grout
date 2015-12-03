@@ -48,7 +48,7 @@ class Files {
 				return Promise.reject({message: 'Bucket name required to get objects'});
 			});
 		} else {
-			if(typeof AWS == 'undefined'){
+			if (typeof AWS == 'undefined') {
 				logger.error({
 					description: 'AWS is required to load files.',
 					func: 'get', obj: 'Files'
