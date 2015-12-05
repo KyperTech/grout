@@ -33,7 +33,8 @@ class Application {
 			this.name = appData;
 		}
 		if (Firebase && _.has(config, 'fbUrl') && _.has(this, 'name')) {
-			this.fbRef = new Firebase(config.fbUrl + this.name);
+			this.fbUrl = config.fbUrl + this.name
+			this.fbRef = new Firebase(this.fbUrl);
 		}
 		// logger.debug({description: 'Application object created.', application: this, func: 'constructor', obj: 'Application'});
 	}

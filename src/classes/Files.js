@@ -1,8 +1,9 @@
 import config from '../config';
 import _ from 'lodash';
-import matter from './Matter';
-
 import AWS from 'aws-sdk';
+
+import matter from './Matter';
+import File from './File';
 //Convenience vars
 let logger = matter.utils.logger;
 
@@ -14,33 +15,64 @@ class Files {
 			this.app = {name: filesData};
 		} else if (filesData && _.isArray(filesData)) {
 			//TODO: Handle an array of files being passed as data
-			logger.error({description: 'Action data object with name is required to start a Files Action.', func: 'constructor', obj: 'Files'});
+			logger.error({
+				description: 'Action data object with name is required to start a Files Action.',
+				func: 'constructor', obj: 'Files'
+			});
 			throw new Error('Files Data object with application is required to start a Files action.');
 		} else {
-			logger.error({description: 'Action data object with name is required to start a Files Action.', func: 'constructor', obj: 'Files'});
+			logger.error({
+				description: 'Action data object with name is required to start a Files Action.',
+				func: 'constructor', obj: 'Files'
+			});
 			throw new Error('Files Data object with name is required to start a Files action.');
 		}
-		logger.debug({description: 'Files object constructed.', func: 'constructor', obj: 'Files'});
+		logger.debug({
+			description: 'Files object constructed.',
+			func: 'constructor', obj: 'Files'
+		});
 	}
-	publish() {
-		//TODO: Publish all files
+	fbRef(){
+		return new Firebase(`${this.app.fbUrl}/files`);
 	}
 	get() {
+		// TODO: get files list from firebase
+		return new Promise((resolve, reject) => {
+			this.fbRef.once('value', (filesSnap) => {
+				let filesArray = [];
+				filesSnap.forEach((fileSnap) => {
+					filesArray.push(new File(fileSnap.val()));
+				});
+				resolve(filesArray);
+			});
+		});
+	}
+	getFromS3() {
 		if (!this.app.frontend || !this.app.frontend.bucketName) {
-			logger.warn({description: 'Application Frontend data not available. Calling .get().', app: this.app, func: 'get', obj: 'Files'});
+			logger.warn({
+				description: 'Application Frontend data not available. Calling .get().',
+				app: this.app, func: 'get', obj: 'Files'
+			});
 			return this.app.get().then((applicationData) => {
-				logger.log({description: 'Application get returned.', data: applicationData, func: 'get', obj: 'Files'});
+				logger.log({
+					description: 'Application get returned.',
+					data: applicationData, func: 'get', obj: 'Files'
+				});
 				this.app = applicationData;
 				if (_.has(applicationData, 'frontend')) {
 					return this.get();
 				} else {
-					logger.error({description: 'Application does not have Frontend to get files from.', func: 'get', obj: 'Files'});
+					logger.error({
+						description: 'Application does not have Frontend to get files from.',
+						func: 'get', obj: 'Files'
+					});
 					return Promise.reject({message: 'Application does not have frontend to get files from.'});
 				}
 			}, (err) => {
 				logger.error({
 					description: 'Application Frontend data not available. Make sure to call .get().',
-					error: err, func: 'get', obj: 'Files'});
+					error: err, func: 'get', obj: 'Files'
+				});
 				return Promise.reject({message: 'Bucket name required to get objects'});
 			});
 		} else {
@@ -54,10 +86,14 @@ class Files {
 			return new Promise((resolve, reject) => {
 				s3.listObjects(listParams, function(err, data) {
 					if (!err) {
-						logger.info({description: 'Files list loaded.', filesData: data, func: 'get', obj: 'Files'});
+						logger.info({
+							description: 'Files list loaded.', filesData: data, func: 'get', obj: 'Files'
+						});
 						return resolve(data.Contents);
 					} else {
-						logger.error({description: 'Error getting files from S3.', error: err, func: 'get', obj: 'Files'});
+						logger.error({
+							description: 'Error getting files from S3.', error: err, func: 'get', obj: 'Files'
+						});
 						return reject(err);
 					}
 				});
@@ -69,6 +105,9 @@ class Files {
 	}
 	del() {
 		//TODO: Delete a file from files list
+	}
+	publish() {
+		//TODO: Publish all files
 	}
 	buildStructure() {
 		logger.debug({description: 'Build Structure called.', func: 'buildStructure', obj: 'Application'});

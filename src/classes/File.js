@@ -23,17 +23,33 @@ class File {
 			//TODO: Get appName from path data?
 			throw new Error('File data must be an object that includes path and appName.');
 		} else {
-			logger.error({description: 'File data that includes path and app is needed to create a File action.', func: 'constructor', obj: 'File'});
+			logger.error({
+				description: 'File data that includes path and app is needed to create a File action.',
+				func: 'constructor', obj: 'File'
+			});
 			throw new Error('File data with path and app is needed to create file action.');
 		}
 		this.type = 'file';
-		logger.debug({description: 'File object constructed.', file: this, func: 'constructor', obj: 'File'});
+		logger.debug({
+			description: 'File object constructed.', file: this,
+			func: 'constructor', obj: 'File'
+		});
 	}
-
 	get() {
+		// TODO: Load file from firepad content
+		return new Promise((resolve, reject) => {
+			let headless = new Firepad.headless(this.fbRef);
+			headless.getText((text) => {
+				headless.dispose();
+				resolve(text);
+			});
+		});
+	}
+	getFromS3() {
 		if (!this.app || !this.app.frontend) {
 			logger.log({
-				description: 'Application Frontend data not available. Calling applicaiton get.', func: 'get', obj: 'File'
+				description: 'Application Frontend data not available. Calling applicaiton get.',
+				func: 'get', obj: 'File'
 			});
 			return this.app.get().then((appData) => {
 				this.app = appData;
@@ -274,6 +290,9 @@ class File {
 			url: this.fbUrl, func: 'fbRef', obj: 'File'
 		});
 		return new Firebase(this.fbUrl);
+	}
+	get headless() {
+		return new Firepad.Headless(this.fbRef);
 	}
 	openInFirepad(editor) {
 		//Load file contents from s3
