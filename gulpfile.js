@@ -8,6 +8,7 @@ const glob = require('glob');
 const path = require('path');
 const isparta = require('isparta');
 const babelify = require('babelify');
+const browserSync = require('browser-sync');
 const watchify = require('watchify');
 const buffer = require('vinyl-buffer');
 const rollup = require('rollup');
@@ -40,7 +41,7 @@ var publisher = CDNPublisher();
 gulp.task('build:main', ['lint-src', 'clean'], function(done) {
   rollup.rollup({
     entry: config.entryFileName,
-    external:['lodash', 'firebase', 'superagent', 'kyper-matter', 'jwt-decode', 'aws-sdk'],
+    external:['lodash', 'firebase', 'superagent', 'kyper-matter', 'jwt-decode', 'aws-sdk', 'firepad'],
   }).then(function(bundle) {
     var res = bundle.generate({
       // Don't worry about the fact that the source map is inlined at this step.
@@ -73,7 +74,7 @@ gulp.task('build:bundle', function (callback) {
 // Ensure that linting occurs before browserify runs. This prevents
 // the build from breaking due to poorly formatted code.
 gulp.task('build', function (callback) {
-  runSequence(['lint-src', 'lint-test'], 'test', 'build:main', 'build:bundle', 'watch', callback);
+  runSequence('build:main', 'build:bundle', 'watch', callback);
 });
 
 //Browserify with external modules included

@@ -9,7 +9,8 @@ module.exports = function(config) {
     exclude: [],
     preprocessors: {
       'src/**/*.js': 'browserify',
-      'test/**/*.js': 'browserify'
+      'test/setup/**/*.js': 'browserify',
+      'test/unit/**/*.js': 'browserify'
     },
     browserify : {
       transform : ['babelify']
