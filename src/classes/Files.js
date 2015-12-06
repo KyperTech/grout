@@ -3,7 +3,7 @@ import _ from 'lodash';
 import AWS from 'aws-sdk';
 
 import matter from './Matter';
-import File from './File';
+import Firebase from 'firebase';
 //Convenience vars
 let logger = matter.utils.logger;
 
@@ -32,16 +32,58 @@ class Files {
 			func: 'constructor', obj: 'Files'
 		});
 	}
-	fbRef(){
-		return new Firebase(`${this.app.fbUrl}/files`);
+	get fbUrl() {
+		return `${config.fbUrl}/files/${this.app.name}`;
+	}
+	get fbRef() {
+		logger.log({
+			description: 'Url created for files fbRef.',
+			url: this.fbUrl, func: 'fbRef', obj: 'Files'
+		});
+		return new Firebase(this.fbUrl);
+	}
+	get pathArrayFromFbRef() {
+		//Handle fbUrls that have multiple levels
+		let removeArray = config.fbUrl.replace('https://', '').split('/');
+		removeArray.shift();
+		logger.warn({
+			description: 'Remove array started.',
+			removeArray: removeArray, fbRefArray: this.fbRef.path.o, func: 'fbRef', obj: 'Files'
+		});
+		let pathArray = this.fbRef.path.o.splice(0, removeArray.length);
+		logger.warn({
+			description: 'Path array built.',
+			pathArray: pathArray, func: 'fbRef', obj: 'Files'
+		});
+		return pathArray;
 	}
 	get() {
 		// TODO: get files list from firebase
-		return new Promise((resolve, reject) => {
+		console.warn(this.pathArrayFromFbRef);
+		logger.log({
+			description: 'Files get called.',
+			func: 'get', obj: 'Files'
+		});
+		return new Promise((resolve) => {
 			this.fbRef.once('value', (filesSnap) => {
+				logger.warn({
+					description: 'Files loaded from firebase.',
+					val: filesSnap.val(), func: 'get', obj: 'Files'
+				});
 				let filesArray = [];
-				filesSnap.forEach((fileSnap) => {
-					filesArray.push(new File(fileSnap.val()));
+				// let filesPathArray =  this.pathArrayFromFbRef;
+				filesSnap.forEach((objSnap) => {
+					let objData = objSnap.hasChild('meta') ? objSnap.child('meta').val() : {path: objSnap.key()};
+					//TODO: Have a better fallback for when meta does not exist
+					// if (!objData.path) {
+					// 	objSnap.ref().path.o.splice(0, filesPathArray.length);
+					// }
+					objData.key = objSnap.key();
+					filesArray.push(objData);
+				});
+				logger.warn({
+					description: 'Files array built.',
+					val: filesArray, func: 'get', obj: 'Files'
 				});
 				resolve(filesArray);
 			});
@@ -51,12 +93,12 @@ class Files {
 		if (!this.app.frontend || !this.app.frontend.bucketName) {
 			logger.warn({
 				description: 'Application Frontend data not available. Calling .get().',
-				app: this.app, func: 'get', obj: 'Files'
+				app: this.app, func: 'getFromS3', obj: 'Files'
 			});
 			return this.app.get().then((applicationData) => {
 				logger.log({
 					description: 'Application get returned.',
-					data: applicationData, func: 'get', obj: 'Files'
+					data: applicationData, func: 'getFromS3', obj: 'Files'
 				});
 				this.app = applicationData;
 				if (_.has(applicationData, 'frontend')) {
@@ -64,16 +106,20 @@ class Files {
 				} else {
 					logger.error({
 						description: 'Application does not have Frontend to get files from.',
-						func: 'get', obj: 'Files'
+						func: 'getFromS3', obj: 'Files'
 					});
-					return Promise.reject({message: 'Application does not have frontend to get files from.'});
+					return Promise.reject({
+						message: 'Application does not have frontend to get files from.'
+					});
 				}
 			}, (err) => {
 				logger.error({
 					description: 'Application Frontend data not available. Make sure to call .get().',
-					error: err, func: 'get', obj: 'Files'
+					error: err, func: 'getFromS3', obj: 'Files'
 				});
-				return Promise.reject({message: 'Bucket name required to get objects'});
+				return Promise.reject({
+					message: 'Bucket name required to get objects'
+				});
 			});
 		} else {
 			//If AWS Credential do not exist, set them
@@ -110,15 +156,33 @@ class Files {
 		//TODO: Publish all files
 	}
 	buildStructure() {
-		logger.debug({description: 'Build Structure called.', func: 'buildStructure', obj: 'Application'});
+		logger.debug({
+			description: 'Build Structure called.',
+			func: 'buildStructure', obj: 'Application'
+		});
 		return this.get().then((filesArray) => {
+			logger.log({
+				description: 'Child struct from array.',
+				childStructure: childStruct,
+				func: 'buildStructure', obj: 'Application'
+			});
 			const childStruct = childrenStructureFromArray(filesArray);
 			//TODO: have child objects have correct classes (file/folder)
-			logger.log({description: 'Child struct from array.', childStructure: childStruct, func: 'buildStructure', obj: 'Application'});
+			logger.log({
+				description: 'Child struct from array.',
+				childStructure: childStruct,
+				func: 'buildStructure', obj: 'Application'
+			});
 			return childStruct;
 		}, (err) => {
-			logger.error({description: 'Error getting application files.', error: err, func: 'buildStructure', obj: 'Application'});
-			return Promise.reject({message: 'Error getting files.', error: err});
+			logger.error({
+				description: 'Error getting application files.',
+				error: err, func: 'buildStructure', obj: 'Application'
+			});
+			return Promise.reject({
+				message: 'Error getting files.',
+				error: err
+			});
 		});
 	}
 	//ALIAS FOR buildStructure
@@ -157,13 +221,15 @@ function buildStructureObject(file) {
 	if (_.has(file, 'path')) {
 		//Coming from files already having path (structure)
 		pathArray = file.path.split('/');
-	} else {
+	} else if (_.has(file, 'Key')) {
 		//Coming from aws
 		pathArray = file.Key.split('/');
 		// console.log('file before pick:', file);
 		file = _.pick(file, 'Key');
 		file.path = file.Key;
 		file.name = file.Key;
+	} else {
+		console.error('Invalid file.', file);
 	}
 	var currentObj = file;
 	if (pathArray.length == 1) {

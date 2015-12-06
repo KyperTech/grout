@@ -80,19 +80,28 @@
     //Get File/Folder structure for application
     function getStructure(){
       console.log('getStructure called');
-      // grout.App('exampleApp').Files.buildStructure().then(function(app){
-      //   console.log('apps list loaded:', app);
-      //   document.getElementById("output").innerHTML = JSON.stringify(app);
-      // });
-      var file = grout.App('Aventura').File({key: 'index.html', path: 'index.html'});
-      console.log('fbUrl', file.safePathArray);
-      console.log('fbUrl', file.safePath);
-      console.log('fbUrl', file.fbUrl);
-      console.log('fbRef', file.fbRef);
+      grout.App('Aventura').Files.buildStructure().then(function(fileStructure){
+        console.log('structure loaded:', fileStructure);
+        document.getElementById("output").innerHTML = JSON.stringify(fileStructure);
+      });
+      // var file = grout.App('Aventura').File({key: 'index.html', path: 'index.html'});
+      // console.log('fbUrl', file.safePathArray);
+      // console.log('fbUrl', file.safePath);
+      // console.log('fbUrl', file.fbUrl);
+      // console.log('fbRef', file.fbRef);
       // file.get().then(function(app){
       //   console.log('apps list loaded:', app);
       //   document.getElementById("output").innerHTML = JSON.stringify(app);
       // });
+    }
+    function getFile() {
+      var file = grout.App('Aventura').File({key: 'index.html', path: 'index.html'});
+      console.log('fbUrl', file.fbUrl);
+      console.log('fbRef', file.fbRef);
+      file.get().then(function(app){
+        console.log('file loaded:', app);
+        document.getElementById("output").innerHTML = JSON.stringify(app);
+      });
     }
     //Get File/Folder structure for application
     function getFirepad(){

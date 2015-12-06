@@ -12,12 +12,22 @@ class File {
 		if (actionData && _.isObject(actionData) && _.has(actionData, 'fileData') && _.has(actionData, 'app')) {
 			_.extend(this, actionData.fileData);
 			this.app = actionData.app;
+			if (!this.path) {
+				if (!this.ref) {
+					logger.error({
+						description: 'Path or ref required to create file.',
+						func: 'constructor', obj: 'File'
+					});
+					throw new Error('Path or ref required to create file.');
+				}
+				this.path = this.pathArrayFromRef.join('/');
+			}
 			this.pathArray = this.path.split('/');
 			//Get name from data or from pathArray
 			this.name = _.has(actionData.fileData, 'name') ? actionData.fileData.name : this.pathArray[this.pathArray.length - 1];
 		} else if (actionData && !_.isObject(actionData)) {
 			logger.error({
-				description: 'File data is not an object. File data must be an object that includes path and appName.',
+				description: 'Action data is not an object. Action data must be an object that includes app and fileData.',
 				func: 'constructor', obj: 'File'
 			});
 			//TODO: Get appName from path data?
@@ -35,9 +45,68 @@ class File {
 			func: 'constructor', obj: 'File'
 		});
 	}
+	get pathArrayFromRef() {
+		if (!this.fbRef) {
+			logger.error({
+				description: 'File fbRef is required to get path array.', file: this,
+				func: 'pathArrayFromRef', obj: 'File'
+			});
+		}
+		return this.fbRef.path.o;
+	}
+	get fileType() {
+		if (this.ext == 'js') {
+			return 'javascript';
+		} else {
+			return this.ext;
+		}
+	}
+	get ext() {
+		let re = /(?:\.([^.]+))?$/;
+		return re.exec(this.name)[1];
+	}
+	get safePathArray() {
+		let safeArray = this.pathArray.map((loc) => {
+			//Replace periods with colons and other unsafe chars as --
+			return loc.replace(/[.]/g, ':').replace(/[#$\[\]]/g, '--');
+		});
+		logger.log({
+			description: 'Safe path array created.',
+			safeArray: safeArray, func: 'safePathArray', obj: 'File'
+		});
+		return safeArray;
+	}
+	get safePath() {
+		return this.safePathArray.join('/');
+	}
+	get fbUrl() {
+		let url = [config.fbUrl, 'files', this.app.name, this.safePath].join('/');
+		logger.log({
+			description: 'File ref url generated',
+			url: url, func: 'fbRef', obj: 'File'
+		});
+		return url;
+	}
+	get fbRef() {
+		if (this.ref) {
+			logger.log({
+				description: 'File already has reference.',
+				ref: this.ref, func: 'fbRef', obj: 'File'
+			});
+			return this.ref;
+		}
+		logger.log({
+			description: 'Fb ref generatating.',
+			url: this.fbUrl, func: 'fbRef', obj: 'File'
+		});
+		return new Firebase(this.fbUrl);
+	}
+	get headless() {
+		return new Firepad.Headless(this.fbRef);
+	}
 	get() {
 		// TODO: Load file from firepad content
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			let headless = new Firepad.headless(this.fbRef);
 			headless.getText((text) => {
 				headless.dispose();
@@ -118,7 +187,7 @@ class File {
 							description: 'Error loading file from S3.',
 							error: err, func: 'get', obj: 'File'
 						});
-						return reject(err);
+						reject(err);
 					}
 				});
 			});
@@ -173,7 +242,7 @@ class File {
 				func: 'publish', obj: 'File'
 			});
 			return new Promise((resolve, reject) => {
-				s3.putObject(saveParams, function(err, data) {
+				s3.putObject(saveParams, (err, data) => {
 					//[TODO] Add putting object ACL (make public)
 					if (!err) {
 						logger.log({
@@ -251,49 +320,7 @@ class File {
 			});
 		}
 	}
-	get fileType() {
-		if (this.ext == 'js') {
-			return 'javascript';
-		} else {
-			return this.ext;
-		}
-	}
-	get ext() {
-		let re = /(?:\.([^.]+))?$/;
-		return re.exec(this.name)[1];
-	}
-	get safePathArray() {
-		let safeArray = this.pathArray.map((loc) => {
-			//Replace periods with colons and other unsafe chars as --
-			return loc.replace(/[.]/g, ':').replace(/[#$\[\]]/g, '--');
-		});
-		logger.log({
-			description: 'Safe path array created.',
-			safeArray: safeArray, func: 'safePathArray', obj: 'File'
-		});
-		return safeArray;
-	}
-	get safePath() {
-		return this.safePathArray.join('/');
-	}
-	get fbUrl() {
-		let url = [config.fbUrl, 'files', this.app.name, this.safePath].join('/');
-		logger.log({
-			description: 'File ref url generated',
-			url: url, func: 'fbRef', obj: 'File'
-		});
-		return url;
-	}
-	get fbRef() {
-		logger.log({
-			description: 'Fb ref generatating.',
-			url: this.fbUrl, func: 'fbRef', obj: 'File'
-		});
-		return new Firebase(this.fbUrl);
-	}
-	get headless() {
-		return new Firepad.Headless(this.fbRef);
-	}
+
 	openInFirepad(editor) {
 		//Load file contents from s3
 		return new Promise((resolve, reject) => {

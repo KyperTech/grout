@@ -7,15 +7,15 @@ function _inherits(subClass, superClass) { if (typeof superClass !== 'function' 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('kyper-matter'), require('lodash'), require('firepad'), require('firebase'), require('aws-sdk')) : typeof define === 'function' && define.amd ? define(['kyper-matter', 'lodash', 'firepad', 'firebase', 'aws-sdk'], factory) : global.Grout = factory(global.Matter, global._, global.Firepad, global.Firebase, global.AWS);
-})(this, function (Matter, _, Firepad, Firebase, AWS) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('kyper-matter'), require('lodash'), require('firepad'), require('aws-sdk'), require('firebase')) : typeof define === 'function' && define.amd ? define(['kyper-matter', 'lodash', 'firepad', 'aws-sdk', 'firebase'], factory) : global.Grout = factory(global.Matter, global._, global.Firepad, global.AWS, global.Firebase);
+})(this, function (Matter, _, Firepad, AWS, Firebase) {
 	'use strict';
 
 	Matter = 'default' in Matter ? Matter['default'] : Matter;
 	_ = 'default' in _ ? _['default'] : _;
 	Firepad = 'default' in Firepad ? Firepad['default'] : Firepad;
-	Firebase = 'default' in Firebase ? Firebase['default'] : Firebase;
 	AWS = 'default' in AWS ? AWS['default'] : AWS;
+	Firebase = 'default' in Firebase ? Firebase['default'] : Firebase;
 
 	var config = {
 		serverUrl: 'http://tessellate.elasticbeanstalk.com',
@@ -23,7 +23,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		fbUrl: 'https://kyper-tech.firebaseio.com/tessellate',
 		appName: 'tessellate',
 		matterOptions: {
-			localServer: false
+			localServer: false,
+			logLevel: 'trace'
 		},
 		aws: {
 			region: 'us-east-1',
@@ -830,22 +831,38 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			if (actionData && _.isObject(actionData) && _.has(actionData, 'fileData') && _.has(actionData, 'app')) {
 				_.extend(this, actionData.fileData);
 				this.app = actionData.app;
+				if (!this.path) {
+					if (!this.ref) {
+						___logger.error({
+							description: 'Path or ref required to create file.',
+							func: 'constructor', obj: 'File'
+						});
+						throw new Error('Path or ref required to create file.');
+					}
+					this.path = this.pathArrayFromRef.join('/');
+				}
 				this.pathArray = this.path.split('/');
 				//Get name from data or from pathArray
 				this.name = _.has(actionData.fileData, 'name') ? actionData.fileData.name : this.pathArray[this.pathArray.length - 1];
 			} else if (actionData && !_.isObject(actionData)) {
 				___logger.error({
-					description: 'File data is not an object. File data must be an object that includes path and appName.',
+					description: 'Action data is not an object. Action data must be an object that includes app and fileData.',
 					func: 'constructor', obj: 'File'
 				});
 				//TODO: Get appName from path data?
 				throw new Error('File data must be an object that includes path and appName.');
 			} else {
-				___logger.error({ description: 'File data that includes path and app is needed to create a File action.', func: 'constructor', obj: 'File' });
+				___logger.error({
+					description: 'File data that includes path and app is needed to create a File action.',
+					func: 'constructor', obj: 'File'
+				});
 				throw new Error('File data with path and app is needed to create file action.');
 			}
 			this.type = 'file';
-			___logger.debug({ description: 'File object constructed.', file: this, func: 'constructor', obj: 'File' });
+			___logger.debug({
+				description: 'File object constructed.', file: this,
+				func: 'constructor', obj: 'File'
+			});
 		}
 
 		//------------------ Utility Functions ------------------//
@@ -857,17 +874,32 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function get() {
 				var _this = this;
 
+				// TODO: Load file from firepad content
+				return new Promise(function (resolve) {
+					var headless = new Firepad.headless(_this.fbRef);
+					headless.getText(function (text) {
+						headless.dispose();
+						resolve(text);
+					});
+				});
+			}
+		}, {
+			key: 'getFromS3',
+			value: function getFromS3() {
+				var _this2 = this;
+
 				if (!this.app || !this.app.frontend) {
 					___logger.log({
-						description: 'Application Frontend data not available. Calling applicaiton get.', func: 'get', obj: 'File'
+						description: 'Application Frontend data not available. Calling applicaiton get.',
+						func: 'get', obj: 'File'
 					});
 					return this.app.get().then(function (appData) {
-						_this.app = appData;
+						_this2.app = appData;
 						___logger.log({
 							description: 'Application get successful. Getting file.',
 							app: appData, func: 'get', obj: 'File'
 						});
-						return _this.get();
+						return _this2.get();
 					}, function (err) {
 						___logger.error({
 							description: 'Application Frontend data not available.',
@@ -887,18 +919,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						}
 						var s3 = new AWS.S3();
 						var getData = {
-							Bucket: _this.app.frontend.bucketName,
-							Key: _this.path
+							Bucket: _this2.app.frontend.bucketName,
+							Key: _this2.path
 						};
 						//Set contentType from actionData to ContentType parameter of new object
-						if (_this.contentType) {
-							getData.ContentType = _this.contentType;
+						if (_this2.contentType) {
+							getData.ContentType = _this2.contentType;
 						}
 						___logger.debug({
 							description: 'File get params built.', getData: getData,
-							file: _this, func: 'get', obj: 'File'
+							file: _this2, func: 'get', obj: 'File'
 						});
-						var finalData = _this;
+						var finalData = _this2;
 						return {
 							v: new Promise(function (resolve, reject) {
 								s3.getObject(getData, function (err, data) {
@@ -930,7 +962,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 											description: 'Error loading file from S3.',
 											error: err, func: 'get', obj: 'File'
 										});
-										return reject(err);
+										reject(err);
 									}
 								});
 							})
@@ -950,7 +982,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'publish',
 			value: function publish(fileData) {
-				var _this2 = this;
+				var _this3 = this;
 
 				//TODO: Publish file to application
 				___logger.debug({
@@ -975,14 +1007,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 							};
 						}
 						var saveParams = {
-							Bucket: _this2.app.frontend.bucketName,
+							Bucket: _this3.app.frontend.bucketName,
 							Key: fileData.path,
 							Body: fileData.content,
 							ACL: 'public-read'
 						};
 						//Set contentType from fileData to ContentType parameter of new object
-						if (_this2.contentType) {
-							saveParams.ContentType = _this2.contentType;
+						if (_this3.contentType) {
+							saveParams.ContentType = _this3.contentType;
 						}
 						//If AWS Credential do not exist, set them
 						if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
@@ -995,7 +1027,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						var s3 = new AWS.S3();
 						___logger.debug({
 							description: 'File publish params built.',
-							saveParams: saveParams, fileData: _this2,
+							saveParams: saveParams, fileData: _this3,
 							func: 'publish', obj: 'File'
 						});
 						return {
@@ -1026,14 +1058,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'del',
 			value: function del() {
-				var _this3 = this;
+				var _this4 = this;
 
 				if (!this.app || !this.app.frontend) {
 					___logger.log({ description: 'Application Frontend data not available. Calling applicaiton get.', func: 'get', obj: 'File' });
 					return this.app.get().then(function (appData) {
-						_this3.app = appData;
+						_this4.app = appData;
 						___logger.log({ description: 'Application get successful. Getting file.', app: appData, func: 'get', obj: 'File' });
-						return _this3.get();
+						return _this4.get();
 					}, function (err) {
 						___logger.error({ description: 'Application Frontend data not available. Make sure to call .get().', error: err, func: 'get', obj: 'File' });
 						return Promise.reject({ message: 'Front end data is required to get file.' });
@@ -1047,16 +1079,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 						}
 						var s3 = new AWS.S3();
 						var saveParams = {
-							Bucket: _this3.app.frontend.bucketName,
-							Key: _this3.path
+							Bucket: _this4.app.frontend.bucketName,
+							Key: _this4.path
 						};
 						//Set contentType from actionData to ContentType parameter of new object
-						if (_this3.contentType) {
-							saveParams.ContentType = _this3.contentType;
+						if (_this4.contentType) {
+							saveParams.ContentType = _this4.contentType;
 						}
 						___logger.debug({
 							description: 'File get params built.',
-							saveParams: saveParams, file: _this3,
+							saveParams: saveParams, file: _this4,
 							func: 'get', obj: 'File'
 						});
 						return {
@@ -1095,11 +1127,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'openInFirepad',
 			value: function openInFirepad(editor) {
-				var _this4 = this;
+				var _this5 = this;
 
 				//Load file contents from s3
 				return new Promise(function (resolve, reject) {
-					_this4.get().then(function (file) {
+					_this5.get().then(function (file) {
 						___logger.log({
 							description: 'File contents loaded. Opening firepad.',
 							editor: editor, file: file,
@@ -1155,10 +1187,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'getConnectedUsers',
 			value: function getConnectedUsers() {
-				var _this5 = this;
+				var _this6 = this;
 
 				return new Promise(function (resolve, reject) {
-					_this5.fbRef.child('users').on('value', function (usersSnap) {
+					_this6.fbRef.child('users').on('value', function (usersSnap) {
 						if (usersSnap.val() === null) {
 							resolve([]);
 						} else {
@@ -1189,6 +1221,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			key: 'getDefaultContent',
 			value: function getDefaultContent() {
 				//TODO: Fill with default data for matching file type
+			}
+		}, {
+			key: 'pathArrayFromRef',
+			get: function get() {
+				if (!this.fbRef) {
+					___logger.error({
+						description: 'File fbRef is required to get path array.', file: this,
+						func: 'pathArrayFromRef', obj: 'File'
+					});
+				}
+				return this.fbRef.path.o;
 			}
 		}, {
 			key: 'fileType',
@@ -1236,11 +1279,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'fbRef',
 			get: function get() {
+				if (this.ref) {
+					___logger.log({
+						description: 'File already has reference.',
+						ref: this.ref, func: 'fbRef', obj: 'File'
+					});
+					return this.ref;
+				}
 				___logger.log({
 					description: 'Fb ref generatating.',
 					url: this.fbUrl, func: 'fbRef', obj: 'File'
 				});
 				return new Firebase(this.fbUrl);
+			}
+		}, {
+			key: 'headless',
+			get: function get() {
+				return new Firepad.Headless(this.fbRef);
 			}
 		}]);
 
@@ -1271,13 +1326,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				this.app = { name: filesData };
 			} else if (filesData && _.isArray(filesData)) {
 				//TODO: Handle an array of files being passed as data
-				__logger.error({ description: 'Action data object with name is required to start a Files Action.', func: 'constructor', obj: 'Files' });
+				__logger.error({
+					description: 'Action data object with name is required to start a Files Action.',
+					func: 'constructor', obj: 'Files'
+				});
 				throw new Error('Files Data object with application is required to start a Files action.');
 			} else {
-				__logger.error({ description: 'Action data object with name is required to start a Files Action.', func: 'constructor', obj: 'Files' });
+				__logger.error({
+					description: 'Action data object with name is required to start a Files Action.',
+					func: 'constructor', obj: 'Files'
+				});
 				throw new Error('Files Data object with name is required to start a Files action.');
 			}
-			__logger.debug({ description: 'Files object constructed.', func: 'constructor', obj: 'Files' });
+			__logger.debug({
+				description: 'Files object constructed.',
+				func: 'constructor', obj: 'Files'
+			});
 		}
 
 		//------------------ Utility Functions ------------------//
@@ -1285,31 +1349,76 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		// AWS Config
 
 		_createClass(Files, [{
-			key: 'publish',
-			value: function publish() {
-				//TODO: Publish all files
-			}
-		}, {
 			key: 'get',
 			value: function get() {
-				var _this6 = this;
+				var _this7 = this;
+
+				// TODO: get files list from firebase
+				console.warn(this.pathArrayFromFbRef);
+				__logger.log({
+					description: 'Files get called.',
+					func: 'get', obj: 'Files'
+				});
+				return new Promise(function (resolve) {
+					_this7.fbRef.once('value', function (filesSnap) {
+						__logger.warn({
+							description: 'Files loaded from firebase.',
+							val: filesSnap.val(), func: 'get', obj: 'Files'
+						});
+						var filesArray = [];
+						// let filesPathArray =  this.pathArrayFromFbRef;
+						filesSnap.forEach(function (objSnap) {
+							var objData = objSnap.hasChild('meta') ? objSnap.child('meta').val() : { path: objSnap.key() };
+							//TODO: Have a better fallback for when meta does not exist
+							// if (!objData.path) {
+							// 	objSnap.ref().path.o.splice(0, filesPathArray.length);
+							// }
+							objData.key = objSnap.key();
+							filesArray.push(objData);
+						});
+						__logger.warn({
+							description: 'Files array built.',
+							val: filesArray, func: 'get', obj: 'Files'
+						});
+						resolve(filesArray);
+					});
+				});
+			}
+		}, {
+			key: 'getFromS3',
+			value: function getFromS3() {
+				var _this8 = this;
 
 				if (!this.app.frontend || !this.app.frontend.bucketName) {
-					__logger.warn({ description: 'Application Frontend data not available. Calling .get().', app: this.app, func: 'get', obj: 'Files' });
+					__logger.warn({
+						description: 'Application Frontend data not available. Calling .get().',
+						app: this.app, func: 'getFromS3', obj: 'Files'
+					});
 					return this.app.get().then(function (applicationData) {
-						__logger.log({ description: 'Application get returned.', data: applicationData, func: 'get', obj: 'Files' });
-						_this6.app = applicationData;
+						__logger.log({
+							description: 'Application get returned.',
+							data: applicationData, func: 'getFromS3', obj: 'Files'
+						});
+						_this8.app = applicationData;
 						if (_.has(applicationData, 'frontend')) {
-							return _this6.get();
+							return _this8.get();
 						} else {
-							__logger.error({ description: 'Application does not have Frontend to get files from.', func: 'get', obj: 'Files' });
-							return Promise.reject({ message: 'Application does not have frontend to get files from.' });
+							__logger.error({
+								description: 'Application does not have Frontend to get files from.',
+								func: 'getFromS3', obj: 'Files'
+							});
+							return Promise.reject({
+								message: 'Application does not have frontend to get files from.'
+							});
 						}
 					}, function (err) {
 						__logger.error({
 							description: 'Application Frontend data not available. Make sure to call .get().',
-							error: err, func: 'get', obj: 'Files' });
-						return Promise.reject({ message: 'Bucket name required to get objects' });
+							error: err, func: 'getFromS3', obj: 'Files'
+						});
+						return Promise.reject({
+							message: 'Bucket name required to get objects'
+						});
 					});
 				} else {
 					var _ret5 = (function () {
@@ -1319,15 +1428,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 							setAWSConfig();
 						}
 						var s3 = new AWS.S3();
-						var listParams = { Bucket: _this6.app.frontend.bucketName };
+						var listParams = { Bucket: _this8.app.frontend.bucketName };
 						return {
 							v: new Promise(function (resolve, reject) {
 								s3.listObjects(listParams, function (err, data) {
 									if (!err) {
-										__logger.info({ description: 'Files list loaded.', filesData: data, func: 'get', obj: 'Files' });
+										__logger.info({
+											description: 'Files list loaded.', filesData: data, func: 'get', obj: 'Files'
+										});
 										return resolve(data.Contents);
 									} else {
-										__logger.error({ description: 'Error getting files from S3.', error: err, func: 'get', obj: 'Files' });
+										__logger.error({
+											description: 'Error getting files from S3.', error: err, func: 'get', obj: 'Files'
+										});
 										return reject(err);
 									}
 								});
@@ -1349,17 +1462,40 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				//TODO: Delete a file from files list
 			}
 		}, {
+			key: 'publish',
+			value: function publish() {
+				//TODO: Publish all files
+			}
+		}, {
 			key: 'buildStructure',
 			value: function buildStructure() {
-				__logger.debug({ description: 'Build Structure called.', func: 'buildStructure', obj: 'Application' });
+				__logger.debug({
+					description: 'Build Structure called.',
+					func: 'buildStructure', obj: 'Application'
+				});
 				return this.get().then(function (filesArray) {
+					__logger.log({
+						description: 'Child struct from array.',
+						childStructure: childStruct,
+						func: 'buildStructure', obj: 'Application'
+					});
 					var childStruct = childrenStructureFromArray(filesArray);
 					//TODO: have child objects have correct classes (file/folder)
-					__logger.log({ description: 'Child struct from array.', childStructure: childStruct, func: 'buildStructure', obj: 'Application' });
+					__logger.log({
+						description: 'Child struct from array.',
+						childStructure: childStruct,
+						func: 'buildStructure', obj: 'Application'
+					});
 					return childStruct;
 				}, function (err) {
-					__logger.error({ description: 'Error getting application files.', error: err, func: 'buildStructure', obj: 'Application' });
-					return Promise.reject({ message: 'Error getting files.', error: err });
+					__logger.error({
+						description: 'Error getting application files.',
+						error: err, func: 'buildStructure', obj: 'Application'
+					});
+					return Promise.reject({
+						message: 'Error getting files.',
+						error: err
+					});
 				});
 			}
 
@@ -1367,6 +1503,37 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			// get structure() {
 			// 	return this.buildStructure();
 			// }
+		}, {
+			key: 'fbUrl',
+			get: function get() {
+				return config.fbUrl + '/files/' + this.app.name;
+			}
+		}, {
+			key: 'fbRef',
+			get: function get() {
+				__logger.log({
+					description: 'Url created for files fbRef.',
+					url: this.fbUrl, func: 'fbRef', obj: 'Files'
+				});
+				return new Firebase(this.fbUrl);
+			}
+		}, {
+			key: 'pathArrayFromFbRef',
+			get: function get() {
+				//Handle fbUrls that have multiple levels
+				var removeArray = config.fbUrl.replace('https://', '').split('/');
+				removeArray.shift();
+				__logger.warn({
+					description: 'Remove array started.',
+					removeArray: removeArray, fbRefArray: this.fbRef.path.o, func: 'fbRef', obj: 'Files'
+				});
+				var pathArray = this.fbRef.path.o.splice(0, removeArray.length);
+				__logger.warn({
+					description: 'Path array built.',
+					pathArray: pathArray, func: 'fbRef', obj: 'Files'
+				});
+				return pathArray;
+			}
 		}]);
 
 		return Files;
@@ -1399,13 +1566,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		if (_.has(file, 'path')) {
 			//Coming from files already having path (structure)
 			pathArray = file.path.split('/');
-		} else {
+		} else if (_.has(file, 'Key')) {
 			//Coming from aws
 			pathArray = file.Key.split('/');
 			// console.log('file before pick:', file);
 			file = _.pick(file, 'Key');
 			file.path = file.Key;
 			file.name = file.Key;
+		} else {
+			console.error('Invalid file.', file);
 		}
 		var currentObj = file;
 		if (pathArray.length == 1) {
@@ -1480,7 +1649,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				this.name = appData;
 			}
 			if (Firebase && _.has(config, 'fbUrl') && _.has(this, 'name')) {
-				this.fbRef = new Firebase(config.fbUrl + this.name);
+				this.fbUrl = config.fbUrl + '/' + this.name;
+				this.fbRef = new Firebase(this.fbUrl);
 			}
 			// logger.debug({description: 'Application object created.', application: this, func: 'constructor', obj: 'Application'});
 		}
@@ -1556,7 +1726,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'applyTemplate',
 			value: function applyTemplate() {
-				var _this7 = this;
+				var _this9 = this;
 
 				_logger.error({
 					description: 'Applying templates to existing applications is not currently supported.',
@@ -1565,14 +1735,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				return _request.post(this.appEndpoint, {}).then(function (response) {
 					_logger.info({
 						description: 'Template successfully applied to application.',
-						response: response, application: _this7,
+						response: response, application: _this9,
 						func: 'applyTemplate', obj: 'Application'
 					});
 					return new Application(response);
 				})['catch'](function (errRes) {
 					_logger.error({
 						description: 'Error applying template to application.',
-						error: errRes, application: _this7,
+						error: errRes, application: _this9,
 						func: 'applyTemplate', obj: 'Application'
 					});
 					return Promise.reject(errRes.response.text || errRes.response);
