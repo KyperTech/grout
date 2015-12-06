@@ -876,10 +876,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 				// TODO: Load file from firepad content
 				return new Promise(function (resolve) {
-					var headless = new Firepad.headless(_this.fbRef);
-					headless.getText(function (text) {
-						headless.dispose();
-						resolve(text);
+					_this.headless.getText(function (text) {
+						___logger.warn({
+							description: 'Text loaded from headless',
+							text: text, func: 'get', obj: 'File'
+						});
+						_this.content = text;
+						// this.fbRef.once('value', (fileSnap) => {
+						// 	let meta = fileSnap.child('meta').val();
+						//
+						// });
+						_this.headless.dispose();
+						resolve(_this);
 					});
 				});
 			}
@@ -1172,15 +1180,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					return;
 				}
 				var settings = {};
-				if (this.content) {
-					settings.defaultText = this.content;
-				}
+				// if (this.content) {
+				// 	settings.defaultText = this.content;
+				// }
 				if (matter.isLoggedIn && matter.currentUser) {
 					settings.userId = matter.currentUser.username || matter.currentUser.name;
 				}
-				___logger.log({
+				___logger.warn({
 					description: 'Creating firepad from ace.',
-					settings: settings, func: 'fbRef', obj: 'File'
+					settings: settings, editor: editor, editorVal: editor.getValue(),
+					func: 'fbRef', obj: 'File'
 				});
 				return Firepad.fromACE(this.fbRef, editor, settings);
 			}
@@ -1986,7 +1995,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			//Start a new App action
 			value: function App(appName) {
-				this.utils.logger.debug({ description: 'Application action called.', appName: appName, template: new Application(appName), func: 'App', obj: 'Grout' });
+				this.utils.logger.debug({
+					description: 'Application action called.',
+					appName: appName, template: new Application(appName),
+					func: 'App', obj: 'Grout'
+				});
 				return new Application(appName);
 			}
 
@@ -1996,7 +2009,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			//Start a new App action
 			value: function Template(templateData) {
-				this.utils.logger.debug({ description: 'Template Action called.', templateData: templateData, template: new _Template(templateData), func: 'Template', obj: 'Grout' });
+				this.utils.logger.debug({
+					description: 'Template Action called.', templateData: templateData,
+					template: new _Template(templateData), func: 'Template', obj: 'Grout'
+				});
 				return new _Template(templateData);
 			}
 
@@ -2006,7 +2022,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 			//Start a new Account action
 			value: function Account(userData) {
-				this.utils.logger.debug({ description: 'Account Action called.', userData: userData, user: new _Account(userData), func: 'user', obj: 'Grout' });
+				this.utils.logger.debug({
+					description: 'Account Action called.',
+					userData: userData, user: new _Account(userData),
+					func: 'user', obj: 'Grout'
+				});
 				return new _Account(userData);
 			}
 
@@ -2018,7 +2038,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			//ALIAS OF ACCOUNT
 			//Start a new Account action
 			value: function User(userData) {
-				this.utils.logger.debug({ description: 'Account Action called.', userData: userData, user: new _Account(userData), func: 'user', obj: 'Grout' });
+				this.utils.logger.debug({
+					description: 'Account Action called.',
+					userData: userData, user: new _Account(userData),
+					func: 'user', obj: 'Grout'
+				});
 				return new _Account(userData);
 			}
 
@@ -2060,26 +2084,36 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'Templates',
 			get: function get() {
-				this.utils.logger.debug({ description: 'Templates Action called.', action: new TemplatesAction(), func: 'Templates', obj: 'Grout' });
+				this.utils.logger.debug({
+					description: 'Templates Action called.',
+					action: new TemplatesAction(), func: 'Templates', obj: 'Grout'
+				});
 				return new TemplatesAction();
 			}
 		}, {
 			key: 'Accounts',
 			get: function get() {
-				this.utils.logger.debug({ description: 'Account Action called.', action: new AccountsAction(), func: 'users', obj: 'Grout' });
+				this.utils.logger.debug({
+					description: 'Account Action called.',
+					action: new AccountsAction(), func: 'users', obj: 'Grout'
+				});
 				return new AccountsAction();
 			}
 		}, {
 			key: 'Users',
 			get: function get() {
-				this.utils.logger.debug({ description: 'Accounts Action called.', action: new AccountsAction(), func: 'Users', obj: 'Grout' });
+				this.utils.logger.debug({
+					description: 'Accounts Action called.',
+					action: new AccountsAction(), func: 'Users', obj: 'Grout'
+				});
 				return new AccountsAction();
 			}
 		}, {
 			key: 'Groups',
 			get: function get() {
 				this.utils.logger.debug({
-					description: 'Groups Action called.', action: new GroupsAction(), func: 'groups', obj: 'Grout'
+					description: 'Groups Action called.',
+					action: new GroupsAction(), func: 'groups', obj: 'Grout'
 				});
 				return new GroupsAction();
 			}

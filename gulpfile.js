@@ -41,7 +41,7 @@ var publisher = CDNPublisher();
 gulp.task('build:main', ['lint-src', 'clean'], function(done) {
   rollup.rollup({
     entry: config.entryFileName,
-    external:['lodash', 'firebase', 'superagent', 'kyper-matter', 'jwt-decode', 'aws-sdk', 'firepad'],
+    external:['lodash', 'firebase', 'superagent', 'kyper-matter', 'jwt-decode', 'aws-sdk', 'firepad', 'brace'],
   }).then(function(bundle) {
     var res = bundle.generate({
       // Don't worry about the fact that the source map is inlined at this step.
@@ -59,7 +59,7 @@ gulp.task('build:main', ['lint-src', 'clean'], function(done) {
       .pipe($.filter(['*', '!**/*.js.map']))
       .pipe($.rename(exportFileName + '.min.js'))
       .pipe($.sourcemaps.init({ loadMaps: true }))
-      .pipe($.uglify())
+      // .pipe($.uglify())
       .pipe($.sourcemaps.write('./'))
       .pipe(gulp.dest(destinationFolder))
       .on('end', done);
@@ -235,7 +235,7 @@ function bundle(bundler) {
       this.emit('end');
     })
     .pipe($.plumber())
-    .pipe(source('./tmp/__matter.bundle.js'))
+    .pipe(source('./tmp/__grout.bundle.js'))
     .pipe(buffer())
     .pipe($.rename(exportFileName + '.bundle.js'))
     .pipe(gulp.dest(destinationFolder))
@@ -253,6 +253,7 @@ function browserifyAndWatchBundler(code) {
 
   // // Set up Babelify so that ES6 works in the tests
   bundler.transform(babelify.configure({
+    global: true,
     ignore: /(bower_components)|(node_modules)/,
     sourceMapRelative: __dirname + '/src',
     optional: ["es7.asyncFunctions"],

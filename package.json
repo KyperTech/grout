@@ -33,6 +33,7 @@
   "homepage": "https://github.com/kypertech/grout",
   "dependencies": {
     "aws-sdk": "^2.2.19",
+    "brace": "^0.5.1",
     "firebase": "^2.3.2",
     "firepad": "^1.2.0",
     "kyper-matter": "0.1.6",

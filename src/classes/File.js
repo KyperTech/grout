@@ -4,6 +4,8 @@ import _ from 'lodash';
 import Firebase from 'firebase';
 import Firepad from 'firepad';
 import AWS from 'aws-sdk';
+import brace from 'brace';
+global.ace = brace;
 //Convenience vars
 let logger = matter.utils.logger;
 
@@ -107,10 +109,18 @@ class File {
 	get() {
 		// TODO: Load file from firepad content
 		return new Promise((resolve) => {
-			let headless = new Firepad.headless(this.fbRef);
-			headless.getText((text) => {
-				headless.dispose();
-				resolve(text);
+			this.headless.getText((text) => {
+				logger.warn({
+					description: 'Text loaded from headless',
+					text: text, func: 'get', obj: 'File'
+				});
+				this.content = text;
+				// this.fbRef.once('value', (fileSnap) => {
+				// 	let meta = fileSnap.child('meta').val();
+				//
+				// });
+				this.headless.dispose();
+				resolve(this);
 			});
 		});
 	}
@@ -320,7 +330,6 @@ class File {
 			});
 		}
 	}
-
 	openInFirepad(editor) {
 		//Load file contents from s3
 		return new Promise((resolve, reject) => {
@@ -363,15 +372,16 @@ class File {
 			return;
 		}
 		let settings = {};
-		if (this.content) {
-			settings.defaultText = this.content;
-		}
+		// if (this.content) {
+		// 	settings.defaultText = this.content;
+		// }
 		if (matter.isLoggedIn && matter.currentUser) {
 			settings.userId = matter.currentUser.username || matter.currentUser.name;
 		}
-		logger.log({
+		logger.warn({
 			description: 'Creating firepad from ace.',
-			settings: settings, func: 'fbRef', obj: 'File'
+			settings: settings, editor: editor, editorVal: editor.getValue(),
+			func: 'fbRef', obj: 'File'
 		});
 		return Firepad.fromACE(this.fbRef, editor, settings);
 	}
