@@ -4,6 +4,7 @@ import AWS from 'aws-sdk';
 
 import matter from './Matter';
 import Firebase from 'firebase';
+import File from './File';
 //Convenience vars
 let logger = matter.utils.logger;
 
@@ -138,7 +139,8 @@ class Files {
 						return resolve(data.Contents);
 					} else {
 						logger.error({
-							description: 'Error getting files from S3.', error: err, func: 'get', obj: 'Files'
+							description: 'Error getting files from S3.',
+							error: err, func: 'get', obj: 'Files'
 						});
 						return reject(err);
 					}
@@ -146,11 +148,60 @@ class Files {
 			});
 		}
 	}
-	add() {
-		//TODO: Add a file to files list
+	add(fileData) {
+		//TODO: Allow for options of where to add the file to
+		return this.addToFb(fileData);
 	}
-	del() {
-		//TODO: Delete a file from files list
+	del(fileData) {
+		//TODO: Delete file from S3 as well
+		return this.delFromFb(fileData);
+	}
+	addToFb(fileData) {
+		if (!fileData || !fileData.path) {
+			logger.error({
+				description: 'Invalid file data. Path must be included.',
+				func: 'addToFb', obj: 'Files'
+			});
+			return Promise.reject({message: 'Invalid file data. Path must be included.'});
+		}
+		let file = new File({app: this.app, fileData: fileData});
+		//TODO: Handle inital content setting
+		return new Promise((resolve, reject) => {
+			file.fbRef.set({meta: {path: file.path}}, (err) => {
+				if (!err) {
+					logger.error({
+						description: 'File successfully added to Firebase.',
+						func: 'addToFb', obj: 'Files'
+					});
+					resolve(fileData);
+				} else {
+					logger.error({
+						description: 'Error creating file on Firebase.',
+						error: err, func: 'addToFb', obj: 'Files'
+					});
+					reject(err);
+				}
+			});
+		});
+	}
+	delFromFb(fileData) {
+		if (!fileData || !fileData.path) {
+			logger.error({
+				description: 'Invalid file data. Path must be included.',
+				func: 'delFromFb', obj: 'Files'
+			});
+			return Promise.reject({message: 'Invalid file data. Path must be included.'});
+		}
+		let file = new File({app: this.app, fileData: fileData});
+		return new Promise((resolve, reject) => {
+			file.fbRef.remove(fileData, (err) => {
+				if (!err) {
+					resolve(fileData);
+				} else {
+					reject(err);
+				}
+			});
+		});
 	}
 	publish() {
 		//TODO: Publish all files

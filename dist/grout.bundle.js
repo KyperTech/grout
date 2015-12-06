@@ -98853,6 +98853,10 @@ var _firebase = require('firebase');
 
 var _firebase2 = _interopRequireDefault(_firebase);
 
+var _File = require('./File');
+
+var _File2 = _interopRequireDefault(_File);
+
 //Convenience vars
 var logger = _Matter2['default'].utils.logger;
 
@@ -98977,7 +98981,8 @@ var Files = (function () {
 									return resolve(data.Contents);
 								} else {
 									logger.error({
-										description: 'Error getting files from S3.', error: err, func: 'get', obj: 'Files'
+										description: 'Error getting files from S3.',
+										error: err, func: 'get', obj: 'Files'
 									});
 									return reject(err);
 								}
@@ -98991,13 +98996,66 @@ var Files = (function () {
 		}
 	}, {
 		key: 'add',
-		value: function add() {
-			//TODO: Add a file to files list
+		value: function add(fileData) {
+			//TODO: Allow for options of where to add the file to
+			return this.addToFb(fileData);
 		}
 	}, {
 		key: 'del',
-		value: function del() {
-			//TODO: Delete a file from files list
+		value: function del(fileData) {
+			//TODO: Delete file from S3 as well
+			return this.delFromFb(fileData);
+		}
+	}, {
+		key: 'addToFb',
+		value: function addToFb(fileData) {
+			if (!fileData || !fileData.path) {
+				logger.error({
+					description: 'Invalid file data. Path must be included.',
+					func: 'addToFb', obj: 'Files'
+				});
+				return Promise.reject({ message: 'Invalid file data. Path must be included.' });
+			}
+			var file = new _File2['default']({ app: this.app, fileData: fileData });
+			//TODO: Handle inital content setting
+			return new Promise(function (resolve, reject) {
+				file.fbRef.set({ meta: { path: file.path } }, function (err) {
+					if (!err) {
+						logger.error({
+							description: 'File successfully added to Firebase.',
+							func: 'addToFb', obj: 'Files'
+						});
+						resolve(fileData);
+					} else {
+						logger.error({
+							description: 'Error creating file on Firebase.',
+							error: err, func: 'addToFb', obj: 'Files'
+						});
+						reject(err);
+					}
+				});
+			});
+		}
+	}, {
+		key: 'delFromFb',
+		value: function delFromFb(fileData) {
+			if (!fileData || !fileData.path) {
+				logger.error({
+					description: 'Invalid file data. Path must be included.',
+					func: 'delFromFb', obj: 'Files'
+				});
+				return Promise.reject({ message: 'Invalid file data. Path must be included.' });
+			}
+			var file = new _File2['default']({ app: this.app, fileData: fileData });
+			return new Promise(function (resolve, reject) {
+				file.fbRef.remove(fileData, function (err) {
+					if (!err) {
+						resolve(fileData);
+					} else {
+						reject(err);
+					}
+				});
+			});
 		}
 	}, {
 		key: 'publish',
@@ -99173,7 +99231,7 @@ function combineLikeObjs(mappedArray) {
 }
 module.exports = exports['default'];
 
-},{"../config":859,"./Matter":857,"aws-sdk":1,"firebase":302,"lodash":842}],856:[function(require,module,exports){
+},{"../config":859,"./File":854,"./Matter":857,"aws-sdk":1,"firebase":302,"lodash":842}],856:[function(require,module,exports){
 Object.defineProperty(exports, '__esModule', {
 	value: true
 });

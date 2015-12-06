@@ -1439,7 +1439,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 										return resolve(data.Contents);
 									} else {
 										__logger.error({
-											description: 'Error getting files from S3.', error: err, func: 'get', obj: 'Files'
+											description: 'Error getting files from S3.',
+											error: err, func: 'get', obj: 'Files'
 										});
 										return reject(err);
 									}
@@ -1453,13 +1454,66 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			}
 		}, {
 			key: 'add',
-			value: function add() {
-				//TODO: Add a file to files list
+			value: function add(fileData) {
+				//TODO: Allow for options of where to add the file to
+				return this.addToFb(fileData);
 			}
 		}, {
 			key: 'del',
-			value: function del() {
-				//TODO: Delete a file from files list
+			value: function del(fileData) {
+				//TODO: Delete file from S3 as well
+				return this.delFromFb(fileData);
+			}
+		}, {
+			key: 'addToFb',
+			value: function addToFb(fileData) {
+				if (!fileData || !fileData.path) {
+					__logger.error({
+						description: 'Invalid file data. Path must be included.',
+						func: 'addToFb', obj: 'Files'
+					});
+					return Promise.reject({ message: 'Invalid file data. Path must be included.' });
+				}
+				var file = new _File({ app: this.app, fileData: fileData });
+				//TODO: Handle inital content setting
+				return new Promise(function (resolve, reject) {
+					file.fbRef.set({ meta: { path: file.path } }, function (err) {
+						if (!err) {
+							__logger.error({
+								description: 'File successfully added to Firebase.',
+								func: 'addToFb', obj: 'Files'
+							});
+							resolve(fileData);
+						} else {
+							__logger.error({
+								description: 'Error creating file on Firebase.',
+								error: err, func: 'addToFb', obj: 'Files'
+							});
+							reject(err);
+						}
+					});
+				});
+			}
+		}, {
+			key: 'delFromFb',
+			value: function delFromFb(fileData) {
+				if (!fileData || !fileData.path) {
+					__logger.error({
+						description: 'Invalid file data. Path must be included.',
+						func: 'delFromFb', obj: 'Files'
+					});
+					return Promise.reject({ message: 'Invalid file data. Path must be included.' });
+				}
+				var file = new _File({ app: this.app, fileData: fileData });
+				return new Promise(function (resolve, reject) {
+					file.fbRef.remove(fileData, function (err) {
+						if (!err) {
+							resolve(fileData);
+						} else {
+							reject(err);
+						}
+					});
+				});
 			}
 		}, {
 			key: 'publish',
