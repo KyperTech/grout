@@ -4,8 +4,6 @@ import _ from 'lodash';
 import Firebase from 'firebase';
 import Firepad from 'firepad';
 import AWS from 'aws-sdk';
-import brace from 'brace';
-global.ace = brace;
 //Convenience vars
 let logger = matter.utils.logger;
 
