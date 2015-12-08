@@ -94,6 +94,7 @@
       //   document.getElementById("output").innerHTML = JSON.stringify(app);
       // });
     }
+    //Get single file content
     function getFile() {
       var file = grout.App('Aventura').File({key: 'index.html', path: 'index.html'});
       console.log('fbUrl', file.fbUrl);
@@ -131,6 +132,13 @@
       //   console.log('file loaded', fileRes);
       //   fileRes.firepadFromAce(editor);
       // });
+    }
+    function addFile() {
+      grout.App('Aventura').Files.add({path: 'test.js'}).then(function(newFileRes) {
+        console.log('New file created successfully', newFileRes);
+      }, function(err){
+        console.error('Error creating new file: ', err);
+      });
     }
     //Get list of users
     function getUsers(){

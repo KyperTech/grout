@@ -58,8 +58,10 @@ class Files {
 		});
 		return pathArray;
 	}
+	/**
+	 * @description get files list from firebase a single time
+	 */
 	get() {
-		// TODO: get files list from firebase
 		console.warn(this.pathArrayFromFbRef);
 		logger.log({
 			description: 'Files get called.',
@@ -67,6 +69,41 @@ class Files {
 		});
 		return new Promise((resolve) => {
 			this.fbRef.once('value', (filesSnap) => {
+				logger.warn({
+					description: 'Files loaded from firebase.',
+					val: filesSnap.val(), func: 'get', obj: 'Files'
+				});
+				let filesArray = [];
+				// let filesPathArray =  this.pathArrayFromFbRef;
+				filesSnap.forEach((objSnap) => {
+					let objData = objSnap.hasChild('meta') ? objSnap.child('meta').val() : {path: objSnap.key()};
+					//TODO: Have a better fallback for when meta does not exist
+					// if (!objData.path) {
+					// 	objSnap.ref().path.o.splice(0, filesPathArray.length);
+					// }
+					objData.key = objSnap.key();
+					filesArray.push(objData);
+				});
+				logger.warn({
+					description: 'Files array built.',
+					val: filesArray, func: 'get', obj: 'Files'
+				});
+				resolve(filesArray);
+			});
+		});
+	}
+	/**
+	 * @description get synced files list from firebase
+	 */
+	sync() {
+		// TODO: get files list from firebase
+		console.warn(this.pathArrayFromFbRef);
+		logger.log({
+			description: 'Files get called.',
+			func: 'get', obj: 'Files'
+		});
+		return new Promise((resolve) => {
+			this.fbRef.on('value', (filesSnap) => {
 				logger.warn({
 					description: 'Files loaded from firebase.',
 					val: filesSnap.val(), func: 'get', obj: 'Files'

@@ -7,13 +7,12 @@ function _inherits(subClass, superClass) { if (typeof superClass !== 'function' 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('kyper-matter'), require('lodash'), require('firepad'), require('aws-sdk'), require('firebase')) : typeof define === 'function' && define.amd ? define(['kyper-matter', 'lodash', 'firepad', 'aws-sdk', 'firebase'], factory) : global.Grout = factory(global.Matter, global._, global.Firepad, global.AWS, global.Firebase);
-})(this, function (Matter, _, Firepad, AWS, Firebase) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('kyper-matter'), require('lodash'), require('aws-sdk'), require('firebase')) : typeof define === 'function' && define.amd ? define(['kyper-matter', 'lodash', 'aws-sdk', 'firebase'], factory) : global.Grout = factory(global.Matter, global._, global.AWS, global.Firebase);
+})(this, function (Matter, _, AWS, Firebase) {
 	'use strict';
 
 	Matter = 'default' in Matter ? Matter['default'] : Matter;
 	_ = 'default' in _ ? _['default'] : _;
-	Firepad = 'default' in Firepad ? Firepad['default'] : Firepad;
 	AWS = 'default' in AWS ? AWS['default'] : AWS;
 	Firebase = 'default' in Firebase ? Firebase['default'] : Firebase;
 
@@ -823,6 +822,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	})();
 
 	var ___logger = matter.utils.logger;
+	var firepad = getFirepadLib();
 
 	var _File = (function () {
 		function _File(actionData) {
@@ -1132,6 +1132,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					if (typeof _ret3 === 'object') return _ret3.v;
 				}
 			}
+
+			/**
+    * @description Open file in firepad from already existing ace editor instance
+    * @param {Object} Ace editor object
+    */
 		}, {
 			key: 'openInFirepad',
 			value: function openInFirepad(editor) {
@@ -1146,9 +1151,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 							func: 'openInFirepad', obj: 'File'
 						});
 						//Open firepad from ace with file content as default
-						var firepad = file.firepadFromAce(editor);
+						var fileFirepad = file.firepadFromAce(editor);
 						//Wait for firepad to be ready
-						firepad.on('ready', function () {
+						fileFirepad.on('ready', function () {
 							resolve(file);
 							// firepad.setText()
 						});
@@ -1161,6 +1166,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					});
 				});
 			}
+
+			/**
+    * @description Create firepad instance from ACE editor
+    * @param {Object} Ace editor object
+    */
 		}, {
 			key: 'firepadFromAce',
 			value: function firepadFromAce(editor) {
@@ -1172,10 +1182,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					});
 					return;
 				}
-				if (typeof Firepad.fromACE !== 'function') {
+				if (typeof firepad.fromACE !== 'function') {
 					___logger.error({
 						description: 'Firepad does not have fromACE method.',
-						firepad: Firepad, func: 'fbRef', obj: 'File'
+						firepad: firepad, func: 'fbRef', obj: 'File'
 					});
 					return;
 				}
@@ -1183,15 +1193,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				// if (this.content) {
 				// 	settings.defaultText = this.content;
 				// }
-				if (matter.isLoggedIn && matter.currentUser) {
-					settings.userId = matter.currentUser.username || matter.currentUser.name;
-				}
+				//Attach logged in user id
+				// if (matter.isLoggedIn && matter.currentUser) {
+				// 	settings.userId = matter.currentUser.username || matter.currentUser.name;
+				// }
 				___logger.warn({
 					description: 'Creating firepad from ace.',
 					settings: settings, editor: editor, editorVal: editor.getValue(),
 					func: 'fbRef', obj: 'File'
 				});
-				return Firepad.fromACE(this.fbRef, editor, settings);
+				return firepad.fromACE(this.fbRef, editor, settings);
 			}
 		}, {
 			key: 'getConnectedUsers',
@@ -1295,7 +1306,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					});
 					return this.ref;
 				}
-				___logger.log({
+				___logger.warn({
 					description: 'Fb ref generatating.',
 					url: this.fbUrl, func: 'fbRef', obj: 'File'
 				});
@@ -1304,7 +1315,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'headless',
 			get: function get() {
-				return new Firepad.Headless(this.fbRef);
+				if (typeof firepad.Headless !== 'function') {
+					___logger.error({
+						description: 'Firepad is required to get file content.',
+						func: 'get', obj: 'File'
+					});
+					throw Error('Firepad is required to get file content');
+				}
+				return firepad.Headless(this.fbRef);
 			}
 		}]);
 
@@ -1318,6 +1336,32 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			}),
 			region: config.aws.region
 		});
+	}
+	//Load firepad from local or global
+	function getFirepadLib() {
+		if (typeof window !== 'undefined' && window.Firepad && window.ace) {
+			return new window.Firepad.Headless(this.fbRef);
+		} else if (typeof global !== 'undefined' && global.Firepad && global.ace) {
+			return new global.Firepad.Headless(this.fbRef);
+		} else {
+			___logger.warn({
+				description: 'Firepad does not currently exist.',
+				func: 'fbRef', obj: 'File'
+			});
+			return {};
+			//TODO: Correctly load firepad
+			// dom.loadJs('https://cdn.firebase.com/libs/firepad/1.2.0/firepad.js');
+			// if (typeof global !== 'undefined' && global.Firepad) {
+			// 	return global.Firepad;
+			// } else if (typeof window !== 'undefined' && window.Firepad) {
+			// 	return window.Firepad;
+			// } else {
+			// 	logger.error({
+			// 		description: 'Adding firepad did not help.',
+			// 		func: 'fbRef', obj: 'File'
+			// 	});
+			// }
+		}
 	}
 
 	//Convenience vars
@@ -1359,10 +1403,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 		_createClass(Files, [{
 			key: 'get',
+
+			/**
+    * @description get files list from firebase a single time
+    */
 			value: function get() {
 				var _this7 = this;
 
-				// TODO: get files list from firebase
 				console.warn(this.pathArrayFromFbRef);
 				__logger.log({
 					description: 'Files get called.',
@@ -1393,10 +1440,50 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					});
 				});
 			}
+
+			/**
+    * @description get synced files list from firebase
+    */
+		}, {
+			key: 'sync',
+			value: function sync() {
+				var _this8 = this;
+
+				// TODO: get files list from firebase
+				console.warn(this.pathArrayFromFbRef);
+				__logger.log({
+					description: 'Files get called.',
+					func: 'get', obj: 'Files'
+				});
+				return new Promise(function (resolve) {
+					_this8.fbRef.on('value', function (filesSnap) {
+						__logger.warn({
+							description: 'Files loaded from firebase.',
+							val: filesSnap.val(), func: 'get', obj: 'Files'
+						});
+						var filesArray = [];
+						// let filesPathArray =  this.pathArrayFromFbRef;
+						filesSnap.forEach(function (objSnap) {
+							var objData = objSnap.hasChild('meta') ? objSnap.child('meta').val() : { path: objSnap.key() };
+							//TODO: Have a better fallback for when meta does not exist
+							// if (!objData.path) {
+							// 	objSnap.ref().path.o.splice(0, filesPathArray.length);
+							// }
+							objData.key = objSnap.key();
+							filesArray.push(objData);
+						});
+						__logger.warn({
+							description: 'Files array built.',
+							val: filesArray, func: 'get', obj: 'Files'
+						});
+						resolve(filesArray);
+					});
+				});
+			}
 		}, {
 			key: 'getFromS3',
 			value: function getFromS3() {
-				var _this8 = this;
+				var _this9 = this;
 
 				if (!this.app.frontend || !this.app.frontend.bucketName) {
 					__logger.warn({
@@ -1408,9 +1495,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 							description: 'Application get returned.',
 							data: applicationData, func: 'getFromS3', obj: 'Files'
 						});
-						_this8.app = applicationData;
+						_this9.app = applicationData;
 						if (_.has(applicationData, 'frontend')) {
-							return _this8.get();
+							return _this9.get();
 						} else {
 							__logger.error({
 								description: 'Application does not have Frontend to get files from.',
@@ -1437,7 +1524,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 							setAWSConfig();
 						}
 						var s3 = new AWS.S3();
-						var listParams = { Bucket: _this8.app.frontend.bucketName };
+						var listParams = { Bucket: _this9.app.frontend.bucketName };
 						return {
 							v: new Promise(function (resolve, reject) {
 								s3.listObjects(listParams, function (err, data) {
@@ -1789,7 +1876,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 		}, {
 			key: 'applyTemplate',
 			value: function applyTemplate() {
-				var _this9 = this;
+				var _this10 = this;
 
 				_logger.error({
 					description: 'Applying templates to existing applications is not currently supported.',
@@ -1798,14 +1885,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				return _request.post(this.appEndpoint, {}).then(function (response) {
 					_logger.info({
 						description: 'Template successfully applied to application.',
-						response: response, application: _this9,
+						response: response, application: _this10,
 						func: 'applyTemplate', obj: 'Application'
 					});
 					return new Application(response);
 				})['catch'](function (errRes) {
 					_logger.error({
 						description: 'Error applying template to application.',
-						error: errRes, application: _this9,
+						error: errRes, application: _this10,
 						func: 'applyTemplate', obj: 'Application'
 					});
 					return Promise.reject(errRes.response.text || errRes.response);

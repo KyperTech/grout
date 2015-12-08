@@ -2,11 +2,12 @@ import config from '../config';
 import matter from './Matter';
 import _ from 'lodash';
 import Firebase from 'firebase';
-import Firepad from 'firepad';
 import AWS from 'aws-sdk';
 //Convenience vars
 let logger = matter.utils.logger;
+let dom = matter.utils.dom;
 
+let firepad = getFirepadLib();
 class File {
 	constructor(actionData) {
 		if (actionData && _.isObject(actionData) && _.has(actionData, 'fileData') && _.has(actionData, 'app')) {
@@ -95,14 +96,21 @@ class File {
 			});
 			return this.ref;
 		}
-		logger.log({
+		logger.warn({
 			description: 'Fb ref generatating.',
 			url: this.fbUrl, func: 'fbRef', obj: 'File'
 		});
 		return new Firebase(this.fbUrl);
 	}
 	get headless() {
-		return new Firepad.Headless(this.fbRef);
+		if (typeof firepad.Headless !== 'function') {
+			logger.error({
+				description: 'Firepad is required to get file content.',
+				func: 'get', obj: 'File'
+			});
+			throw Error('Firepad is required to get file content');
+		}
+		return firepad.Headless(this.fbRef);
 	}
 	get() {
 		// TODO: Load file from firepad content
@@ -328,6 +336,10 @@ class File {
 			});
 		}
 	}
+	/**
+	 * @description Open file in firepad from already existing ace editor instance
+	 * @param {Object} Ace editor object
+	 */
 	openInFirepad(editor) {
 		//Load file contents from s3
 		return new Promise((resolve, reject) => {
@@ -338,9 +350,9 @@ class File {
 					func: 'openInFirepad', obj: 'File'
 				});
 				//Open firepad from ace with file content as default
-				let firepad = file.firepadFromAce(editor);
+				let fileFirepad = file.firepadFromAce(editor);
 				//Wait for firepad to be ready
-				firepad.on('ready', () => {
+				fileFirepad.on('ready', () => {
 					resolve(file);
 					// firepad.setText()
 				});
@@ -353,6 +365,10 @@ class File {
 			});
 		});
 	}
+	/**
+	 * @description Create firepad instance from ACE editor
+	 * @param {Object} Ace editor object
+	 */
 	firepadFromAce(editor) {
 		//TODO:Create new Firepad instance within div
 		if (!editor || typeof editor.setTheme !== 'function') {
@@ -362,10 +378,10 @@ class File {
 			});
 			return;
 		}
-		if (typeof Firepad.fromACE !== 'function') {
+		if (typeof firepad.fromACE !== 'function') {
 			logger.error({
 				description: 'Firepad does not have fromACE method.',
-				firepad: Firepad, func: 'fbRef', obj: 'File'
+				firepad: firepad, func: 'fbRef', obj: 'File'
 			});
 			return;
 		}
@@ -373,15 +389,16 @@ class File {
 		// if (this.content) {
 		// 	settings.defaultText = this.content;
 		// }
-		if (matter.isLoggedIn && matter.currentUser) {
-			settings.userId = matter.currentUser.username || matter.currentUser.name;
-		}
+		//Attach logged in user id
+		// if (matter.isLoggedIn && matter.currentUser) {
+		// 	settings.userId = matter.currentUser.username || matter.currentUser.name;
+		// }
 		logger.warn({
 			description: 'Creating firepad from ace.',
 			settings: settings, editor: editor, editorVal: editor.getValue(),
 			func: 'fbRef', obj: 'File'
 		});
-		return Firepad.fromACE(this.fbRef, editor, settings);
+		return firepad.fromACE(this.fbRef, editor, settings);
 	}
 	getConnectedUsers() {
 		return new Promise((resolve, reject) => {
@@ -425,4 +442,30 @@ function setAWSConfig() {
 	}),
 		region: config.aws.region
 	});
+}
+//Load firepad from local or global
+function getFirepadLib() {
+	if (typeof window !== 'undefined' && window.Firepad && window.ace) {
+		return new window.Firepad.Headless(this.fbRef);
+	} else if (typeof global !== 'undefined' && global.Firepad && global.ace) {
+		return new global.Firepad.Headless(this.fbRef);
+	} else {
+		logger.warn({
+			description: 'Firepad does not currently exist.',
+			func: 'fbRef', obj: 'File'
+		});
+		return {};
+		//TODO: Correctly load firepad
+		// dom.loadJs('https://cdn.firebase.com/libs/firepad/1.2.0/firepad.js');
+		// if (typeof global !== 'undefined' && global.Firepad) {
+		// 	return global.Firepad;
+		// } else if (typeof window !== 'undefined' && window.Firepad) {
+		// 	return window.Firepad;
+		// } else {
+		// 	logger.error({
+		// 		description: 'Adding firepad did not help.',
+		// 		func: 'fbRef', obj: 'File'
+		// 	});
+		// }
+	}
 }
