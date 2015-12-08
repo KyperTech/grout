@@ -33,9 +33,15 @@ class Files {
 			func: 'constructor', obj: 'Files'
 		});
 	}
+	/**
+	 * @description Firebase URL for files list
+	 */
 	get fbUrl() {
 		return `${config.fbUrl}/files/${this.app.name}`;
 	}
+	/**
+	 * @description Firebase reference of files list
+	 */
 	get fbRef() {
 		logger.log({
 			description: 'Url created for files fbRef.',
@@ -43,6 +49,10 @@ class Files {
 		});
 		return new Firebase(this.fbUrl);
 	}
+	/**
+	 * @description Path array that is built from Firebase Reference
+	 * @private
+	 */
 	get pathArrayFromFbRef() {
 		//Handle fbUrls that have multiple levels
 		let removeArray = config.fbUrl.replace('https://', '').split('/');
@@ -59,7 +69,7 @@ class Files {
 		return pathArray;
 	}
 	/**
-	 * @description get files list from firebase a single time
+	 * @description Get files list single time
 	 */
 	get() {
 		console.warn(this.pathArrayFromFbRef);
@@ -93,7 +103,7 @@ class Files {
 		});
 	}
 	/**
-	 * @description get synced files list from firebase
+	 * @description Get synced files list from firebase
 	 */
 	sync() {
 		// TODO: get files list from firebase
@@ -127,6 +137,24 @@ class Files {
 			});
 		});
 	}
+
+	/**
+	 * @description Add a new file
+	 */
+	add(fileData) {
+		//TODO: Allow for options of where to add the file to
+		return this.addToFb(fileData);
+	}
+	/**
+	 * @description Delete file
+	 */
+	del(fileData) {
+		//TODO: Delete file from S3 as well if it exists
+		return this.delFromFb(fileData);
+	}
+	/**
+	 * @description Get files list from S3
+	 */
 	getFromS3() {
 		if (!this.app.frontend || !this.app.frontend.bucketName) {
 			logger.warn({
@@ -160,7 +188,7 @@ class Files {
 				});
 			});
 		} else {
-			//If AWS Credential do not exist, set them
+			//If AWS Credentials do not exist, set them
 			if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
 				// logger.info('AWS creds are being updated to make request');
 				setAWSConfig();
@@ -185,14 +213,9 @@ class Files {
 			});
 		}
 	}
-	add(fileData) {
-		//TODO: Allow for options of where to add the file to
-		return this.addToFb(fileData);
-	}
-	del(fileData) {
-		//TODO: Delete file from S3 as well
-		return this.delFromFb(fileData);
-	}
+	/**
+	 * @description Add a file to Firebase
+	 */
 	addToFb(fileData) {
 		if (!fileData || !fileData.path) {
 			logger.error({
@@ -221,6 +244,9 @@ class Files {
 			});
 		});
 	}
+	/**
+	 * @description Delete a file from Firebase
+	 */
 	delFromFb(fileData) {
 		if (!fileData || !fileData.path) {
 			logger.error({
@@ -243,6 +269,9 @@ class Files {
 	publish() {
 		//TODO: Publish all files
 	}
+	/**
+	 * @description build child structure from files list
+	 */
 	buildStructure() {
 		logger.debug({
 			description: 'Build Structure called.',
@@ -273,6 +302,40 @@ class Files {
 			});
 		});
 	}
+	/**
+	 * @description sync file structure from Firebase
+	 */
+	syncStructure() {
+		//TODO: Determine if it is worth storing this in the built structure
+		logger.debug({
+			description: 'Build Structure called.',
+			func: 'syncStructure', obj: 'Application'
+		});
+		return this.sync().then((filesArray) => {
+			logger.log({
+				description: 'Child struct from array.',
+				childStructure: childStruct,
+				func: 'syncStructure', obj: 'Application'
+			});
+			const childStruct = childrenStructureFromArray(filesArray);
+			//TODO: have child objects have correct classes (file/folder)
+			logger.log({
+				description: 'Child struct from array.',
+				childStructure: childStruct,
+				func: 'syncStructure', obj: 'Application'
+			});
+			return childStruct;
+		}, (err) => {
+			logger.error({
+				description: 'Error getting application files.',
+				error: err, func: 'syncStructure', obj: 'Application'
+			});
+			return Promise.reject({
+				message: 'Error getting files.',
+				error: err
+			});
+		});
+	}
 	//ALIAS FOR buildStructure
 	// get structure() {
 	// 	return this.buildStructure();
@@ -290,10 +353,15 @@ function setAWSConfig() {
 		region: config.aws.region
 	});
 }
-//Convert from array file structure (from S3) to 'children' structure used in Editor GUI (angular-tree-control)
-//Examples for two files (index.html and /testFolder/file.js):
-//Array structure: [{path:'index.html'}, {path:'testFolder/file.js'}]
-//Children Structure [{type:'folder', name:'testfolder', children:[{path:'testFolder/file.js', name:'file.js', filetype:'javascript', contentType:'application/javascript'}]}]
+/**
+ * @description Convert from array file structure (from S3) to 'children' structure used in Editor GUI
+ * @private
+ * @example
+ * //Array structure: [{path:'index.html'}, {path:'testFolder/file.js'}]
+ * //Children Structure [{type:'folder', name:'testfolder', children:[{path:'testFolder/file.js', name:'file.js', filetype:'javascript', contentType:'application/javascript'}]}]
+ * var flatArray = [{path:'index.html'}, {path:'testFolder/file.js'}];
+ * var childrenStructure = childrenStructureFromArray(flatArray);
+ */
 function childrenStructureFromArray(fileArray) {
 	// logger.log('childStructureFromArray called:', fileArray);
 	//Create a object for each file that stores the file in the correct 'children' level
@@ -302,7 +370,10 @@ function childrenStructureFromArray(fileArray) {
 	});
 	return combineLikeObjs(mappedStructure);
 }
-//Convert file with key into a folder/file children object
+/**
+ * @description Convert file with key into a folder/file children object
+ * @private
+ */
 function buildStructureObject(file) {
 	var pathArray;
 	// console.log('buildStructureObject with:', file);
@@ -352,7 +423,10 @@ function buildStructureObject(file) {
 		return finalObj;
 	}
 }
-//Recursivley combine children of object's that have the same names
+/**
+ * @description Recursivley combine children of object's that have the same names
+ * @private
+ */
 function combineLikeObjs(mappedArray) {
 	var takenNames = [];
 	var finishedArray = [];

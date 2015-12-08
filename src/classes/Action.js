@@ -6,23 +6,32 @@ let logger = matter.utils.logger;
 let request = matter.utils.request;
 
 export default class Action {
-  constructor(actionName, actionData, endpoint) {
+  constructor(actionName, actionData) {
     this.name = actionName;
-    this.endpoint = endpoint ? endpoint : `${this.name}`;
     this.init(actionData);
   }
+  /**
+   * @description Initialize action
+   * @param {Object} actionData - Data with which to initialize action
+   */
   init(actionData) {
     logger.log({
       description: 'Init action called.',
       actionData: actionData, func: 'url', obj: 'Action'
     });
+    if (!actionData || !actionData.app) {
+      logger.error({
+        description: 'Action data with app is required.',
+        actionData: actionData, func: 'url', obj: 'Action'
+      });
+      throw Error('Action data with app is required.');
+    }
     this.isList = actionData ? false : true;
+    this.app = actionData.app;
     if (!this.isList) {
       this.actionData = actionData;
       if (isString(actionData)) { //String username provided
         this.id = this.actionData;
-      } else if (has(actionData, 'id') || has(actionData, 'username')) { //Check for object to have id or username
-        this.id = actionData.id ? actionData.id : actionData.username;
       } else {
         logger.warn({
           description: 'Invalid action data object.',
@@ -33,17 +42,32 @@ export default class Action {
       }
     }
   }
+  /**
+   * @description Build endpoint in the form of an array
+   * @return {Array}
+   */
+  get endpointArray() {
+    let endpointArray = [matter.endpoint, this.name];
+    if (_.has(this, 'app') && _.has(this.app, 'name')) {
+      //Splice apps, appName into index 1
+      endpointArray.splice(1, 0, 'apps', this.app.name);
+    }
+    logger.log({
+      description: 'Url created.', url: url,
+      func: 'url', obj: 'Action'
+    });
+    return endpointArray;
+  }
   /** url
    * @description Action url
    * @return {String}
    */
   get url() {
-    let url = this.isList ? `${config.urls.api}/${this.endpoint}` : `${config.urls.api}/${this.endpoint}/${this.id}`;
     logger.log({
-      description: 'Url created.', url: url,
+      description: 'Url created.', url: endpointArray.join('/'),
       func: 'url', obj: 'Action'
     });
-    return url;
+    return endpointArray.join('/');
   }
   /** Get
    * @return {Promise}
@@ -100,6 +124,10 @@ export default class Action {
       return Promise.reject(err);
     });
   }
+  /** Update
+   * @param {Object} updateData - Object containing data with which to update
+   * @return {Promise}
+   */
   update(updateData) {
     return request.put(this.url, updateData).then((res) => {
       if (has(res, 'error')) {
