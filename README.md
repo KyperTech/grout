@@ -30,7 +30,7 @@ Client library to simplify communication with Tessellate application building se
 
 ## Getting Started
 
-Grout is isomorphic, so it can be used within a frontend or on a server. Below are setups for both:
+Grout is isomorphic, so it can be used within a front-end or on a server. Below are setups for both:
 
 ### Browser
 1. Include the Grout library using one of the following:
@@ -38,7 +38,7 @@ Grout is isomorphic, so it can be used within a frontend or on a server. Below a
   Add script tag to index.html:
 
     ```html
-    <script src="http://cdn.kyper.io/js/grout/0.0.15/grout.bundle.js"></script>
+    <script src="http://cdn.kyper.io/js/grout/0.0.17/grout.bundle.js"></script>
     ```
 
   #### Bower
@@ -57,7 +57,7 @@ Grout is isomorphic, so it can be used within a frontend or on a server. Below a
     ```
     **or in ES6:**
     ```javascript
-    import Grout from ('grout');
+  import Grout from ('grout');
   let grout = new Grout();
     ```
 

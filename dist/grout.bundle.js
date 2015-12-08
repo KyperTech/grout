@@ -50459,14 +50459,15 @@ var File = (function () {
 	}, {
 		key: 'headless',
 		get: function get() {
-			if (typeof firepad.Headless !== 'function') {
+			if (typeof firepad === 'undefined' || typeof firepad.Headless !== 'function') {
 				logger.error({
 					description: 'Firepad is required to get file content.',
 					func: 'get', obj: 'File'
 				});
 				throw Error('Firepad is required to get file content');
+			} else {
+				return firepad.Headless(this.fbRef);
 			}
-			return firepad.Headless(this.fbRef);
 		}
 	}]);
 
@@ -50488,16 +50489,20 @@ function setAWSConfig() {
 }
 //Load firepad from local or global
 function getFirepadLib() {
+	logger.warn({
+		description: 'Get firepad lib called',
+		func: 'fbRef', obj: 'File'
+	});
 	if (typeof window !== 'undefined' && window.Firepad && window.ace) {
-		return new window.Firepad.Headless(this.fbRef);
+		return window.Firepad;
 	} else if (typeof global !== 'undefined' && global.Firepad && global.ace) {
-		return new global.Firepad.Headless(this.fbRef);
+		return global.Firepad;
 	} else {
 		logger.warn({
 			description: 'Firepad does not currently exist.',
 			func: 'fbRef', obj: 'File'
 		});
-		return {};
+		return null;
 		//TODO: Correctly load firepad
 		// dom.loadJs('https://cdn.firebase.com/libs/firepad/1.2.0/firepad.js');
 		// if (typeof global !== 'undefined' && global.Firepad) {
@@ -50583,11 +50588,15 @@ var Files = (function () {
 		});
 	}
 
+	/**
+  * @description Firebase URL for files list
+  */
+
 	_createClass(Files, [{
 		key: 'get',
 
 		/**
-   * @description get files list from firebase a single time
+   * @description Get files list single time
    */
 		value: function get() {
 			var _this = this;
@@ -50624,7 +50633,7 @@ var Files = (function () {
 		}
 
 		/**
-   * @description get synced files list from firebase
+   * @description Get synced files list from firebase
    */
 	}, {
 		key: 'sync',
@@ -50662,6 +50671,30 @@ var Files = (function () {
 				});
 			});
 		}
+
+		/**
+   * @description Add a new file
+   */
+	}, {
+		key: 'add',
+		value: function add(fileData) {
+			//TODO: Allow for options of where to add the file to
+			return this.addToFb(fileData);
+		}
+
+		/**
+   * @description Delete file
+   */
+	}, {
+		key: 'del',
+		value: function del(fileData) {
+			//TODO: Delete file from S3 as well if it exists
+			return this.delFromFb(fileData);
+		}
+
+		/**
+   * @description Get files list from S3
+   */
 	}, {
 		key: 'getFromS3',
 		value: function getFromS3() {
@@ -50700,7 +50733,7 @@ var Files = (function () {
 				});
 			} else {
 				var _ret = (function () {
-					//If AWS Credential do not exist, set them
+					//If AWS Credentials do not exist, set them
 					if (typeof _awsSdk2['default'].config.credentials == 'undefined' || !_awsSdk2['default'].config.credentials) {
 						// logger.info('AWS creds are being updated to make request');
 						setAWSConfig();
@@ -50730,18 +50763,10 @@ var Files = (function () {
 				if (typeof _ret === 'object') return _ret.v;
 			}
 		}
-	}, {
-		key: 'add',
-		value: function add(fileData) {
-			//TODO: Allow for options of where to add the file to
-			return this.addToFb(fileData);
-		}
-	}, {
-		key: 'del',
-		value: function del(fileData) {
-			//TODO: Delete file from S3 as well
-			return this.delFromFb(fileData);
-		}
+
+		/**
+   * @description Add a file to Firebase
+   */
 	}, {
 		key: 'addToFb',
 		value: function addToFb(fileData) {
@@ -50772,6 +50797,10 @@ var Files = (function () {
 				});
 			});
 		}
+
+		/**
+   * @description Delete a file from Firebase
+   */
 	}, {
 		key: 'delFromFb',
 		value: function delFromFb(fileData) {
@@ -50795,9 +50824,13 @@ var Files = (function () {
 		}
 	}, {
 		key: 'publish',
-		value: function publish() {
-			//TODO: Publish all files
-		}
+		value: function publish() {}
+		//TODO: Publish all files
+
+		/**
+   * @description build child structure from files list
+   */
+
 	}, {
 		key: 'buildStructure',
 		value: function buildStructure() {
@@ -50831,6 +50864,43 @@ var Files = (function () {
 			});
 		}
 
+		/**
+   * @description sync file structure from Firebase
+   */
+	}, {
+		key: 'syncStructure',
+		value: function syncStructure() {
+			//TODO: Determine if it is worth storing this in the built structure
+			logger.debug({
+				description: 'Build Structure called.',
+				func: 'syncStructure', obj: 'Application'
+			});
+			return this.sync().then(function (filesArray) {
+				logger.log({
+					description: 'Child struct from array.',
+					childStructure: childStruct,
+					func: 'syncStructure', obj: 'Application'
+				});
+				var childStruct = childrenStructureFromArray(filesArray);
+				//TODO: have child objects have correct classes (file/folder)
+				logger.log({
+					description: 'Child struct from array.',
+					childStructure: childStruct,
+					func: 'syncStructure', obj: 'Application'
+				});
+				return childStruct;
+			}, function (err) {
+				logger.error({
+					description: 'Error getting application files.',
+					error: err, func: 'syncStructure', obj: 'Application'
+				});
+				return Promise.reject({
+					message: 'Error getting files.',
+					error: err
+				});
+			});
+		}
+
 		//ALIAS FOR buildStructure
 		// get structure() {
 		// 	return this.buildStructure();
@@ -50840,6 +50910,10 @@ var Files = (function () {
 		get: function get() {
 			return _config2['default'].fbUrl + '/files/' + this.app.name;
 		}
+
+		/**
+   * @description Firebase reference of files list
+   */
 	}, {
 		key: 'fbRef',
 		get: function get() {
@@ -50849,6 +50923,11 @@ var Files = (function () {
 			});
 			return new _firebase2['default'](this.fbUrl);
 		}
+
+		/**
+   * @description Path array that is built from Firebase Reference
+   * @private
+   */
 	}, {
 		key: 'pathArrayFromFbRef',
 		get: function get() {
@@ -50884,10 +50963,15 @@ function setAWSConfig() {
 		region: _config2['default'].aws.region
 	});
 }
-//Convert from array file structure (from S3) to 'children' structure used in Editor GUI (angular-tree-control)
-//Examples for two files (index.html and /testFolder/file.js):
-//Array structure: [{path:'index.html'}, {path:'testFolder/file.js'}]
-//Children Structure [{type:'folder', name:'testfolder', children:[{path:'testFolder/file.js', name:'file.js', filetype:'javascript', contentType:'application/javascript'}]}]
+/**
+ * @description Convert from array file structure (from S3) to 'children' structure used in Editor GUI
+ * @private
+ * @example
+ * //Array structure: [{path:'index.html'}, {path:'testFolder/file.js'}]
+ * //Children Structure [{type:'folder', name:'testfolder', children:[{path:'testFolder/file.js', name:'file.js', filetype:'javascript', contentType:'application/javascript'}]}]
+ * var flatArray = [{path:'index.html'}, {path:'testFolder/file.js'}];
+ * var childrenStructure = childrenStructureFromArray(flatArray);
+ */
 function childrenStructureFromArray(fileArray) {
 	// logger.log('childStructureFromArray called:', fileArray);
 	//Create a object for each file that stores the file in the correct 'children' level
@@ -50896,7 +50980,10 @@ function childrenStructureFromArray(fileArray) {
 	});
 	return combineLikeObjs(mappedStructure);
 }
-//Convert file with key into a folder/file children object
+/**
+ * @description Convert file with key into a folder/file children object
+ * @private
+ */
 function buildStructureObject(file) {
 	var pathArray;
 	// console.log('buildStructureObject with:', file);
@@ -50947,7 +51034,10 @@ function buildStructureObject(file) {
 		return finalObj;
 	}
 }
-//Recursivley combine children of object's that have the same names
+/**
+ * @description Recursivley combine children of object's that have the same names
+ * @private
+ */
 function combineLikeObjs(mappedArray) {
 	var takenNames = [];
 	var finishedArray = [];

@@ -41,7 +41,7 @@ var publisher = CDNPublisher();
 gulp.task('build:main', ['lint-src', 'clean'], function(done) {
   rollup.rollup({
     entry: config.entryFileName,
-    external:['lodash', 'firebase', 'superagent', 'kyper-matter', 'jwt-decode', 'aws-sdk', 'firepad', 'brace'],
+    external:['lodash', 'firebase', 'superagent', 'kyper-matter', 'jwt-decode', 'aws-sdk'],
   }).then(function(bundle) {
     var res = bundle.generate({
       // Don't worry about the fact that the source map is inlined at this step.

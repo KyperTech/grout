@@ -103,14 +103,15 @@ class File {
 		return new Firebase(this.fbUrl);
 	}
 	get headless() {
-		if (typeof firepad.Headless !== 'function') {
+		if (typeof firepad === 'undefined' || typeof firepad.Headless !== 'function') {
 			logger.error({
 				description: 'Firepad is required to get file content.',
 				func: 'get', obj: 'File'
 			});
 			throw Error('Firepad is required to get file content');
+		} else {
+			return firepad.Headless(this.fbRef);
 		}
-		return firepad.Headless(this.fbRef);
 	}
 	get() {
 		// TODO: Load file from firepad content
@@ -445,16 +446,20 @@ function setAWSConfig() {
 }
 //Load firepad from local or global
 function getFirepadLib() {
+	logger.warn({
+		description: 'Get firepad lib called',
+		func: 'fbRef', obj: 'File'
+	});
 	if (typeof window !== 'undefined' && window.Firepad && window.ace) {
-		return new window.Firepad.Headless(this.fbRef);
+		return window.Firepad;
 	} else if (typeof global !== 'undefined' && global.Firepad && global.ace) {
-		return new global.Firepad.Headless(this.fbRef);
+		return global.Firepad;
 	} else {
 		logger.warn({
 			description: 'Firepad does not currently exist.',
 			func: 'fbRef', obj: 'File'
 		});
-		return {};
+		return null;
 		//TODO: Correctly load firepad
 		// dom.loadJs('https://cdn.firebase.com/libs/firepad/1.2.0/firepad.js');
 		// if (typeof global !== 'undefined' && global.Firepad) {
