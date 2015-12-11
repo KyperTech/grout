@@ -5,7 +5,6 @@ import Firebase from 'firebase';
 import AWS from 'aws-sdk';
 //Convenience vars
 let logger = matter.utils.logger;
-let dom = matter.utils.dom;
 
 let firepad = getFirepadLib();
 class File {
@@ -96,10 +95,10 @@ class File {
 			});
 			return this.ref;
 		}
-		logger.warn({
-			description: 'Fb ref generatating.',
-			url: this.fbUrl, func: 'fbRef', obj: 'File'
-		});
+		// logger.log({
+		// 	description: 'Fb ref generated.',
+		// 	url: this.fbUrl, func: 'fbRef', obj: 'File'
+		// });
 		return new Firebase(this.fbUrl);
 	}
 	get headless() {
@@ -114,22 +113,60 @@ class File {
 		}
 	}
 	get() {
-		// TODO: Load file from firepad content
 		return new Promise((resolve) => {
-			this.headless.getText((text) => {
-				logger.warn({
-					description: 'Text loaded from headless',
-					text: text, func: 'get', obj: 'File'
-				});
-				this.content = text;
-				// this.fbRef.once('value', (fileSnap) => {
-				// 	let meta = fileSnap.child('meta').val();
-				//
-				// });
-				this.headless.dispose();
-				resolve(this);
+			this.fbRef.once('value', (fileSnap) => {
+				// Load file from firepad original content if no history available
+				if (fileSnap.hasChild('original') && !fileSnap.hasChild('history')) {
+					//File has not yet been opened in firepad
+					this.content = fileSnap.child('original').val();
+					logger.log({
+						description: 'File content loaded.',
+						content: this.content, func: 'get', obj: 'File'
+					});
+					this.headless.setText(this.content, (err, success) => {
+						this.headless.dispose();
+						if (!err) {
+							logger.log({
+								description: 'File content set to Headless Firepad.',
+								func: 'get', obj: 'File'
+							});
+							resolve(this);
+						} else {
+							logger.error({
+								description: 'Error setting file text.',
+								error: err, func: 'get', obj: 'File'
+							});
+							reject(err);
+						}
+					});
+				} else {
+					//Get firepad text from history
+					this.headless.getText((text) => {
+						logger.log({
+							description: 'Text loaded from headless',
+							text: text, func: 'get', obj: 'File'
+						});
+						this.content = text;
+						// this.fbRef.once('value', (fileSnap) => {
+						// 	let meta = fileSnap.child('meta').val();
+						//
+						// });
+						this.headless.dispose();
+						resolve(this);
+					});
+				}
 			});
 		});
+	}
+	//Alias for get
+	open() {
+		return this.get();
+	}
+	publish() {
+
+	}
+	del() {
+
 	}
 	getFromS3() {
 		if (!this.app || !this.app.frontend) {
@@ -210,11 +247,7 @@ class File {
 			});
 		}
 	}
-	//Alias for get
-	open() {
-		return this.get();
-	}
-	publish(fileData) {
+	saveToS3(fileData) {
 		//TODO: Publish file to application
 		logger.debug({
 			description: 'File publish called.', file: this,
@@ -278,7 +311,7 @@ class File {
 			});
 		}
 	}
-	del() {
+	delFromS3() {
 		if (!this.app || !this.app.frontend) {
 			logger.log({description: 'Application Frontend data not available. Calling applicaiton get.', func: 'get', obj: 'File'});
 			return this.app.get().then((appData) => {
@@ -345,7 +378,7 @@ class File {
 		//Load file contents from s3
 		return new Promise((resolve, reject) => {
 			this.get().then((file) => {
-				logger.log({
+				logger.warn({
 					description: 'File contents loaded. Opening firepad.',
 					editor: editor, file: file,
 					func: 'openInFirepad', obj: 'File'

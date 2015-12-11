@@ -822,6 +822,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 	})();
 
 	var ___logger = matter.utils.logger;
+
 	var firepad = getFirepadLib();
 
 	var _File = (function () {
@@ -874,23 +875,64 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 			value: function get() {
 				var _this = this;
 
-				// TODO: Load file from firepad content
 				return new Promise(function (resolve) {
-					_this.headless.getText(function (text) {
-						___logger.warn({
-							description: 'Text loaded from headless',
-							text: text, func: 'get', obj: 'File'
-						});
-						_this.content = text;
-						// this.fbRef.once('value', (fileSnap) => {
-						// 	let meta = fileSnap.child('meta').val();
-						//
-						// });
-						_this.headless.dispose();
-						resolve(_this);
+					_this.fbRef.once('value', function (fileSnap) {
+						// Load file from firepad original content if no history available
+						if (fileSnap.hasChild('original') && !fileSnap.hasChild('history')) {
+							//File has not yet been opened in firepad
+							_this.content = fileSnap.child('original').val();
+							___logger.log({
+								description: 'File content loaded.',
+								content: _this.content, func: 'get', obj: 'File'
+							});
+							_this.headless.setText(_this.content, function (err, success) {
+								_this.headless.dispose();
+								if (!err) {
+									___logger.log({
+										description: 'File content set to Headless Firepad.',
+										func: 'get', obj: 'File'
+									});
+									resolve(_this);
+								} else {
+									___logger.error({
+										description: 'Error setting file text.',
+										error: err, func: 'get', obj: 'File'
+									});
+									reject(err);
+								}
+							});
+						} else {
+							//Get firepad text from history
+							_this.headless.getText(function (text) {
+								___logger.log({
+									description: 'Text loaded from headless',
+									text: text, func: 'get', obj: 'File'
+								});
+								_this.content = text;
+								// this.fbRef.once('value', (fileSnap) => {
+								// 	let meta = fileSnap.child('meta').val();
+								//
+								// });
+								_this.headless.dispose();
+								resolve(_this);
+							});
+						}
 					});
 				});
 			}
+
+			//Alias for get
+		}, {
+			key: 'open',
+			value: function open() {
+				return this.get();
+			}
+		}, {
+			key: 'publish',
+			value: function publish() {}
+		}, {
+			key: 'del',
+			value: function del() {}
 		}, {
 			key: 'getFromS3',
 			value: function getFromS3() {
@@ -980,16 +1022,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					if (typeof _ret === 'object') return _ret.v;
 				}
 			}
-
-			//Alias for get
 		}, {
-			key: 'open',
-			value: function open() {
-				return this.get();
-			}
-		}, {
-			key: 'publish',
-			value: function publish(fileData) {
+			key: 'saveToS3',
+			value: function saveToS3(fileData) {
 				var _this3 = this;
 
 				//TODO: Publish file to application
@@ -1064,8 +1099,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				}
 			}
 		}, {
-			key: 'del',
-			value: function del() {
+			key: 'delFromS3',
+			value: function delFromS3() {
 				var _this4 = this;
 
 				if (!this.app || !this.app.frontend) {
@@ -1145,7 +1180,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 				//Load file contents from s3
 				return new Promise(function (resolve, reject) {
 					_this5.get().then(function (file) {
-						___logger.log({
+						___logger.warn({
 							description: 'File contents loaded. Opening firepad.',
 							editor: editor, file: file,
 							func: 'openInFirepad', obj: 'File'
@@ -1306,10 +1341,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 					});
 					return this.ref;
 				}
-				___logger.warn({
-					description: 'Fb ref generatating.',
-					url: this.fbUrl, func: 'fbRef', obj: 'File'
-				});
+				// logger.log({
+				// 	description: 'Fb ref generated.',
+				// 	url: this.fbUrl, func: 'fbRef', obj: 'File'
+				// });
 				return new Firebase(this.fbUrl);
 			}
 		}, {
