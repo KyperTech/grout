@@ -30,6 +30,7 @@ export default class Action {
     this.app = actionData.app;
     if (!this.isList) {
       this.actionData = actionData;
+      this.callData = actionData.callData || {};
       if (isString(actionData)) { //String username provided
         this.id = this.actionData;
       } else {
@@ -48,14 +49,10 @@ export default class Action {
    */
   get endpointArray() {
     let endpointArray = [matter.endpoint, this.name];
-    if (_.has(this, 'app') && _.has(this.app, 'name')) {
+    if (_.has(this, 'app') && _.has(this.app, 'name') && this.app.name !== config.appName) {
       //Splice apps, appName into index 1
       endpointArray.splice(1, 0, 'apps', this.app.name);
     }
-    logger.log({
-      description: 'Url created.', url: url,
-      func: 'url', obj: 'Action'
-    });
     return endpointArray;
   }
   /** url
@@ -64,10 +61,10 @@ export default class Action {
    */
   get url() {
     logger.log({
-      description: 'Url created.', url: endpointArray.join('/'),
+      description: 'Url created.', url: this.endpointArray.join('/'),
       func: 'url', obj: 'Action'
     });
-    return endpointArray.join('/');
+    return this.endpointArray.join('/');
   }
   /** Get
    * @return {Promise}
