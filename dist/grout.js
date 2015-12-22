@@ -29228,6 +29228,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'add',
 	    value: function add(newData) {
+	      var _this = this;
+
 	      return request.post(this.url, newData).then(function (res) {
 	        logger.log({
 	          description: 'Add request responded successfully.',
@@ -29235,20 +29237,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	        if ((0, _lodash.has)(res, 'error')) {
 	          logger.error({
-	            description: 'Error creating new user.', error: res.error,
-	            res: res, func: 'add', obj: 'Action'
+	            description: 'Error in add request.', error: res.error,
+	            action: _this, res: res, func: 'add', obj: 'Action'
 	          });
 	          return Promise.reject(res.error);
 	        }
 	        logger.log({
-	          description: 'Add successful.', res: res,
+	          description: 'Add successful.', res: res, action: _this,
 	          func: 'add', obj: 'Action'
 	        });
 	        return res;
 	      }, function (err) {
 	        logger.error({
-	          description: 'Error creating new user.',
-	          error: err, func: 'add', obj: 'Action'
+	          description: 'Error in add request.',
+	          action: _this, error: err, func: 'add', obj: 'Action'
 	        });
 	        return Promise.reject(err);
 	      });
@@ -29289,22 +29291,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'remove',
 	    value: function remove() {
+	      var _this2 = this;
+
 	      return request.del(this.url).then(function (res) {
 	        if ((0, _lodash.has)(res, 'error')) {
 	          logger.error({
-	            description: 'Error in request for removal.',
+	            description: 'Error in removal request.', action: _this2,
 	            error: res.error, res: res, func: 'remove', obj: 'Action'
 	          });
 	          return Promise.reject(res.error);
 	        }
 	        logger.log({
-	          description: 'Remove successfully.',
+	          description: 'Remove successful.',
 	          res: res, func: 'remove', obj: 'Action'
 	        });
 	        return res;
 	      }, function (err) {
 	        logger.error({
-	          description: 'Error in request for removal.',
+	          description: 'Error in request for removal.', action: _this2,
 	          error: err, func: 'remove', obj: 'Action'
 	        });
 	        return Promise.reject(err);

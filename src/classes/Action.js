@@ -103,20 +103,20 @@ export default class Action {
       });
       if (has(res, 'error')) {
         logger.error({
-          description: 'Error creating new user.', error: res.error,
-          res: res, func: 'add', obj: 'Action'
+          description: 'Error in add request.', error: res.error,
+          action: this, res: res, func: 'add', obj: 'Action'
         });
         return Promise.reject(res.error);
       }
       logger.log({
-        description: 'Add successful.', res: res,
+        description: 'Add successful.', res: res, action: this,
         func: 'add', obj: 'Action'
       });
       return res;
     }, (err) => {
       logger.error({
-        description: 'Error creating new user.',
-        error: err, func: 'add', obj: 'Action'
+        description: `Error in add request.`,
+        action: this, error: err, func: 'add', obj: 'Action'
       });
       return Promise.reject(err);
     });
@@ -154,19 +154,19 @@ export default class Action {
     return request.del(this.url).then((res) => {
       if (has(res, 'error')) {
         logger.error({
-          description: 'Error in request for removal.',
+          description: 'Error in removal request.', action: this,
           error: res.error, res: res, func: 'remove', obj: 'Action'
         });
         return Promise.reject(res.error);
       }
       logger.log({
-        description: 'Remove successfully.',
+        description: 'Remove successful.',
         res: res, func: 'remove', obj: 'Action'
       });
       return res;
     }, (err) => {
       logger.error({
-        description: 'Error in request for removal.',
+        description: 'Error in request for removal.', action: this,
         error: err, func: 'remove', obj: 'Action'
       });
       return Promise.reject(err);
