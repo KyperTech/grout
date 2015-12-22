@@ -1,6 +1,7 @@
 import { isString, isObject } from 'lodash';
 import config from './config';
 import Matter from 'kyper-matter';
+import Application from './classes/Application';
 import * as Actions from './actions';
 /**Grout Client Class
  * @description Extending matter provides token storage and login/logout/signup capabilities
@@ -27,7 +28,7 @@ export default class Grout extends Matter {
 			description: 'Project action called.',
 			projectName: projectName, func: 'Projects', obj: 'Grout'
 		});
-		return new Actions.Project({app: this, callData: projectName});
+		return new Application({app: this, callData: projectName});
 	}
 	//Start a new Projects Action
 	get Apps() {
@@ -43,7 +44,7 @@ export default class Grout extends Matter {
 			description: 'Project action called.',
 			projectName: projectName, func: 'Projects', obj: 'Grout'
 		});
-		return new Actions.Project({app: this, callData: projectName});
+		return new Application({app: this, callData: projectName});
 	}
 	//Start a new Apps Action
 	get Templates() {

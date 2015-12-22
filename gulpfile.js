@@ -7,7 +7,6 @@ const del = require('del');
 const glob = require('glob');
 const path = require('path');
 const isparta = require('isparta');
-const babelify = require('babelify');
 const browserSync = require('browser-sync');
 const watchify = require('watchify');
 const buffer = require('vinyl-buffer');
@@ -37,50 +36,6 @@ const ignoreFiles = ['dist/**/*.js', 'examples/**', 'node_modules/**'].map(funct
 
 //Create CDN Publisher
 var publisher = CDNPublisher();
-
-gulp.task('build:main', ['lint-src', 'clean'], function(done) {
-  rollup.rollup({
-    entry: config.entryFileName,
-    external:['lodash', 'firebase', 'superagent', 'kyper-matter', 'jwt-decode', 'aws-sdk'],
-  }).then(function(bundle) {
-    var res = bundle.generate({
-      // Don't worry about the fact that the source map is inlined at this step.
-      // `gulp-sourcemaps`, which comes next, will externalize them.
-      format:'umd',
-      sourceMap: 'inline',
-      moduleName: config.mainVarName
-    });
-    $.file(exportFileName + '.js', res.code, { src: true })
-      .pipe($.plumber())
-      .pipe($.sourcemaps.init({ loadMaps: true }))
-      .pipe($.babel())
-      .pipe($.sourcemaps.write('./'))
-      .pipe(gulp.dest(destinationFolder))
-      .pipe($.filter(['*', '!**/*.js.map']))
-      .pipe($.rename(exportFileName + '.min.js'))
-      .pipe($.sourcemaps.init({ loadMaps: true }))
-      // .pipe($.uglify())
-      .pipe($.sourcemaps.write('./'))
-      .pipe(gulp.dest(destinationFolder))
-      .on('end', done);
-  })
-  .catch(done);
-});
-//Build bundle version
-gulp.task('build:bundle', function (callback) {
-  runSequence('addExternals', callback);
-});
-
-// Ensure that linting occurs before browserify runs. This prevents
-// the build from breaking due to poorly formatted code.
-gulp.task('build', function (callback) {
-  runSequence('build:main', 'build:bundle', 'watch', callback);
-});
-
-//Browserify with external modules included
-gulp.task('addExternals', function() {
-  return bundle(browserifyAndWatchBundler());
-});
 
 //Run test once using Karma and exit
 gulp.task('test', function (done) {
@@ -125,13 +80,6 @@ gulp.task('bump', function(){
   .pipe(gulp.dest('./'));
 });
 
-//Watch files and trigger a rebuild on change
-gulp.task('watch', function() {
-  const watchCollection = mainFiles.concat(watchFiles).concat(ignoreFiles);
-  // console.log('watching collection:', watchCollection);
-  gulp.watch(watchCollection, ['build']);
-});
-
 //Upload to both locations of CDN
 gulp.task('upload', function (callback) {
   runSequence('upload:version', 'upload:latest', callback);
@@ -163,16 +111,6 @@ gulp.task('browser-sync', function() {
       baseDir: "./"
     }
   });
-});
-
-// Remove the built files
-gulp.task('clean', function(cb) {
-  del([destinationFolder], cb);
-});
-
-// Remove our temporary files
-gulp.task('clean-tmp', function(cb) {
-  del(['tmp'], cb);
 });
 
 // Lint our source code
@@ -227,40 +165,6 @@ function CDNPublisher () {
   };
   return awspublish.create(s3Config);
 }
-
-function bundle(bundler) {
-  return bundler.bundle()
-    .on('error', function(err) {
-      console.log(err.message);
-      this.emit('end');
-    })
-    .pipe($.plumber())
-    .pipe(source('./tmp/__grout.bundle.js'))
-    .pipe(buffer())
-    .pipe($.rename(exportFileName + '.bundle.js'))
-    .pipe(gulp.dest(destinationFolder))
-    .pipe($.livereload());
-}
-function browserifyAndWatchBundler(code) {
-  // Create our bundler, passing in the arguments required for watchify
-  var bundler = browserify('src/' + exportFileName + '.js', {standalone:'Grout'});
-
-  // Watch the bundler, and re-bundle it whenever files change
-  // bundler = watchify(bundler);
-  // bundler.on('update', function() {
-  //   bundle(bundler);
-  // });
-
-  // // Set up Babelify so that ES6 works in the tests
-  bundler.transform(babelify.configure({
-    global: true,
-    ignore: /(bower_components)|(node_modules)/,
-    sourceMapRelative: __dirname + '/src',
-    optional: ["es7.asyncFunctions"],
-    stage:2
-  }));
-  return bundler;
-};
 // Send a notification when JSCS fails,
 // so that you know your changes didn't build
 function jscsNotify(file) {

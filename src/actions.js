@@ -16,11 +16,7 @@ export class Projects extends Action {
     super('apps', actionData);
   }
 }
-export class Project extends Action {
-  constructor(actionData) {
-    super('app', actionData);
-  }
-}
+
 export class Groups extends Action {
   constructor(actionData) {
     super('groups', actionData);

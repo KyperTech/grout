@@ -30,14 +30,14 @@ export default class Action {
     this.app = actionData.app;
     if (!this.isList) {
       this.actionData = actionData;
-      this.callData = actionData.callData || {};
-      if (isString(actionData)) { //String username provided
+      if (isString(actionData)) {
         this.id = this.actionData;
       } else {
-        logger.warn({
-          description: 'Invalid action data object.',
-          func: 'constructor', obj: 'Action'
-        });
+        this.callData = actionData.callData || {};
+        // logger.warn({
+        //   description: 'Invalid action data object.',
+        //   func: 'constructor', obj: 'Action'
+        // });
         this.isList = false;
         // return Promise.reject('Invalid this.actionData');
       }

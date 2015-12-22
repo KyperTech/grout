@@ -17,13 +17,13 @@ import File from './File';
 import Firebase from 'firebase';
 //Convenience vars
 const {request, logger} = matter.utils;
-
 /**
  * Application class.
  *
  */
 class Application {
 	constructor(appData) {
+		console.log('files in group:', Files);
 		//Setup application data based on input
 		if (appData && _.isObject(appData)) {
 			_.extend(this, appData);
@@ -79,7 +79,6 @@ class Application {
 			return Promise.reject(errRes.response.text || errRes.response);
 		});
 	}
-
 	addStorage() {
 		logger.debug({
 			description: 'Application add storage called.', application: this,

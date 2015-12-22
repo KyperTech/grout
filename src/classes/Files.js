@@ -1,7 +1,6 @@
 import config from '../config';
 import _ from 'lodash';
 import AWS from 'aws-sdk';
-
 import matter from './Matter';
 import Firebase from 'firebase';
 import File from './File';
