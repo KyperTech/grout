@@ -23,7 +23,6 @@ const {request, logger} = matter.utils;
  */
 class Application {
 	constructor(appData) {
-		console.log('files in group:', Files);
 		//Setup application data based on input
 		if (appData && _.isObject(appData)) {
 			_.extend(this, appData);

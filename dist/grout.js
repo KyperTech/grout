@@ -54,21 +54,13 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	Object.defineProperty(exports, '__esModule', {
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var _lodash = __webpack_require__(4);
 
@@ -80,13 +72,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _kyperMatter2 = _interopRequireDefault(_kyperMatter);
 
-	var _classesApplication = __webpack_require__(112);
+	var _Application = __webpack_require__(112);
 
-	var _classesApplication2 = _interopRequireDefault(_classesApplication);
+	var _Application2 = _interopRequireDefault(_Application);
 
 	var _actions = __webpack_require__(93);
 
 	var Actions = _interopRequireWildcard(_actions);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	/**Grout Client Class
 	 * @description Extending matter provides token storage and login/logout/signup capabilities
@@ -101,11 +103,10 @@ return /******/ (function(modules) { // webpackBootstrap
 			_classCallCheck(this, Grout);
 
 			//Call matter with tessellate
-			var name = appName && (0, _lodash.isString)(appName) ? appName : _config2['default'].appName;
-			var options = groutOptions && (0, _lodash.isObject)(groutOptions) ? groutOptions : _config2['default'].matterOptions;
-			_get(Object.getPrototypeOf(Grout.prototype), 'constructor', this).call(this, name, options);
+			var name = appName && (0, _lodash.isString)(appName) ? appName : _config2.default.appName;
+			var options = groutOptions && (0, _lodash.isObject)(groutOptions) ? groutOptions : _config2.default.matterOptions;
+			return _possibleConstructorReturn(this, Object.getPrototypeOf(Grout).call(this, name, options));
 		}
-
 		//Start a new Projects Action
 
 		_createClass(Grout, [{
@@ -117,10 +118,10 @@ return /******/ (function(modules) { // webpackBootstrap
 					description: 'Project action called.',
 					projectName: projectName, func: 'Projects', obj: 'Grout'
 				});
-				return new _classesApplication2['default']({ app: this, callData: projectName });
+				return new _Application2.default({ app: this, callData: projectName });
 			}
-
 			//Start a new Projects Action
+
 		}, {
 			key: 'App',
 
@@ -130,10 +131,10 @@ return /******/ (function(modules) { // webpackBootstrap
 					description: 'Project action called.',
 					projectName: projectName, func: 'Projects', obj: 'Grout'
 				});
-				return new _classesApplication2['default']({ app: this, callData: projectName });
+				return new _Application2.default({ app: this, callData: projectName });
 			}
-
 			//Start a new Apps Action
+
 		}, {
 			key: 'Template',
 
@@ -145,8 +146,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				});
 				return new Actions.Template({ app: this, callData: templateData });
 			}
-
 			//Start a new Accounts action
+
 		}, {
 			key: 'Account',
 
@@ -159,9 +160,9 @@ return /******/ (function(modules) { // webpackBootstrap
 				});
 				return new Actions.Account({ app: this, callData: userData });
 			}
-
 			//ALIAS OF ACCOUNTS
 			//Start a new Accounts action
+
 		}, {
 			key: 'User',
 
@@ -175,8 +176,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				});
 				return new Actions.Account({ app: this, callData: userData });
 			}
-
 			//Start a new Groups action
+
 		}, {
 			key: 'Group',
 
@@ -246,9 +247,9 @@ return /******/ (function(modules) { // webpackBootstrap
 		}]);
 
 		return Grout;
-	})(_kyperMatter2['default']);
+	})(_kyperMatter2.default);
 
-	exports['default'] = Grout;
+	exports.default = Grout;
 	module.exports = exports['default'];
 
 /***/ },
@@ -15805,7 +15806,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 9 */
 /***/ function(module, exports) {
 
-	Object.defineProperty(exports, '__esModule', {
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
 	var config = {
@@ -15832,7 +15835,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// if (typeof window != 'undefined' && (window.location.hostname == '' || window.location.hostname == 'localhost')) {
 	// 	config.serverUrl = 'http://localhost:4000';
 	// }
-	exports['default'] = config;
+	exports.default = config;
 	module.exports = exports['default'];
 
 /***/ },
@@ -16426,11 +16429,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
-	Object.defineProperty(exports, '__esModule', {
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	var _config = __webpack_require__(9);
 
@@ -16440,8 +16443,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _kyperMatter2 = _interopRequireDefault(_kyperMatter);
 
-	var matter = new _kyperMatter2['default'](_config2['default'].appName, _config2['default'].matterOptions);
-	exports['default'] = matter;
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var matter = new _kyperMatter2.default(_config2.default.appName, _config2.default.matterOptions);
+	exports.default = matter;
 	module.exports = exports['default'];
 
 /***/ },
@@ -29013,125 +29018,114 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
-	Object.defineProperty(exports, '__esModule', {
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.Template = exports.Templates = exports.Groups = exports.Projects = exports.Account = exports.Accounts = exports.Group = undefined;
 
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	var _Action7 = __webpack_require__(94);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	var _Action8 = _interopRequireDefault(_Action7);
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	var _Group2 = __webpack_require__(96);
 
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	var _Group3 = _interopRequireDefault(_Group2);
 
-	var _classesAction = __webpack_require__(94);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var _classesAction2 = _interopRequireDefault(_classesAction);
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var _classesGroup = __webpack_require__(96);
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	var _classesGroup2 = _interopRequireDefault(_classesGroup);
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	exports.Group = _classesGroup2['default'];
+	exports.Group = _Group3.default;
 
-	var Accounts = (function (_Action) {
+	var Accounts = exports.Accounts = (function (_Action) {
 	  _inherits(Accounts, _Action);
 
 	  function Accounts(actionData) {
 	    _classCallCheck(this, Accounts);
 
-	    _get(Object.getPrototypeOf(Accounts.prototype), 'constructor', this).call(this, 'accounts', actionData);
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Accounts).call(this, 'accounts', actionData));
 	  }
 
 	  return Accounts;
-	})(_classesAction2['default']);
+	})(_Action8.default);
 
-	exports.Accounts = Accounts;
-
-	var Account = (function (_Action2) {
+	var Account = exports.Account = (function (_Action2) {
 	  _inherits(Account, _Action2);
 
 	  function Account(actionData) {
 	    _classCallCheck(this, Account);
 
-	    _get(Object.getPrototypeOf(Account.prototype), 'constructor', this).call(this, 'account', actionData);
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Account).call(this, 'account', actionData));
 	  }
 
 	  return Account;
-	})(_classesAction2['default']);
+	})(_Action8.default);
 
-	exports.Account = Account;
-
-	var Projects = (function (_Action3) {
+	var Projects = exports.Projects = (function (_Action3) {
 	  _inherits(Projects, _Action3);
 
 	  function Projects(actionData) {
 	    _classCallCheck(this, Projects);
 
-	    _get(Object.getPrototypeOf(Projects.prototype), 'constructor', this).call(this, 'apps', actionData);
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Projects).call(this, 'apps', actionData));
 	  }
 
 	  return Projects;
-	})(_classesAction2['default']);
+	})(_Action8.default);
 
-	exports.Projects = Projects;
-
-	var Groups = (function (_Action4) {
+	var Groups = exports.Groups = (function (_Action4) {
 	  _inherits(Groups, _Action4);
 
 	  function Groups(actionData) {
 	    _classCallCheck(this, Groups);
 
-	    _get(Object.getPrototypeOf(Groups.prototype), 'constructor', this).call(this, 'groups', actionData);
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Groups).call(this, 'groups', actionData));
 	  }
 
 	  return Groups;
-	})(_classesAction2['default']);
+	})(_Action8.default);
 
-	exports.Groups = Groups;
-
-	var Templates = (function (_Action5) {
+	var Templates = exports.Templates = (function (_Action5) {
 	  _inherits(Templates, _Action5);
 
 	  function Templates(actionData) {
 	    _classCallCheck(this, Templates);
 
-	    _get(Object.getPrototypeOf(Templates.prototype), 'constructor', this).call(this, 'templates', actionData);
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Templates).call(this, 'templates', actionData));
 	  }
 
 	  return Templates;
-	})(_classesAction2['default']);
+	})(_Action8.default);
 
-	exports.Templates = Templates;
-
-	var Template = (function (_Action6) {
+	var Template = exports.Template = (function (_Action6) {
 	  _inherits(Template, _Action6);
 
 	  function Template(actionData) {
 	    _classCallCheck(this, Template);
 
-	    _get(Object.getPrototypeOf(Template.prototype), 'constructor', this).call(this, 'template', actionData);
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Template).call(this, 'template', actionData));
 	  }
 
 	  return Template;
-	})(_classesAction2['default']);
-
-	exports.Template = Template;
+	})(_Action8.default);
 
 /***/ },
 /* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
-	Object.defineProperty(exports, '__esModule', {
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 	var _config = __webpack_require__(9);
 
@@ -29143,8 +29137,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Matter2 = _interopRequireDefault(_Matter);
 
-	var logger = _Matter2['default'].utils.logger;
-	var request = _Matter2['default'].utils.request;
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var logger = _Matter2.default.utils.logger;
+	var request = _Matter2.default.utils.request;
 
 	var Action = (function () {
 	  function Action(actionName, actionData) {
@@ -29153,7 +29151,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.name = actionName;
 	    this.init(actionData);
 	  }
-
 	  /**
 	   * @description Initialize action
 	   * @param {Object} actionData - Data with which to initialize action
@@ -29190,11 +29187,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      }
 	    }
-
 	    /**
 	     * @description Build endpoint in the form of an array
 	     * @return {Array}
 	     */
+
 	  }, {
 	    key: 'get',
 
@@ -29223,11 +29220,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return Promise.reject(error);
 	      });
 	    }
-
 	    /** Add
 	     * @param {Object} newData - Object containing data to create with
 	     * @return {Promise}
 	     */
+
 	  }, {
 	    key: 'add',
 	    value: function add(newData) {
@@ -29256,11 +29253,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return Promise.reject(err);
 	      });
 	    }
-
 	    /** Update
 	     * @param {Object} updateData - Object containing data with which to update
 	     * @return {Promise}
 	     */
+
 	  }, {
 	    key: 'update',
 	    value: function update(updateData) {
@@ -29285,10 +29282,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return Promise.reject(err);
 	      });
 	    }
-
 	    /** Remove
 	     * @return {Promise}
 	     */
+
 	  }, {
 	    key: 'remove',
 	    value: function remove() {
@@ -29316,18 +29313,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'endpointArray',
 	    get: function get() {
-	      var endpointArray = [_Matter2['default'].endpoint, this.name];
-	      if ((0, _lodash.has)(this, 'app') && (0, _lodash.has)(this.app, 'name') && this.app.name !== _config2['default'].appName) {
+	      var endpointArray = [_Matter2.default.endpoint, this.name];
+	      if ((0, _lodash.has)(this, 'app') && (0, _lodash.has)(this.app, 'name') && this.app.name !== _config2.default.appName) {
 	        //Splice apps, appName into index 1
 	        endpointArray.splice(1, 0, 'apps', this.app.name);
 	      }
 	      return endpointArray;
 	    }
-
 	    /** url
 	     * @description Action url
 	     * @return {String}
 	     */
+
 	  }, {
 	    key: 'url',
 	    get: function get() {
@@ -29342,22 +29339,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return Action;
 	})();
 
-	exports['default'] = Action;
+	exports.default = Action;
 	module.exports = exports['default'];
 
 /***/ },
 /* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {Object.defineProperty(exports, '__esModule', {
+	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 	var _config = __webpack_require__(9);
 
@@ -29379,8 +29374,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _awsSdk2 = _interopRequireDefault(_awsSdk);
 
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 	//Convenience vars
-	var logger = _Matter2['default'].utils.logger;
+	var logger = _Matter2.default.utils.logger;
 
 	var firepad = getFirepadLib();
 
@@ -29388,8 +29389,8 @@ return /******/ (function(modules) { // webpackBootstrap
 		function File(actionData) {
 			_classCallCheck(this, File);
 
-			if (actionData && _lodash2['default'].isObject(actionData) && _lodash2['default'].has(actionData, 'fileData') && _lodash2['default'].has(actionData, 'app')) {
-				_lodash2['default'].extend(this, actionData.fileData);
+			if (actionData && _lodash2.default.isObject(actionData) && _lodash2.default.has(actionData, 'fileData') && _lodash2.default.has(actionData, 'app')) {
+				_lodash2.default.extend(this, actionData.fileData);
 				this.app = actionData.app;
 				if (!this.path) {
 					if (!this.ref) {
@@ -29403,8 +29404,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				}
 				this.pathArray = this.path.split('/');
 				//Get name from data or from pathArray
-				this.name = _lodash2['default'].has(actionData.fileData, 'name') ? actionData.fileData.name : this.pathArray[this.pathArray.length - 1];
-			} else if (actionData && !_lodash2['default'].isObject(actionData)) {
+				this.name = _lodash2.default.has(actionData.fileData, 'name') ? actionData.fileData.name : this.pathArray[this.pathArray.length - 1];
+			} else if (actionData && !_lodash2.default.isObject(actionData)) {
 				logger.error({
 					description: 'Action data is not an object. Action data must be an object that includes app and fileData.',
 					func: 'constructor', obj: 'File'
@@ -29475,8 +29476,8 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 				});
 			}
-
 			//Alias for get
+
 		}, {
 			key: 'open',
 			value: function open() {
@@ -29515,14 +29516,14 @@ return /******/ (function(modules) { // webpackBootstrap
 				} else {
 					var _ret = (function () {
 						//If AWS Credential do not exist, set them
-						if (typeof _awsSdk2['default'].config.credentials == 'undefined' || !_awsSdk2['default'].config.credentials) {
+						if (typeof _awsSdk2.default.config.credentials == 'undefined' || !_awsSdk2.default.config.credentials) {
 							logger.log({
 								description: 'AWS creds do not exist, so they are being set.',
 								func: 'publish', obj: 'File'
 							});
 							setAWSConfig();
 						}
-						var s3 = new _awsSdk2['default'].S3();
+						var s3 = new _awsSdk2.default.S3();
 						var getData = {
 							Bucket: _this2.app.frontend.bucketName,
 							Key: _this2.path
@@ -29545,7 +29546,7 @@ return /******/ (function(modules) { // webpackBootstrap
 											description: 'File loaded successfully.',
 											data: data, func: 'get', obj: 'File'
 										});
-										if (_lodash2['default'].has(data, 'Body')) {
+										if (_lodash2.default.has(data, 'Body')) {
 											logger.info({
 												description: 'File has content.',
 												content: data.Body.toString(),
@@ -29574,7 +29575,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						};
 					})();
 
-					if (typeof _ret === 'object') return _ret.v;
+					if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
 				}
 			}
 		}, {
@@ -29595,7 +29596,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					return Promise.reject({ message: 'Front end data is required to publish file.' });
 				} else {
 					var _ret2 = (function () {
-						if (!_lodash2['default'].has(fileData, ['content', 'path'])) {
+						if (!_lodash2.default.has(fileData, ['content', 'path'])) {
 							logger.error({
 								description: 'File data including path and content required to publish.',
 								func: 'publish', obj: 'File'
@@ -29615,14 +29616,14 @@ return /******/ (function(modules) { // webpackBootstrap
 							saveParams.ContentType = _this3.contentType;
 						}
 						//If AWS Credential do not exist, set them
-						if (typeof _awsSdk2['default'].config.credentials == 'undefined' || !_awsSdk2['default'].config.credentials) {
+						if (typeof _awsSdk2.default.config.credentials == 'undefined' || !_awsSdk2.default.config.credentials) {
 							logger.debug({
 								description: 'AWS creds do not exist, so they are being set.',
 								func: 'publish', obj: 'File'
 							});
 							setAWSConfig();
 						}
-						var s3 = new _awsSdk2['default'].S3();
+						var s3 = new _awsSdk2.default.S3();
 						logger.debug({
 							description: 'File publish params built.',
 							saveParams: saveParams, fileData: _this3,
@@ -29650,7 +29651,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						};
 					})();
 
-					if (typeof _ret2 === 'object') return _ret2.v;
+					if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
 				}
 			}
 		}, {
@@ -29671,11 +29672,11 @@ return /******/ (function(modules) { // webpackBootstrap
 				} else {
 					var _ret3 = (function () {
 						//If AWS Credential do not exist, set them
-						if (typeof _awsSdk2['default'].config.credentials == 'undefined' || !_awsSdk2['default'].config.credentials) {
+						if (typeof _awsSdk2.default.config.credentials == 'undefined' || !_awsSdk2.default.config.credentials) {
 							logger.debug({ description: 'AWS creds do not exist, so they are being set.', func: 'publish', obj: 'File' });
 							setAWSConfig();
 						}
-						var s3 = new _awsSdk2['default'].S3();
+						var s3 = new _awsSdk2.default.S3();
 						var saveParams = {
 							Bucket: _this4.app.frontend.bucketName,
 							Key: _this4.path
@@ -29704,7 +29705,7 @@ return /******/ (function(modules) { // webpackBootstrap
 										description: 'File loaded successfully.',
 										fileData: data, func: 'get', obj: 'File'
 									});
-									if (_lodash2['default'].has(data, 'Body')) {
+									if (_lodash2.default.has(data, 'Body')) {
 										logger.info({
 											description: 'File has content.',
 											fileData: data.Body.toString(), func: 'get', obj: 'File'
@@ -29718,14 +29719,14 @@ return /******/ (function(modules) { // webpackBootstrap
 						};
 					})();
 
-					if (typeof _ret3 === 'object') return _ret3.v;
+					if ((typeof _ret3 === 'undefined' ? 'undefined' : _typeof(_ret3)) === "object") return _ret3.v;
 				}
 			}
-
 			/**
 	   * @description Open file in firepad from already existing ace editor instance
 	   * @param {Object} Ace editor object
 	   */
+
 		}, {
 			key: 'openInFirepad',
 			value: function openInFirepad(editor) {
@@ -29755,11 +29756,11 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 				});
 			}
-
 			/**
 	   * @description Create firepad instance from ACE editor
 	   * @param {Object} Ace editor object
 	   */
+
 		}, {
 			key: 'firepadFromAce',
 			value: function firepadFromAce(editor) {
@@ -29878,7 +29879,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'fbUrl',
 			get: function get() {
-				var url = [_config2['default'].fbUrl, 'files', this.app.name, this.safePath].join('/');
+				var url = [_config2.default.fbUrl, 'files', this.app.name, this.safePath].join('/');
 				logger.log({
 					description: 'File ref url generated',
 					url: url, func: 'fbRef', obj: 'File'
@@ -29899,7 +29900,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				// 	description: 'Fb ref generated.',
 				// 	url: this.fbUrl, func: 'fbRef', obj: 'File'
 				// });
-				return new _firebase2['default'](this.fbUrl);
+				return new _firebase2.default(this.fbUrl);
 			}
 		}, {
 			key: 'headless',
@@ -29919,22 +29920,22 @@ return /******/ (function(modules) { // webpackBootstrap
 		return File;
 	})();
 
-	exports['default'] = File;
-
+	exports.default = File;
 	//------------------ Utility Functions ------------------//
 
 	// AWS Config
+
 	function setAWSConfig() {
-		_awsSdk2['default'].config.update({
-			credentials: new _awsSdk2['default'].CognitoIdentityCredentials({
-				IdentityPoolId: _config2['default'].aws.cognito.poolId
+		_awsSdk2.default.config.update({
+			credentials: new _awsSdk2.default.CognitoIdentityCredentials({
+				IdentityPoolId: _config2.default.aws.cognito.poolId
 			}),
-			region: _config2['default'].aws.region
+			region: _config2.default.aws.region
 		});
 	}
 	//Load firepad from local or global
 	function getFirepadLib() {
-		logger.warn({
+		logger.debug({
 			description: 'Get firepad lib called',
 			func: 'fbRef', obj: 'File'
 		});
@@ -29943,7 +29944,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		} else if (typeof global !== 'undefined' && global.Firepad && global.ace) {
 			return global.Firepad;
 		} else {
-			logger.warn({
+			logger.log({
 				description: 'Firepad does not currently exist.',
 				func: 'fbRef', obj: 'File'
 			});
@@ -29969,19 +29970,13 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
-	Object.defineProperty(exports, '__esModule', {
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var _Matter = __webpack_require__(14);
 
@@ -29993,7 +29988,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Action3 = _interopRequireDefault(_Action2);
 
-	var logger = _Matter2['default'].utils.logger;
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var logger = _Matter2.default.utils.logger;
 
 	var Group = (function (_Action) {
 		_inherits(Group, _Action);
@@ -30001,9 +30004,8 @@ return /******/ (function(modules) { // webpackBootstrap
 		function Group(actionData) {
 			_classCallCheck(this, Group);
 
-			_get(Object.getPrototypeOf(Group.prototype), 'constructor', this).call(this, 'group', actionData);
+			return _possibleConstructorReturn(this, Object.getPrototypeOf(Group).call(this, 'group', actionData));
 		}
-
 		/**
 	  * @description Add accounts to a group
 	  * @param {Array} accounts - List of accounts ids to add to group
@@ -30053,9 +30055,9 @@ return /******/ (function(modules) { // webpackBootstrap
 		}]);
 
 		return Group;
-	})(_Action3['default']);
+	})(_Action3.default);
 
-	exports['default'] = Group;
+	exports.default = Group;
 	module.exports = exports['default'];
 
 /***/ },
@@ -32965,17 +32967,17 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
-	Object.defineProperty(exports, '__esModule', {
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); //Internal libs and config
+
+	//Actions and Classes
+
+	//External Libs
+
+	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	//Internal libs and config
 
 	var _config = __webpack_require__(9);
 
@@ -32988,8 +32990,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _Matter = __webpack_require__(14);
 
 	var _Matter2 = _interopRequireDefault(_Matter);
-
-	//Actions and Classes
 
 	var _actions = __webpack_require__(93);
 
@@ -33005,17 +33005,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _File3 = _interopRequireDefault(_File2);
 
-	//External Libs
-
 	var _firebase = __webpack_require__(52);
 
 	var _firebase2 = _interopRequireDefault(_firebase);
 
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 	//Convenience vars
-	var _matter$utils = _Matter2['default'].utils;
+	var _matter$utils = _Matter2.default.utils;
 	var request = _matter$utils.request;
 	var logger = _matter$utils.logger;
-
 	/**
 	 * Application class.
 	 *
@@ -33025,16 +33026,15 @@ return /******/ (function(modules) { // webpackBootstrap
 		function Application(appData) {
 			_classCallCheck(this, Application);
 
-			console.log('files in group:', _Files2['default']);
 			//Setup application data based on input
-			if (appData && _lodash2['default'].isObject(appData)) {
-				_lodash2['default'].extend(this, appData);
-			} else if (appData && _lodash2['default'].isString(appData)) {
+			if (appData && _lodash2.default.isObject(appData)) {
+				_lodash2.default.extend(this, appData);
+			} else if (appData && _lodash2.default.isString(appData)) {
 				this.name = appData;
 			}
-			if (_firebase2['default'] && _lodash2['default'].has(_config2['default'], 'fbUrl') && _lodash2['default'].has(this, 'name')) {
-				this.fbUrl = _config2['default'].fbUrl + '/' + this.name;
-				this.fbRef = new _firebase2['default'](this.fbUrl);
+			if (_firebase2.default && _lodash2.default.has(_config2.default, 'fbUrl') && _lodash2.default.has(this, 'name')) {
+				this.fbUrl = _config2.default.fbUrl + '/' + this.name;
+				this.fbRef = new _firebase2.default(this.fbUrl);
 			}
 			// logger.debug({description: 'Application object created.', application: this, func: 'constructor', obj: 'Application'});
 		}
@@ -33062,8 +33062,8 @@ return /******/ (function(modules) { // webpackBootstrap
 					return Promise.reject(errRes.response.text || errRes.response);
 				});
 			}
-
 			//Update an application
+
 		}, {
 			key: 'update',
 			value: function update(appData) {
@@ -33132,8 +33132,8 @@ return /******/ (function(modules) { // webpackBootstrap
 					return Promise.reject(errRes.response.text || errRes.response);
 				});
 			}
-
 			//Files object that contains files methods
+
 		}, {
 			key: 'File',
 			value: function File(fileData) {
@@ -33142,7 +33142,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					fileData: fileData, application: this,
 					func: 'file', obj: 'Application'
 				});
-				return new _File3['default']({ app: this, fileData: fileData });
+				return new _File3.default({ app: this, fileData: fileData });
 			}
 		}, {
 			key: 'User',
@@ -33172,12 +33172,12 @@ return /******/ (function(modules) { // webpackBootstrap
 					groupData: groupData, application: this,
 					func: 'group', obj: 'Application'
 				});
-				return new _Group3['default']({ app: this, groupData: groupData });
+				return new _Group3.default({ app: this, groupData: groupData });
 			}
 		}, {
 			key: 'appEndpoint',
 			get: function get() {
-				return _Matter2['default'].endpoint + '/apps/' + this.name;
+				return _Matter2.default.endpoint + '/apps/' + this.name;
 			}
 		}, {
 			key: 'Files',
@@ -33186,7 +33186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					description: 'Applications files action called.',
 					application: this, func: 'files', obj: 'Application'
 				});
-				return new _Files2['default']({ app: this });
+				return new _Files2.default({ app: this });
 			}
 		}, {
 			key: 'Users',
@@ -33220,22 +33220,20 @@ return /******/ (function(modules) { // webpackBootstrap
 		return Application;
 	})();
 
-	exports['default'] = Application;
+	exports.default = Application;
 	module.exports = exports['default'];
 
 /***/ },
 /* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
-	Object.defineProperty(exports, '__esModule', {
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 	var _config = __webpack_require__(9);
 
@@ -33261,20 +33259,26 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _File2 = _interopRequireDefault(_File);
 
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 	//Convenience vars
-	var logger = _Matter2['default'].utils.logger;
+	var logger = _Matter2.default.utils.logger;
 
 	var Files = (function () {
 		function Files(filesData) {
 			_classCallCheck(this, Files);
 
-			if (filesData && _lodash2['default'].isObject(filesData) && _lodash2['default'].has(filesData, 'app')) {
+			if (filesData && _lodash2.default.isObject(filesData) && _lodash2.default.has(filesData, 'app')) {
 				//Data is object containing directory data
 				this.app = filesData.app;
-			} else if (filesData && _lodash2['default'].isString(filesData)) {
+			} else if (filesData && _lodash2.default.isString(filesData)) {
 				//Data is string name
 				this.app = { name: filesData };
-			} else if (filesData && _lodash2['default'].isArray(filesData)) {
+			} else if (filesData && _lodash2.default.isArray(filesData)) {
 				//TODO: Handle an array of files being passed as data
 				logger.error({
 					description: 'Action data object with name is required to start a Files Action.',
@@ -33293,7 +33297,6 @@ return /******/ (function(modules) { // webpackBootstrap
 				func: 'constructor', obj: 'Files'
 			});
 		}
-
 		/**
 	  * @description Firebase URL for files list
 	  */
@@ -33336,10 +33339,10 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 				});
 			}
-
 			/**
 	   * @description Get synced files list from firebase
 	   */
+
 		}, {
 			key: 'sync',
 			value: function sync() {
@@ -33379,26 +33382,27 @@ return /******/ (function(modules) { // webpackBootstrap
 			/**
 	   * @description Add a new file
 	   */
+
 		}, {
 			key: 'add',
 			value: function add(fileData) {
 				//TODO: Allow for options of where to add the file to
 				return this.addToFb(fileData);
 			}
-
 			/**
 	   * @description Delete file
 	   */
+
 		}, {
 			key: 'del',
 			value: function del(fileData) {
 				//TODO: Delete file from S3 as well if it exists
 				return this.delFromFb(fileData);
 			}
-
 			/**
 	   * @description Get files list from S3
 	   */
+
 		}, {
 			key: 'getFromS3',
 			value: function getFromS3() {
@@ -33415,7 +33419,7 @@ return /******/ (function(modules) { // webpackBootstrap
 							data: applicationData, func: 'getFromS3', obj: 'Files'
 						});
 						_this3.app = applicationData;
-						if (_lodash2['default'].has(applicationData, 'frontend')) {
+						if (_lodash2.default.has(applicationData, 'frontend')) {
 							return _this3.get();
 						} else {
 							logger.error({
@@ -33438,11 +33442,11 @@ return /******/ (function(modules) { // webpackBootstrap
 				} else {
 					var _ret = (function () {
 						//If AWS Credentials do not exist, set them
-						if (typeof _awsSdk2['default'].config.credentials == 'undefined' || !_awsSdk2['default'].config.credentials) {
+						if (typeof _awsSdk2.default.config.credentials == 'undefined' || !_awsSdk2.default.config.credentials) {
 							// logger.info('AWS creds are being updated to make request');
 							setAWSConfig();
 						}
-						var s3 = new _awsSdk2['default'].S3();
+						var s3 = new _awsSdk2.default.S3();
 						var listParams = { Bucket: _this3.app.frontend.bucketName };
 						return {
 							v: new Promise(function (resolve, reject) {
@@ -33464,13 +33468,13 @@ return /******/ (function(modules) { // webpackBootstrap
 						};
 					})();
 
-					if (typeof _ret === 'object') return _ret.v;
+					if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
 				}
 			}
-
 			/**
 	   * @description Add a file to Firebase
 	   */
+
 		}, {
 			key: 'addToFb',
 			value: function addToFb(fileData) {
@@ -33481,7 +33485,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 					return Promise.reject({ message: 'Invalid file data. Path must be included.' });
 				}
-				var file = new _File2['default']({ app: this.app, fileData: fileData });
+				var file = new _File2.default({ app: this.app, fileData: fileData });
 				//TODO: Handle inital content setting
 				return new Promise(function (resolve, reject) {
 					file.fbRef.set({ meta: { path: file.path } }, function (err) {
@@ -33501,10 +33505,10 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 				});
 			}
-
 			/**
 	   * @description Delete a file from Firebase
 	   */
+
 		}, {
 			key: 'delFromFb',
 			value: function delFromFb(fileData) {
@@ -33515,7 +33519,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 					return Promise.reject({ message: 'Invalid file data. Path must be included.' });
 				}
-				var file = new _File2['default']({ app: this.app, fileData: fileData });
+				var file = new _File2.default({ app: this.app, fileData: fileData });
 				return new Promise(function (resolve, reject) {
 					file.fbRef.remove(fileData, function (err) {
 						if (!err) {
@@ -33567,10 +33571,10 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 				});
 			}
-
 			/**
 	   * @description sync file structure from Firebase
 	   */
+
 		}, {
 			key: 'syncStructure',
 			value: function syncStructure() {
@@ -33604,20 +33608,20 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 				});
 			}
-
 			//ALIAS FOR buildStructure
 			// get structure() {
 			// 	return this.buildStructure();
 			// }
+
 		}, {
 			key: 'fbUrl',
 			get: function get() {
-				return _config2['default'].fbUrl + '/files/' + this.app.name;
+				return _config2.default.fbUrl + '/files/' + this.app.name;
 			}
-
 			/**
 	   * @description Firebase reference of files list
 	   */
+
 		}, {
 			key: 'fbRef',
 			get: function get() {
@@ -33625,18 +33629,18 @@ return /******/ (function(modules) { // webpackBootstrap
 					description: 'Url created for files fbRef.',
 					url: this.fbUrl, func: 'fbRef', obj: 'Files'
 				});
-				return new _firebase2['default'](this.fbUrl);
+				return new _firebase2.default(this.fbUrl);
 			}
-
 			/**
 	   * @description Path array that is built from Firebase Reference
 	   * @private
 	   */
+
 		}, {
 			key: 'pathArrayFromFbRef',
 			get: function get() {
 				//Handle fbUrls that have multiple levels
-				var removeArray = _config2['default'].fbUrl.replace('https://', '').split('/');
+				var removeArray = _config2.default.fbUrl.replace('https://', '').split('/');
 				removeArray.shift();
 				logger.warn({
 					description: 'Remove array started.',
@@ -33654,17 +33658,17 @@ return /******/ (function(modules) { // webpackBootstrap
 		return Files;
 	})();
 
-	exports['default'] = Files;
-
+	exports.default = Files;
 	//------------------ Utility Functions ------------------//
 
 	// AWS Config
+
 	function setAWSConfig() {
-		_awsSdk2['default'].config.update({
-			credentials: new _awsSdk2['default'].CognitoIdentityCredentials({
-				IdentityPoolId: _config2['default'].aws.cognito.poolId
+		_awsSdk2.default.config.update({
+			credentials: new _awsSdk2.default.CognitoIdentityCredentials({
+				IdentityPoolId: _config2.default.aws.cognito.poolId
 			}),
-			region: _config2['default'].aws.region
+			region: _config2.default.aws.region
 		});
 	}
 	/**
@@ -33691,14 +33695,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	function buildStructureObject(file) {
 		var pathArray;
 		// console.log('buildStructureObject with:', file);
-		if (_lodash2['default'].has(file, 'path')) {
+		if (_lodash2.default.has(file, 'path')) {
 			//Coming from files already having path (structure)
 			pathArray = file.path.split('/');
-		} else if (_lodash2['default'].has(file, 'Key')) {
+		} else if (_lodash2.default.has(file, 'Key')) {
 			//Coming from aws
 			pathArray = file.Key.split('/');
 			// console.log('file before pick:', file);
-			file = _lodash2['default'].pick(file, 'Key');
+			file = _lodash2.default.pick(file, 'Key');
 			file.path = file.Key;
 			file.name = file.Key;
 		} else {
@@ -33710,18 +33714,18 @@ return /******/ (function(modules) { // webpackBootstrap
 		var currentObj = file;
 		if (pathArray.length == 1) {
 			currentObj.name = pathArray[0];
-			if (!_lodash2['default'].has(currentObj, 'type')) {
+			if (!_lodash2.default.has(currentObj, 'type')) {
 				currentObj.type = 'file';
 			}
 			currentObj.path = pathArray[0];
 			return currentObj;
 		} else {
 			var finalObj = {};
-			_lodash2['default'].each(pathArray, function (loc, ind, list) {
+			_lodash2.default.each(pathArray, function (loc, ind, list) {
 				if (ind != list.length - 1) {
 					//Not the last loc
 					currentObj.name = loc;
-					currentObj.path = _lodash2['default'].take(list, ind + 1).join('/');
+					currentObj.path = _lodash2.default.take(list, ind + 1).join('/');
 					currentObj.type = 'folder';
 					currentObj.children = [{}];
 					//TODO: Find out why this works
@@ -33748,14 +33752,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	function combineLikeObjs(mappedArray) {
 		var takenNames = [];
 		var finishedArray = [];
-		_lodash2['default'].each(mappedArray, function (obj) {
+		_lodash2.default.each(mappedArray, function (obj) {
 			if (takenNames.indexOf(obj.name) == -1) {
 				takenNames.push(obj.name);
 				finishedArray.push(obj);
 			} else {
-				var likeObj = _lodash2['default'].findWhere(mappedArray, { name: obj.name });
+				var likeObj = _lodash2.default.findWhere(mappedArray, { name: obj.name });
 				//Combine children of like objects
-				likeObj.children = _lodash2['default'].union(obj.children, likeObj.children);
+				likeObj.children = _lodash2.default.union(obj.children, likeObj.children);
 				likeObj.children = combineLikeObjs(likeObj.children);
 				// logger.log('extended obj:',likeObj);
 			}
@@ -34298,6 +34302,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	/**
+	 * Check if `mime` is json or has +json structured syntax suffix.
+	 *
+	 * @param {String} mime
+	 * @return {Boolean}
+	 * @api private
+	 */
+
+	function isJSON(mime) {
+	  return /[\/+]json\b/.test(mime);
+	}
+
+	/**
 	 * Return the mime type for the given `str`.
 	 *
 	 * @param {String} str
@@ -34552,6 +34568,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      err = new Error('Parser is unable to parse the response');
 	      err.parse = true;
 	      err.original = e;
+	      // issue #675: return the raw response if the response parsing fails
+	      err.rawResponse = self.xhr && self.xhr.responseText ? self.xhr.responseText : null;
 	      return self.callback(err);
 	    }
 
@@ -34942,8 +34960,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	Request.prototype.crossDomainError = function(){
-	  var err = new Error('Origin is not allowed by Access-Control-Allow-Origin');
+	  var err = new Error('Request has been terminated\nPossible causes: the network is offline, Origin is not allowed by Access-Control-Allow-Origin, the page is being unloaded, etc.');
 	  err.crossDomain = true;
+
+	  err.status = this.status;
+	  err.method = this.method;
+	  err.url = this.url;
+
 	  this.callback(err);
 	};
 
@@ -35059,6 +35082,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // serialize stuff
 	    var contentType = this.getHeader('Content-Type');
 	    var serialize = this._parser || request.serialize[contentType ? contentType.split(';')[0] : ''];
+	    if (!serialize && isJSON(contentType)) serialize = request.serialize['application/json'];
 	    if (serialize) data = serialize(data);
 	  }
 

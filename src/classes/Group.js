@@ -3,7 +3,7 @@ import {isString} from 'lodash';
 const {logger} = matter.utils;
 import Action from './Action';
 
-class Group extends Action {
+export default class Group extends Action {
 	constructor(actionData) {
 		super('group', actionData);
 	}
@@ -51,5 +51,3 @@ class Group extends Action {
 		});
 	}
 }
-
-export default Group;

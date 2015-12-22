@@ -1,5 +1,5 @@
     var grout = new Grout();
-    console.log('utils', grout.utils);
+    // console.log('utils', grout.utils);
 
 
     //Set logged in status when dom is loaded

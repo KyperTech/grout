@@ -1,30 +1,12 @@
 # Grout
-<p align="center">
-  <!-- Npm Version -->
-  <a href="https://npmjs.org/package/kyper-grout">
-    <img src="https://img.shields.io/npm/v/kyper-grout.svg" alt="npm version">
-  </a>
-  <!-- Build Status -->
-  <a href="https://travis-ci.org/KyperTech/grout">
-    <img src="http://img.shields.io/travis/KyperTech/grout.svg" alt="build status">
-  </a>
-  <!-- Dependency Status -->
-  <a href="https://david-dm.org/KyperTech/grout">
-    <img src="https://david-dm.org/KyperTech/grout.svg" alt="dependency status">
-  </a>
-  <!-- Codeclimate -->
-  <a href="https://codeclimate.com/github/kypertech/grout">
-    <img src="https://codeclimate.com/github/KyperTech/grout/badges/gpa.svg" alt="codeclimate">
-  </a>
-  <!-- Coverage -->
-  <a href="https://codeclimate.com/github/KyperTech/grout">
-    <img src="https://codeclimate.com/github/KyperTech/grout/badges/coverage.svg" alt="coverage">
-  </a>
-  <!-- License -->
-  <a href="https://github.com/KyperTech/grout/blob/master/LICENSE.md">
-    <img src="https://img.shields.io/npm/l/kyper-grout.svg" alt="license">
-  </a>
-</p>
+
+[![npm version](https://img.shields.io/npm/v/kyper-grout.svg?style=flat-square)](https://www.npmjs.com/package/kyper-grout)
+[![npm downloads](https://img.shields.io/npm/dm/kyper-grout.svg?style=flat-square)](https://www.npmjs.com/package/kyper-grout)
+[![build status](https://img.shields.io/travis/KyperTech/grout/master.svg?style=flat-square)](https://travis-ci.org/KyperTech/grout)
+[![dependencies status](https://img.shields.io/david/KyperTech/grout/master.svg?style=flat-square)](https://david-dm.org/KyperTech/grout)
+[![codeclimate](https://img.shields.io/codeclimate/github/KyperTech/grout.svg?style=flat-square)](https://codeclimate.com/github/KyperTech/grout)
+[![coverage](https://img.shields.io/codeclimate/coverage/github/KyperTech/grout.svg?style=flat-square)](https://codeclimate.com/github/KyperTech/grout)
+[![license](https://img.shields.io/npm/l/kyper-grout.svg?style=flat-square)](https://github.com/KyperTech/grout/blob/master/LICENSE)
 
 Client library to simplify communication with Tessellate application building service.
 
@@ -38,7 +20,7 @@ Grout is isomorphic, so it can be used within a front-end or on a server. Below 
   Add script tag to index.html:
 
     ```html
-    <script src="http://cdn.kyper.io/js/grout/0.0.18/grout.bundle.js"></script>
+    <script src="http://cdn.kyper.io/js/grout/0.1.0/grout.bundle.js"></script>
     ```
 
   #### Bower

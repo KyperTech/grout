@@ -3,60 +3,18 @@ const gulp = require('gulp');
 const $ = require('gulp-load-plugins')();
 
 // Load other npm modules
-const del = require('del');
-const glob = require('glob');
 const path = require('path');
-const isparta = require('isparta');
-const browserSync = require('browser-sync');
-const watchify = require('watchify');
-const buffer = require('vinyl-buffer');
-const rollup = require('rollup');
-const browserify = require('browserify');
 const runSequence = require('run-sequence');
-const source = require('vinyl-source-stream');
 const awspublish = require('gulp-awspublish');
-const KarmaServer = require('karma').Server;
-
-// Gather the library data from `package.json`
-const manifest = require('./package.json');
-const config = manifest.babelBoilerplateOptions;
-const mainFile = manifest.main;
-const destinationFolder = path.dirname(mainFile);
-const exportFileName = path.basename(mainFile, path.extname(mainFile));
-const conf = require('./config.json');
 const _ = require('lodash');
 const shell = require('gulp-shell');
 
-// JS files that should be watched
-const mainFiles = ['src/**/*.js', 'src/classes/**/*.js'];
-
-// Locations/Files to watch along with main files
-const watchFiles = ['package.json', '**/.eslintrc', '.jscsrc', 'test/**/*'];
-const ignoreFiles = ['dist/**/*.js', 'examples/**', 'node_modules/**'].map(function(location){return '!' + location;});
+// Gather the library data from `package.json` and `config.json`
+const manifest = require('./package.json');
+const conf = require('./config.json');
 
 //Create CDN Publisher
 var publisher = CDNPublisher();
-
-//Run test once using Karma and exit
-gulp.task('test', function (done) {
-  require('babel-core/register');
-  new KarmaServer({
-    configFile: __dirname + '/karma.conf.js',
-    singleRun: true
-  }, done).start();
-});
-//Run test with mocha and generate code coverage with istanbul
-gulp.task('coverage', ['lint-src', 'lint-test'], function(done) {
-  require('babel-core/register');
-  gulp.src(['src/**/*.js', '!gulpfile.js', '!dist/**/*.js', '!examples/**', '!node_modules/**'])
-    .pipe($.istanbul({ instrumenter: isparta.Instrumenter }))
-    .pipe($.istanbul.hookRequire())
-    .on('finish', function() {
-      return test()
-        .pipe($.istanbul.writeReports())
-        .on('end', done);
-    });
-});
 
 // Release a new version of the package
 gulp.task('release', function(callback) {
@@ -69,7 +27,7 @@ gulp.task('release', function(callback) {
   //Create a git tag and push the tag
   //TODO: Look into what should be moved to happening after travis build
   //TODO: Include 'npm publish', 'git commit' and 'git push'?
-  runSequence('bump', 'unlink', 'build', 'upload',  shell.task([tagCreate, tagPush]), callback);
+  runSequence('unlink', 'build', 'upload',  shell.task([tagCreate, tagPush]), callback);
 });
 
 // Basic usage:
@@ -104,15 +62,6 @@ gulp.task('upload:latest', function() {
     .pipe(awspublish.reporter());
 });
 
-// Static server
-gulp.task('browser-sync', function() {
-  browserSync.init({
-    server: {
-      baseDir: "./"
-    }
-  });
-});
-
 // Lint our source code
 createLintTask('lint-src', ['src/**/*.js']);
 
@@ -126,7 +75,7 @@ gulp.task('link', shell.task(buildLinkCommands('link')));
 gulp.task('unlink', shell.task(buildLinkCommands('unlink')));
 
 // An alias of test
-gulp.task('default', ['coverage', 'build']);
+gulp.task('default', ['lint-src']);
 
 //----------------------- Utility Functions -------------------------------\\
 function buildLinkCommands(linkAction){
@@ -187,5 +136,5 @@ function createLintTask(taskName, files) {
 //Run tests sepeartley with mocha (for coverage)
 function test() {
   return gulp.src(['test/setup/node.js', 'test/unit/**/*.js'], {read: false})
-    .pipe($.mocha({reporter: 'dot', globals: config.mochaGlobals}));
+    .pipe($.mocha({reporter: 'dot', globals: conf.mochaGlobals}));
 }

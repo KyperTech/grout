@@ -478,7 +478,7 @@ function setAWSConfig() {
 }
 //Load firepad from local or global
 function getFirepadLib() {
-	logger.warn({
+	logger.debug({
 		description: 'Get firepad lib called',
 		func: 'fbRef', obj: 'File'
 	});
@@ -487,7 +487,7 @@ function getFirepadLib() {
 	} else if (typeof global !== 'undefined' && global.Firepad && global.ace) {
 		return global.Firepad;
 	} else {
-		logger.warn({
+		logger.log({
 			description: 'Firepad does not currently exist.',
 			func: 'fbRef', obj: 'File'
 		});
