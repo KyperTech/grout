@@ -1,6 +1,5 @@
-import config from './config';
-import {has, isString} from 'lodash';
 import Action from './classes/Action';
+export Group from './classes/Group';
 
 export class Accounts extends Action {
   constructor(actionData) {
@@ -25,11 +24,6 @@ export class Project extends Action {
 export class Groups extends Action {
   constructor(actionData) {
     super('groups', actionData);
-  }
-}
-export class Group extends Action {
-  constructor(actionData) {
-    super('group', actionData);
   }
 }
 export class Templates extends Action {

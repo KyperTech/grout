@@ -1,4 +1,4 @@
-import Grout from '../../src/grout';
+import Grout from '../../src';
 
 let grout = new Grout();
 let mockGet, mockPut, mockPost, mockDel, mockLog, mockDebug, mockWarn, mockInfo, mockError;
@@ -77,12 +77,12 @@ describe('Application model', () => {
       expect(exampleAccount.update()).to.eventually.be.an('object');
     });
   });
-  describe('Del Method', () => {
+  describe('Remove Method', () => {
     it('exists', () => {
-      expect(exampleAccount).to.respondTo('del');
+      expect(exampleAccount).to.respondTo('remove');
     });
     it('resolves', () => {
-      expect(exampleAccount.del()).to.eventually.be.an('object');
+      expect(exampleAccount.remove()).to.eventually.be.an('object');
     });
   });
 });

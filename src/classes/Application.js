@@ -4,21 +4,19 @@ import _ from 'lodash';
 import matter from './Matter';
 
 //Actions and Classes
-import GroupsAction from '../actions/GroupsAction';
+import {
+	Accounts,
+	Account,
+	Groups
+} from '../actions';
 import Group from './Group';
-import DirectoriesAction from '../actions/DirectoriesAction';
-import Directory from './Directory';
-import AccountsAction from '../actions/AccountsAction';
-import Account from './Account';
 import Files from './Files';
 import File from './File';
 
 //External Libs
 import Firebase from 'firebase';
-
 //Convenience vars
-let request = matter.utils.request;
-let logger = matter.utils.logger;
+const {request, logger} = matter.utils;
 
 /**
  * Application class.
@@ -144,7 +142,7 @@ class Application {
 			description: 'Applications users action called.',
 			application: this, func: 'user', obj: 'Application'
 		});
-		return new AccountsAction({app: this});
+		return new Accounts({app: this});
 	}
 	User(userData) {
 		logger.debug({
@@ -159,7 +157,7 @@ class Application {
 			description: 'Applications account action called.',
 			application: this, func: 'user', obj: 'Application'
 		});
-		return new AccountsAction({app: this});
+		return new Accounts({app: this});
 	}
 	Account(userData) {
 		logger.debug({
@@ -174,7 +172,7 @@ class Application {
 			description: 'Applications groups action called.',
 			application: this, func: 'groups', obj: 'Application'
 		});
-		return new GroupsAction({app: this});
+		return new Groups({app: this});
 	}
 	Group(groupData) {
 		logger.debug({
@@ -183,21 +181,6 @@ class Application {
 			func: 'group', obj: 'Application'
 		});
 		return new Group({app: this, groupData: groupData});
-	}
-	get Directories() {
-		logger.debug({
-			description: 'Applications directories action called.',
-			application: this, func: 'directories', obj: 'Application'
-		});
-		return new DirectoriesAction({app: this});
-	}
-	Directory(directoryData) {
-		logger.debug({
-			description: 'Applications directory action called.',
-			directoryData: directoryData, application: this,
-			func: 'directory', obj: 'Application'
-		});
-		return new Directory({app: this, directoryData: directoryData});
 	}
 }
 

@@ -4,9 +4,16 @@
   "description": "Library to communicate with tessellate application building/managing service.",
   "main": "dist/grout.js",
   "scripts": {
-    "build": "gulp build",
-    "test": "gulp coverage",
-    "coverage": "gulp coverage"
+    "build:lib": "babel src --out-dir lib",
+    "build:umd": "webpack src/index.js dist/grout.js --config webpack.config.development.js",
+    "build:umd:min": "webpack src/index.js dist/grout.min.js --config webpack.config.production.js",
+    "build": "npm run clean && npm run build:lib && npm run build:umd && npm run build:umd:min",
+    "watch:umd": "npm run build:umd -- --stats --progress --colors --watch",
+    "watch:lib": "npm run build:lib -- --stats --progress --colors --watch",
+    "watch": "npm run watch:umd",
+    "clean": "rimraf lib dist coverage",
+    "prepublish": "npm run clean && npm run build",
+    "test": "gulp test"
   },
   "repository": {
     "type": "git",
@@ -29,11 +36,11 @@
   "contributors": [
     {
       "name": "Scott Prue",
-      "email":"<sprue.dev@gmail.com>"
+      "email": "<sprue.dev@gmail.com>"
     },
     {
       "name": "Mel van Londen",
-      "email":"<melvanlonden@gmail.com>"
+      "email": "<melvanlonden@gmail.com>"
     }
   ],
   "license": "MIT",
@@ -97,7 +104,8 @@
     "sinon-chai": "^2.7.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.0.0",
-    "watchify": "^3.3.1"
+    "watchify": "^3.3.1",
+    "webpack": "^1.12.9"
   },
   "babelBoilerplateOptions": {
     "entryFileName": "src/grout.js",

@@ -1,4 +1,4 @@
-import Grout from '../../src/grout';
+import Grout from '../../src';
 
 let grout = new Grout();
 let mockGet, mockPut, mockPost, mockLog, mockDebug, mockWarn, mockInfo, mockError;
@@ -113,19 +113,6 @@ describe('Grout', () => {
 		});
 		it('accepts a name', () => {
 			expect(grout.User('test')).to.be.an('object');
-		});
-	});
-	describe('Directories', () => {
-		it('exists', () => {
-			expect(grout.Directories).to.be.an('object');
-		});
-	});
-	describe('Directory', () => {
-		it('exists', () => {
-			expect(grout).to.respondTo('Directory');
-		});
-		it('accepts a name', () => {
-			expect(grout.Directory('test')).to.be.an('object');
 		});
 	});
 	describe('Templates', () => {

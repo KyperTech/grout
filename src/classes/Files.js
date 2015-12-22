@@ -72,7 +72,6 @@ class Files {
 	 * @description Get files list single time
 	 */
 	get() {
-		console.warn(this.pathArrayFromFbRef);
 		logger.log({
 			description: 'Files get called.',
 			func: 'get', obj: 'Files'
@@ -107,7 +106,6 @@ class Files {
 	 */
 	sync() {
 		// TODO: get files list from firebase
-		console.warn(this.pathArrayFromFbRef);
 		logger.log({
 			description: 'Files get called.',
 			func: 'get', obj: 'Files'
@@ -388,7 +386,10 @@ function buildStructureObject(file) {
 		file.path = file.Key;
 		file.name = file.Key;
 	} else {
-		console.error('Invalid file.', file);
+		logger.error({
+			description: 'Invalid file.', file: file,
+			func: 'buildStructureObject', obj: 'Files'
+		});
 	}
 	var currentObj = file;
 	if (pathArray.length == 1) {

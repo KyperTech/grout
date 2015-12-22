@@ -5,7 +5,7 @@ import * as Actions from './actions';
 /**Grout Client Class
  * @description Extending matter provides token storage and login/logout/signup capabilities
  */
-class Grout extends Matter {
+export default class Grout extends Matter {
 	//TODO: Use getter/setter to make this not a function
 	constructor(appName, groutOptions) {
 		//Call matter with tessellate
@@ -23,6 +23,22 @@ class Grout extends Matter {
 	}
 	//Start a new Project action
 	Project(projectName) {
+		this.utils.logger.debug({
+			description: 'Project action called.',
+			projectName: projectName, func: 'Projects', obj: 'Grout'
+		});
+		return new Actions.Project({app: this, callData: projectName});
+	}
+	//Start a new Projects Action
+	get Apps() {
+		this.utils.logger.debug({
+			description: 'Projects Action called.', action: new Actions.Projects({app: this}),
+			func: 'Projects', obj: 'Grout'
+		});
+		return new Actions.Projects({app: this});
+	}
+	//Start a new Project action
+	App(projectName) {
 		this.utils.logger.debug({
 			description: 'Project action called.',
 			projectName: projectName, func: 'Projects', obj: 'Grout'
@@ -85,19 +101,17 @@ class Grout extends Matter {
 	get Groups() {
 		this.utils.logger.debug({
 			description: 'Groups Action called.',
-			action: new Action.Groups({app: this}), func: 'groups', obj: 'Grout'
+			action: new Actions.Groups({app: this}), func: 'groups', obj: 'Grout'
 		});
-		return new Action.Groups({app: this});
+		return new Actions.Groups({app: this});
 	}
 	//Start a new Group action
 	Group(groupData) {
 		this.utils.logger.debug({
 			description: 'Group Action called.', groupData: groupData,
-			action: new Action.Group({app: this, groupData: groupData}),
+			action: new Actions.Group({app: this, groupData: groupData}),
 			func: 'group', obj: 'Grout'
 		});
-		return new Action.Group({app: this, groupData: groupData});
+		return new Actions.Group({app: this, groupData: groupData});
 	}
 }
-
-export default Grout;

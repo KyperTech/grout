@@ -4,7 +4,7 @@ import _ from 'lodash';
 import Firebase from 'firebase';
 import AWS from 'aws-sdk';
 //Convenience vars
-let logger = matter.utils.logger;
+const {logger} = matter.utils;
 
 let firepad = getFirepadLib();
 class File {
@@ -113,7 +113,7 @@ class File {
 		}
 	}
 	get() {
-		return new Promise((resolve) => {
+		return new Promise((resolve, reject) => {
 			this.fbRef.once('value', (fileSnap) => {
 				// Load file from firepad original content if no history available
 				if (fileSnap.hasChild('original') && !fileSnap.hasChild('history')) {
@@ -123,7 +123,7 @@ class File {
 						description: 'File content loaded.',
 						content: this.content, func: 'get', obj: 'File'
 					});
-					this.headless.setText(this.content, (err, success) => {
+					this.headless.setText(this.content, (err) => {
 						this.headless.dispose();
 						if (!err) {
 							logger.log({
@@ -343,28 +343,27 @@ class File {
 				func: 'get', obj: 'File'
 			});
 			return new Promise((resolve, reject) => {
-				s3.deleteObject(saveParams, function(err, data) {
+				s3.deleteObject(saveParams, (err, data) => {
 					//[TODO] Add putting object ACL (make public)
-					if (!err) {
-						logger.info({
-							description: 'File loaded successfully.',
-							fileData: data, func: 'get', obj: 'File'
-						});
-						if (_.has(data, 'Body')) {
-							logger.info({
-								description: 'File has content.',
-								fileData: data.Body.toString(), func: 'get', obj: 'File'
-							});
-							resolve(data.Body.toString());
-						} else {
-							resolve(data);
-						}
-					}	else {
+					if (err) {
 						logger.error({
 							description: 'Error loading file from S3.',
 							error: err, func: 'get', obj: 'File'
 						});
 						return reject(err);
+					}
+					logger.info({
+						description: 'File loaded successfully.',
+						fileData: data, func: 'get', obj: 'File'
+					});
+					if (_.has(data, 'Body')) {
+						logger.info({
+							description: 'File has content.',
+							fileData: data.Body.toString(), func: 'get', obj: 'File'
+						});
+						resolve(data.Body.toString());
+					} else {
+						resolve(data);
 					}
 				});
 			});

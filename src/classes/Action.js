@@ -49,7 +49,7 @@ export default class Action {
    */
   get endpointArray() {
     let endpointArray = [matter.endpoint, this.name];
-    if (_.has(this, 'app') && _.has(this.app, 'name') && this.app.name !== config.appName) {
+    if (has(this, 'app') && has(this.app, 'name') && this.app.name !== config.appName) {
       //Splice apps, appName into index 1
       endpointArray.splice(1, 0, 'apps', this.app.name);
     }
