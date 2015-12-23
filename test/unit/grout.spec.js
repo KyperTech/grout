@@ -58,6 +58,8 @@ describe('Grout', () => {
 	describe('Matter', () => {
 		it('main methods exist', () => {
 			expect(grout).to.respondTo('login');
+			expect(grout).to.respondTo('logout');
+			expect(grout).to.respondTo('signup');
 		});
 		it('utils exist', () => {
 			expect(grout.utils).to.be.an('object');

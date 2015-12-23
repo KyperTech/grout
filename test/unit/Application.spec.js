@@ -1,7 +1,7 @@
 import Grout from '../../src';
 import Matter from 'kyper-matter';
 import App from '../../src/classes/Application';
-
+import config from '../../src/config';
 let grout = new Grout();
 let mockGet, mockPut, mockPost, mockLog, mockDebug, mockWarn, mockInfo, mockError;
 
@@ -51,32 +51,94 @@ describe('Application model', () => {
     mockInfo.restore();
     mockError.restore();
   });
-  // it.skip('exists', () => {
-  //   expect(exampleApp).to.exist;
-  // });
-  // describe('Get', () => {
-  //   it.skip('exists', () => {
-  //     expect(exampleApp).to.respondTo('get');
-  //   });
-  //   // it('makes request', () => {
-  //   //   exampleApp.get().then(() => {
-  //   //     expect(mockGet).to.have.been.called();
-  //   //   });
-  //   // });
-  // });
-  // describe('Update', () => {
-  //   it.skip('exists', () => {
-  //     expect(exampleApp).to.respondTo('update');
-  //   });
-  //   // it('makes request', () => {
-  //   //   exampleApp.put().then(() => {
-  //   //     expect(mockGet).to.have.been.called();
-  //   //   });
-  //   // });
-  // });
-  // describe('Structure', () => {
-  //   it.skip('has structure', () => {
-  //     expect(exampleApp).to.be.an('object');
-  //   });
-  // });
+  it('exists', () => {
+    expect(exampleApp).to.exist;
+  });
+  it('sets name', () => {
+    expect(exampleApp).to.have.property('name');
+    expect(exampleApp.name).to.equal('exampleApp');
+  });
+  it('sets fbUrl', () => {
+    expect(exampleApp).to.have.property('fbUrl');
+    expect(exampleApp.fbUrl).to.equal(config.fbUrl + '/' + exampleApp.name);
+  });
+  describe('appEndpoint', () => {
+    it('exists', () => {
+      expect(exampleApp).to.have.property('appEndpoint');
+    });
+    it('is correct', () => {
+      expect(exampleApp.appEndpoint).to.equal(`${config.serverUrl}/apps/${exampleApp.name}`);
+    });
+  });
+  describe('get method', () => {
+    it('exists', () => {
+      expect(exampleApp).to.respondTo('get');
+    });
+    it('makes request', () => {
+      exampleApp.get().then(() => {
+        expect(mockGet).to.have.been.called();
+      });
+    });
+  });
+  describe('update method', () => {
+    it('exists', () => {
+      expect(exampleApp).to.respondTo('update');
+    });
+    it('makes request', () => {
+      exampleApp.update().then(() => {
+        expect(mockPost).to.have.been.called();
+      });
+    });
+  });
+  describe('addStorage method', () => {
+    it('exists', () => {
+      expect(exampleApp).to.respondTo('addStorage');
+    });
+    it('makes request', () => {
+      exampleApp.addStorage().then(() => {
+        expect(mockPost).to.have.been.called();
+      });
+    });
+  });
+  describe('applyTemplate method', () => {
+    it('exists', () => {
+      expect(exampleApp).to.respondTo('applyTemplate');
+    });
+    it('makes request', () => {
+      exampleApp.applyTemplate().then(() => {
+        expect(mockPost).to.have.been.called();
+      });
+    });
+  });
+  describe('Files model', () => {
+    it('exists', () => {
+      expect(exampleApp).to.have.property('Files');
+      console.log('files:', exampleApp.Files);
+    });
+    it('sets app data', () => {
+      expect(exampleApp.Files).to.be.an('object');
+      expect(exampleApp.Files).to.have.property('app');
+      expect(exampleApp.Files.app).to.have.property('name');
+    });
+  });
+  describe('Users model', () => {
+    it('exists', () => {
+      expect(exampleApp).to.have.property('Users');
+    });
+  });
+  describe('Accounts model', () => {
+    it('exists', () => {
+      expect(exampleApp).to.have.property('Accounts');
+    });
+  });
+  describe('Groups model', () => {
+    it('exists', () => {
+      expect(exampleApp).to.have.property('Groups');
+    });
+  });
+  describe('Structure', () => {
+    // it('has structure', () => {
+    //   expect(exampleApp.Structure).to.be.an('object');
+    // });
+  });
 });
