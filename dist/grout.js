@@ -118,7 +118,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					description: 'Project action called.',
 					projectName: projectName, func: 'Projects', obj: 'Grout'
 				});
-				return new _Application2.default({ app: this, callData: projectName });
+				return new _Application2.default(projectName);
 			}
 			//Start a new Projects Action
 
@@ -131,7 +131,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					description: 'Project action called.',
 					projectName: projectName, func: 'Projects', obj: 'Grout'
 				});
-				return new _Application2.default({ app: this, callData: projectName });
+				return new _Application2.default(projectName);
 			}
 			//Start a new Apps Action
 
@@ -29869,7 +29869,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					//Replace periods with colons and other unsafe chars as --
 					return loc.replace(/[.]/g, ':').replace(/[#$\[\]]/g, '--');
 				});
-				logger.log({
+				logger.debug({
 					description: 'Safe path array created.',
 					safeArray: safeArray, func: 'safePathArray', obj: 'File'
 				});
@@ -29878,17 +29878,24 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'safePath',
 			get: function get() {
-				return this.safePathArray.join('/');
+				var safePathArray = this.safePathArray;
+
+				if (safePathArray.length === 1) {
+					return safePathArray[0];
+				}
+				return safePathArray.join('/');
 			}
 		}, {
 			key: 'fbUrl',
 			get: function get() {
-				var url = [_config2.default.fbUrl, 'files', this.app.name, this.safePath].join('/');
-				logger.log({
-					description: 'File ref url generated',
-					url: url, func: 'fbRef', obj: 'File'
-				});
-				return url;
+				if (!this.app || !this.app.name) {
+					logger.error({
+						description: 'App information needed to generate fbUrl for File.',
+						file: this, func: 'fbRef', obj: 'File'
+					});
+					throw new Error('App information needed to generate fbUrl for File.');
+				}
+				return [_config2.default.fbUrl, 'files', this.app.name, this.safePath].join('/');
 			}
 		}, {
 			key: 'fbRef',

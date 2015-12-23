@@ -28,7 +28,7 @@ export default class Grout extends Matter {
 			description: 'Project action called.',
 			projectName: projectName, func: 'Projects', obj: 'Grout'
 		});
-		return new Application({app: this, callData: projectName});
+		return new Application(projectName);
 	}
 	//Start a new Projects Action
 	get Apps() {
@@ -44,7 +44,7 @@ export default class Grout extends Matter {
 			description: 'Project action called.',
 			projectName: projectName, func: 'Projects', obj: 'Grout'
 		});
-		return new Application({app: this, callData: projectName});
+		return new Application(projectName);
 	}
 	//Start a new Apps Action
 	get Templates() {

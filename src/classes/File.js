@@ -70,22 +70,28 @@ class File {
 			//Replace periods with colons and other unsafe chars as --
 			return loc.replace(/[.]/g, ':').replace(/[#$\[\]]/g, '--');
 		});
-		logger.log({
+		logger.debug({
 			description: 'Safe path array created.',
 			safeArray: safeArray, func: 'safePathArray', obj: 'File'
 		});
 		return safeArray;
 	}
 	get safePath() {
-		return this.safePathArray.join('/');
+		const { safePathArray } = this;
+		if(safePathArray.length === 1){
+			return safePathArray[0];
+		}
+		return safePathArray.join('/');
 	}
 	get fbUrl() {
-		let url = [config.fbUrl, 'files', this.app.name, this.safePath].join('/');
-		logger.log({
-			description: 'File ref url generated',
-			url: url, func: 'fbRef', obj: 'File'
-		});
-		return url;
+		if (!this.app || !this.app.name) {
+			logger.error({
+				description: 'App information needed to generate fbUrl for File.',
+				file: this, func: 'fbRef', obj: 'File'
+			});
+			throw new Error ('App information needed to generate fbUrl for File.');
+		}
+		return [config.fbUrl, 'files', this.app.name, this.safePath].join('/');
 	}
 	get fbRef() {
 		if (this.ref) {
