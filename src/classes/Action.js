@@ -15,7 +15,7 @@ export default class Action {
    * @param {Object} actionData - Data with which to initialize action
    */
   init(actionData) {
-    logger.log({
+    logger.debug({
       description: 'Init action called.',
       actionData: actionData, func: 'url', obj: 'Action'
     });
@@ -60,7 +60,7 @@ export default class Action {
    * @return {String}
    */
   get url() {
-    logger.log({
+    logger.debug({
       description: 'Url created.', url: this.endpointArray.join('/'),
       func: 'url', obj: 'Action'
     });

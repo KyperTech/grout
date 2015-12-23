@@ -116,7 +116,8 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function Project(projectName) {
 				this.utils.logger.debug({
 					description: 'Project action called.',
-					projectName: projectName, func: 'Projects', obj: 'Grout'
+					projectName: projectName, action: new _Application2.default(projectName),
+					func: 'Projects', obj: 'Grout'
 				});
 				return new _Application2.default(projectName);
 			}
@@ -129,7 +130,8 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function App(projectName) {
 				this.utils.logger.debug({
 					description: 'Project action called.',
-					projectName: projectName, func: 'Projects', obj: 'Grout'
+					projectName: projectName, action: new _Application2.default(projectName),
+					func: 'Projects', obj: 'Grout'
 				});
 				return new _Application2.default(projectName);
 			}
@@ -185,10 +187,10 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function Group(groupData) {
 				this.utils.logger.debug({
 					description: 'Group Action called.', groupData: groupData,
-					action: new Actions.Group({ app: this, groupData: groupData }),
+					action: new Actions.Group({ app: this, callData: groupData }),
 					func: 'group', obj: 'Grout'
 				});
-				return new Actions.Group({ app: this, groupData: groupData });
+				return new Actions.Group({ app: this, callData: groupData });
 			}
 		}, {
 			key: 'Projects',
@@ -29159,7 +29161,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(Action, [{
 	    key: 'init',
 	    value: function init(actionData) {
-	      logger.log({
+	      logger.debug({
 	        description: 'Init action called.',
 	        actionData: actionData, func: 'url', obj: 'Action'
 	      });
@@ -29332,7 +29334,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'url',
 	    get: function get() {
-	      logger.log({
+	      logger.debug({
 	        description: 'Url created.', url: this.endpointArray.join('/'),
 	        func: 'url', obj: 'Action'
 	      });

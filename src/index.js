@@ -26,7 +26,8 @@ export default class Grout extends Matter {
 	Project(projectName) {
 		this.utils.logger.debug({
 			description: 'Project action called.',
-			projectName: projectName, func: 'Projects', obj: 'Grout'
+			projectName: projectName, action: new Application(projectName),
+			func: 'Projects', obj: 'Grout'
 		});
 		return new Application(projectName);
 	}
@@ -42,7 +43,8 @@ export default class Grout extends Matter {
 	App(projectName) {
 		this.utils.logger.debug({
 			description: 'Project action called.',
-			projectName: projectName, func: 'Projects', obj: 'Grout'
+			projectName: projectName, action: new Application(projectName),
+			func: 'Projects', obj: 'Grout'
 		});
 		return new Application(projectName);
 	}
@@ -77,7 +79,7 @@ export default class Grout extends Matter {
 			userData: userData, user: new Actions.Account({app: this, callData: userData}),
 			func: 'user', obj: 'Grout'
 		});
-		return new Actions.Account({app: this, callData: userData});
+		return new Actions.Account({app:this, callData: userData});
 	}
 	//ALIAS OF ACCOUNTS
 	//Start a new Accounts action
@@ -93,10 +95,10 @@ export default class Grout extends Matter {
 	User(userData) {
 		this.utils.logger.debug({
 			description: 'Account Action called.',
-			userData: userData, user: new Actions.Account({app: this, callData: userData}),
+			userData: userData, user: new Actions.Account({app:this, callData: userData}),
 			func: 'user', obj: 'Grout'
 		});
-		return new Actions.Account({app: this, callData: userData});
+		return new Actions.Account({app:this, callData: userData});
 	}
 	//Start a new Groups action
 	get Groups() {
@@ -110,9 +112,9 @@ export default class Grout extends Matter {
 	Group(groupData) {
 		this.utils.logger.debug({
 			description: 'Group Action called.', groupData: groupData,
-			action: new Actions.Group({app: this, groupData: groupData}),
+			action: new Actions.Group({app:this, callData: groupData}),
 			func: 'group', obj: 'Grout'
 		});
-		return new Actions.Group({app: this, groupData: groupData});
+		return new Actions.Group({app:this, callData: groupData});
 	}
 }

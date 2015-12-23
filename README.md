@@ -36,7 +36,7 @@ Grout is isomorphic, so it can be used within a front-end or on a server. Below 
     Add script tag to index.html:
 
       ```html
-      <script src="http://cdn.kyper.io/js/grout/0.1.0/grout.js"></script>
+      <script src="http://cdn.kyper.io/js/grout/0.1.2/grout.js"></script>
       ```
 
     #### Bower
