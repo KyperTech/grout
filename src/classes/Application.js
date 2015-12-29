@@ -1,6 +1,6 @@
 //Internal libs and config
 import config from '../config';
-import { isObject, isString, has, extend } from 'lodash';
+import { isObject, isString, isArray, has, extend } from 'lodash';
 import matter from './Matter';
 
 //Actions and Classes
@@ -122,6 +122,26 @@ class Application {
 			});
 			return Promise.reject(error.response.text || error.response);
 		});
+	}
+	/**
+	 * @description Add collaborators to Project
+	 * @param {Array|String} collabs - Array list of Ids, or a string list of ids
+	 */
+	addCollaborators(collabs) {
+		logger.debug({
+			description: 'Add collaborators called', collabs,
+			application: this, func: 'addCollaborators', obj: 'Application'
+		});
+		this.collaborators = collabs;
+		//Handle string of ids
+		if (!isArray(collabs) && isString(collabs)) {
+			this.collaborators =  collabs.replace(' ').split(',');
+		}
+		logger.log({
+			description: 'Collaborators list added to application, calling update.',
+			application: this, func: 'addCollaborators', obj: 'Application'
+		});
+		return this.update(this);
 	}
 	//Files object that contains files methods
 	get Files() {
