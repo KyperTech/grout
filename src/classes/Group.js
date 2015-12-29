@@ -24,9 +24,9 @@ export default class Group extends Action {
 		}
 		//Check item in array to see if it is a string (username) instead of _id
 		if (isString(accountsArray[0])) {
-			logger.error({
+			logger.warn({
 				description: 'Accounts array only currently supports account._id not account.username.',
-				accountsData: accountsData, func: 'update', obj: 'Group'
+				accountsData, func: 'update', obj: 'Group'
 			});
 			return Promise.reject({
 				message: 'Accounts array only currently supports account._id not account.username.'
@@ -34,20 +34,20 @@ export default class Group extends Action {
 		}
 		logger.log({
 			description: 'Updating group with accounts array.',
-			accountsArray: accountsArray, func: 'update', obj: 'Group'
+			accountsArray, func: 'update', obj: 'Group'
 		});
-		return this.update({accounts: accountsArray}).then((response) => {
+		return this.update({accounts: accountsArray}).then(response => {
 			logger.info({
 				description: 'Account(s) added to group successfully.',
-				response: response, func: 'addAccounts', obj: 'Group'
+				response, func: 'addAccounts', obj: 'Group'
 			});
 			return response;
-		})['catch']((errRes) => {
+		})['catch'](error => {
 			logger.error({
 				description: 'Error addAccountseting group.',
-				error: errRes,  func: 'addAccounts', obj: 'Group'
+				error, func: 'addAccounts', obj: 'Group'
 			});
-			return Promise.reject(errRes.response.text || errRes.response);
+			return Promise.reject(error.response.text || error.response);
 		});
 	}
 }

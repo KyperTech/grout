@@ -1,6 +1,6 @@
 //Internal libs and config
 import config from '../config';
-import _ from 'lodash';
+import { isObject, isString, has, extend } from 'lodash';
 import matter from './Matter';
 
 //Actions and Classes
@@ -24,16 +24,19 @@ const {request, logger} = matter.utils;
 class Application {
 	constructor(appData) {
 		//Setup application data based on input
-		if (appData && _.isObject(appData)) {
-			_.extend(this, appData);
-		} else if (appData && _.isString(appData)) {
+		if (appData && isObject(appData)) {
+			extend(this, appData);
+		} else if (appData && isString(appData)) {
 			this.name = appData;
 		}
-		if (Firebase && _.has(config, 'fbUrl') && _.has(this, 'name')) {
+		if (Firebase && has(config, 'fbUrl') && has(this, 'name')) {
 			this.fbUrl = `${config.fbUrl}/${this.name}`;
 			this.fbRef = new Firebase(this.fbUrl);
 		}
-		// logger.debug({description: 'Application object created.', application: this, func: 'constructor', obj: 'Application'});
+		logger.debug({
+			description: 'Application object created.', application: this,
+			func: 'constructor', obj: 'Application'
+		});
 	}
 	get appEndpoint() {
 		return `${matter.endpoint}/apps/${this.name}`;
@@ -43,19 +46,20 @@ class Application {
 		logger.debug({
 			description: 'Application get called.', func: 'get', obj: 'Application'
 		});
-		return request.get(this.appEndpoint).then((response) => {
+		return request.get(this.appEndpoint).then(response => {
+			const application = new Application(response);
 			logger.info({
-				description: 'Application loaded successfully.', response: response,
-				application: new Application(response), func: 'get', obj: 'Application'
+				description: 'Application loaded successfully.',
+				response, application, func: 'get', obj: 'Application'
 			});
-			return new Application(response);
-		})['catch']((errRes) => {
+			return application;
+		})['catch'](error => {
 			logger.error({
 				description: 'Error getting Application.',
-				message: errRes.response.text ,error: errRes,
+				message: error.response.text , error,
 				func: 'get', obj: 'Application'
 			});
-			return Promise.reject(errRes.response.text || errRes.response);
+			return Promise.reject(error.response.text || error.response);
 		});
 	}
 	//Update an application
@@ -64,18 +68,18 @@ class Application {
 			description: 'Application update called.',
 			func: 'update', obj: 'Application'
 		});
-		return request.put(this.appEndpoint, appData).then((response) => {
+		return request.put(this.appEndpoint, appData).then(response => {
 			logger.info({
 				description: 'Application updated successfully.',
-				response: response, func: 'update', obj: 'Application'
+				response, func: 'update', obj: 'Application'
 			});
 			return new Application(response);
-		})['catch']((errRes) => {
+		})['catch'](error => {
 			logger.error({
 				description: 'Error updating application.',
-				error: errRes, func: 'update', obj: 'Application'
+				error, func: 'update', obj: 'Application'
 			});
-			return Promise.reject(errRes.response.text || errRes.response);
+			return Promise.reject(error.response.text || error.response);
 		});
 	}
 	addStorage() {
@@ -83,40 +87,40 @@ class Application {
 			description: 'Application add storage called.', application: this,
 			func: 'addStorage', obj: 'Application'
 		});
-		return request.post(`${this.appEndpoint}/storage`, {}).then((response) => {
+		return request.post(`${this.appEndpoint}/storage`, {}).then(response => {
+			const application = new Application(response)
 			logger.info({
 				description: 'Storage successfully added to application.',
-				response: response, application: new Application(response),
-				func: 'addStorage', obj: 'Application'
+				response, application, func: 'addStorage', obj: 'Application'
 			});
-			return new Application(response);
-		})['catch']((errRes) => {
+			return application;
+		})['catch'](error => {
 			logger.error({
 				description: 'Error adding storage to application.',
-				error: errRes, func: 'addStorage', obj: 'Application'
+				error, func: 'addStorage', obj: 'Application'
 			});
-			return Promise.reject(errRes.response.text || errRes.response);
+			return Promise.reject(error.response.text || error.response);
 		});
 	}
-	applyTemplate() {
-		logger.error({
-			description: 'Applying templates to existing applications is not currently supported.',
+	applyTemplate(template) {
+		logger.debug({
+			description: 'Applying template to project.',
 			func: 'applyTemplate', obj: 'Application'
 		});
-		return request.post(this.appEndpoint, {}).then((response) => {
+		return request.post(this.appEndpoint, {template}).then((response) => {
 			logger.info({
 				description: 'Template successfully applied to application.',
-				response: response, application: this,
+				response, application: this,
 				func: 'applyTemplate', obj: 'Application'
 			});
 			return new Application(response);
-		})['catch']((errRes) => {
+		})['catch'](error => {
 			logger.error({
 				description: 'Error applying template to application.',
-				error: errRes, application: this,
+				error, application: this,
 				func: 'applyTemplate', obj: 'Application'
 			});
-			return Promise.reject(errRes.response.text || errRes.response);
+			return Promise.reject(error.response.text || error.response);
 		});
 	}
 	//Files object that contains files methods
@@ -130,10 +134,10 @@ class Application {
 	File(fileData) {
 		logger.debug({
 			description: 'Applications file action called.',
-			fileData: fileData, application: this,
+			fileData, application: this,
 			func: 'file', obj: 'Application'
 		});
-		return new File({app: this, fileData: fileData});
+		return new File({app: this, fileData});
 	}
 	get Users() {
 		logger.debug({
@@ -145,10 +149,9 @@ class Application {
 	User(userData) {
 		logger.debug({
 			description: 'Applications user action called.',
-			userData: userData, application: this, func: 'user',
-			obj: 'Application'
+			userData, application: this, func: 'user', obj: 'Application'
 		});
-		return new Account({app: this, userData: userData});
+		return new Account({app: this, userData});
 	}
 	get Accounts() {
 		logger.debug({
@@ -160,10 +163,10 @@ class Application {
 	Account(userData) {
 		logger.debug({
 			description: 'Applications account action called.',
-			userData: userData, application: this,
+			userData, application: this,
 			func: 'user', obj: 'Application'
 		});
-		return new Account({app: this, userData: userData});
+		return new Account({app: this, userData});
 	}
 	get Groups() {
 		logger.debug({
@@ -175,10 +178,10 @@ class Application {
 	Group(groupData) {
 		logger.debug({
 			description: 'Applications group action called.',
-			groupData: groupData, application: this,
+			groupData, application: this,
 			func: 'group', obj: 'Application'
 		});
-		return new Group({app: this, groupData: groupData});
+		return new Group({app: this, groupData});
 	}
 }
 

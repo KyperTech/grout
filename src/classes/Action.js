@@ -1,9 +1,7 @@
 import config from '../config';
 import {has, isString} from 'lodash';
 import matter from './Matter';
-
-let logger = matter.utils.logger;
-let request = matter.utils.request;
+const { logger, request } = matter.utils;
 
 export default class Action {
   constructor(actionName, actionData) {
@@ -17,12 +15,12 @@ export default class Action {
   init(actionData) {
     logger.debug({
       description: 'Init action called.',
-      actionData: actionData, func: 'url', obj: 'Action'
+      actionData, func: 'url', obj: 'Action'
     });
     if (!actionData || !actionData.app) {
       logger.error({
         description: 'Action data with app is required.',
-        actionData: actionData, func: 'url', obj: 'Action'
+        actionData, func: 'url', obj: 'Action'
       });
       throw Error('Action data with app is required.');
     }
@@ -70,22 +68,22 @@ export default class Action {
    * @return {Promise}
    */
   get() {
-    return request.get(this.url).then((res) => {
+    return request.get(this.url).then(res => {
       logger.log({
         description: 'Get responded successfully.',
-        res: res, func: 'get', obj: 'Action'
+        res, func: 'get', obj: 'Action'
       });
       if (has(res, 'error')) {
         logger.error({
           description: 'Error in get response.', error: res.error,
-          res: res, func: 'get', obj: 'Action'
+          res, func: 'get', obj: 'Action'
         });
         return Promise.reject(res.error);
       }
       return res.collection ? res.collection : res;
-    }, (error) => {
+    }, error => {
       logger.error({
-        description: 'Error in GET request.', error: error,
+        description: 'Error in GET request.', error,
         func: 'get', obj: 'Action'
       });
       return Promise.reject(error);
@@ -96,29 +94,29 @@ export default class Action {
    * @return {Promise}
    */
   add(newData) {
-    return request.post(this.url, newData).then((res) => {
+    return request.post(this.url, newData).then(res => {
       logger.log({
         description: 'Add request responded successfully.',
-        res: res, func: 'add', obj: 'Action'
+        res, func: 'add', obj: 'Action'
       });
       if (has(res, 'error')) {
         logger.error({
           description: 'Error in add request.', error: res.error,
-          action: this, res: res, func: 'add', obj: 'Action'
+          action: this, res, func: 'add', obj: 'Action'
         });
         return Promise.reject(res.error);
       }
       logger.log({
-        description: 'Add successful.', res: res, action: this,
+        description: 'Add successful.', res, action: this,
         func: 'add', obj: 'Action'
       });
       return res;
-    }, (err) => {
+    }, error => {
       logger.error({
         description: `Error in add request.`,
-        action: this, error: err, func: 'add', obj: 'Action'
+        action: this, error, func: 'add', obj: 'Action'
       });
-      return Promise.reject(err);
+      return Promise.reject(error);
     });
   }
   /** Update
@@ -126,50 +124,50 @@ export default class Action {
    * @return {Promise}
    */
   update(updateData) {
-    return request.put(this.url, updateData).then((res) => {
+    return request.put(this.url, updateData).then(res => {
       if (has(res, 'error')) {
         logger.error({
           description: 'Error in update request.',
-          error: res.error, res: res, func: 'update', obj: 'Action'
+          error: res.error, res, func: 'update', obj: 'Action'
         });
         return Promise.reject(res.error);
       }
       logger.log({
-        description: 'Update successful.', res: res,
+        description: 'Update successful.', res,
         func: 'update', obj: 'Action'
       });
       return res;
-    }, (err) => {
+    }, error => {
       logger.error({
         description: 'Error in update request.',
-        error: err, func: 'update', obj: 'Action'
+        error, func: 'update', obj: 'Action'
       });
-      return Promise.reject(err);
+      return Promise.reject(error);
     });
   }
   /** Remove
    * @return {Promise}
    */
   remove() {
-    return request.del(this.url).then((res) => {
+    return request.del(this.url).then(res => {
       if (has(res, 'error')) {
         logger.error({
           description: 'Error in removal request.', action: this,
-          error: res.error, res: res, func: 'remove', obj: 'Action'
+          error: res.error, res, func: 'remove', obj: 'Action'
         });
         return Promise.reject(res.error);
       }
       logger.log({
         description: 'Remove successful.',
-        res: res, func: 'remove', obj: 'Action'
+        res, func: 'remove', obj: 'Action'
       });
       return res;
-    }, (err) => {
+    }, error => {
       logger.error({
         description: 'Error in request for removal.', action: this,
-        error: err, func: 'remove', obj: 'Action'
+        error, func: 'remove', obj: 'Action'
       });
-      return Promise.reject(err);
+      return Promise.reject(error);
     });
   }
 }
