@@ -32,7 +32,7 @@ export default class Files {
 	 * @description Firebase reference of files list
 	 */
 	get fbRef() {
-		logger.log({
+		logger.debug({
 			description: 'Url created for files fbRef.',
 			url: this.fbUrl, func: 'fbRef', obj: 'Files'
 		});
@@ -46,14 +46,10 @@ export default class Files {
 		//Handle fbUrls that have multiple levels
 		let removeArray = config.fbUrl.replace('https://', '').split('/');
 		removeArray.shift();
-		logger.warn({
-			description: 'Remove array started.',
-			removeArray: removeArray, fbRefArray: this.fbRef.path.o, func: 'fbRef', obj: 'Files'
-		});
 		const pathArray = this.fbRef.path.o.splice(0, removeArray.length);
-		logger.warn({
+		logger.info({
 			description: 'Path array built.',
-			pathArray: pathArray, func: 'fbRef', obj: 'Files'
+			pathArray, func: 'fbRef', obj: 'Files'
 		});
 		return pathArray;
 	}
@@ -65,15 +61,15 @@ export default class Files {
 			description: 'Files get called.',
 			func: 'get', obj: 'Files'
 		});
-		return new Promise((resolve) => {
-			this.fbRef.once('value', (filesSnap) => {
-				logger.warn({
+		return new Promise(resolve => {
+			this.fbRef.once('value', filesSnap => {
+				logger.info({
 					description: 'Files loaded from firebase.',
-					val: filesSnap.val(), func: 'get', obj: 'Files'
+					func: 'get', obj: 'Files'
 				});
 				let filesArray = [];
 				// let filesPathArray =  this.pathArrayFromFbRef;
-				filesSnap.forEach((objSnap) => {
+				filesSnap.forEach(objSnap => {
 					let objData = objSnap.hasChild('meta') ? objSnap.child('meta').val() : {path: objSnap.key()};
 					//TODO: Have a better fallback for when meta does not exist
 					// if (!objData.path) {
@@ -82,9 +78,9 @@ export default class Files {
 					objData.key = objSnap.key();
 					filesArray.push(objData);
 				});
-				logger.warn({
+				logger.debug({
 					description: 'Files array built.',
-					val: filesArray, func: 'get', obj: 'Files'
+					filesArray, func: 'get', obj: 'Files'
 				});
 				resolve(filesArray);
 			});
@@ -95,19 +91,19 @@ export default class Files {
 	 */
 	sync() {
 		// TODO: get files list from firebase
-		logger.log({
-			description: 'Files get called.',
-			func: 'get', obj: 'Files'
+		logger.debug({
+			description: 'Files sync called.',
+			func: 'sync', obj: 'Files'
 		});
-		return new Promise((resolve) => {
-			this.fbRef.on('value', (filesSnap) => {
-				logger.warn({
-					description: 'Files loaded from firebase.',
-					val: filesSnap.val(), func: 'get', obj: 'Files'
+		return new Promise(resolve => {
+			this.fbRef.on('value', filesSnap => {
+				logger.info({
+					description: 'Files synced with Firebase.',
+					func: 'sync', obj: 'Files'
 				});
 				let filesArray = [];
 				// let filesPathArray =  this.pathArrayFromFbRef;
-				filesSnap.forEach((objSnap) => {
+				filesSnap.forEach(objSnap => {
 					let objData = objSnap.hasChild('meta') ? objSnap.child('meta').val() : {path: objSnap.key()};
 					//TODO: Have a better fallback for when meta does not exist
 					// if (!objData.path) {
@@ -116,9 +112,9 @@ export default class Files {
 					objData.key = objSnap.key();
 					filesArray.push(objData);
 				});
-				logger.warn({
+				logger.log({
 					description: 'Files array built.',
-					val: filesArray, func: 'get', obj: 'Files'
+					filesArray, func: 'get', obj: 'Files'
 				});
 				resolve(filesArray);
 			});
@@ -147,7 +143,7 @@ export default class Files {
 				promises.push(this.addToFb(file));
 			});
 			return Promise.all(promises).then(resultsArray => {
-				logger.warn({
+				logger.info({
 					description: 'Files uploaded successfully.', resultsArray,
 					func: 'upload', obj: 'Files'
 				});
@@ -165,7 +161,6 @@ export default class Files {
 	publish() {
 		//TODO: Publish all files
 	}
-
 	/**
 	 * @description build child structure from files list
 	 */
@@ -174,7 +169,7 @@ export default class Files {
 			description: 'Build Structure called.',
 			func: 'buildStructure', obj: 'Application'
 		});
-		return this.get().then((filesArray) => {
+		return this.get().then(filesArray => {
 			logger.log({
 				description: 'Child struct from array.',
 				childStructure: childStruct,
@@ -188,14 +183,14 @@ export default class Files {
 				func: 'buildStructure', obj: 'Application'
 			});
 			return childStruct;
-		}, (err) => {
+		}, error => {
 			logger.error({
 				description: 'Error getting application files.',
-				error: err, func: 'buildStructure', obj: 'Application'
+				error, func: 'buildStructure', obj: 'Application'
 			});
 			return Promise.reject({
 				message: 'Error getting files.',
-				error: err
+				error
 			});
 		});
 	}
@@ -208,28 +203,26 @@ export default class Files {
 			description: 'Build Structure called.',
 			func: 'syncStructure', obj: 'Application'
 		});
-		return this.sync().then((filesArray) => {
+		return this.sync().then(filesArray => {
 			logger.log({
 				description: 'Child struct from array.',
-				childStructure: childStruct,
-				func: 'syncStructure', obj: 'Application'
+				childStruct, func: 'syncStructure', obj: 'Application'
 			});
 			const childStruct = childrenStructureFromArray(filesArray);
 			//TODO: have child objects have correct classes (file/folder)
 			logger.log({
 				description: 'Child struct from array.',
-				childStructure: childStruct,
-				func: 'syncStructure', obj: 'Application'
+				childStruct, func: 'syncStructure', obj: 'Application'
 			});
 			return childStruct;
-		}, (err) => {
+		}, error => {
 			logger.error({
 				description: 'Error getting application files.',
-				error: err, func: 'syncStructure', obj: 'Application'
+				error, func: 'syncStructure', obj: 'Application'
 			});
 			return Promise.reject({
 				message: 'Error getting files.',
-				error: err
+				error
 			});
 		});
 	}
@@ -260,7 +253,7 @@ export default class Files {
 					description: 'Error getting file contents.', error,
 					func: 'getContentFromFile', obj: 'Application'
 				});
-				reject(err);
+				reject(error);
 			}
 		});
 	}
@@ -294,7 +287,7 @@ export default class Files {
 				message: 'Invalid file data. Path must be included.'
 			});
 		}
-		let file = new File({app: this.app, fileData: fileData});
+		let file = new File({app: this.app, fileData});
 		return file.save();
 	}
 	addLocalToFb(fileData) {
@@ -326,11 +319,13 @@ export default class Files {
 				description: 'Invalid file data. Path must be included.',
 				func: 'delFromFb', obj: 'Files'
 			});
-			return Promise.reject({message: 'Invalid file data. Path must be included.'});
+			return Promise.reject({
+				message: 'Invalid file data. Path must be included.'
+			});
 		}
-		let file = new File({app: this.app, fileData: fileData});
+		let file = new File({app: this.app, fileData});
 		return new Promise((resolve, reject) => {
-			file.fbRef.remove(fileData, (err) => {
+			file.fbRef.remove(fileData, err => {
 				if (!err) {
 					resolve(fileData);
 				} else {
@@ -348,7 +343,7 @@ export default class Files {
 				description: 'Application Frontend data not available. Calling .get().',
 				app: this.app, func: 'getFromS3', obj: 'Files'
 			});
-			return this.app.get().then((applicationData) => {
+			return this.app.get().then(applicationData => {
 				logger.log({
 					description: 'Application get returned.',
 					data: applicationData, func: 'getFromS3', obj: 'Files'
@@ -365,7 +360,7 @@ export default class Files {
 						message: 'Application does not have frontend to get files from.'
 					});
 				}
-			}, (err) => {
+			}, err => {
 				logger.error({
 					description: 'Application Frontend data not available. Make sure to call .get().',
 					error: err, func: 'getFromS3', obj: 'Files'

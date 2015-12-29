@@ -10,8 +10,8 @@ export default class Grout extends Matter {
 	//TODO: Use getter/setter to make this not a function
 	constructor(appName, groutOptions) {
 		//Call matter with tessellate
-		let name = (appName && isString(appName)) ? appName : config.appName;
-		let options = (groutOptions && isObject(groutOptions)) ? groutOptions : config.matterOptions;
+		const name = (appName && isString(appName)) ? appName : config.appName;
+		const options = (groutOptions && isObject(groutOptions)) ? groutOptions : config.matterOptions;
 		super(name, options);
 	}
 	//Start a new Projects Action
@@ -26,7 +26,7 @@ export default class Grout extends Matter {
 	Project(projectName) {
 		this.utils.logger.warn({
 			description: 'Project action called.',
-			projectName: projectName, action: new Application(projectName),
+			projectName, action: new Application(projectName),
 			func: 'Projects', obj: 'Grout'
 		});
 		return new Application(projectName);
@@ -43,7 +43,7 @@ export default class Grout extends Matter {
 	App(projectName) {
 		this.utils.logger.debug({
 			description: 'Project action called.',
-			projectName: projectName, action: new Application(projectName),
+			projectName, action: new Application(projectName),
 			func: 'Projects', obj: 'Grout'
 		});
 		return new Application(projectName);
@@ -59,7 +59,7 @@ export default class Grout extends Matter {
 	//Start a new App action
 	Template(templateData) {
 		this.utils.logger.debug({
-			description: 'Template Action called.', templateData: templateData,
+			description: 'Template Action called.', templateData,
 			template: new Actions.Template({app: this, callData: templateData}), func: 'Template', obj: 'Grout'
 		});
 		return new Actions.Template({app: this, callData: templateData});
@@ -76,7 +76,7 @@ export default class Grout extends Matter {
 	Account(userData) {
 		this.utils.logger.debug({
 			description: 'Account Action called.',
-			userData: userData, user: new Actions.Account({app: this, callData: userData}),
+			userData, user: new Actions.Account({app: this, callData: userData}),
 			func: 'user', obj: 'Grout'
 		});
 		return new Actions.Account({app:this, callData: userData});
@@ -95,7 +95,7 @@ export default class Grout extends Matter {
 	User(userData) {
 		this.utils.logger.debug({
 			description: 'Account Action called.',
-			userData: userData, user: new Actions.Account({app:this, callData: userData}),
+			userData, user: new Actions.Account({app:this, callData: userData}),
 			func: 'user', obj: 'Grout'
 		});
 		return new Actions.Account({app:this, callData: userData});
@@ -111,7 +111,7 @@ export default class Grout extends Matter {
 	//Start a new Group action
 	Group(groupData) {
 		this.utils.logger.debug({
-			description: 'Group Action called.', groupData: groupData,
+			description: 'Group Action called.', groupData,
 			action: new Actions.Group({app:this, callData: groupData}),
 			func: 'group', obj: 'Grout'
 		});

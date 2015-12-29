@@ -41539,8 +41539,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var logger = _Matter2.default.utils.logger;
-	var request = _Matter2.default.utils.request;
+	var _matter$utils = _Matter2.default.utils;
+	var logger = _matter$utils.logger;
+	var request = _matter$utils.request;
 
 	var Action = (function () {
 	  function Action(actionName, actionData) {
@@ -41645,12 +41646,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	          func: 'add', obj: 'Action'
 	        });
 	        return res;
-	      }, function (err) {
+	      }, function (error) {
 	        logger.error({
 	          description: 'Error in add request.',
-	          action: _this, error: err, func: 'add', obj: 'Action'
+	          action: _this, error: error, func: 'add', obj: 'Action'
 	        });
-	        return Promise.reject(err);
+	        return Promise.reject(error);
 	      });
 	    }
 	    /** Update
@@ -41674,12 +41675,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	          func: 'update', obj: 'Action'
 	        });
 	        return res;
-	      }, function (err) {
+	      }, function (error) {
 	        logger.error({
 	          description: 'Error in update request.',
-	          error: err, func: 'update', obj: 'Action'
+	          error: error, func: 'update', obj: 'Action'
 	        });
-	        return Promise.reject(err);
+	        return Promise.reject(error);
 	      });
 	    }
 	    /** Remove
@@ -41704,12 +41705,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	          res: res, func: 'remove', obj: 'Action'
 	        });
 	        return res;
-	      }, function (err) {
+	      }, function (error) {
 	        logger.error({
 	          description: 'Error in request for removal.', action: _this2,
-	          error: err, func: 'remove', obj: 'Action'
+	          error: error, func: 'remove', obj: 'Action'
 	        });
-	        return Promise.reject(err);
+	        return Promise.reject(error);
 	      });
 	    }
 	  }, {
@@ -41843,9 +41844,9 @@ return /******/ (function(modules) { // webpackBootstrap
 								description: 'File content loaded.',
 								content: _this.content, func: 'get', obj: 'File'
 							});
-							_this.headless.setText(_this.content, function (err) {
+							_this.headless.setText(_this.content, function (error) {
 								_this.headless.dispose();
-								if (!err) {
+								if (!error) {
 									logger.log({
 										description: 'File content set to Headless Firepad.',
 										func: 'get', obj: 'File'
@@ -41854,9 +41855,9 @@ return /******/ (function(modules) { // webpackBootstrap
 								} else {
 									logger.error({
 										description: 'Error setting file text.',
-										error: err, func: 'get', obj: 'File'
+										error: error, func: 'get', obj: 'File'
 									});
-									reject(err);
+									reject(error);
 								}
 							});
 						} else {
@@ -41914,8 +41915,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				var fbRef = this.fbRef;
 
 				return new Promise(function (resolve, reject) {
-					fbRef.set(fbData, function (err) {
-						if (!err) {
+					fbRef.set(fbData, function (error) {
+						if (!error) {
 							logger.info({
 								description: 'File successfully added to Firebase.',
 								func: 'addToFb', obj: 'Files'
@@ -41924,9 +41925,9 @@ return /******/ (function(modules) { // webpackBootstrap
 						} else {
 							logger.error({
 								description: 'Error creating file on Firebase.',
-								error: err, func: 'addToFb', obj: 'Files'
+								error: error, func: 'addToFb', obj: 'Files'
 							});
-							reject(err);
+							reject(error);
 						}
 					});
 				});
@@ -41942,8 +41943,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				var fbRef = this.fbRef;
 
 				return new Promise(function (resolve, reject) {
-					fbRef.remove(function (err) {
-						if (!err) {
+					fbRef.remove(function (error) {
+						if (!error) {
 							logger.info({
 								description: 'File successfully removed from Firebase.',
 								func: 'removeFromFb', obj: 'Files'
@@ -41952,9 +41953,9 @@ return /******/ (function(modules) { // webpackBootstrap
 						} else {
 							logger.error({
 								description: 'Error creating file on Firebase.',
-								error: err, func: 'removeFromFb', obj: 'Files'
+								error: error, func: 'removeFromFb', obj: 'Files'
 							});
-							reject(err);
+							reject(error);
 						}
 					});
 				});
@@ -41976,12 +41977,14 @@ return /******/ (function(modules) { // webpackBootstrap
 							app: appData, func: 'get', obj: 'File'
 						});
 						return _this2.get();
-					}, function (err) {
+					}, function (error) {
 						logger.error({
 							description: 'Application Frontend data not available.',
-							error: err, func: 'get', obj: 'File'
+							error: error, func: 'get', obj: 'File'
 						});
-						return Promise.reject({ message: 'Front end data is required to get file.' });
+						return Promise.reject({
+							message: 'Front end data is required to get file.'
+						});
 					});
 				} else {
 					var _ret = (function () {
@@ -42009,36 +42012,34 @@ return /******/ (function(modules) { // webpackBootstrap
 						var finalData = _this2;
 						return {
 							v: new Promise(function (resolve, reject) {
-								s3.getObject(getData, function (err, data) {
+								s3.getObject(getData, function (error, data) {
 									//[TODO] Add putting object ACL (make public)
-									if (!err) {
-										logger.info({
-											description: 'File loaded successfully.',
-											data: data, func: 'get', obj: 'File'
-										});
-										if ((0, _lodash.has)(data, 'Body')) {
-											logger.info({
-												description: 'File has content.',
-												content: data.Body.toString(),
-												metaData: data.Metadata.toString(),
-												func: 'get', obj: 'File'
-											});
-											finalData.content = data.Body.toString();
-											logger.info({
-												description: 'File content has been added to file.',
-												file: finalData,
-												func: 'get', obj: 'File'
-											});
-											resolve(finalData);
-										} else {
-											resolve(data);
-										}
-									} else {
+									if (error) {
 										logger.error({
 											description: 'Error loading file from S3.',
-											error: err, func: 'get', obj: 'File'
+											error: error, func: 'get', obj: 'File'
 										});
-										reject(err);
+										return reject(error);
+									}
+									logger.info({
+										description: 'File loaded successfully.',
+										data: data, func: 'get', obj: 'File'
+									});
+									if ((0, _lodash.has)(data, 'Body')) {
+										logger.info({
+											description: 'File has content.',
+											content: data.Body.toString(),
+											metaData: data.Metadata.toString(),
+											func: 'get', obj: 'File'
+										});
+										finalData.content = data.Body.toString();
+										logger.info({
+											description: 'File content has been added to file.',
+											file: finalData, func: 'get', obj: 'File'
+										});
+										resolve(finalData);
+									} else {
+										resolve(data);
 									}
 								});
 							})
@@ -42101,9 +42102,9 @@ return /******/ (function(modules) { // webpackBootstrap
 						});
 						return {
 							v: new Promise(function (resolve, reject) {
-								s3.putObject(saveParams, function (err, data) {
+								s3.putObject(saveParams, function (error, data) {
 									//[TODO] Add putting object ACL (make public)
-									if (!err) {
+									if (!error) {
 										logger.log({
 											description: 'File saved successfully.',
 											response: data, func: 'publish', obj: 'File'
@@ -42112,9 +42113,9 @@ return /******/ (function(modules) { // webpackBootstrap
 									} else {
 										logger.error({
 											description: 'Error saving file to S3.',
-											error: err, func: 'publish', obj: 'File'
+											error: error, func: 'publish', obj: 'File'
 										});
-										reject(err);
+										reject(error);
 									}
 								});
 							})
@@ -42138,7 +42139,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						_this4.app = appData;
 						logger.log({
 							description: 'Application get successful. Getting file.',
-							app: appData, func: 'removeFromS3', obj: 'File'
+							app: _this4.app, func: 'removeFromS3', obj: 'File'
 						});
 						return _this4.get();
 					}, function (error) {
@@ -42171,19 +42172,18 @@ return /******/ (function(modules) { // webpackBootstrap
 						}
 						logger.debug({
 							description: 'File get params built.',
-							saveParams: saveParams, file: _this4,
-							func: 'get', obj: 'File'
+							saveParams: saveParams, file: _this4, func: 'get', obj: 'File'
 						});
 						return {
 							v: new Promise(function (resolve, reject) {
-								s3.deleteObject(saveParams, function (err, data) {
+								s3.deleteObject(saveParams, function (error, data) {
 									//[TODO] Add putting object ACL (make public)
-									if (err) {
+									if (error) {
 										logger.error({
 											description: 'Error loading file from S3.',
-											error: err, func: 'get', obj: 'File'
+											error: error, func: 'get', obj: 'File'
 										});
-										return reject(err);
+										return reject(error);
 									}
 									logger.info({
 										description: 'File loaded successfully.',
@@ -42219,10 +42219,9 @@ return /******/ (function(modules) { // webpackBootstrap
 				//Load file contents from s3
 				return new Promise(function (resolve, reject) {
 					_this5.get().then(function (file) {
-						logger.warn({
+						logger.info({
 							description: 'File contents loaded. Opening firepad.',
-							editor: editor, file: file,
-							func: 'openInFirepad', obj: 'File'
+							editor: editor, file: file, func: 'openInFirepad', obj: 'File'
 						});
 						//Open firepad from ace with file content as default
 						var fileFirepad = file.firepadFromAce(editor);
@@ -42231,12 +42230,12 @@ return /******/ (function(modules) { // webpackBootstrap
 							resolve(file);
 							// firepad.setText()
 						});
-					}, function (err) {
+					}, function (error) {
 						logger.error({
 							description: 'Valid ace editor instance required to create firepad.',
-							func: 'openInFirepad', obj: 'File', editor: editor
+							editor: editor, error: error, func: 'openInFirepad', obj: 'File'
 						});
-						reject(err);
+						reject(error);
 					});
 				});
 			}
@@ -42252,7 +42251,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				if (!editor || typeof editor.setTheme !== 'function') {
 					logger.error({
 						description: 'Valid ace editor instance required to create firepad.',
-						func: 'fbRef', obj: 'File', editor: editor
+						func: 'fbRef', obj: 'File'
 					});
 					return;
 				}
@@ -42271,10 +42270,9 @@ return /******/ (function(modules) { // webpackBootstrap
 				// if (matter.isLoggedIn && matter.currentUser) {
 				// 	settings.userId = matter.currentUser.username || matter.currentUser.name;
 				// }
-				logger.warn({
+				logger.debug({
 					description: 'Creating firepad from ace.',
-					settings: settings, editor: editor, editorVal: editor.getValue(),
-					func: 'fbRef', obj: 'File'
+					settings: settings, editor: editor, func: 'fbRef', obj: 'File'
 				});
 				return firepad.fromACE(this.fbRef, editor, settings);
 			}
@@ -42297,17 +42295,17 @@ return /******/ (function(modules) { // webpackBootstrap
 								});
 								logger.log({
 									description: 'Connected users array built.',
-									users: usersArray, func: 'connectedUsers', obj: 'File'
+									usersArray: usersArray, func: 'connectedUsers', obj: 'File'
 								});
 								resolve(usersArray);
 							})();
 						}
-					}, function (err) {
+					}, function (error) {
 						logger.error({
 							description: 'Error loading connected users.',
-							error: err, func: 'connectedUsers', obj: 'File'
+							error: error, func: 'connectedUsers', obj: 'File'
 						});
-						reject(err);
+						reject(error);
 					});
 				});
 			}
@@ -42519,7 +42517,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				}
 				//Check item in array to see if it is a string (username) instead of _id
 				if ((0, _lodash.isString)(accountsArray[0])) {
-					logger.error({
+					logger.warn({
 						description: 'Accounts array only currently supports account._id not account.username.',
 						accountsData: accountsData, func: 'update', obj: 'Group'
 					});
@@ -42537,12 +42535,12 @@ return /******/ (function(modules) { // webpackBootstrap
 						response: response, func: 'addAccounts', obj: 'Group'
 					});
 					return response;
-				})['catch'](function (errRes) {
+				})['catch'](function (error) {
 					logger.error({
 						description: 'Error addAccountseting group.',
-						error: errRes, func: 'addAccounts', obj: 'Group'
+						error: error, func: 'addAccounts', obj: 'Group'
 					});
-					return Promise.reject(errRes.response.text || errRes.response);
+					return Promise.reject(error.response.text || error.response);
 				});
 			}
 		}]);
@@ -45592,8 +45590,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lodash = __webpack_require__(9);
 
-	var _lodash2 = _interopRequireDefault(_lodash);
-
 	var _Matter = __webpack_require__(15);
 
 	var _Matter2 = _interopRequireDefault(_Matter);
@@ -45634,16 +45630,19 @@ return /******/ (function(modules) { // webpackBootstrap
 			_classCallCheck(this, Application);
 
 			//Setup application data based on input
-			if (appData && _lodash2.default.isObject(appData)) {
-				_lodash2.default.extend(this, appData);
-			} else if (appData && _lodash2.default.isString(appData)) {
+			if (appData && (0, _lodash.isObject)(appData)) {
+				(0, _lodash.extend)(this, appData);
+			} else if (appData && (0, _lodash.isString)(appData)) {
 				this.name = appData;
 			}
-			if (_firebase2.default && _lodash2.default.has(_config2.default, 'fbUrl') && _lodash2.default.has(this, 'name')) {
+			if (_firebase2.default && (0, _lodash.has)(_config2.default, 'fbUrl') && (0, _lodash.has)(this, 'name')) {
 				this.fbUrl = _config2.default.fbUrl + '/' + this.name;
 				this.fbRef = new _firebase2.default(this.fbUrl);
 			}
-			// logger.debug({description: 'Application object created.', application: this, func: 'constructor', obj: 'Application'});
+			logger.debug({
+				description: 'Application object created.', application: this,
+				func: 'constructor', obj: 'Application'
+			});
 		}
 
 		_createClass(Application, [{
@@ -45655,18 +45654,19 @@ return /******/ (function(modules) { // webpackBootstrap
 					description: 'Application get called.', func: 'get', obj: 'Application'
 				});
 				return request.get(this.appEndpoint).then(function (response) {
+					var application = new Application(response);
 					logger.info({
-						description: 'Application loaded successfully.', response: response,
-						application: new Application(response), func: 'get', obj: 'Application'
+						description: 'Application loaded successfully.',
+						response: response, application: application, func: 'get', obj: 'Application'
 					});
-					return new Application(response);
-				})['catch'](function (errRes) {
+					return application;
+				})['catch'](function (error) {
 					logger.error({
 						description: 'Error getting Application.',
-						message: errRes.response.text, error: errRes,
+						message: error.response.text, error: error,
 						func: 'get', obj: 'Application'
 					});
-					return Promise.reject(errRes.response.text || errRes.response);
+					return Promise.reject(error.response.text || error.response);
 				});
 			}
 			//Update an application
@@ -45684,12 +45684,12 @@ return /******/ (function(modules) { // webpackBootstrap
 						response: response, func: 'update', obj: 'Application'
 					});
 					return new Application(response);
-				})['catch'](function (errRes) {
+				})['catch'](function (error) {
 					logger.error({
 						description: 'Error updating application.',
-						error: errRes, func: 'update', obj: 'Application'
+						error: error, func: 'update', obj: 'Application'
 					});
-					return Promise.reject(errRes.response.text || errRes.response);
+					return Promise.reject(error.response.text || error.response);
 				});
 			}
 		}, {
@@ -45700,18 +45700,18 @@ return /******/ (function(modules) { // webpackBootstrap
 					func: 'addStorage', obj: 'Application'
 				});
 				return request.post(this.appEndpoint + '/storage', {}).then(function (response) {
+					var application = new Application(response);
 					logger.info({
 						description: 'Storage successfully added to application.',
-						response: response, application: new Application(response),
-						func: 'addStorage', obj: 'Application'
+						response: response, application: application, func: 'addStorage', obj: 'Application'
 					});
-					return new Application(response);
-				})['catch'](function (errRes) {
+					return application;
+				})['catch'](function (error) {
 					logger.error({
 						description: 'Error adding storage to application.',
-						error: errRes, func: 'addStorage', obj: 'Application'
+						error: error, func: 'addStorage', obj: 'Application'
 					});
-					return Promise.reject(errRes.response.text || errRes.response);
+					return Promise.reject(error.response.text || error.response);
 				});
 			}
 		}, {
@@ -45730,13 +45730,13 @@ return /******/ (function(modules) { // webpackBootstrap
 						func: 'applyTemplate', obj: 'Application'
 					});
 					return new Application(response);
-				})['catch'](function (errRes) {
+				})['catch'](function (error) {
 					logger.error({
 						description: 'Error applying template to application.',
-						error: errRes, application: _this,
+						error: error, application: _this,
 						func: 'applyTemplate', obj: 'Application'
 					});
-					return Promise.reject(errRes.response.text || errRes.response);
+					return Promise.reject(error.response.text || error.response);
 				});
 			}
 			//Files object that contains files methods
@@ -45756,8 +45756,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function User(userData) {
 				logger.debug({
 					description: 'Applications user action called.',
-					userData: userData, application: this, func: 'user',
-					obj: 'Application'
+					userData: userData, application: this, func: 'user', obj: 'Application'
 				});
 				return new _actions.Account({ app: this, userData: userData });
 			}
@@ -45909,9 +45908,9 @@ return /******/ (function(modules) { // webpackBootstrap
 				});
 				return new Promise(function (resolve) {
 					_this.fbRef.once('value', function (filesSnap) {
-						logger.warn({
+						logger.info({
 							description: 'Files loaded from firebase.',
-							val: filesSnap.val(), func: 'get', obj: 'Files'
+							func: 'get', obj: 'Files'
 						});
 						var filesArray = [];
 						// let filesPathArray =  this.pathArrayFromFbRef;
@@ -45924,9 +45923,9 @@ return /******/ (function(modules) { // webpackBootstrap
 							objData.key = objSnap.key();
 							filesArray.push(objData);
 						});
-						logger.warn({
+						logger.debug({
 							description: 'Files array built.',
-							val: filesArray, func: 'get', obj: 'Files'
+							filesArray: filesArray, func: 'get', obj: 'Files'
 						});
 						resolve(filesArray);
 					});
@@ -45942,15 +45941,15 @@ return /******/ (function(modules) { // webpackBootstrap
 				var _this2 = this;
 
 				// TODO: get files list from firebase
-				logger.log({
-					description: 'Files get called.',
-					func: 'get', obj: 'Files'
+				logger.debug({
+					description: 'Files sync called.',
+					func: 'sync', obj: 'Files'
 				});
 				return new Promise(function (resolve) {
 					_this2.fbRef.on('value', function (filesSnap) {
-						logger.warn({
-							description: 'Files loaded from firebase.',
-							val: filesSnap.val(), func: 'get', obj: 'Files'
+						logger.info({
+							description: 'Files synced with Firebase.',
+							func: 'sync', obj: 'Files'
 						});
 						var filesArray = [];
 						// let filesPathArray =  this.pathArrayFromFbRef;
@@ -45963,9 +45962,9 @@ return /******/ (function(modules) { // webpackBootstrap
 							objData.key = objSnap.key();
 							filesArray.push(objData);
 						});
-						logger.warn({
+						logger.log({
 							description: 'Files array built.',
-							val: filesArray, func: 'get', obj: 'Files'
+							filesArray: filesArray, func: 'get', obj: 'Files'
 						});
 						resolve(filesArray);
 					});
@@ -46003,7 +46002,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						});
 						return {
 							v: Promise.all(promises).then(function (resultsArray) {
-								logger.warn({
+								logger.info({
 									description: 'Files uploaded successfully.', resultsArray: resultsArray,
 									func: 'upload', obj: 'Files'
 								});
@@ -46055,14 +46054,14 @@ return /******/ (function(modules) { // webpackBootstrap
 						func: 'buildStructure', obj: 'Application'
 					});
 					return childStruct;
-				}, function (err) {
+				}, function (error) {
 					logger.error({
 						description: 'Error getting application files.',
-						error: err, func: 'buildStructure', obj: 'Application'
+						error: error, func: 'buildStructure', obj: 'Application'
 					});
 					return Promise.reject({
 						message: 'Error getting files.',
-						error: err
+						error: error
 					});
 				});
 			}
@@ -46081,25 +46080,23 @@ return /******/ (function(modules) { // webpackBootstrap
 				return this.sync().then(function (filesArray) {
 					logger.log({
 						description: 'Child struct from array.',
-						childStructure: childStruct,
-						func: 'syncStructure', obj: 'Application'
+						childStruct: childStruct, func: 'syncStructure', obj: 'Application'
 					});
 					var childStruct = childrenStructureFromArray(filesArray);
 					//TODO: have child objects have correct classes (file/folder)
 					logger.log({
 						description: 'Child struct from array.',
-						childStructure: childStruct,
-						func: 'syncStructure', obj: 'Application'
+						childStruct: childStruct, func: 'syncStructure', obj: 'Application'
 					});
 					return childStruct;
-				}, function (err) {
+				}, function (error) {
 					logger.error({
 						description: 'Error getting application files.',
-						error: err, func: 'syncStructure', obj: 'Application'
+						error: error, func: 'syncStructure', obj: 'Application'
 					});
 					return Promise.reject({
 						message: 'Error getting files.',
-						error: err
+						error: error
 					});
 				});
 			}
@@ -46132,7 +46129,7 @@ return /******/ (function(modules) { // webpackBootstrap
 							description: 'Error getting file contents.', error: error,
 							func: 'getContentFromFile', obj: 'Application'
 						});
-						reject(err);
+						reject(error);
 					}
 				});
 			}
@@ -46216,7 +46213,9 @@ return /******/ (function(modules) { // webpackBootstrap
 						description: 'Invalid file data. Path must be included.',
 						func: 'delFromFb', obj: 'Files'
 					});
-					return Promise.reject({ message: 'Invalid file data. Path must be included.' });
+					return Promise.reject({
+						message: 'Invalid file data. Path must be included.'
+					});
 				}
 				var file = new _File2.default({ app: this.app, fileData: fileData });
 				return new Promise(function (resolve, reject) {
@@ -46314,7 +46313,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'fbRef',
 			get: function get() {
-				logger.log({
+				logger.debug({
 					description: 'Url created for files fbRef.',
 					url: this.fbUrl, func: 'fbRef', obj: 'Files'
 				});
@@ -46331,12 +46330,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				//Handle fbUrls that have multiple levels
 				var removeArray = _config2.default.fbUrl.replace('https://', '').split('/');
 				removeArray.shift();
-				logger.warn({
-					description: 'Remove array started.',
-					removeArray: removeArray, fbRefArray: this.fbRef.path.o, func: 'fbRef', obj: 'Files'
-				});
 				var pathArray = this.fbRef.path.o.splice(0, removeArray.length);
-				logger.warn({
+				logger.info({
 					description: 'Path array built.',
 					pathArray: pathArray, func: 'fbRef', obj: 'Files'
 				});

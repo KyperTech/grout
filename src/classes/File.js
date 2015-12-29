@@ -74,7 +74,7 @@ export default class File {
 		});
 		logger.debug({
 			description: 'Safe path array created.',
-			safeArray: safeArray, func: 'safePathArray', obj: 'File'
+			safeArray, func: 'safePathArray', obj: 'File'
 		});
 		return safeArray;
 	}
@@ -131,9 +131,9 @@ export default class File {
 						description: 'File content loaded.',
 						content: this.content, func: 'get', obj: 'File'
 					});
-					this.headless.setText(this.content, (err) => {
+					this.headless.setText(this.content, error => {
 						this.headless.dispose();
-						if (!err) {
+						if (!error) {
 							logger.log({
 								description: 'File content set to Headless Firepad.',
 								func: 'get', obj: 'File'
@@ -142,9 +142,9 @@ export default class File {
 						} else {
 							logger.error({
 								description: 'Error setting file text.',
-								error: err, func: 'get', obj: 'File'
+								error, func: 'get', obj: 'File'
 							});
-							reject(err);
+							reject(error);
 						}
 					});
 				} else {
@@ -152,7 +152,7 @@ export default class File {
 					this.headless.getText((text) => {
 						logger.log({
 							description: 'Text loaded from headless',
-							text: text, func: 'get', obj: 'File'
+							text, func: 'get', obj: 'File'
 						});
 						this.content = text;
 						// this.fbRef.once('value', (fileSnap) => {
@@ -189,8 +189,8 @@ export default class File {
 		const fbData = {meta: {path: this.path}, original: this.content};
 		const { fbRef } = this;
 		return new Promise((resolve, reject) => {
-			fbRef.set(fbData, (err) => {
-				if (!err) {
+			fbRef.set(fbData, error => {
+				if (!error) {
 					logger.info({
 						description: 'File successfully added to Firebase.',
 						func: 'addToFb', obj: 'Files'
@@ -199,9 +199,9 @@ export default class File {
 				} else {
 					logger.error({
 						description: 'Error creating file on Firebase.',
-						error: err, func: 'addToFb', obj: 'Files'
+						error, func: 'addToFb', obj: 'Files'
 					});
-					reject(err);
+					reject(error);
 				}
 			});
 		});
@@ -213,8 +213,8 @@ export default class File {
 		const fbData = {meta: {path: this.path}};
 		const { fbRef } = this;
 		return new Promise((resolve, reject) => {
-			fbRef.remove((err) => {
-				if (!err) {
+			fbRef.remove((error) => {
+				if (!error) {
 					logger.info({
 						description: 'File successfully removed from Firebase.',
 						func: 'removeFromFb', obj: 'Files'
@@ -223,9 +223,9 @@ export default class File {
 				} else {
 					logger.error({
 						description: 'Error creating file on Firebase.',
-						error: err, func: 'removeFromFb', obj: 'Files'
+						error, func: 'removeFromFb', obj: 'Files'
 					});
-					reject(err);
+					reject(error);
 				}
 			});
 		});
@@ -243,12 +243,14 @@ export default class File {
 					app: appData, func: 'get', obj: 'File'
 				});
 				return this.get();
-			}, (err) => {
+			}, error => {
 				logger.error({
 					description: 'Application Frontend data not available.',
-					error: err, func: 'get', obj: 'File'
+					error, func: 'get', obj: 'File'
 				});
-				return Promise.reject({message: 'Front end data is required to get file.'});
+				return Promise.reject({
+					message: 'Front end data is required to get file.'
+				});
 			});
 		} else {
 			//If AWS Credential do not exist, set them
@@ -274,36 +276,34 @@ export default class File {
 			});
 			let finalData = this;
 			return new Promise((resolve, reject) => {
-				s3.getObject(getData, (err, data) => {
+				s3.getObject(getData, (error, data) => {
 					//[TODO] Add putting object ACL (make public)
-					if (!err) {
-						logger.info({
-							description: 'File loaded successfully.',
-							data: data, func: 'get', obj: 'File'
-						});
-						if (has(data, 'Body')) {
-							logger.info({
-								description: 'File has content.',
-								content: data.Body.toString(),
-								metaData: data.Metadata.toString(),
-								func: 'get', obj: 'File'
-							});
-							finalData.content = data.Body.toString();
-							logger.info({
-								description: 'File content has been added to file.',
-								file: finalData,
-								func: 'get', obj: 'File'
-							});
-							resolve(finalData);
-						} else {
-							resolve(data);
-						}
-					} else {
+					if (error) {
 						logger.error({
 							description: 'Error loading file from S3.',
-							error: err, func: 'get', obj: 'File'
+							error, func: 'get', obj: 'File'
 						});
-						reject(err);
+						return reject(error);
+					}
+					logger.info({
+						description: 'File loaded successfully.',
+						data: data, func: 'get', obj: 'File'
+					});
+					if (has(data, 'Body')) {
+						logger.info({
+							description: 'File has content.',
+							content: data.Body.toString(),
+							metaData: data.Metadata.toString(),
+							func: 'get', obj: 'File'
+						});
+						finalData.content = data.Body.toString();
+						logger.info({
+							description: 'File content has been added to file.',
+							file: finalData, func: 'get', obj: 'File'
+						});
+						resolve(finalData);
+					} else {
+						resolve(data);
 					}
 				});
 			});
@@ -313,7 +313,7 @@ export default class File {
 		//TODO: Publish file to application
 		logger.debug({
 			description: 'File publish called.', file: this,
-			fileData: fileData, func: 'publish', obj: 'File'
+			fileData, func: 'publish', obj: 'File'
 		});
 		if (!this.app.frontend) {
 			logger.error({
@@ -354,9 +354,9 @@ export default class File {
 				func: 'publish', obj: 'File'
 			});
 			return new Promise((resolve, reject) => {
-				s3.putObject(saveParams, (err, data) => {
+				s3.putObject(saveParams, (error, data) => {
 					//[TODO] Add putting object ACL (make public)
-					if (!err) {
+					if (!error) {
 						logger.log({
 							description: 'File saved successfully.',
 							response: data, func: 'publish', obj: 'File'
@@ -365,9 +365,9 @@ export default class File {
 					}	else {
 						logger.error({
 							description: 'Error saving file to S3.',
-							error: err, func: 'publish', obj: 'File'
+							error, func: 'publish', obj: 'File'
 						});
-						reject(err);
+						reject(error);
 					}
 				});
 			});
@@ -379,14 +379,14 @@ export default class File {
 				description: 'Application Frontend data not available. Calling applicaiton get.',
 				func: 'removeFromS3', obj: 'File'
 			});
-			return this.app.get().then((appData) => {
+			return this.app.get().then(appData => {
 				this.app = appData;
 				logger.log({
 					description: 'Application get successful. Getting file.',
-					app: appData, func: 'removeFromS3', obj: 'File'
+					app: this.app, func: 'removeFromS3', obj: 'File'
 				});
 				return this.get();
-			}, (error) => {
+			}, error => {
 				logger.error({
 					description: 'Application Frontend data not available. Make sure to call .get().',
 					error, func: 'removeFromS3', obj: 'File'
@@ -415,18 +415,17 @@ export default class File {
 			}
 			logger.debug({
 				description: 'File get params built.',
-				saveParams: saveParams, file: this,
-				func: 'get', obj: 'File'
+				saveParams, file: this, func: 'get', obj: 'File'
 			});
 			return new Promise((resolve, reject) => {
-				s3.deleteObject(saveParams, (err, data) => {
+				s3.deleteObject(saveParams, (error, data) => {
 					//[TODO] Add putting object ACL (make public)
-					if (err) {
+					if (error) {
 						logger.error({
 							description: 'Error loading file from S3.',
-							error: err, func: 'get', obj: 'File'
+							error, func: 'get', obj: 'File'
 						});
-						return reject(err);
+						return reject(error);
 					}
 					logger.info({
 						description: 'File loaded successfully.',
@@ -452,11 +451,10 @@ export default class File {
 	openInFirepad(editor) {
 		//Load file contents from s3
 		return new Promise((resolve, reject) => {
-			this.get().then((file) => {
-				logger.warn({
+			this.get().then(file => {
+				logger.info({
 					description: 'File contents loaded. Opening firepad.',
-					editor: editor, file: file,
-					func: 'openInFirepad', obj: 'File'
+					editor, file, func: 'openInFirepad', obj: 'File'
 				});
 				//Open firepad from ace with file content as default
 				let fileFirepad = file.firepadFromAce(editor);
@@ -465,12 +463,12 @@ export default class File {
 					resolve(file);
 					// firepad.setText()
 				});
-			}, (err) => {
+			}, error => {
 				logger.error({
 					description: 'Valid ace editor instance required to create firepad.',
-					func: 'openInFirepad', obj: 'File', editor: editor
+					editor, error, func: 'openInFirepad', obj: 'File'
 				});
-				reject(err);
+				reject(error);
 			});
 		});
 	}
@@ -483,14 +481,14 @@ export default class File {
 		if (!editor || typeof editor.setTheme !== 'function') {
 			logger.error({
 				description: 'Valid ace editor instance required to create firepad.',
-				func: 'fbRef', obj: 'File', editor: editor
+				func: 'fbRef', obj: 'File'
 			});
 			return;
 		}
 		if (typeof firepad.fromACE !== 'function') {
 			logger.error({
 				description: 'Firepad does not have fromACE method.',
-				firepad: firepad, func: 'fbRef', obj: 'File'
+				firepad, func: 'fbRef', obj: 'File'
 			});
 			return;
 		}
@@ -502,37 +500,36 @@ export default class File {
 		// if (matter.isLoggedIn && matter.currentUser) {
 		// 	settings.userId = matter.currentUser.username || matter.currentUser.name;
 		// }
-		logger.warn({
+		logger.debug({
 			description: 'Creating firepad from ace.',
-			settings: settings, editor: editor, editorVal: editor.getValue(),
-			func: 'fbRef', obj: 'File'
+			settings, editor, func: 'fbRef', obj: 'File'
 		});
 		return firepad.fromACE(this.fbRef, editor, settings);
 	}
 	getConnectedUsers() {
 		return new Promise((resolve, reject) => {
-			this.fbRef.child('users').on('value', (usersSnap) => {
+			this.fbRef.child('users').on('value', usersSnap => {
 				if (usersSnap.val() === null) {
 					resolve([]);
 				} else {
 					let usersArray = [];
-					usersSnap.forEach((userSnap) => {
+					usersSnap.forEach(userSnap => {
 						let user = userSnap.val();
 						user.username = userSnap.key();
 						usersArray.push(user);
 					});
 					logger.log({
 						description: 'Connected users array built.',
-						users: usersArray, func: 'connectedUsers', obj: 'File'
+						usersArray, func: 'connectedUsers', obj: 'File'
 					});
 					resolve(usersArray);
 				}
-			}, (err) => {
+			}, error => {
 				logger.error({
 					description: 'Error loading connected users.',
-					error: err, func: 'connectedUsers', obj: 'File'
+					error, func: 'connectedUsers', obj: 'File'
 				});
-				reject(err);
+				reject(error);
 			});
 		});
 	}
