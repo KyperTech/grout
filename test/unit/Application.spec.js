@@ -75,8 +75,8 @@ describe('Application model', () => {
       expect(exampleApp).to.respondTo('get');
     });
     it('makes request', () => {
-      exampleApp.get().then(() => {
-        expect(mockGet).to.have.been.called();
+      return exampleApp.get().then(() => {
+        return expect(mockGet).to.have.been.called;
       });
     });
   });
@@ -85,8 +85,8 @@ describe('Application model', () => {
       expect(exampleApp).to.respondTo('update');
     });
     it('makes request', () => {
-      exampleApp.update().then(() => {
-        expect(mockPost).to.have.been.called();
+      return exampleApp.update().then(() => {
+        return expect(mockPut).to.have.been.called;
       });
     });
   });
@@ -95,8 +95,8 @@ describe('Application model', () => {
       expect(exampleApp).to.respondTo('addStorage');
     });
     it('makes request', () => {
-      exampleApp.addStorage().then(() => {
-        expect(mockPost).to.have.been.called();
+      return exampleApp.addStorage().then(() => {
+        return expect(mockPost).to.have.been.called;
       });
     });
   });
@@ -105,8 +105,18 @@ describe('Application model', () => {
       expect(exampleApp).to.respondTo('applyTemplate');
     });
     it('makes request', () => {
-      exampleApp.applyTemplate().then(() => {
-        expect(mockPost).to.have.been.called();
+      return exampleApp.applyTemplate().then(() => {
+        return expect(mockPost).to.have.been.called;
+      });
+    });
+  });
+  describe('addCollaborators method', () => {
+    it('exists', () => {
+      expect(exampleApp).to.respondTo('addCollaborators');
+    });
+    it('makes request', () => {
+      return exampleApp.addCollaborators(['1']).then(() => {
+        return expect(mockPut).to.have.been.called;
       });
     });
   });
