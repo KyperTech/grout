@@ -33376,7 +33376,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					description: 'Collaborators list added to application, calling update.',
 					application: this, func: 'addCollaborators', obj: 'Application'
 				});
-				return this.update();
+				return this.update(this);
 			}
 			//Files object that contains files methods
 
