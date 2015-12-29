@@ -16398,7 +16398,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		//TODO: Attach time stamp
 		//Attach location information to the beginning of message
 		if (_lodash2.default.isObject(logData)) {
-			if (_config2.default.logLevel == 'debug') {
+			if (_config2.default.logLevel !== 'error') {
 				if (_lodash2.default.has(logData, 'func')) {
 					if (_lodash2.default.has(logData, 'obj')) {
 						//Object and function provided
@@ -28802,6 +28802,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.request = exports.logger = undefined;
 
 	var _config = __webpack_require__(8);
 
@@ -28814,8 +28815,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var matter = new _kyperMatter2.default(_config2.default.appName, _config2.default.matterOptions);
+	var _matter$utils = matter.utils;
+	var logger = _matter$utils.logger;
+	var request = _matter$utils.request;
 	exports.default = matter;
-	module.exports = exports['default'];
+	exports.logger = logger;
+	exports.request = request;
 
 /***/ },
 /* 16 */
@@ -42572,7 +42577,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.storage = exports.dom = exports.request = exports.logger = undefined;
 
 	var _config = __webpack_require__(94);
 
@@ -42687,7 +42691,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						func: 'signup', obj: 'Matter'
 					});
 					return Promise.reject({
-						message: 'Login data is required to login.',
+						message: 'Signup data is required to signup.',
 						status: 'NULL_DATA'
 					});
 				}
@@ -43467,10 +43471,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	})();
 
 	exports.default = Matter;
-	exports.logger = _logger2.default;
-	exports.request = _request2.default;
-	exports.dom = _dom2.default;
-	exports.storage = _envStorage2.default;
+	module.exports = exports['default'];
 
 /***/ },
 /* 100 */
@@ -45347,18 +45348,31 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function handleResponse(req) {
 		return new Promise(function (resolve, reject) {
+			if (typeof req.end !== 'function') {
+				_logger2.default.warn({
+					description: 'req.end is not a function',
+					func: 'handleResponse'
+				});
+				return reject({});
+			}
 			req.end(function (err, res) {
 				if (!err) {
 					// logger.log({description: 'Response:', response:res, func:'handleResponse', file: 'request'});
 					return resolve(res.body);
 				} else {
 					if (err.status == 401) {
-						_logger2.default.warn({ description: 'Unauthorized. You must be signed into make this request.', func: 'handleResponse' });
+						_logger2.default.warn({
+							description: 'Unauthorized. You must be signed into make this request.',
+							func: 'handleResponse'
+						});
 					}
 					if (err && err.response) {
+						_logger2.default.warn({
+							description: 'Unauthorized. You must be signed into make this request.',
+							error: err, func: 'handleResponse'
+						});
 						return reject(err.response.text);
 					}
-					_logger2.default.warn({ description: 'Unauthorized. You must be signed into make this request.', error: err, func: 'handleResponse' });
 					return reject(err);
 				}
 			});
