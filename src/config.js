@@ -5,7 +5,7 @@ let config = {
 	appName: 'tessellate',
 	matterOptions: {
 		localServer: false,
-		logLevel: 'warn'
+		logLevel: 'trace'
 	},
 	aws: {
 		region: 'us-east-1',

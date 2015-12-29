@@ -24,7 +24,7 @@ export default class Grout extends Matter {
 	}
 	//Start a new Project action
 	Project(projectName) {
-		this.utils.logger.debug({
+		this.utils.logger.warn({
 			description: 'Project action called.',
 			projectName: projectName, action: new Application(projectName),
 			func: 'Projects', obj: 'Grout'

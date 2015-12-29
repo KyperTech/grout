@@ -1,45 +1,47 @@
 import config from '../config';
 import matter from './Matter';
-import _ from 'lodash';
+import { has, isObject, extend } from 'lodash';
 import Firebase from 'firebase';
 import AWS from 'aws-sdk';
 //Convenience vars
-const {logger} = matter.utils;
+const { logger } = matter.utils;
 
 let firepad = getFirepadLib();
-class File {
+export default class File {
 	constructor(actionData) {
-		if (actionData && _.isObject(actionData) && _.has(actionData, 'fileData') && _.has(actionData, 'app')) {
-			_.extend(this, actionData.fileData);
-			this.app = actionData.app;
-			if (!this.path) {
-				if (!this.ref) {
-					logger.error({
-						description: 'Path or ref required to create file.',
-						func: 'constructor', obj: 'File'
-					});
-					throw new Error('Path or ref required to create file.');
-				}
-				this.path = this.pathArrayFromRef.join('/');
-			}
-			this.pathArray = this.path.split('/');
-			//Get name from data or from pathArray
-			this.name = _.has(actionData.fileData, 'name') ? actionData.fileData.name : this.pathArray[this.pathArray.length - 1];
-		} else if (actionData && !_.isObject(actionData)) {
-			logger.error({
-				description: 'Action data is not an object. Action data must be an object that includes app and fileData.',
-				func: 'constructor', obj: 'File'
-			});
-			//TODO: Get appName from path data?
-			throw new Error('File data must be an object that includes path and appName.');
-		} else {
+		if (!actionData) {
 			logger.error({
 				description: 'File data that includes path and app is needed to create a File action.',
 				func: 'constructor', obj: 'File'
 			});
 			throw new Error('File data with path and app is needed to create file action.');
 		}
+		if (!isObject(actionData)) {
+			logger.error({
+				description: 'Action data is not an object. Action data must be an object that includes app and fileData.',
+				func: 'constructor', obj: 'File'
+			});
+			//TODO: Get appName from path data?
+			throw new Error('File data must be an object that includes path and appName.');
+		}
 		this.type = 'file';
+		if (has(actionData, 'fileData') && has(actionData, 'app')) {
+			extend(this, actionData.fileData);
+			this.app = actionData.app;
+			if (!this.path) {
+				if (!this.ref && !this.name) {
+					logger.error({
+						description: 'Path, name, or ref required to create file.',
+						func: 'constructor', obj: 'File'
+					});
+					throw new Error('Path or ref required to create file.');
+				}
+				this.path = this.name ? this.name : this.pathArrayFromRef.join('/');
+			}
+			this.pathArray = this.path.split('/');
+			//Get name from data or from pathArray
+			this.name = has(actionData.fileData, 'name') ? actionData.fileData.name : this.pathArray[this.pathArray.length - 1];
+		}
 		logger.debug({
 			description: 'File object constructed.', file: this,
 			func: 'constructor', obj: 'File'
@@ -155,7 +157,6 @@ class File {
 						this.content = text;
 						// this.fbRef.once('value', (fileSnap) => {
 						// 	let meta = fileSnap.child('meta').val();
-						//
 						// });
 						this.headless.dispose();
 						resolve(this);
@@ -168,11 +169,66 @@ class File {
 	open() {
 		return this.get();
 	}
-	publish() {
-
+	add() {
+		return this.addToFb();
 	}
-	del() {
-
+	remove() {
+		return this.removeFromFb();
+	}
+	save() {
+		return this.add();
+	}
+	/**
+	 * @description Add file to Firebase located at file's fbRef
+	 */
+	addToFb() {
+		logger.debug({
+			description: 'addToFb called.', file: this,
+			func: 'addToFb', obj: 'Files'
+		});
+		const fbData = {meta: {path: this.path}, original: this.content};
+		const { fbRef } = this;
+		return new Promise((resolve, reject) => {
+			fbRef.set(fbData, (err) => {
+				if (!err) {
+					logger.info({
+						description: 'File successfully added to Firebase.',
+						func: 'addToFb', obj: 'Files'
+					});
+					resolve(fbData);
+				} else {
+					logger.error({
+						description: 'Error creating file on Firebase.',
+						error: err, func: 'addToFb', obj: 'Files'
+					});
+					reject(err);
+				}
+			});
+		});
+	}
+	/**
+	 * @description Add file to Firebase located at file's fbRef
+	 */
+	removeFromFb() {
+		const fbData = {meta: {path: this.path}};
+		const { fbRef } = this;
+		return new Promise((resolve, reject) => {
+			fbRef.remove((err) => {
+				if (!err) {
+					logger.info({
+						description: 'File successfully removed from Firebase.',
+						func: 'removeFromFb', obj: 'Files'
+					});
+					resolve(fileData);
+				} else {
+					logger.error({
+						description: 'Error creating file on Firebase.',
+						error: err, func: 'removeFromFb', obj: 'Files'
+					});
+					reject(err);
+				}
+			});
+		});
 	}
 	getFromS3() {
 		if (!this.app || !this.app.frontend) {
@@ -225,7 +281,7 @@ class File {
 							description: 'File loaded successfully.',
 							data: data, func: 'get', obj: 'File'
 						});
-						if (_.has(data, 'Body')) {
+						if (has(data, 'Body')) {
 							logger.info({
 								description: 'File has content.',
 								content: data.Body.toString(),
@@ -266,7 +322,7 @@ class File {
 			});
 			return Promise.reject({message: 'Front end data is required to publish file.'});
 		} else {
-			if (!_.has(fileData, ['content', 'path'])) {
+			if (!has(fileData, ['content', 'path'])) {
 				logger.error({
 					description: 'File data including path and content required to publish.',
 					func: 'publish', obj: 'File'
@@ -317,21 +373,35 @@ class File {
 			});
 		}
 	}
-	delFromS3() {
+	removeFromS3() {
 		if (!this.app || !this.app.frontend) {
-			logger.log({description: 'Application Frontend data not available. Calling applicaiton get.', func: 'get', obj: 'File'});
+			logger.log({
+				description: 'Application Frontend data not available. Calling applicaiton get.',
+				func: 'removeFromS3', obj: 'File'
+			});
 			return this.app.get().then((appData) => {
 				this.app = appData;
-				logger.log({description: 'Application get successful. Getting file.', app: appData, func: 'get', obj: 'File'});
+				logger.log({
+					description: 'Application get successful. Getting file.',
+					app: appData, func: 'removeFromS3', obj: 'File'
+				});
 				return this.get();
-			}, (err) => {
-				logger.error({description: 'Application Frontend data not available. Make sure to call .get().', error: err, func: 'get', obj: 'File'});
-				return Promise.reject({message: 'Front end data is required to get file.'});
+			}, (error) => {
+				logger.error({
+					description: 'Application Frontend data not available. Make sure to call .get().',
+					error, func: 'removeFromS3', obj: 'File'
+				});
+				return Promise.reject({
+					message: 'Front end data is required to get file.'
+				});
 			});
 		} else {
 			//If AWS Credential do not exist, set them
 			if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
-				logger.debug({description: 'AWS creds do not exist, so they are being set.', func: 'publish', obj: 'File'});
+				logger.debug({
+					description: 'AWS creds do not exist, so they are being set.',
+					func: 'publish', obj: 'File'
+				});
 				setAWSConfig();
 			}
 			let s3 = new AWS.S3();
@@ -362,7 +432,7 @@ class File {
 						description: 'File loaded successfully.',
 						fileData: data, func: 'get', obj: 'File'
 					});
-					if (_.has(data, 'Body')) {
+					if (has(data, 'Body')) {
 						logger.info({
 							description: 'File has content.',
 							fileData: data.Body.toString(), func: 'get', obj: 'File'
@@ -470,19 +540,21 @@ class File {
 		//TODO: Fill with default data for matching file type
 	}
 }
-export default File;
 //------------------ Utility Functions ------------------//
-
-// AWS Config
+/**
+ * @description Initial AWS Config
+ */
 function setAWSConfig() {
-	AWS.config.update({
+	return AWS.config.update({
 		credentials: new AWS.CognitoIdentityCredentials({
 		IdentityPoolId: config.aws.cognito.poolId
 	}),
 		region: config.aws.region
 	});
 }
-//Load firepad from local or global
+/**
+ * @description Load firepad from local or global
+ */
 function getFirepadLib() {
 	logger.debug({
 		description: 'Get firepad lib called',

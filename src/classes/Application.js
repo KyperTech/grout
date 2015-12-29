@@ -98,12 +98,12 @@ class Application {
 			return Promise.reject(errRes.response.text || errRes.response);
 		});
 	}
-	applyTemplate() {
-		logger.error({
-			description: 'Applying templates to existing applications is not currently supported.',
+	applyTemplate(template) {
+		logger.debug({
+			description: 'Applying template to project.',
 			func: 'applyTemplate', obj: 'Application'
 		});
-		return request.post(this.appEndpoint, {}).then((response) => {
+		return request.post(this.appEndpoint, {template}).then((response) => {
 			logger.info({
 				description: 'Template successfully applied to application.',
 				response: response, application: this,
