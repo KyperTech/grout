@@ -1,7 +1,5 @@
-    var grout = new Grout();
+var grout = new Grout('tessellate', {logLevel: 'trace'});
     // console.log('utils', grout.utils);
-
-
     //Set logged in status when dom is loaded
     document.addEventListener("DOMContentLoaded", function(event) {
       setStatus();

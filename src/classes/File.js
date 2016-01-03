@@ -555,14 +555,14 @@ function setAWSConfig() {
 function getFirepadLib() {
 	logger.debug({
 		description: 'Get firepad lib called',
-		func: 'fbRef', obj: 'File'
+		func: 'File => getFirepadLib', file: 'classes/File'
 	});
 	if (typeof window !== 'undefined' && window.Firepad && window.ace) {
 		return window.Firepad;
 	} else if (typeof global !== 'undefined' && global.Firepad && global.ace) {
 		return global.Firepad;
 	} else {
-		logger.log({
+		logger.debug({
 			description: 'Firepad does not currently exist.',
 			func: 'fbRef', obj: 'File'
 		});

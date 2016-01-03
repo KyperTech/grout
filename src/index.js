@@ -6,13 +6,15 @@ import * as Actions from './actions';
 /**Grout Client Class
  * @description Extending matter provides token storage and login/logout/signup capabilities
  */
+import matter from './classes/Matter';
 export default class Grout extends Matter {
 	//TODO: Use getter/setter to make this not a function
 	constructor(appName, groutOptions) {
 		//Call matter with tessellate
 		const name = (appName && isString(appName)) ? appName : config.appName;
 		const options = (groutOptions && isObject(groutOptions)) ? groutOptions : config.matterOptions;
-		super(name, options);
+		config.applySettings(options);
+		super(name, config.matterSettings);
 	}
 	//Start a new Projects Action
 	get Projects() {
