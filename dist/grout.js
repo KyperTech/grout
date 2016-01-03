@@ -113,7 +113,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				options = appName;
 			}
 			_config2.default.applySettings(options);
-			return _possibleConstructorReturn(this, Object.getPrototypeOf(Grout).call(this, name, _config2.default));
+			return _possibleConstructorReturn(this, Object.getPrototypeOf(Grout).call(this, name, _config2.default.matterSettings));
 		}
 		//Start a new Projects Action
 
@@ -15875,7 +15875,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				logLevel: 'error'
 			}
 		},
-		serverUrl: 'http://tessellate.elasticbeanstalk.com',
+		defaultServerUrl: 'http://tessellate.elasticbeanstalk.com',
 		tokenName: 'grout',
 		fbUrl: 'https://kyper-tech.firebaseio.com/tessellate',
 		appName: 'tessellate',
@@ -15916,7 +15916,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'serverUrl',
 			get: function get() {
-				var url = defaultConfig.envs[envName].serverUrl;
+				var url = defaultConfig.envs[envName].serverUrl || defaultServerUrl;
 				if (typeof window !== 'undefined' && (0, _lodash.has)(window, 'location') && (0, _lodash.has)(window.location, 'host') && window.location.host !== '') {
 					var matchingEnv = (0, _lodash.find)(defaultConfig.envs, function (e) {
 						return e.serverUrl === window.location.host;
@@ -15954,6 +15954,11 @@ return /******/ (function(modules) { // webpackBootstrap
 			key: 'localServer',
 			get: function get() {
 				return defaultConfig.envs[envName].isLocal || isLocal;
+			}
+		}, {
+			key: 'matterSettings',
+			get: function get() {
+				return { serverUrl: this.serverUrl, logLevel: this.logLevel, localServer: this.localServer };
 			}
 		}]);
 

@@ -1,4 +1,4 @@
-var grout = new Grout({logLevel: 'warn'});
+var grout = new Grout({logLevel: 'trace'});
   // console.log('utils', grout.utils);
   //Set logged in status when dom is loaded
   document.addEventListener("DOMContentLoaded", function(event) {

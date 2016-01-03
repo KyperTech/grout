@@ -19,7 +19,7 @@ let defaultConfig = {
 			logLevel: 'error'
 		}
 	},
-	serverUrl: 'http://tessellate.elasticbeanstalk.com',
+	defaultServerUrl:'http://tessellate.elasticbeanstalk.com',
 	tokenName: 'grout',
 	fbUrl: 'https://kyper-tech.firebaseio.com/tessellate',
 	appName: 'tessellate',
@@ -47,7 +47,7 @@ class Config {
 		return merge(instance, defaultConfig);
 	}
 	get serverUrl() {
-		let url = defaultConfig.envs[envName].serverUrl;
+		let url = defaultConfig.envs[envName].serverUrl || defaultServerUrl;
 		if (typeof window !== 'undefined' && has(window, 'location') && has(window.location, 'host') && window.location.host !== '') {
 			let matchingEnv = find(defaultConfig.envs, (e) => {
 				return e.serverUrl === window.location.host;
@@ -82,6 +82,9 @@ class Config {
 		if(settings){
 			merge(instance, settings);
 		}
+	}
+	get matterSettings() {
+		return { serverUrl: this.serverUrl, logLevel: this.logLevel, localServer: this.localServer};
 	}
 }
 let config = new Config();
