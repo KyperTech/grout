@@ -2,6 +2,7 @@ import {merge, has, find} from 'lodash';
 let defaultConfig = {
 	envs: {
 		local: {
+			isLocal: true,
 			serverUrl: 'http://localhost:4000',
 			logLevel: 'trace'
 		},
@@ -36,6 +37,7 @@ let defaultConfig = {
 let instance = null;
 let envName = 'prod';
 let level = null;
+let isLocal = false;
 class Config {
 	constructor() {
 		if (!instance) {
@@ -73,19 +75,15 @@ class Config {
 	get env() {
 		return defaultConfig.envs[envName];
 	}
+	get localServer(){
+		return defaultConfig.envs[envName].isLocal || isLocal;
+	}
 	applySettings(settings) {
 		if(settings){
 			merge(instance, settings);
 		}
 	}
-	get matterSettings() {
-		return {logLevel: this.logLevel};
-	}
 }
 let config = new Config();
 
-//Set server to local server if developing
-// if (typeof window != 'undefined' && (window.location.hostname == '' || window.location.hostname == 'localhost')) {
-// 	config.serverUrl = 'http://localhost:4000';
-// }
 export default config;

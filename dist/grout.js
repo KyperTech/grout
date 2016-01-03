@@ -108,8 +108,12 @@ return /******/ (function(modules) { // webpackBootstrap
 			//Call matter with tessellate
 			var name = appName && (0, _lodash.isString)(appName) ? appName : _config2.default.appName;
 			var options = groutOptions && (0, _lodash.isObject)(groutOptions) ? groutOptions : _config2.default.matterOptions;
+			//handle No App name provided
+			if ((0, _lodash.isObject)(appName)) {
+				options = appName;
+			}
 			_config2.default.applySettings(options);
-			return _possibleConstructorReturn(this, Object.getPrototypeOf(Grout).call(this, name, _config2.default.matterSettings));
+			return _possibleConstructorReturn(this, Object.getPrototypeOf(Grout).call(this, name, _config2.default));
 		}
 		//Start a new Projects Action
 
@@ -15854,6 +15858,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var defaultConfig = {
 		envs: {
 			local: {
+				isLocal: true,
 				serverUrl: 'http://localhost:4000',
 				logLevel: 'trace'
 			},
@@ -15888,6 +15893,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var instance = null;
 	var envName = 'prod';
 	var level = null;
+	var isLocal = false;
 
 	var Config = (function () {
 		function Config() {
@@ -15945,9 +15951,9 @@ return /******/ (function(modules) { // webpackBootstrap
 				return defaultConfig.envs[envName];
 			}
 		}, {
-			key: 'matterSettings',
+			key: 'localServer',
 			get: function get() {
-				return { logLevel: this.logLevel };
+				return defaultConfig.envs[envName].isLocal || isLocal;
 			}
 		}]);
 
@@ -15956,10 +15962,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var config = new Config();
 
-	//Set server to local server if developing
-	// if (typeof window != 'undefined' && (window.location.hostname == '' || window.location.hostname == 'localhost')) {
-	// 	config.serverUrl = 'http://localhost:4000';
-	// }
 	exports.default = config;
 	module.exports = exports['default'];
 

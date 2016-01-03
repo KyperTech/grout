@@ -12,9 +12,13 @@ export default class Grout extends Matter {
 	constructor(appName, groutOptions) {
 		//Call matter with tessellate
 		const name = (appName && isString(appName)) ? appName : config.appName;
-		const options = (groutOptions && isObject(groutOptions)) ? groutOptions : config.matterOptions;
+		let options = (groutOptions && isObject(groutOptions)) ? groutOptions : config.matterOptions;
+		//handle No App name provided
+		if(isObject(appName)){
+			options = appName;
+		}
 		config.applySettings(options);
-		super(name, config.matterSettings);
+		super(name, config);
 	}
 	//Start a new Projects Action
 	get Projects() {
