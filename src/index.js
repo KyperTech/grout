@@ -12,7 +12,7 @@ export default class Grout extends Matter {
 	constructor(appName, groutOptions) {
 		//Call matter with tessellate
 		const name = (appName && isString(appName)) ? appName : config.appName;
-		let options = (groutOptions && isObject(groutOptions)) ? groutOptions : config.matterOptions;
+		let options = (groutOptions && isObject(groutOptions)) ? groutOptions : config.matterSettings;
 		//handle No App name provided
 		if(isObject(appName)){
 			options = appName;
@@ -30,10 +30,10 @@ export default class Grout extends Matter {
 	}
 	//Start a new Project action
 	Project(projectName) {
-		this.utils.logger.warn({
+		this.utils.logger.debug({
 			description: 'Project action called.',
-			projectName, action: new Application(projectName),
-			func: 'Projects', obj: 'Grout'
+			projectName, project: new Application(projectName),
+			func: 'Project', obj: 'Grout'
 		});
 		return new Application(projectName);
 	}

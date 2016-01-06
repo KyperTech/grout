@@ -127,6 +127,9 @@ export default class Files {
 	 */
 	add(fileData) {
 		//TODO: Allow for options of where to add the file to
+		if(isArray(fileData)){
+			return this.upload(fileData);
+		}
 		return this.addToFb(fileData);
 	}
 	upload(filesData) {
@@ -314,6 +317,10 @@ export default class Files {
 	 * @description Delete a file from Firebase
 	 */
 	delFromFb(fileData) {
+		logger.debug({
+			description: 'Del from fb called.', fileData,
+			func: 'delFromFb', obj: 'Files'
+		});
 		if (!fileData || !fileData.path) {
 			logger.error({
 				description: 'Invalid file data. Path must be included.',

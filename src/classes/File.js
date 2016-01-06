@@ -9,39 +9,46 @@ const { logger } = matter.utils;
 let firepad = getFirepadLib();
 export default class File {
 	constructor(actionData) {
-		if (!actionData) {
+		if (!actionData || !isObject(actionData)) {
 			logger.error({
 				description: 'File data that includes path and app is needed to create a File action.',
 				func: 'constructor', obj: 'File'
 			});
 			throw new Error('File data with path and app is needed to create file action.');
 		}
-		if (!isObject(actionData)) {
+		const { fileData, app } = actionData;
+		if(!fileData){
 			logger.error({
-				description: 'Action data is not an object. Action data must be an object that includes app and fileData.',
+				description: 'Action data must be an object that includes fileData.',
 				func: 'constructor', obj: 'File'
 			});
 			//TODO: Get appName from path data?
-			throw new Error('File data must be an object that includes path and appName.');
+			throw new Error('File data must be an object that includes fileData.');
+		}
+		if(!app){
+			logger.error({
+				description: 'Action data must be an object that includes app.',
+				func: 'constructor', obj: 'File'
+			});
+			//TODO: Get appName from path data?
+			throw new Error('File data must be an object that includes app.');
 		}
 		this.type = 'file';
-		if (has(actionData, 'fileData') && has(actionData, 'app')) {
-			extend(this, actionData.fileData);
-			this.app = actionData.app;
-			if (!this.path) {
-				if (!this.ref && !this.name) {
-					logger.error({
-						description: 'Path, name, or ref required to create file.',
-						func: 'constructor', obj: 'File'
-					});
-					throw new Error('Path or ref required to create file.');
-				}
-				this.path = this.name ? this.name : this.pathArrayFromRef.join('/');
+		this.app = app;
+		extend(this, fileData);
+		if (!this.path) {
+			if (!this.ref && !this.name) {
+				logger.error({
+					description: 'Path, name, or ref required to create a file object.',
+					func: 'constructor', obj: 'File'
+				});
+				throw new Error('Path or ref required to create file.');
 			}
-			this.pathArray = this.path.split('/');
-			//Get name from data or from pathArray
-			this.name = has(actionData.fileData, 'name') ? actionData.fileData.name : this.pathArray[this.pathArray.length - 1];
+			this.path = this.name ? this.name : this.pathArrayFromRef.join('/');
 		}
+		this.pathArray = this.path.split('/');
+			//Get name from data or from pathArray
+		this.name = fileData.name ? fileData.name : this.pathArray[this.pathArray.length - 1];
 		logger.debug({
 			description: 'File object constructed.', file: this,
 			func: 'constructor', obj: 'File'
@@ -172,8 +179,8 @@ export default class File {
 	add() {
 		return this.addToFb();
 	}
-	remove() {
-		return this.removeFromFb();
+	remove(removeData) {
+		return this.removeFromFb(removeData);
 	}
 	save() {
 		return this.add();
