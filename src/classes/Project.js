@@ -18,107 +18,139 @@ import Firebase from 'firebase';
 //Convenience vars
 const {request, logger} = matter.utils;
 /**
- * Application class.
+ * Project class.
  *
  */
-class Application {
+class Project {
 	constructor(appData) {
 		//Setup application data based on input
 		if (appData && isObject(appData)) {
 			extend(this, appData);
 		} else if (appData && isString(appData)) {
 			this.name = appData;
+			//TODO: Handle no owner data being provided?
 		}
 		if (Firebase && has(config, 'fbUrl') && has(this, 'name')) {
 			this.fbUrl = `${config.fbUrl}/${this.name}`;
 			this.fbRef = new Firebase(this.fbUrl);
 		}
 		logger.debug({
-			description: 'Application object created.', application: this,
-			func: 'constructor', obj: 'Application'
+			description: 'Project object created.', application: this,
+			func: 'constructor', obj: 'Project'
 		});
 	}
-	get appEndpoint() {
+	/**
+	 * @description Project endpoint on Tessellate server
+	 * @return {String}
+	 */
+	get endpoint() {
 		return `${matter.endpoint}/apps/${this.name}`;
 	}
-	//Get applications or single application
+	/**
+	 * @description Project files Firebase Url
+	 * @return {String}
+	 */
+	get fbUrl() {
+		if (Firebase && has(config, 'fbUrl') && has(this, 'name')) {
+			return `${config.fbUrl}/${this.name}`;
+		}
+	}
+	/**
+	 * @description Generate Firebase reference based on project url
+	 */
+	get fbRef() {
+		if (this.fbUrl) {
+			this.fbRef = new Firebase(this.fbUrl);
+		}
+	}
+	/**
+	 * @description Get project data
+	 */
 	get() {
 		logger.debug({
-			description: 'Application get called.', func: 'get', obj: 'Application'
+			description: 'Project get called.', func: 'get', obj: 'Project'
 		});
-		return request.get(this.appEndpoint).then(response => {
-			const application = new Application(response);
+		return request.get(this.endpoint).then(response => {
+			const application = new Project(response);
 			logger.info({
-				description: 'Application loaded successfully.',
-				response, application, func: 'get', obj: 'Application'
+				description: 'Project loaded successfully.',
+				response, application, func: 'get', obj: 'Project'
 			});
 			return application;
 		})['catch'](error => {
 			logger.error({
-				description: 'Error getting Application.',
+				description: 'Error getting Project.',
 				message: error.response.text , error,
-				func: 'get', obj: 'Application'
+				func: 'get', obj: 'Project'
 			});
 			return Promise.reject(error.response.text || error.response);
 		});
 	}
-	//Update an application
+	/**
+	 * @description Update project data
+	 */
 	update(appData) {
 		logger.debug({
-			description: 'Application update called.',
-			func: 'update', obj: 'Application'
+			description: 'Project update called.',
+			func: 'update', obj: 'Project'
 		});
-		return request.put(this.appEndpoint, appData).then(response => {
+		return request.put(this.endpoint, appData).then(response => {
 			logger.info({
-				description: 'Application updated successfully.',
-				response, func: 'update', obj: 'Application'
+				description: 'Project updated successfully.',
+				response, func: 'update', obj: 'Project'
 			});
-			return new Application(response);
+			return new Project(response);
 		})['catch'](error => {
 			logger.error({
 				description: 'Error updating application.',
-				error, func: 'update', obj: 'Application'
+				error, func: 'update', obj: 'Project'
 			});
 			return Promise.reject(error.response.text || error.response);
 		});
 	}
+	/**
+	 * @description Add static file hosting storage (currrently though AWS S3)
+	 */
 	addStorage() {
 		logger.debug({
-			description: 'Application add storage called.', application: this,
-			func: 'addStorage', obj: 'Application'
+			description: 'Project add storage called.', application: this,
+			func: 'addStorage', obj: 'Project'
 		});
-		return request.post(`${this.appEndpoint}/storage`, {}).then(response => {
-			const application = new Application(response)
+		return request.post(`${this.endpoint}/storage`, {}).then(response => {
+			const application = new Project(response)
 			logger.info({
 				description: 'Storage successfully added to application.',
-				response, application, func: 'addStorage', obj: 'Application'
+				response, application, func: 'addStorage', obj: 'Project'
 			});
 			return application;
 		})['catch'](error => {
 			logger.error({
 				description: 'Error adding storage to application.',
-				error, func: 'addStorage', obj: 'Application'
+				error, func: 'addStorage', obj: 'Project'
 			});
 			return Promise.reject(error.response.text || error.response);
 		});
 	}
+	/**
+	 * @description Apply a template to Project
+	 */
 	applyTemplate(template) {
 		logger.debug({
 			description: 'Applying template to project.',
-			func: 'applyTemplate', obj: 'Application'
+			func: 'applyTemplate', obj: 'Project'
 		});
-		return request.post(this.appEndpoint, {template}).then((response) => {
+		return request.post(this.endpoint, {template}).then((response) => {
 			logger.info({
 				description: 'Template successfully applied to application.',
 				response, application: this,
-				func: 'applyTemplate', obj: 'Application'
+				func: 'applyTemplate', obj: 'Project'
 			});
-			return new Application(response);
+			return new Project(response);
 		})['catch'](error => {
 			logger.error({
 				description: 'Error applying template to application.',
 				error, application: this,
-				func: 'applyTemplate', obj: 'Application'
+				func: 'applyTemplate', obj: 'Project'
 			});
 			return Promise.reject(error.response.text || error.response);
 		});
@@ -130,7 +162,7 @@ class Application {
 	addCollaborators(collabs) {
 		logger.debug({
 			description: 'Add collaborators called', collabs,
-			application: this, func: 'addCollaborators', obj: 'Application'
+			application: this, func: 'addCollaborators', obj: 'Project'
 		});
 		this.collaborators = collabs;
 		//Handle string of ids
@@ -139,70 +171,70 @@ class Application {
 		}
 		logger.log({
 			description: 'Collaborators list added to application, calling update.',
-			application: this, func: 'addCollaborators', obj: 'Application'
+			application: this, func: 'addCollaborators', obj: 'Project'
 		});
 		return this.update(this);
 	}
 	//Files object that contains files methods
 	get Files() {
 		logger.debug({
-			description: 'Applications files action called.',
-			application: this, func: 'files', obj: 'Application'
+			description: 'Projects files action called.',
+			application: this, func: 'files', obj: 'Project'
 		});
 		return new Files({app: this});
 	}
 	File(fileData) {
 		logger.debug({
-			description: 'Applications file action called.',
+			description: 'Projects file action called.',
 			fileData, application: this,
-			func: 'file', obj: 'Application'
+			func: 'file', obj: 'Project'
 		});
 		return new File({app: this, fileData});
 	}
 	get Users() {
 		logger.debug({
-			description: 'Applications users action called.',
-			application: this, func: 'user', obj: 'Application'
+			description: 'Projects users action called.',
+			application: this, func: 'user', obj: 'Project'
 		});
 		return new Accounts({app: this});
 	}
 	User(userData) {
 		logger.debug({
-			description: 'Applications user action called.',
-			userData, application: this, func: 'user', obj: 'Application'
+			description: 'Projects user action called.',
+			userData, application: this, func: 'user', obj: 'Project'
 		});
 		return new Account({app: this, userData});
 	}
 	get Accounts() {
 		logger.debug({
-			description: 'Applications account action called.',
-			application: this, func: 'user', obj: 'Application'
+			description: 'Projects account action called.',
+			application: this, func: 'user', obj: 'Project'
 		});
 		return new Accounts({app: this});
 	}
 	Account(userData) {
 		logger.debug({
-			description: 'Applications account action called.',
+			description: 'Projects account action called.',
 			userData, application: this,
-			func: 'user', obj: 'Application'
+			func: 'user', obj: 'Project'
 		});
 		return new Account({app: this, userData});
 	}
 	get Groups() {
 		logger.debug({
-			description: 'Applications groups action called.',
-			application: this, func: 'groups', obj: 'Application'
+			description: 'Projects groups action called.',
+			application: this, func: 'groups', obj: 'Project'
 		});
 		return new Groups({app: this});
 	}
 	Group(groupData) {
 		logger.debug({
-			description: 'Applications group action called.',
+			description: 'Projects group action called.',
 			groupData, application: this,
-			func: 'group', obj: 'Application'
+			func: 'group', obj: 'Project'
 		});
 		return new Group({app: this, groupData});
 	}
 }
 
-export default Application;
+export default Project;

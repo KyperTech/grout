@@ -16,26 +16,23 @@ export default class File {
 			});
 			throw new Error('File data with path and app is needed to create file action.');
 		}
-		const { fileData, app } = actionData;
-		if(!fileData){
+		const { data, project } = actionData;
+		if(!data){
 			logger.error({
-				description: 'Action data must be an object that includes fileData.',
+				description: 'Action data must be an object that includes data.',
 				func: 'constructor', obj: 'File'
 			});
-			//TODO: Get appName from path data?
-			throw new Error('File data must be an object that includes fileData.');
+			throw new Error('File data must be an object that includes data.');
 		}
-		if(!app){
+		if(!project){
 			logger.error({
 				description: 'Action data must be an object that includes app.',
 				func: 'constructor', obj: 'File'
 			});
-			//TODO: Get appName from path data?
 			throw new Error('File data must be an object that includes app.');
 		}
 		this.type = 'file';
-		this.app = app;
-		extend(this, fileData);
+		extend(this, actionData);
 		if (!this.path) {
 			if (!this.ref && !this.name) {
 				logger.error({
@@ -93,14 +90,14 @@ export default class File {
 		return safePathArray.join('/');
 	}
 	get fbUrl() {
-		if (!this.app || !this.app.name) {
+		if (!this.project || !this.project.name) {
 			logger.error({
 				description: 'App information needed to generate fbUrl for File.',
 				file: this, func: 'fbRef', obj: 'File'
 			});
 			throw new Error ('App information needed to generate fbUrl for File.');
 		}
-		return [config.fbUrl, 'files', this.app.name, this.safePath].join('/');
+		return [config.fbUrl, 'files', this.project.name, this.safePath].join('/');
 	}
 	get fbRef() {
 		if (this.ref) {
@@ -193,20 +190,23 @@ export default class File {
 			description: 'addToFb called.', file: this,
 			func: 'addToFb', obj: 'Files'
 		});
-		const fbData = {meta: {path: this.path}, original: this.content};
-		const { fbRef } = this;
+		const { fbRef, path, fileType, content, name } = this;
+		const fbData = {meta: {path, fileType, name}};
+		if(content){
+			fbData.original = content;
+		}
 		return new Promise((resolve, reject) => {
 			fbRef.set(fbData, error => {
 				if (!error) {
 					logger.info({
 						description: 'File successfully added to Firebase.',
-						func: 'addToFb', obj: 'Files'
+						func: 'addToFb', obj: 'File'
 					});
 					resolve(fbData);
 				} else {
 					logger.error({
 						description: 'Error creating file on Firebase.',
-						error, func: 'addToFb', obj: 'Files'
+						error, func: 'addToFb', obj: 'File'
 					});
 					reject(error);
 				}
@@ -217,8 +217,6 @@ export default class File {
 	 * @description Add file to Firebase located at file's fbRef
 	 */
 	removeFromFb() {
-		const fbData = {meta: {path: this.path}};
-		const { fbRef } = this;
 		return new Promise((resolve, reject) => {
 			fbRef.remove((error) => {
 				if (!error) {
@@ -238,13 +236,13 @@ export default class File {
 		});
 	}
 	getFromS3() {
-		if (!this.app || !this.app.frontend) {
+		if (!this.project || !this.project.frontend) {
 			logger.log({
 				description: 'Application Frontend data not available. Calling applicaiton get.',
 				func: 'get', obj: 'File'
 			});
-			return this.app.get().then((appData) => {
-				this.app = appData;
+			return this.project.get().then((appData) => {
+				this.project = appData;
 				logger.log({
 					description: 'Application get successful. Getting file.',
 					app: appData, func: 'get', obj: 'File'
@@ -270,7 +268,7 @@ export default class File {
 			}
 			let s3 = new AWS.S3();
 			let getData = {
-				Bucket: this.app.frontend.bucketName,
+				Bucket: this.project.frontend.bucketName,
 				Key: this.path
 			};
 			//Set contentType from actionData to ContentType parameter of new object
@@ -322,7 +320,7 @@ export default class File {
 			description: 'File publish called.', file: this,
 			fileData, func: 'publish', obj: 'File'
 		});
-		if (!this.app.frontend) {
+		if (!this.project.frontend) {
 			logger.error({
 				description: 'Application Frontend data not available. Make sure to call .get().',
 				func: 'publish', obj: 'File'
@@ -337,7 +335,7 @@ export default class File {
 				return Promise.reject({message: 'File data including path and content required to publish.'});
 			}
 			let saveParams = {
-				Bucket: this.app.frontend.bucketName,
+				Bucket: this.project.frontend.bucketName,
 				Key: fileData.path,
 				Body: fileData.content,
 				ACL: 'public-read'
@@ -381,16 +379,16 @@ export default class File {
 		}
 	}
 	removeFromS3() {
-		if (!this.app || !this.app.frontend) {
+		if (!this.project || !this.project.frontend) {
 			logger.log({
 				description: 'Application Frontend data not available. Calling applicaiton get.',
 				func: 'removeFromS3', obj: 'File'
 			});
-			return this.app.get().then(appData => {
-				this.app = appData;
+			return this.project.get().then(appData => {
+				this.project = appData;
 				logger.log({
 					description: 'Application get successful. Getting file.',
-					app: this.app, func: 'removeFromS3', obj: 'File'
+					app: this.project, func: 'removeFromS3', obj: 'File'
 				});
 				return this.get();
 			}, error => {
@@ -413,7 +411,7 @@ export default class File {
 			}
 			let s3 = new AWS.S3();
 			let saveParams = {
-				Bucket: this.app.frontend.bucketName,
+				Bucket: this.project.frontend.bucketName,
 				Key: this.path
 			};
 			//Set contentType from actionData to ContentType parameter of new object

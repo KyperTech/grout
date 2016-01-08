@@ -1,5 +1,5 @@
 import config from '../config';
-import { toArray, isArray, has, pick, take, each, findWhere, union } from 'lodash';
+import { toArray, isArray, has, pick, take, each, findWhere, union, clone, extend } from 'lodash';
 import AWS from 'aws-sdk';
 import matter from './Matter';
 import Firebase from 'firebase';
@@ -9,14 +9,14 @@ const { logger } = matter.utils;
 
 export default class Files {
 	constructor(filesData) {
-		if(!filesData){
+		if(!filesData || (!has(filesData, 'app') && !has(filesData, 'project'))){
 			logger.error({
 				description: 'Action data object with name is required to start a Files Action.',
 				func: 'constructor', obj: 'Files'
 			});
 			throw new Error('Files Data object with name is required to start a Files action.');
 		}
-		this.app = has(filesData, 'app') ? filesData.app : {name: filesData};
+		extend(this, filesData);
 		logger.debug({
 			description: 'Files object constructed.',
 			func: 'constructor', obj: 'Files', files: this
@@ -26,7 +26,14 @@ export default class Files {
 	 * @description Firebase URL for files list
 	 */
 	get fbUrl() {
-		return `${config.fbUrl}/files/${this.app.name}`;
+		if(!this.project.owner){
+			logger.warn({
+				description: 'No owner provided. FbUrl does not contain owner name.',
+				func: 'fbUrl', obj: 'Files'
+			});
+			return `${config.fbUrl}/files/${this.project.name}`;
+		}
+		return `${config.fbUrl}/files/${this.project.owner.id}/${this.project.name}`;
 	}
 	/**
 	 * @description Firebase reference of files list
@@ -139,7 +146,7 @@ export default class Files {
 		} else {
 			logger.warn({
 				description: 'Add called with multiple files.', files,
-				app: this.app, func: 'upload', obj: 'Files'
+				app: this.project, func: 'upload', obj: 'Files'
 			});
 			let promises = [];
 			each(filesData, file => {
@@ -163,6 +170,11 @@ export default class Files {
 	}
 	publish() {
 		//TODO: Publish all files
+	}
+	addFolder(folderData) {
+		let dataObj = folderData;
+		dataObj.app = this;
+		let folder = new Folder({app: this})
 	}
 	/**
 	 * @description build child structure from files list
@@ -266,22 +278,32 @@ export default class Files {
 	 * @param {String} fileData.path - Path of file within project
 	 * @param {String} fileData.content - Content of file
 	 */
-	addToFb(fileData) {
+	addToFb(addData) {
 		logger.debug({
-			description: 'Add to fb called.', fileData,
+			description: 'Add to fb called.', addData,
 			func: 'addToFb', obj: 'Files'
 		});
-		if (isArray(fileData)) {
+		if (!addData) {
+			logger.debug({
+				description: 'Object data is required to add.', addData,
+				func: 'addToFb', obj: 'Files'
+			});
+			return Promise.reject({
+				message: 'Object data is required to add.'
+			});
+		}
+		if (isArray(addData)) {
 			let promises = [];
-			fileData.forEach(file => {
+			addData.forEach(file => {
 				promises.push(this.addToFb(file));
 			});
 			return Promise.all(promises);
 		}
-		if (fileData.size) {
-			return this.addLocalToFb(fileData);
+		const { size, path, name, type } = addData;
+		if (size) {
+			return this.addLocalToFb(addData);
 		}
-		if (!fileData || !fileData.path) {
+		if (!path) {
 			logger.error({
 				description: 'Invalid file data. Path must be included.',
 				func: 'addToFb', obj: 'Files'
@@ -290,8 +312,15 @@ export default class Files {
 				message: 'Invalid file data. Path must be included.'
 			});
 		}
-		let file = new File({app: this.app, fileData});
-		return file.save();
+		let newData = {project: this.project, data: { path }};
+		if(name){
+			newData.data.name = name;
+		}
+		if (type && type === 'folder') {
+			return new Folder(newData).save();
+		} else {
+			return new File(newData).save();
+		}
 	}
 	addLocalToFb(fileData) {
 		logger.debug({
@@ -305,7 +334,7 @@ export default class Files {
 			});
 			fileData.content = content;
 			fileData.path = fileData.name;
-			const file = new File({app: this.app, fileData});
+			const file = new File({app: this.project, fileData});
 			logger.info({
 				description: 'File object created.', file,
 				func: 'addLocalToFb', obj: 'Files'
@@ -330,7 +359,7 @@ export default class Files {
 				message: 'Invalid file data. Path must be included.'
 			});
 		}
-		let file = new File({app: this.app, fileData});
+		let file = new File({app: this.project, fileData});
 		return new Promise((resolve, reject) => {
 			file.fbRef.remove(fileData, err => {
 				if (!err) {
@@ -345,17 +374,17 @@ export default class Files {
 	 * @description Get files list from S3
 	 */
 	getFromS3() {
-		if (!this.app.frontend || !this.app.frontend.bucketName) {
+		if (!this.project.frontend || !this.project.frontend.bucketName) {
 			logger.warn({
 				description: 'Application Frontend data not available. Calling .get().',
-				app: this.app, func: 'getFromS3', obj: 'Files'
+				app: this.project, func: 'getFromS3', obj: 'Files'
 			});
-			return this.app.get().then(applicationData => {
+			return this.project.get().then(applicationData => {
 				logger.log({
 					description: 'Application get returned.',
 					data: applicationData, func: 'getFromS3', obj: 'Files'
 				});
-				this.app = applicationData;
+				this.project = applicationData;
 				if (has(applicationData, 'frontend')) {
 					return this.get();
 				} else {
@@ -383,7 +412,7 @@ export default class Files {
 				setAWSConfig();
 			}
 			const s3 = new AWS.S3();
-			const listParams = {Bucket: this.app.frontend.bucketName};
+			const listParams = {Bucket: this.project.frontend.bucketName};
 			return new Promise((resolve, reject) => {
 				s3.listObjects(listParams, (err, data) => {
 					if (!err) {

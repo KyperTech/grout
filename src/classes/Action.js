@@ -1,5 +1,5 @@
 import config from '../config';
-import {has, isString} from 'lodash';
+import { has, isString, extend } from 'lodash';
 import matter from './Matter';
 const { logger, request } = matter.utils;
 
@@ -25,7 +25,7 @@ export default class Action {
       throw Error('Action data with app is required.');
     }
     this.isList = actionData ? false : true;
-    this.app = actionData.app;
+    extend(this, actionData);
     if (!this.isList) {
       this.actionData = actionData;
       if (isString(actionData)) {
