@@ -1,6 +1,6 @@
 import matter from './Matter';
-import {isString} from 'lodash';
-const {logger} = matter.utils;
+import { isString } from 'lodash';
+const { logger } = matter.utils;
 import Action from './Action';
 
 export default class Group extends Action {

@@ -1,5 +1,5 @@
 import config from '../config';
-import {has, isString} from 'lodash';
+import { has, isString, extend } from 'lodash';
 import matter from './Matter';
 const { logger, request } = matter.utils;
 
@@ -15,17 +15,17 @@ export default class Action {
   init(actionData) {
     logger.debug({
       description: 'Init action called.',
-      actionData, func: 'url', obj: 'Action'
+      actionData, func: 'init', obj: 'Action'
     });
-    if (!actionData || !actionData.app) {
+    if (!actionData || !actionData.project) {
       logger.error({
-        description: 'Action data with app is required.',
-        actionData, func: 'url', obj: 'Action'
+        description: 'Action data with project is required.',
+        actionData, func: 'init', obj: 'Action'
       });
-      throw Error('Action data with app is required.');
+      throw Error('Action data with project is required.');
     }
     this.isList = actionData ? false : true;
-    this.app = actionData.app;
+    extend(this, actionData);
     if (!this.isList) {
       this.actionData = actionData;
       if (isString(actionData)) {
@@ -47,9 +47,9 @@ export default class Action {
    */
   get endpointArray() {
     let endpointArray = [matter.endpoint, this.name];
-    if (has(this, 'app') && has(this.app, 'name') && this.app.name !== config.appName) {
-      //Splice apps, appName into index 1
-      endpointArray.splice(1, 0, 'apps', this.app.name);
+    if (has(this, 'project') && has(this.project, 'name') && this.project.name !== config.defaultProject) {
+      //Splice apps, defaultProject into index 1
+      endpointArray.splice(1, 0, 'apps', this.project.name);
     }
     return endpointArray;
   }
@@ -58,11 +58,12 @@ export default class Action {
    * @return {String}
    */
   get url() {
+    const urlStr = this.endpointArray.join('/');
     logger.debug({
-      description: 'Url created.', url: this.endpointArray.join('/'),
+      description: 'Url created.', urlStr,
       func: 'url', obj: 'Action'
     });
-    return this.endpointArray.join('/');
+    return urlStr;
   }
   /** Get
    * @return {Promise}

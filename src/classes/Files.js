@@ -1,22 +1,23 @@
 import config from '../config';
-import { toArray, isArray, has, pick, take, each, findWhere, union } from 'lodash';
+import { toArray, isArray, has, pick, take, each, findWhere, union, clone, extend } from 'lodash';
 import AWS from 'aws-sdk';
 import matter from './Matter';
 import Firebase from 'firebase';
+import Project from './Project';
 import File from './File';
 //Convenience vars
 const { logger } = matter.utils;
 
 export default class Files {
 	constructor(filesData) {
-		if(!filesData){
+		if(!filesData || !has(filesData, 'project')){
 			logger.error({
 				description: 'Action data object with name is required to start a Files Action.',
 				func: 'constructor', obj: 'Files'
 			});
 			throw new Error('Files Data object with name is required to start a Files action.');
 		}
-		this.app = has(filesData, 'app') ? filesData.app : {name: filesData};
+		extend(this, filesData);
 		logger.debug({
 			description: 'Files object constructed.',
 			func: 'constructor', obj: 'Files', files: this
@@ -26,7 +27,18 @@ export default class Files {
 	 * @description Firebase URL for files list
 	 */
 	get fbUrl() {
-		return `${config.fbUrl}/files/${this.app.name}`;
+		if(!this.project.fbUrl){
+			logger.error({
+				description: 'Project data is required for fbUrl.',
+				func: 'constructor', obj: 'Files', files: this
+			});
+			throw new Error('Project data is required to create fbUrl.');
+		}
+		if(this.project.fbUrl){
+			return this.project.fbUrl;
+		}
+		let project = new Project(this.project);
+		return project.fbUrl;
 	}
 	/**
 	 * @description Firebase reference of files list
@@ -68,7 +80,6 @@ export default class Files {
 					func: 'get', obj: 'Files'
 				});
 				let filesArray = [];
-				// let filesPathArray =  this.pathArrayFromFbRef;
 				filesSnap.forEach(objSnap => {
 					let objData = objSnap.hasChild('meta') ? objSnap.child('meta').val() : {path: objSnap.key()};
 					//TODO: Have a better fallback for when meta does not exist
@@ -132,14 +143,18 @@ export default class Files {
 		}
 		return this.addToFb(fileData);
 	}
+	/**
+	 * @description Add multiple files/folders to project files
+	 * @param {Array} filesData - Array of file objects to upload
+	 */
 	upload(filesData) {
 		//TODO: Allow for options of where to add the file to
 		if(!isArray(filesData)){
 			return this.addToFb(filesData);
 		} else {
 			logger.warn({
-				description: 'Add called with multiple files.', files,
-				app: this.app, func: 'upload', obj: 'Files'
+				description: 'Upload called with multiple files.', filesData,
+				project: this.project, func: 'upload', obj: 'Files'
 			});
 			let promises = [];
 			each(filesData, file => {
@@ -155,133 +170,61 @@ export default class Files {
 		}
 	}
 	/**
-	 * @description Delete file
+	 * @description Remove object from files (folder or file)
 	 */
-	del(fileData) {
+	remove(objData) {
 		//TODO: Delete file from S3 as well if it exists
-		return this.delFromFb(fileData);
+		return this.delFromFb(objData);
+	}
+	/**
+	 * @description Alias for remove
+	 */
+	del(objData) {
+		//TODO: Delete file from S3 as well if it exists
+		return this.remove(objData);
 	}
 	publish() {
 		//TODO: Publish all files
 	}
-	/**
-	 * @description build child structure from files list
-	 */
-	buildStructure() {
-		logger.debug({
-			description: 'Build Structure called.',
-			func: 'buildStructure', obj: 'Application'
-		});
-		return this.get().then(filesArray => {
-			logger.log({
-				description: 'Child struct from array.',
-				childStructure: childStruct,
-				func: 'buildStructure', obj: 'Application'
-			});
-			const childStruct = childrenStructureFromArray(filesArray);
-			//TODO: have child objects have correct classes (file/folder)
-			logger.log({
-				description: 'Child struct from array.',
-				childStructure: childStruct,
-				func: 'buildStructure', obj: 'Application'
-			});
-			return childStruct;
-		}, error => {
-			logger.error({
-				description: 'Error getting application files.',
-				error, func: 'buildStructure', obj: 'Application'
-			});
-			return Promise.reject({
-				message: 'Error getting files.',
-				error
-			});
-		});
+	addFolder(folderData) {
+		let dataObj = folderData;
+		dataObj.app = this;
+		let folder = new Folder({project: this})
+		return folder.save();
 	}
-	/**
-	 * @description sync file structure from Firebase
-	 */
-	syncStructure() {
-		//TODO: Determine if it is worth storing this in the built structure
-		logger.debug({
-			description: 'Build Structure called.',
-			func: 'syncStructure', obj: 'Application'
-		});
-		return this.sync().then(filesArray => {
-			logger.log({
-				description: 'Child struct from array.',
-				childStruct, func: 'syncStructure', obj: 'Application'
-			});
-			const childStruct = childrenStructureFromArray(filesArray);
-			//TODO: have child objects have correct classes (file/folder)
-			logger.log({
-				description: 'Child struct from array.',
-				childStruct, func: 'syncStructure', obj: 'Application'
-			});
-			return childStruct;
-		}, error => {
-			logger.error({
-				description: 'Error getting application files.',
-				error, func: 'syncStructure', obj: 'Application'
-			});
-			return Promise.reject({
-				message: 'Error getting files.',
-				error
-			});
-		});
-	}
-	getContentFromFile(fileData) {
-		//Get initial content from local file
-		logger.debug({
-			description: 'getContentFromFile called', fileData,
-			func: 'getContentFromFile', obj: 'Application'
-		});
-		return new Promise(resolve => {
-			try {
-				let reader = new FileReader();
-				logger.debug({
-					description: 'reader created', reader,
-					func: 'getContentFromFile', obj: 'Application'
-				});
-				reader.onload = e => {
-					const contents = e.target.result;
-					logger.debug({
-						description: 'Contents loaded', contents,
-						func: 'getContentFromFile', obj: 'Application'
-					});
-					resolve(contents);
-				}
-				reader.readAsText(fileData);
-			} catch(error){
-				logger.error({
-					description: 'Error getting file contents.', error,
-					func: 'getContentFromFile', obj: 'Application'
-				});
-				reject(error);
-			}
-		});
-	}
+
 	/**
 	 * @description Add a file to Firebase
 	 * @param {Object} fileData - Data object for new file
 	 * @param {String} fileData.path - Path of file within project
 	 * @param {String} fileData.content - Content of file
 	 */
-	addToFb(fileData) {
+	addToFb(addData) {
 		logger.debug({
-			description: 'Add to fb called.', fileData,
+			description: 'Add to fb called.', addData,
 			func: 'addToFb', obj: 'Files'
 		});
-		if (isArray(fileData)) {
+		if (!addData) {
+			logger.debug({
+				description: 'Object data is required to add.', addData,
+				func: 'addToFb', obj: 'Files'
+			});
+			return Promise.reject({
+				message: 'Object data is required to add.'
+			});
+		}
+		if (isArray(addData)) {
 			let promises = [];
-			fileData.forEach(file => {
+			addData.forEach(file => {
 				promises.push(this.addToFb(file));
 			});
 			return Promise.all(promises);
 		}
-		if (fileData.size) {
-			return this.addLocalToFb(fileData);
+		const { size, path, name, type } = addData;
+		if (size) {
+			return this.addLocalToFb(addData);
 		}
-		if (!fileData || !fileData.path) {
+		if (!path) {
 			logger.error({
 				description: 'Invalid file data. Path must be included.',
 				func: 'addToFb', obj: 'Files'
@@ -290,38 +233,27 @@ export default class Files {
 				message: 'Invalid file data. Path must be included.'
 			});
 		}
-		let file = new File({app: this.app, fileData});
-		return file.save();
-	}
-	addLocalToFb(fileData) {
-		logger.debug({
-			description: 'Add local to fb called.', fileData,
-			func: 'addLocalToFb', obj: 'Files'
-		});
-		return this.getContentFromFile(fileData).then(content => {
-			logger.info({
-				description: 'Content loaded.', content,
-				func: 'addLocalToFb', obj: 'Files'
-			});
-			fileData.content = content;
-			fileData.path = fileData.name;
-			const file = new File({app: this.app, fileData});
-			logger.info({
-				description: 'File object created.', file,
-				func: 'addLocalToFb', obj: 'Files'
-			});
-			return file.save();
-		});
+		let newData = {project: this.project, data: { path }};
+		if(name){
+			newData.data.name = name;
+		}
+		if (type && type === 'folder') {
+			return new Folder(newData).save();
+		} else {
+			return new File(newData).save();
+		}
 	}
 	/**
-	 * @description Delete a file from Firebase
+	 * @description Delete a file or folder from Firebase
+	 * @param {Object} objData - Data of file or folder
+	 * @param {String} path - Path of file or folder
 	 */
-	delFromFb(fileData) {
+	delFromFb(data) {
 		logger.debug({
-			description: 'Del from fb called.', fileData,
+			description: 'Del from fb called.', data,
 			func: 'delFromFb', obj: 'Files'
 		});
-		if (!fileData || !fileData.path) {
+		if (!data || !data.path) {
 			logger.error({
 				description: 'Invalid file data. Path must be included.',
 				func: 'delFromFb', obj: 'Files'
@@ -330,7 +262,7 @@ export default class Files {
 				message: 'Invalid file data. Path must be included.'
 			});
 		}
-		let file = new File({app: this.app, fileData});
+		let file = new File({project: this.project, data});
 		return new Promise((resolve, reject) => {
 			file.fbRef.remove(fileData, err => {
 				if (!err) {
@@ -342,34 +274,67 @@ export default class Files {
 		});
 	}
 	/**
+	 * @description Upload a local file to Firebase
+	 * @param {File} file - Local file with content to be uploaded
+	 */
+	addLocalToFb(data) {
+		logger.debug({
+			description: 'Add local to fb called.', data,
+			func: 'addLocalToFb', obj: 'Files'
+		});
+		if (!data) {
+			logger.error({
+				description: 'File is required to upload to Firebase.',
+				func: 'addLocalToFb', obj: 'Files'
+			});
+			return Promise.reject({
+				message: 'File is required to upload to Firebase.'
+			});
+		}
+		return getContentFromFile(data).then(content => {
+			logger.debug({
+				description: 'Content loaded from local file.', content,
+				func: 'addLocalToFb', obj: 'Files'
+			});
+			data.content = content;
+			data.path = data.name;
+			const file = new File({project: this.project, data});
+			logger.info({
+				description: 'File object created.', file,
+				func: 'addLocalToFb', obj: 'Files'
+			});
+			return file.save();
+		});
+	}
+	/**
 	 * @description Get files list from S3
 	 */
 	getFromS3() {
-		if (!this.app.frontend || !this.app.frontend.bucketName) {
+		if (!this.project.frontend || !this.project.frontend.bucketName) {
 			logger.warn({
-				description: 'Application Frontend data not available. Calling .get().',
-				app: this.app, func: 'getFromS3', obj: 'Files'
+				description: 'Files Frontend data not available. Calling .get().',
+				project: this.project, func: 'getFromS3', obj: 'Files'
 			});
-			return this.app.get().then(applicationData => {
+			return this.project.get().then(applicationData => {
 				logger.log({
-					description: 'Application get returned.',
+					description: 'Files get returned.',
 					data: applicationData, func: 'getFromS3', obj: 'Files'
 				});
-				this.app = applicationData;
+				this.project = applicationData;
 				if (has(applicationData, 'frontend')) {
 					return this.get();
 				} else {
 					logger.error({
-						description: 'Application does not have Frontend to get files from.',
+						description: 'Files does not have Frontend to get files from.',
 						func: 'getFromS3', obj: 'Files'
 					});
 					return Promise.reject({
-						message: 'Application does not have frontend to get files from.'
+						message: 'Files does not have frontend to get files from.'
 					});
 				}
 			}, err => {
 				logger.error({
-					description: 'Application Frontend data not available. Make sure to call .get().',
+					description: 'Files Frontend data not available. Make sure to call .get().',
 					error: err, func: 'getFromS3', obj: 'Files'
 				});
 				return Promise.reject({
@@ -383,7 +348,7 @@ export default class Files {
 				setAWSConfig();
 			}
 			const s3 = new AWS.S3();
-			const listParams = {Bucket: this.app.frontend.bucketName};
+			const listParams = {Bucket: this.project.frontend.bucketName};
 			return new Promise((resolve, reject) => {
 				s3.listObjects(listParams, (err, data) => {
 					if (!err) {
@@ -403,6 +368,71 @@ export default class Files {
 			});
 		}
 	}
+	/**
+	 * @description build child structure from files list
+	 */
+	buildStructure() {
+		logger.debug({
+			description: 'Build Structure called.',
+			func: 'buildStructure', obj: 'Files'
+		});
+		return this.get().then(filesArray => {
+			logger.log({
+				description: 'Child struct from array.',
+				childStructure: childStruct,
+				func: 'buildStructure', obj: 'Files'
+			});
+			const childStruct = childrenStructureFromArray(filesArray);
+			//TODO: have child objects have correct classes (file/folder)
+			logger.log({
+				description: 'Child struct from array.',
+				childStructure: childStruct,
+				func: 'buildStructure', obj: 'Files'
+			});
+			return childStruct;
+		}, error => {
+			logger.error({
+				description: 'Error getting application files.',
+				error, func: 'buildStructure', obj: 'Files'
+			});
+			return Promise.reject({
+				message: 'Error getting files.',
+				error
+			});
+		});
+	}
+	/**
+	 * @description sync file structure from Firebase
+	 */
+	syncStructure() {
+		//TODO: Determine if it is worth storing this in the built structure
+		logger.debug({
+			description: 'Build Structure called.',
+			func: 'syncStructure', obj: 'Files'
+		});
+		return this.sync().then(filesArray => {
+			logger.log({
+				description: 'Child struct from array.',
+				childStruct, func: 'syncStructure', obj: 'Files'
+			});
+			const childStruct = childrenStructureFromArray(filesArray);
+			//TODO: have child objects have correct classes (file/folder)
+			logger.log({
+				description: 'Child struct from array.',
+				childStruct, func: 'syncStructure', obj: 'Files'
+			});
+			return childStruct;
+		}, error => {
+			logger.error({
+				description: 'Error getting application files.',
+				error, func: 'syncStructure', obj: 'Files'
+			});
+			return Promise.reject({
+				message: 'Error getting files.',
+				error
+			});
+		});
+	}
 }
 //------------------ Utility Functions ------------------//
 // AWS Config
@@ -412,6 +442,37 @@ function setAWSConfig() {
 		IdentityPoolId: config.aws.cognito.poolId
 	}),
 		region: config.aws.region
+	});
+}
+function getContentFromFile(fileData) {
+	//Get initial content from local file
+	logger.debug({
+		description: 'getContentFromFile called', fileData,
+		func: 'getContentFromFile', obj: 'Files'
+	});
+	return new Promise(resolve => {
+		try {
+			let reader = new FileReader();
+			logger.debug({
+				description: 'reader created', reader,
+				func: 'getContentFromFile', obj: 'Files'
+			});
+			reader.onload = e => {
+				const contents = e.target.result;
+				logger.debug({
+					description: 'Contents loaded', contents,
+					func: 'getContentFromFile', obj: 'Files'
+				});
+				resolve(contents);
+			}
+			reader.readAsText(fileData);
+		} catch(error){
+			logger.error({
+				description: 'Error getting file contents.', error,
+				func: 'getContentFromFile', obj: 'Files'
+			});
+			reject(error);
+		}
 	});
 }
 /**

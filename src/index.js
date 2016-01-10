@@ -1,126 +1,119 @@
 import { isString, isObject } from 'lodash';
 import config from './config';
 import Matter from 'kyper-matter';
-import Application from './classes/Application';
+import Project from './classes/Project';
 import * as Actions from './actions';
+
 /**Grout Client Class
  * @description Extending matter provides token storage and login/logout/signup capabilities
  */
 import matter from './classes/Matter';
+const { logger } = matter.utils;
 export default class Grout extends Matter {
-	//TODO: Use getter/setter to make this not a function
-	constructor(appName, groutOptions) {
-		//Call matter with tessellate
-		const name = (appName && isString(appName)) ? appName : config.appName;
+	constructor(projectName, groutOptions) {
+		const name = (projectName && isString(projectName)) ? projectName : config.defaultProject;
 		let options = (groutOptions && isObject(groutOptions)) ? groutOptions : config.matterSettings;
-		//handle No App name provided
-		if(isObject(appName)){
-			options = appName;
+		if(isObject(projectName)){
+			options = projectName;
 		}
 		config.applySettings(options);
 		super(name, config.matterSettings);
 	}
 	//Start a new Projects Action
 	get Projects() {
-		this.utils.logger.debug({
-			description: 'Projects Action called.', action: new Actions.Projects({app: this}),
-			func: 'Projects', obj: 'Grout'
+		let action = new Actions.Projects({project: this});
+		logger.debug({
+			description: 'Projects Action called.',
+			action, func: 'Projects', obj: 'Grout'
 		});
-		return new Actions.Projects({app: this});
+		return action;
 	}
 	//Start a new Project action
 	Project(projectName) {
-		this.utils.logger.debug({
-			description: 'Project action called.',
-			projectName, project: new Application(projectName),
-			func: 'Project', obj: 'Grout'
+		let project = new Project(projectName);
+		logger.debug({
+			description: 'Project action called.', projectName,
+			project, func: 'Project', obj: 'Grout'
 		});
-		return new Application(projectName);
+		return project;
 	}
-	//Start a new Projects Action
-	get Apps() {
-		this.utils.logger.debug({
-			description: 'Projects Action called.', action: new Actions.Projects({app: this}),
-			func: 'Projects', obj: 'Grout'
-		});
-		return new Actions.Projects({app: this});
-	}
-	//Start a new Project action
-	App(projectName) {
-		this.utils.logger.debug({
-			description: 'Project action called.',
-			projectName, action: new Application(projectName),
-			func: 'Projects', obj: 'Grout'
-		});
-		return new Application(projectName);
-	}
-	//Start a new Apps Action
-	get Templates() {
-		this.utils.logger.debug({
-			description: 'Templates Action called.',
-			func: 'Templates', obj: 'Grout'
-		});
-		return new Actions.Templates({app: this});
-	}
-	//Start a new App action
-	Template(templateData) {
-		this.utils.logger.debug({
-			description: 'Template Action called.', templateData,
-			template: new Actions.Template({app: this, callData: templateData}), func: 'Template', obj: 'Grout'
-		});
-		return new Actions.Template({app: this, callData: templateData});
-	}
+
 	//Start a new Accounts action
 	get Accounts() {
-		this.utils.logger.debug({
+		const action = new Actions.Accounts({project: this});
+		logger.debug({
 			description: 'Account Action called.',
-			action: new Actions.Accounts({app: this}), func: 'users', obj: 'Grout'
+			action, func: 'Accounts', obj: 'Grout'
 		});
-		return new Actions.Accounts({app: this});
+		return new Actions.Accounts({project: this});
 	}
 	//Start a new Account action
-	Account(userData) {
-		this.utils.logger.debug({
-			description: 'Account Action called.',
-			userData, user: new Actions.Account({app: this, callData: userData}),
-			func: 'user', obj: 'Grout'
+	Account(accountData) {
+		const action = new Actions.Account({project: this, callData: accountData});
+		logger.debug({
+			description: 'Account Action called.', accountData,
+			action, func: 'Account', obj: 'Grout'
 		});
-		return new Actions.Account({app:this, callData: userData});
-	}
-	//ALIAS OF ACCOUNTS
-	//Start a new Accounts action
-	get Users() {
-		this.utils.logger.debug({
-			description: 'Accounts Action called.',
-			action: new Actions.Accounts({app: this}), func: 'Users', obj: 'Grout'
-		});
-		return new Actions.Accounts({app: this});
-	}
-	//ALIAS OF ACCOUNT
-	//Start a new Account action
-	User(userData) {
-		this.utils.logger.debug({
-			description: 'Account Action called.',
-			userData, user: new Actions.Account({app:this, callData: userData}),
-			func: 'user', obj: 'Grout'
-		});
-		return new Actions.Account({app:this, callData: userData});
+		return action;
 	}
 	//Start a new Groups action
 	get Groups() {
-		this.utils.logger.debug({
+		const action = new Actions.Groups({project: this});
+		logger.debug({
 			description: 'Groups Action called.',
-			action: new Actions.Groups({app: this}), func: 'groups', obj: 'Grout'
+			action, func: 'groups', obj: 'Grout'
 		});
-		return new Actions.Groups({app: this});
+		return action;
 	}
-	//Start a new Group action
+	/**
+	 * @description Start a new Group action
+	 * @param {Object|String} groupData - Name of group or object containing name parameter
+	 */
 	Group(groupData) {
-		this.utils.logger.debug({
+		const action = new Actions.Group({project:this, callData: groupData})
+		logger.debug({
 			description: 'Group Action called.', groupData,
-			action: new Actions.Group({app:this, callData: groupData}),
-			func: 'group', obj: 'Grout'
+			action, func: 'group', obj: 'Grout'
 		});
-		return new Actions.Group({app:this, callData: groupData});
+		return new Actions.Group({project:this, callData: groupData});
+	}
+	/**
+	 * @description Start a new Templates Action
+	 */
+	get Templates() {
+		const action = new Actions.Templates({project: this});
+		logger.debug({
+			description: 'Templates Action called.', action,
+			func: 'Templates', obj: 'Grout'
+		});
+		return action;
+	}
+	/**
+	 * @description Start a new Template action
+	 * @param {Object|String} templateData - Name of template or object containing name parameter
+	 */
+	Template(templateData) {
+		const action = new Actions.Template({project: this, callData: templateData});
+		logger.debug({
+			description: 'Template Action called.', templateData,
+			action, func: 'Template', obj: 'Grout'
+		});
+		return action;
+	}
+	//Alias of Projects
+	get Apps() {
+		return this.Projects;
+	}
+	//Alias of Project
+	App(projectData) {
+		return this.Project(projectData);
+	}
+	//Alias of Accounts
+	get Users() {
+		return this.Accounts;
+	}
+	//Alias of Account
+	User(accountData) {
+		return this.Account(accountData);
 	}
 }

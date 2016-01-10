@@ -22,7 +22,7 @@ let defaultConfig = {
 	defaultServerUrl:'http://tessellate.elasticbeanstalk.com',
 	tokenName: 'grout',
 	fbUrl: 'https://kyper-tech.firebaseio.com/tessellate',
-	appName: 'tessellate',
+	defaultProject: 'tessellate',
 	aws: {
 		region: 'us-east-1',
 		cognito: {
@@ -69,8 +69,6 @@ class Config {
 	}
 	set envName(newEnv) {
 		envName = newEnv;
-		// this.envName = newEnv;
-		// console.log('Environment name set:', envName);
 	}
 	get env() {
 		return defaultConfig.envs[envName];

@@ -72,9 +72,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _kyperMatter2 = _interopRequireDefault(_kyperMatter);
 
-	var _Application = __webpack_require__(112);
+	var _Project2 = __webpack_require__(113);
 
-	var _Application2 = _interopRequireDefault(_Application);
+	var _Project3 = _interopRequireDefault(_Project2);
 
 	var _actions = __webpack_require__(93);
 
@@ -93,24 +93,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 	/**Grout Client Class
 	 * @description Extending matter provides token storage and login/logout/signup capabilities
 	 */
 
+	var logger = _Matter3.default.utils.logger;
+
 	var Grout = (function (_Matter) {
 		_inherits(Grout, _Matter);
 
-		//TODO: Use getter/setter to make this not a function
-
-		function Grout(appName, groutOptions) {
+		function Grout(projectName, groutOptions) {
 			_classCallCheck(this, Grout);
 
-			//Call matter with tessellate
-			var name = appName && (0, _lodash.isString)(appName) ? appName : _config2.default.appName;
+			var name = projectName && (0, _lodash.isString)(projectName) ? projectName : _config2.default.defaultProject;
 			var options = groutOptions && (0, _lodash.isObject)(groutOptions) ? groutOptions : _config2.default.matterSettings;
-			//handle No App name provided
-			if ((0, _lodash.isObject)(appName)) {
-				options = appName;
+			if ((0, _lodash.isObject)(projectName)) {
+				options = projectName;
 			}
 			_config2.default.applySettings(options);
 			return _possibleConstructorReturn(this, Object.getPrototypeOf(Grout).call(this, name, _config2.default.matterSettings));
@@ -122,137 +121,131 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			//Start a new Project action
 			value: function Project(projectName) {
-				this.utils.logger.debug({
-					description: 'Project action called.',
-					projectName: projectName, project: new _Application2.default(projectName),
-					func: 'Project', obj: 'Grout'
+				var project = new _Project3.default(projectName);
+				logger.debug({
+					description: 'Project action called.', projectName: projectName,
+					project: project, func: 'Project', obj: 'Grout'
 				});
-				return new _Application2.default(projectName);
+				return project;
 			}
-			//Start a new Projects Action
 
-		}, {
-			key: 'App',
-
-			//Start a new Project action
-			value: function App(projectName) {
-				this.utils.logger.debug({
-					description: 'Project action called.',
-					projectName: projectName, action: new _Application2.default(projectName),
-					func: 'Projects', obj: 'Grout'
-				});
-				return new _Application2.default(projectName);
-			}
-			//Start a new Apps Action
-
-		}, {
-			key: 'Template',
-
-			//Start a new App action
-			value: function Template(templateData) {
-				this.utils.logger.debug({
-					description: 'Template Action called.', templateData: templateData,
-					template: new Actions.Template({ app: this, callData: templateData }), func: 'Template', obj: 'Grout'
-				});
-				return new Actions.Template({ app: this, callData: templateData });
-			}
 			//Start a new Accounts action
 
 		}, {
 			key: 'Account',
 
 			//Start a new Account action
-			value: function Account(userData) {
-				this.utils.logger.debug({
-					description: 'Account Action called.',
-					userData: userData, user: new Actions.Account({ app: this, callData: userData }),
-					func: 'user', obj: 'Grout'
+			value: function Account(accountData) {
+				var action = new Actions.Account({ project: this, callData: accountData });
+				logger.debug({
+					description: 'Account Action called.', accountData: accountData,
+					action: action, func: 'Account', obj: 'Grout'
 				});
-				return new Actions.Account({ app: this, callData: userData });
-			}
-			//ALIAS OF ACCOUNTS
-			//Start a new Accounts action
-
-		}, {
-			key: 'User',
-
-			//ALIAS OF ACCOUNT
-			//Start a new Account action
-			value: function User(userData) {
-				this.utils.logger.debug({
-					description: 'Account Action called.',
-					userData: userData, user: new Actions.Account({ app: this, callData: userData }),
-					func: 'user', obj: 'Grout'
-				});
-				return new Actions.Account({ app: this, callData: userData });
+				return action;
 			}
 			//Start a new Groups action
 
 		}, {
 			key: 'Group',
 
-			//Start a new Group action
+			/**
+	   * @description Start a new Group action
+	   * @param {Object|String} groupData - Name of group or object containing name parameter
+	   */
 			value: function Group(groupData) {
-				this.utils.logger.debug({
+				var action = new Actions.Group({ project: this, callData: groupData });
+				logger.debug({
 					description: 'Group Action called.', groupData: groupData,
-					action: new Actions.Group({ app: this, callData: groupData }),
-					func: 'group', obj: 'Grout'
+					action: action, func: 'group', obj: 'Grout'
 				});
-				return new Actions.Group({ app: this, callData: groupData });
+				return new Actions.Group({ project: this, callData: groupData });
+			}
+			/**
+	   * @description Start a new Templates Action
+	   */
+
+		}, {
+			key: 'Template',
+
+			/**
+	   * @description Start a new Template action
+	   * @param {Object|String} templateData - Name of template or object containing name parameter
+	   */
+			value: function Template(templateData) {
+				var action = new Actions.Template({ project: this, callData: templateData });
+				logger.debug({
+					description: 'Template Action called.', templateData: templateData,
+					action: action, func: 'Template', obj: 'Grout'
+				});
+				return action;
+			}
+			//Alias of Projects
+
+		}, {
+			key: 'App',
+
+			//Alias of Project
+			value: function App(projectData) {
+				return this.Project(projectData);
+			}
+			//Alias of Accounts
+
+		}, {
+			key: 'User',
+
+			//Alias of Account
+			value: function User(accountData) {
+				return this.Account(accountData);
 			}
 		}, {
 			key: 'Projects',
 			get: function get() {
-				this.utils.logger.debug({
-					description: 'Projects Action called.', action: new Actions.Projects({ app: this }),
-					func: 'Projects', obj: 'Grout'
+				var action = new Actions.Projects({ project: this });
+				logger.debug({
+					description: 'Projects Action called.',
+					action: action, func: 'Projects', obj: 'Grout'
 				});
-				return new Actions.Projects({ app: this });
-			}
-		}, {
-			key: 'Apps',
-			get: function get() {
-				this.utils.logger.debug({
-					description: 'Projects Action called.', action: new Actions.Projects({ app: this }),
-					func: 'Projects', obj: 'Grout'
-				});
-				return new Actions.Projects({ app: this });
-			}
-		}, {
-			key: 'Templates',
-			get: function get() {
-				this.utils.logger.debug({
-					description: 'Templates Action called.',
-					func: 'Templates', obj: 'Grout'
-				});
-				return new Actions.Templates({ app: this });
+				return action;
 			}
 		}, {
 			key: 'Accounts',
 			get: function get() {
-				this.utils.logger.debug({
+				var action = new Actions.Accounts({ project: this });
+				logger.debug({
 					description: 'Account Action called.',
-					action: new Actions.Accounts({ app: this }), func: 'users', obj: 'Grout'
+					action: action, func: 'Accounts', obj: 'Grout'
 				});
-				return new Actions.Accounts({ app: this });
-			}
-		}, {
-			key: 'Users',
-			get: function get() {
-				this.utils.logger.debug({
-					description: 'Accounts Action called.',
-					action: new Actions.Accounts({ app: this }), func: 'Users', obj: 'Grout'
-				});
-				return new Actions.Accounts({ app: this });
+				return new Actions.Accounts({ project: this });
 			}
 		}, {
 			key: 'Groups',
 			get: function get() {
-				this.utils.logger.debug({
+				var action = new Actions.Groups({ project: this });
+				logger.debug({
 					description: 'Groups Action called.',
-					action: new Actions.Groups({ app: this }), func: 'groups', obj: 'Grout'
+					action: action, func: 'groups', obj: 'Grout'
 				});
-				return new Actions.Groups({ app: this });
+				return action;
+			}
+		}, {
+			key: 'Templates',
+			get: function get() {
+				var action = new Actions.Templates({ project: this });
+				logger.debug({
+					description: 'Templates Action called.', action: action,
+					func: 'Templates', obj: 'Grout'
+				});
+				return action;
+			}
+		}, {
+			key: 'Apps',
+			get: function get() {
+				return this.Projects;
+			}
+		}, {
+			key: 'Users',
+			get: function get() {
+				return this.Accounts;
 			}
 		}]);
 
@@ -15836,7 +15829,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = new _kyperMatter2.default(_config2.default.appName, _config2.default.matterSettings);
+	exports.default = new _kyperMatter2.default(_config2.default.defaultProject, _config2.default.matterSettings);
 	module.exports = exports['default'];
 
 /***/ },
@@ -15878,7 +15871,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		defaultServerUrl: 'http://tessellate.elasticbeanstalk.com',
 		tokenName: 'grout',
 		fbUrl: 'https://kyper-tech.firebaseio.com/tessellate',
-		appName: 'tessellate',
+		defaultProject: 'tessellate',
 		aws: {
 			region: 'us-east-1',
 			cognito: {
@@ -15942,8 +15935,6 @@ return /******/ (function(modules) { // webpackBootstrap
 			key: 'envName',
 			set: function set(newEnv) {
 				envName = newEnv;
-				// this.envName = newEnv;
-				// console.log('Environment name set:', envName);
 			}
 		}, {
 			key: 'env',
@@ -29274,17 +29265,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function init(actionData) {
 	      logger.debug({
 	        description: 'Init action called.',
-	        actionData: actionData, func: 'url', obj: 'Action'
+	        actionData: actionData, func: 'init', obj: 'Action'
 	      });
-	      if (!actionData || !actionData.app) {
+	      if (!actionData || !actionData.project) {
 	        logger.error({
-	          description: 'Action data with app is required.',
-	          actionData: actionData, func: 'url', obj: 'Action'
+	          description: 'Action data with project is required.',
+	          actionData: actionData, func: 'init', obj: 'Action'
 	        });
-	        throw Error('Action data with app is required.');
+	        throw Error('Action data with project is required.');
 	      }
 	      this.isList = actionData ? false : true;
-	      this.app = actionData.app;
+	      (0, _lodash.extend)(this, actionData);
 	      if (!this.isList) {
 	        this.actionData = actionData;
 	        if ((0, _lodash.isString)(actionData)) {
@@ -29431,9 +29422,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'endpointArray',
 	    get: function get() {
 	      var endpointArray = [_Matter2.default.endpoint, this.name];
-	      if ((0, _lodash.has)(this, 'app') && (0, _lodash.has)(this.app, 'name') && this.app.name !== _config2.default.appName) {
-	        //Splice apps, appName into index 1
-	        endpointArray.splice(1, 0, 'apps', this.app.name);
+	      if ((0, _lodash.has)(this, 'project') && (0, _lodash.has)(this.project, 'name') && this.project.name !== _config2.default.defaultProject) {
+	        //Splice apps, defaultProject into index 1
+	        endpointArray.splice(1, 0, 'apps', this.project.name);
 	      }
 	      return endpointArray;
 	    }
@@ -29445,11 +29436,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'url',
 	    get: function get() {
+	      var urlStr = this.endpointArray.join('/');
 	      logger.debug({
-	        description: 'Url created.', url: this.endpointArray.join('/'),
+	        description: 'Url created.', urlStr: urlStr,
 	        func: 'url', obj: 'Action'
 	      });
-	      return this.endpointArray.join('/');
+	      return urlStr;
 	    }
 	  }]);
 
@@ -29481,6 +29473,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lodash = __webpack_require__(4);
 
+	var _Files = __webpack_require__(112);
+
+	var _Files2 = _interopRequireDefault(_Files);
+
 	var _firebase = __webpack_require__(52);
 
 	var _firebase2 = _interopRequireDefault(_firebase);
@@ -29498,8 +29494,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	//Convenience vars
 	var logger = _Matter2.default.utils.logger;
 
-	var firepad = getFirepadLib();
-
 	var File = (function () {
 		function File(actionData) {
 			_classCallCheck(this, File);
@@ -29511,28 +29505,26 @@ return /******/ (function(modules) { // webpackBootstrap
 				});
 				throw new Error('File data with path and app is needed to create file action.');
 			}
-			var fileData = actionData.fileData;
-			var app = actionData.app;
+			var data = actionData.data;
+			var project = actionData.project;
 
-			if (!fileData) {
+			if (!data) {
 				logger.error({
-					description: 'Action data must be an object that includes fileData.',
+					description: 'Action data must be an object that includes data.',
 					func: 'constructor', obj: 'File'
 				});
-				//TODO: Get appName from path data?
-				throw new Error('File data must be an object that includes fileData.');
+				throw new Error('File data must be an object that includes data.');
 			}
-			if (!app) {
+			if (!project) {
 				logger.error({
-					description: 'Action data must be an object that includes app.',
+					description: 'Action data must be an object that includes project.',
 					func: 'constructor', obj: 'File'
 				});
-				//TODO: Get appName from path data?
-				throw new Error('File data must be an object that includes app.');
+				throw new Error('File data must be an object that includes project.');
 			}
 			this.type = 'file';
-			this.app = app;
-			(0, _lodash.extend)(this, fileData);
+			this.project = project;
+			(0, _lodash.extend)(this, data);
 			if (!this.path) {
 				if (!this.ref && !this.name) {
 					logger.error({
@@ -29544,8 +29536,10 @@ return /******/ (function(modules) { // webpackBootstrap
 				this.path = this.name ? this.name : this.pathArrayFromRef.join('/');
 			}
 			this.pathArray = this.path.split('/');
-			//Get name from data or from pathArray
-			this.name = fileData.name ? fileData.name : this.pathArray[this.pathArray.length - 1];
+			if (!this.name) {
+				//Get name from data or from pathArray
+				this.name = this.pathArray[this.pathArray.length - 1];
+			}
 			logger.debug({
 				description: 'File object constructed.', file: this,
 				func: 'constructor', obj: 'File'
@@ -29634,21 +29628,28 @@ return /******/ (function(modules) { // webpackBootstrap
 					description: 'addToFb called.', file: this,
 					func: 'addToFb', obj: 'Files'
 				});
-				var fbData = { meta: { path: this.path }, original: this.content };
 				var fbRef = this.fbRef;
+				var path = this.path;
+				var fileType = this.fileType;
+				var content = this.content;
+				var name = this.name;
 
+				var fbData = { meta: { path: path, fileType: fileType, name: name } };
+				if (content) {
+					fbData.original = content;
+				}
 				return new Promise(function (resolve, reject) {
 					fbRef.set(fbData, function (error) {
 						if (!error) {
 							logger.info({
 								description: 'File successfully added to Firebase.',
-								func: 'addToFb', obj: 'Files'
+								func: 'addToFb', obj: 'File'
 							});
 							resolve(fbData);
 						} else {
 							logger.error({
 								description: 'Error creating file on Firebase.',
-								error: error, func: 'addToFb', obj: 'Files'
+								error: error, func: 'addToFb', obj: 'File'
 							});
 							reject(error);
 						}
@@ -29662,9 +29663,6 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'removeFromFb',
 			value: function removeFromFb() {
-				var fbData = { meta: { path: this.path } };
-				var fbRef = this.fbRef;
-
 				return new Promise(function (resolve, reject) {
 					fbRef.remove(function (error) {
 						if (!error) {
@@ -29688,13 +29686,13 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function getFromS3() {
 				var _this2 = this;
 
-				if (!this.app || !this.app.frontend) {
+				if (!this.project || !this.project.frontend) {
 					logger.log({
 						description: 'Application Frontend data not available. Calling applicaiton get.',
 						func: 'get', obj: 'File'
 					});
-					return this.app.get().then(function (appData) {
-						_this2.app = appData;
+					return this.project.get().then(function (appData) {
+						_this2.project = appData;
 						logger.log({
 							description: 'Application get successful. Getting file.',
 							app: appData, func: 'get', obj: 'File'
@@ -29721,7 +29719,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						}
 						var s3 = new _awsSdk2.default.S3();
 						var getData = {
-							Bucket: _this2.app.frontend.bucketName,
+							Bucket: _this2.project.frontend.bucketName,
 							Key: _this2.path
 						};
 						//Set contentType from actionData to ContentType parameter of new object
@@ -29782,7 +29780,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					description: 'File publish called.', file: this,
 					fileData: fileData, func: 'publish', obj: 'File'
 				});
-				if (!this.app.frontend) {
+				if (!this.project.frontend) {
 					logger.error({
 						description: 'Application Frontend data not available. Make sure to call .get().',
 						func: 'publish', obj: 'File'
@@ -29800,7 +29798,7 @@ return /******/ (function(modules) { // webpackBootstrap
 							};
 						}
 						var saveParams = {
-							Bucket: _this3.app.frontend.bucketName,
+							Bucket: _this3.project.frontend.bucketName,
 							Key: fileData.path,
 							Body: fileData.content,
 							ACL: 'public-read'
@@ -29853,16 +29851,16 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function removeFromS3() {
 				var _this4 = this;
 
-				if (!this.app || !this.app.frontend) {
+				if (!this.project || !this.project.frontend) {
 					logger.log({
 						description: 'Application Frontend data not available. Calling applicaiton get.',
 						func: 'removeFromS3', obj: 'File'
 					});
-					return this.app.get().then(function (appData) {
-						_this4.app = appData;
+					return this.project.get().then(function (appData) {
+						_this4.project = appData;
 						logger.log({
 							description: 'Application get successful. Getting file.',
-							app: _this4.app, func: 'removeFromS3', obj: 'File'
+							app: _this4.project, func: 'removeFromS3', obj: 'File'
 						});
 						return _this4.get();
 					}, function (error) {
@@ -29886,7 +29884,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						}
 						var s3 = new _awsSdk2.default.S3();
 						var saveParams = {
-							Bucket: _this4.app.frontend.bucketName,
+							Bucket: _this4.project.frontend.bucketName,
 							Key: _this4.path
 						};
 						//Set contentType from actionData to ContentType parameter of new object
@@ -29978,6 +29976,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 					return;
 				}
+				var firepad = getFirepadLib();
 				if (typeof firepad.fromACE !== 'function') {
 					logger.error({
 						description: 'Firepad does not have fromACE method.',
@@ -30089,14 +30088,15 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'fbUrl',
 			get: function get() {
-				if (!this.app || !this.app.name) {
+				if (!this.project || !this.project.name) {
 					logger.error({
 						description: 'App information needed to generate fbUrl for File.',
 						file: this, func: 'fbRef', obj: 'File'
 					});
 					throw new Error('App information needed to generate fbUrl for File.');
 				}
-				return [_config2.default.fbUrl, 'files', this.app.name, this.safePath].join('/');
+				var files = new _Files2.default({ project: this.project });
+				return [files.fbUrl, this.safePath].join('/');
 			}
 		}, {
 			key: 'fbRef',
@@ -30117,6 +30117,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'headless',
 			get: function get() {
+				var firepad = getFirepadLib();
 				if (typeof firepad === 'undefined' || typeof firepad.Headless !== 'function') {
 					logger.error({
 						description: 'Firepad is required to get file content.',
@@ -33296,290 +33297,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); //Internal libs and config
-
-	//Actions and Classes
-
-	//External Libs
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _config = __webpack_require__(10);
-
-	var _config2 = _interopRequireDefault(_config);
-
-	var _lodash = __webpack_require__(4);
-
-	var _Matter = __webpack_require__(9);
-
-	var _Matter2 = _interopRequireDefault(_Matter);
-
-	var _actions = __webpack_require__(93);
-
-	var _Group2 = __webpack_require__(96);
-
-	var _Group3 = _interopRequireDefault(_Group2);
-
-	var _Files = __webpack_require__(113);
-
-	var _Files2 = _interopRequireDefault(_Files);
-
-	var _File2 = __webpack_require__(95);
-
-	var _File3 = _interopRequireDefault(_File2);
-
-	var _firebase = __webpack_require__(52);
-
-	var _firebase2 = _interopRequireDefault(_firebase);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	//Convenience vars
-	var _matter$utils = _Matter2.default.utils;
-	var request = _matter$utils.request;
-	var logger = _matter$utils.logger;
-	/**
-	 * Application class.
-	 *
-	 */
-
-	var Application = (function () {
-		function Application(appData) {
-			_classCallCheck(this, Application);
-
-			//Setup application data based on input
-			if (appData && (0, _lodash.isObject)(appData)) {
-				(0, _lodash.extend)(this, appData);
-			} else if (appData && (0, _lodash.isString)(appData)) {
-				this.name = appData;
-			}
-			if (_firebase2.default && (0, _lodash.has)(_config2.default, 'fbUrl') && (0, _lodash.has)(this, 'name')) {
-				this.fbUrl = _config2.default.fbUrl + '/' + this.name;
-				this.fbRef = new _firebase2.default(this.fbUrl);
-			}
-			logger.debug({
-				description: 'Application object created.', application: this,
-				func: 'constructor', obj: 'Application'
-			});
-		}
-
-		_createClass(Application, [{
-			key: 'get',
-
-			//Get applications or single application
-			value: function get() {
-				logger.debug({
-					description: 'Application get called.', func: 'get', obj: 'Application'
-				});
-				return request.get(this.appEndpoint).then(function (response) {
-					var application = new Application(response);
-					logger.info({
-						description: 'Application loaded successfully.',
-						response: response, application: application, func: 'get', obj: 'Application'
-					});
-					return application;
-				})['catch'](function (error) {
-					logger.error({
-						description: 'Error getting Application.',
-						message: error.response.text, error: error,
-						func: 'get', obj: 'Application'
-					});
-					return Promise.reject(error.response.text || error.response);
-				});
-			}
-			//Update an application
-
-		}, {
-			key: 'update',
-			value: function update(appData) {
-				logger.debug({
-					description: 'Application update called.',
-					func: 'update', obj: 'Application'
-				});
-				return request.put(this.appEndpoint, appData).then(function (response) {
-					logger.info({
-						description: 'Application updated successfully.',
-						response: response, func: 'update', obj: 'Application'
-					});
-					return new Application(response);
-				})['catch'](function (error) {
-					logger.error({
-						description: 'Error updating application.',
-						error: error, func: 'update', obj: 'Application'
-					});
-					return Promise.reject(error.response.text || error.response);
-				});
-			}
-		}, {
-			key: 'addStorage',
-			value: function addStorage() {
-				logger.debug({
-					description: 'Application add storage called.', application: this,
-					func: 'addStorage', obj: 'Application'
-				});
-				return request.post(this.appEndpoint + '/storage', {}).then(function (response) {
-					var application = new Application(response);
-					logger.info({
-						description: 'Storage successfully added to application.',
-						response: response, application: application, func: 'addStorage', obj: 'Application'
-					});
-					return application;
-				})['catch'](function (error) {
-					logger.error({
-						description: 'Error adding storage to application.',
-						error: error, func: 'addStorage', obj: 'Application'
-					});
-					return Promise.reject(error.response.text || error.response);
-				});
-			}
-		}, {
-			key: 'applyTemplate',
-			value: function applyTemplate(template) {
-				var _this = this;
-
-				logger.debug({
-					description: 'Applying template to project.',
-					func: 'applyTemplate', obj: 'Application'
-				});
-				return request.post(this.appEndpoint, { template: template }).then(function (response) {
-					logger.info({
-						description: 'Template successfully applied to application.',
-						response: response, application: _this,
-						func: 'applyTemplate', obj: 'Application'
-					});
-					return new Application(response);
-				})['catch'](function (error) {
-					logger.error({
-						description: 'Error applying template to application.',
-						error: error, application: _this,
-						func: 'applyTemplate', obj: 'Application'
-					});
-					return Promise.reject(error.response.text || error.response);
-				});
-			}
-			/**
-	   * @description Add collaborators to Project
-	   * @param {Array|String} collabs - Array list of Ids, or a string list of ids
-	   */
-
-		}, {
-			key: 'addCollaborators',
-			value: function addCollaborators(collabs) {
-				logger.debug({
-					description: 'Add collaborators called', collabs: collabs,
-					application: this, func: 'addCollaborators', obj: 'Application'
-				});
-				this.collaborators = collabs;
-				//Handle string of ids
-				if (!(0, _lodash.isArray)(collabs) && (0, _lodash.isString)(collabs)) {
-					this.collaborators = collabs.replace(' ').split(',');
-				}
-				logger.log({
-					description: 'Collaborators list added to application, calling update.',
-					application: this, func: 'addCollaborators', obj: 'Application'
-				});
-				return this.update(this);
-			}
-			//Files object that contains files methods
-
-		}, {
-			key: 'File',
-			value: function File(fileData) {
-				logger.debug({
-					description: 'Applications file action called.',
-					fileData: fileData, application: this,
-					func: 'file', obj: 'Application'
-				});
-				return new _File3.default({ app: this, fileData: fileData });
-			}
-		}, {
-			key: 'User',
-			value: function User(userData) {
-				logger.debug({
-					description: 'Applications user action called.',
-					userData: userData, application: this, func: 'user', obj: 'Application'
-				});
-				return new _actions.Account({ app: this, userData: userData });
-			}
-		}, {
-			key: 'Account',
-			value: function Account(userData) {
-				logger.debug({
-					description: 'Applications account action called.',
-					userData: userData, application: this,
-					func: 'user', obj: 'Application'
-				});
-				return new _actions.Account({ app: this, userData: userData });
-			}
-		}, {
-			key: 'Group',
-			value: function Group(groupData) {
-				logger.debug({
-					description: 'Applications group action called.',
-					groupData: groupData, application: this,
-					func: 'group', obj: 'Application'
-				});
-				return new _Group3.default({ app: this, groupData: groupData });
-			}
-		}, {
-			key: 'appEndpoint',
-			get: function get() {
-				return _Matter2.default.endpoint + '/apps/' + this.name;
-			}
-		}, {
-			key: 'Files',
-			get: function get() {
-				logger.debug({
-					description: 'Applications files action called.',
-					application: this, func: 'files', obj: 'Application'
-				});
-				return new _Files2.default({ app: this });
-			}
-		}, {
-			key: 'Users',
-			get: function get() {
-				logger.debug({
-					description: 'Applications users action called.',
-					application: this, func: 'user', obj: 'Application'
-				});
-				return new _actions.Accounts({ app: this });
-			}
-		}, {
-			key: 'Accounts',
-			get: function get() {
-				logger.debug({
-					description: 'Applications account action called.',
-					application: this, func: 'user', obj: 'Application'
-				});
-				return new _actions.Accounts({ app: this });
-			}
-		}, {
-			key: 'Groups',
-			get: function get() {
-				logger.debug({
-					description: 'Applications groups action called.',
-					application: this, func: 'groups', obj: 'Application'
-				});
-				return new _actions.Groups({ app: this });
-			}
-		}]);
-
-		return Application;
-	})();
-
-	exports.default = Application;
-	module.exports = exports['default'];
-
-/***/ },
-/* 113 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
@@ -33604,6 +33321,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _firebase2 = _interopRequireDefault(_firebase);
 
+	var _Project = __webpack_require__(113);
+
+	var _Project2 = _interopRequireDefault(_Project);
+
 	var _File = __webpack_require__(95);
 
 	var _File2 = _interopRequireDefault(_File);
@@ -33621,14 +33342,14 @@ return /******/ (function(modules) { // webpackBootstrap
 		function Files(filesData) {
 			_classCallCheck(this, Files);
 
-			if (!filesData) {
+			if (!filesData || !(0, _lodash.has)(filesData, 'project')) {
 				logger.error({
 					description: 'Action data object with name is required to start a Files Action.',
 					func: 'constructor', obj: 'Files'
 				});
 				throw new Error('Files Data object with name is required to start a Files action.');
 			}
-			this.app = (0, _lodash.has)(filesData, 'app') ? filesData.app : { name: filesData };
+			(0, _lodash.extend)(this, filesData);
 			logger.debug({
 				description: 'Files object constructed.',
 				func: 'constructor', obj: 'Files', files: this
@@ -33658,7 +33379,6 @@ return /******/ (function(modules) { // webpackBootstrap
 							func: 'get', obj: 'Files'
 						});
 						var filesArray = [];
-						// let filesPathArray =  this.pathArrayFromFbRef;
 						filesSnap.forEach(function (objSnap) {
 							var objData = objSnap.hasChild('meta') ? objSnap.child('meta').val() : { path: objSnap.key() };
 							//TODO: Have a better fallback for when meta does not exist
@@ -33730,6 +33450,11 @@ return /******/ (function(modules) { // webpackBootstrap
 				}
 				return this.addToFb(fileData);
 			}
+			/**
+	   * @description Add multiple files/folders to project files
+	   * @param {Array} filesData - Array of file objects to upload
+	   */
+
 		}, {
 			key: 'upload',
 			value: function upload(filesData) {
@@ -33741,8 +33466,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				} else {
 					var _ret = (function () {
 						logger.warn({
-							description: 'Add called with multiple files.', files: files,
-							app: _this3.app, func: 'upload', obj: 'Files'
+							description: 'Upload called with multiple files.', filesData: filesData,
+							project: _this3.project, func: 'upload', obj: 'Files'
 						});
 						var promises = [];
 						(0, _lodash.each)(filesData, function (file) {
@@ -33763,124 +33488,39 @@ return /******/ (function(modules) { // webpackBootstrap
 				}
 			}
 			/**
-	   * @description Delete file
+	   * @description Remove object from files (folder or file)
+	   */
+
+		}, {
+			key: 'remove',
+			value: function remove(objData) {
+				//TODO: Delete file from S3 as well if it exists
+				return this.delFromFb(objData);
+			}
+			/**
+	   * @description Alias for remove
 	   */
 
 		}, {
 			key: 'del',
-			value: function del(fileData) {
+			value: function del(objData) {
 				//TODO: Delete file from S3 as well if it exists
-				return this.delFromFb(fileData);
+				return this.remove(objData);
 			}
 		}, {
 			key: 'publish',
-			value: function publish() {}
-			//TODO: Publish all files
-
-			/**
-	   * @description build child structure from files list
-	   */
-
-		}, {
-			key: 'buildStructure',
-			value: function buildStructure() {
-				logger.debug({
-					description: 'Build Structure called.',
-					func: 'buildStructure', obj: 'Application'
-				});
-				return this.get().then(function (filesArray) {
-					logger.log({
-						description: 'Child struct from array.',
-						childStructure: childStruct,
-						func: 'buildStructure', obj: 'Application'
-					});
-					var childStruct = childrenStructureFromArray(filesArray);
-					//TODO: have child objects have correct classes (file/folder)
-					logger.log({
-						description: 'Child struct from array.',
-						childStructure: childStruct,
-						func: 'buildStructure', obj: 'Application'
-					});
-					return childStruct;
-				}, function (error) {
-					logger.error({
-						description: 'Error getting application files.',
-						error: error, func: 'buildStructure', obj: 'Application'
-					});
-					return Promise.reject({
-						message: 'Error getting files.',
-						error: error
-					});
-				});
-			}
-			/**
-	   * @description sync file structure from Firebase
-	   */
-
-		}, {
-			key: 'syncStructure',
-			value: function syncStructure() {
-				//TODO: Determine if it is worth storing this in the built structure
-				logger.debug({
-					description: 'Build Structure called.',
-					func: 'syncStructure', obj: 'Application'
-				});
-				return this.sync().then(function (filesArray) {
-					logger.log({
-						description: 'Child struct from array.',
-						childStruct: childStruct, func: 'syncStructure', obj: 'Application'
-					});
-					var childStruct = childrenStructureFromArray(filesArray);
-					//TODO: have child objects have correct classes (file/folder)
-					logger.log({
-						description: 'Child struct from array.',
-						childStruct: childStruct, func: 'syncStructure', obj: 'Application'
-					});
-					return childStruct;
-				}, function (error) {
-					logger.error({
-						description: 'Error getting application files.',
-						error: error, func: 'syncStructure', obj: 'Application'
-					});
-					return Promise.reject({
-						message: 'Error getting files.',
-						error: error
-					});
-				});
+			value: function publish() {
+				//TODO: Publish all files
 			}
 		}, {
-			key: 'getContentFromFile',
-			value: function getContentFromFile(fileData) {
-				//Get initial content from local file
-				logger.debug({
-					description: 'getContentFromFile called', fileData: fileData,
-					func: 'getContentFromFile', obj: 'Application'
-				});
-				return new Promise(function (resolve) {
-					try {
-						var reader = new FileReader();
-						logger.debug({
-							description: 'reader created', reader: reader,
-							func: 'getContentFromFile', obj: 'Application'
-						});
-						reader.onload = function (e) {
-							var contents = e.target.result;
-							logger.debug({
-								description: 'Contents loaded', contents: contents,
-								func: 'getContentFromFile', obj: 'Application'
-							});
-							resolve(contents);
-						};
-						reader.readAsText(fileData);
-					} catch (error) {
-						logger.error({
-							description: 'Error getting file contents.', error: error,
-							func: 'getContentFromFile', obj: 'Application'
-						});
-						reject(error);
-					}
-				});
+			key: 'addFolder',
+			value: function addFolder(folderData) {
+				var dataObj = folderData;
+				dataObj.app = this;
+				var folder = new Folder({ project: this });
+				return folder.save();
 			}
+
 			/**
 	   * @description Add a file to Firebase
 	   * @param {Object} fileData - Data object for new file
@@ -33890,17 +33530,26 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		}, {
 			key: 'addToFb',
-			value: function addToFb(fileData) {
+			value: function addToFb(addData) {
 				var _this4 = this;
 
 				logger.debug({
-					description: 'Add to fb called.', fileData: fileData,
+					description: 'Add to fb called.', addData: addData,
 					func: 'addToFb', obj: 'Files'
 				});
-				if ((0, _lodash.isArray)(fileData)) {
+				if (!addData) {
+					logger.debug({
+						description: 'Object data is required to add.', addData: addData,
+						func: 'addToFb', obj: 'Files'
+					});
+					return Promise.reject({
+						message: 'Object data is required to add.'
+					});
+				}
+				if ((0, _lodash.isArray)(addData)) {
 					var _ret2 = (function () {
 						var promises = [];
-						fileData.forEach(function (file) {
+						addData.forEach(function (file) {
 							promises.push(_this4.addToFb(file));
 						});
 						return {
@@ -33910,10 +33559,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 					if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
 				}
-				if (fileData.size) {
-					return this.addLocalToFb(fileData);
+				var size = addData.size;
+				var path = addData.path;
+				var name = addData.name;
+				var type = addData.type;
+
+				if (size) {
+					return this.addLocalToFb(addData);
 				}
-				if (!fileData || !fileData.path) {
+				if (!path) {
 					logger.error({
 						description: 'Invalid file data. Path must be included.',
 						func: 'addToFb', obj: 'Files'
@@ -33922,45 +33576,30 @@ return /******/ (function(modules) { // webpackBootstrap
 						message: 'Invalid file data. Path must be included.'
 					});
 				}
-				var file = new _File2.default({ app: this.app, fileData: fileData });
-				return file.save();
-			}
-		}, {
-			key: 'addLocalToFb',
-			value: function addLocalToFb(fileData) {
-				var _this5 = this;
-
-				logger.debug({
-					description: 'Add local to fb called.', fileData: fileData,
-					func: 'addLocalToFb', obj: 'Files'
-				});
-				return this.getContentFromFile(fileData).then(function (content) {
-					logger.info({
-						description: 'Content loaded.', content: content,
-						func: 'addLocalToFb', obj: 'Files'
-					});
-					fileData.content = content;
-					fileData.path = fileData.name;
-					var file = new _File2.default({ app: _this5.app, fileData: fileData });
-					logger.info({
-						description: 'File object created.', file: file,
-						func: 'addLocalToFb', obj: 'Files'
-					});
-					return file.save();
-				});
+				var newData = { project: this.project, data: { path: path } };
+				if (name) {
+					newData.data.name = name;
+				}
+				if (type && type === 'folder') {
+					return new Folder(newData).save();
+				} else {
+					return new _File2.default(newData).save();
+				}
 			}
 			/**
-	   * @description Delete a file from Firebase
+	   * @description Delete a file or folder from Firebase
+	   * @param {Object} objData - Data of file or folder
+	   * @param {String} path - Path of file or folder
 	   */
 
 		}, {
 			key: 'delFromFb',
-			value: function delFromFb(fileData) {
+			value: function delFromFb(data) {
 				logger.debug({
-					description: 'Del from fb called.', fileData: fileData,
+					description: 'Del from fb called.', data: data,
 					func: 'delFromFb', obj: 'Files'
 				});
-				if (!fileData || !fileData.path) {
+				if (!data || !data.path) {
 					logger.error({
 						description: 'Invalid file data. Path must be included.',
 						func: 'delFromFb', obj: 'Files'
@@ -33969,7 +33608,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						message: 'Invalid file data. Path must be included.'
 					});
 				}
-				var file = new _File2.default({ app: this.app, fileData: fileData });
+				var file = new _File2.default({ project: this.project, data: data });
 				return new Promise(function (resolve, reject) {
 					file.fbRef.remove(fileData, function (err) {
 						if (!err) {
@@ -33981,6 +33620,44 @@ return /******/ (function(modules) { // webpackBootstrap
 				});
 			}
 			/**
+	   * @description Upload a local file to Firebase
+	   * @param {File} file - Local file with content to be uploaded
+	   */
+
+		}, {
+			key: 'addLocalToFb',
+			value: function addLocalToFb(data) {
+				var _this5 = this;
+
+				logger.debug({
+					description: 'Add local to fb called.', data: data,
+					func: 'addLocalToFb', obj: 'Files'
+				});
+				if (!data) {
+					logger.error({
+						description: 'File is required to upload to Firebase.',
+						func: 'addLocalToFb', obj: 'Files'
+					});
+					return Promise.reject({
+						message: 'File is required to upload to Firebase.'
+					});
+				}
+				return getContentFromFile(data).then(function (content) {
+					logger.debug({
+						description: 'Content loaded from local file.', content: content,
+						func: 'addLocalToFb', obj: 'Files'
+					});
+					data.content = content;
+					data.path = data.name;
+					var file = new _File2.default({ project: _this5.project, data: data });
+					logger.info({
+						description: 'File object created.', file: file,
+						func: 'addLocalToFb', obj: 'Files'
+					});
+					return file.save();
+				});
+			}
+			/**
 	   * @description Get files list from S3
 	   */
 
@@ -33989,31 +33666,31 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function getFromS3() {
 				var _this6 = this;
 
-				if (!this.app.frontend || !this.app.frontend.bucketName) {
+				if (!this.project.frontend || !this.project.frontend.bucketName) {
 					logger.warn({
-						description: 'Application Frontend data not available. Calling .get().',
-						app: this.app, func: 'getFromS3', obj: 'Files'
+						description: 'Files Frontend data not available. Calling .get().',
+						project: this.project, func: 'getFromS3', obj: 'Files'
 					});
-					return this.app.get().then(function (applicationData) {
+					return this.project.get().then(function (applicationData) {
 						logger.log({
-							description: 'Application get returned.',
+							description: 'Files get returned.',
 							data: applicationData, func: 'getFromS3', obj: 'Files'
 						});
-						_this6.app = applicationData;
+						_this6.project = applicationData;
 						if ((0, _lodash.has)(applicationData, 'frontend')) {
 							return _this6.get();
 						} else {
 							logger.error({
-								description: 'Application does not have Frontend to get files from.',
+								description: 'Files does not have Frontend to get files from.',
 								func: 'getFromS3', obj: 'Files'
 							});
 							return Promise.reject({
-								message: 'Application does not have frontend to get files from.'
+								message: 'Files does not have frontend to get files from.'
 							});
 						}
 					}, function (err) {
 						logger.error({
-							description: 'Application Frontend data not available. Make sure to call .get().',
+							description: 'Files Frontend data not available. Make sure to call .get().',
 							error: err, func: 'getFromS3', obj: 'Files'
 						});
 						return Promise.reject({
@@ -34028,7 +33705,7 @@ return /******/ (function(modules) { // webpackBootstrap
 							setAWSConfig();
 						}
 						var s3 = new _awsSdk2.default.S3();
-						var listParams = { Bucket: _this6.app.frontend.bucketName };
+						var listParams = { Bucket: _this6.project.frontend.bucketName };
 						return {
 							v: new Promise(function (resolve, reject) {
 								s3.listObjects(listParams, function (err, data) {
@@ -34053,10 +33730,92 @@ return /******/ (function(modules) { // webpackBootstrap
 					if ((typeof _ret3 === 'undefined' ? 'undefined' : _typeof(_ret3)) === "object") return _ret3.v;
 				}
 			}
+			/**
+	   * @description build child structure from files list
+	   */
+
+		}, {
+			key: 'buildStructure',
+			value: function buildStructure() {
+				logger.debug({
+					description: 'Build Structure called.',
+					func: 'buildStructure', obj: 'Files'
+				});
+				return this.get().then(function (filesArray) {
+					logger.log({
+						description: 'Child struct from array.',
+						childStructure: childStruct,
+						func: 'buildStructure', obj: 'Files'
+					});
+					var childStruct = childrenStructureFromArray(filesArray);
+					//TODO: have child objects have correct classes (file/folder)
+					logger.log({
+						description: 'Child struct from array.',
+						childStructure: childStruct,
+						func: 'buildStructure', obj: 'Files'
+					});
+					return childStruct;
+				}, function (error) {
+					logger.error({
+						description: 'Error getting application files.',
+						error: error, func: 'buildStructure', obj: 'Files'
+					});
+					return Promise.reject({
+						message: 'Error getting files.',
+						error: error
+					});
+				});
+			}
+			/**
+	   * @description sync file structure from Firebase
+	   */
+
+		}, {
+			key: 'syncStructure',
+			value: function syncStructure() {
+				//TODO: Determine if it is worth storing this in the built structure
+				logger.debug({
+					description: 'Build Structure called.',
+					func: 'syncStructure', obj: 'Files'
+				});
+				return this.sync().then(function (filesArray) {
+					logger.log({
+						description: 'Child struct from array.',
+						childStruct: childStruct, func: 'syncStructure', obj: 'Files'
+					});
+					var childStruct = childrenStructureFromArray(filesArray);
+					//TODO: have child objects have correct classes (file/folder)
+					logger.log({
+						description: 'Child struct from array.',
+						childStruct: childStruct, func: 'syncStructure', obj: 'Files'
+					});
+					return childStruct;
+				}, function (error) {
+					logger.error({
+						description: 'Error getting application files.',
+						error: error, func: 'syncStructure', obj: 'Files'
+					});
+					return Promise.reject({
+						message: 'Error getting files.',
+						error: error
+					});
+				});
+			}
 		}, {
 			key: 'fbUrl',
 			get: function get() {
-				return _config2.default.fbUrl + '/files/' + this.app.name;
+				if (!this.project.fbUrl) {
+					logger.error({
+						description: 'Project data is required for fbUrl.',
+						func: 'constructor', obj: 'Files', files: this
+					});
+					throw new Error('Project data is required to create fbUrl.');
+				}
+				if (this.project.fbUrl) {
+					return this.project.fbUrl;
+				}
+				var project = new _Project2.default(this.project);
+				return project.fbUrl;
 			}
 			/**
 	   * @description Firebase reference of files list
@@ -34103,6 +33862,37 @@ return /******/ (function(modules) { // webpackBootstrap
 				IdentityPoolId: _config2.default.aws.cognito.poolId
 			}),
 			region: _config2.default.aws.region
+		});
+	}
+	function getContentFromFile(fileData) {
+		//Get initial content from local file
+		logger.debug({
+			description: 'getContentFromFile called', fileData: fileData,
+			func: 'getContentFromFile', obj: 'Files'
+		});
+		return new Promise(function (resolve) {
+			try {
+				var reader = new FileReader();
+				logger.debug({
+					description: 'reader created', reader: reader,
+					func: 'getContentFromFile', obj: 'Files'
+				});
+				reader.onload = function (e) {
+					var contents = e.target.result;
+					logger.debug({
+						description: 'Contents loaded', contents: contents,
+						func: 'getContentFromFile', obj: 'Files'
+					});
+					resolve(contents);
+				};
+				reader.readAsText(fileData);
+			} catch (error) {
+				logger.error({
+					description: 'Error getting file contents.', error: error,
+					func: 'getContentFromFile', obj: 'Files'
+				});
+				reject(error);
+			}
 		});
 	}
 	/**
@@ -34200,6 +33990,349 @@ return /******/ (function(modules) { // webpackBootstrap
 		});
 		return finishedArray;
 	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 113 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); //Internal libs and config
+
+	//Actions and Classes
+
+	//External Libs
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _config = __webpack_require__(10);
+
+	var _config2 = _interopRequireDefault(_config);
+
+	var _lodash = __webpack_require__(4);
+
+	var _Matter = __webpack_require__(9);
+
+	var _Matter2 = _interopRequireDefault(_Matter);
+
+	var _actions = __webpack_require__(93);
+
+	var _Group2 = __webpack_require__(96);
+
+	var _Group3 = _interopRequireDefault(_Group2);
+
+	var _Files = __webpack_require__(112);
+
+	var _Files2 = _interopRequireDefault(_Files);
+
+	var _File2 = __webpack_require__(95);
+
+	var _File3 = _interopRequireDefault(_File2);
+
+	var _firebase = __webpack_require__(52);
+
+	var _firebase2 = _interopRequireDefault(_firebase);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	//Convenience vars
+	var _matter$utils = _Matter2.default.utils;
+	var request = _matter$utils.request;
+	var logger = _matter$utils.logger;
+	/**
+	 * Project class.
+	 *
+	 */
+
+	var Project = (function () {
+		function Project(appData) {
+			_classCallCheck(this, Project);
+
+			if (!appData || !(0, _lodash.isObject)(appData) && !(0, _lodash.isString)(appData)) {
+				logger.error({
+					description: 'Project object created.', project: this,
+					func: 'constructor', obj: 'Project'
+				});
+			}
+			if ((0, _lodash.isString)(appData)) {
+				this.name = appData;
+				logger.log({
+					description: 'Project object created without owner.', project: this,
+					func: 'constructor', obj: 'Project'
+				});
+			} else {
+				(0, _lodash.extend)(this, appData);
+			}
+			logger.debug({
+				description: 'Project object created.', project: this,
+				func: 'constructor', obj: 'Project'
+			});
+		}
+		/**
+	  * @description Project endpoint on Tessellate server
+	  * @return {String}
+	  */
+
+		_createClass(Project, [{
+			key: 'get',
+
+			/**
+	   * @description Get project data
+	   */
+			value: function get() {
+				logger.debug({
+					description: 'Project get called.', func: 'get', obj: 'Project'
+				});
+				return request.get(this.endpoint).then(function (response) {
+					var project = new Project(response);
+					logger.info({
+						description: 'Project loaded successfully.',
+						response: response, project: project, func: 'get', obj: 'Project'
+					});
+					return project;
+				})['catch'](function (error) {
+					logger.error({
+						description: 'Error getting Project.',
+						message: error.response.text, error: error,
+						func: 'get', obj: 'Project'
+					});
+					return Promise.reject(error.response.text || error.response);
+				});
+			}
+			/**
+	   * @description Update project data
+	   */
+
+		}, {
+			key: 'update',
+			value: function update(updateData) {
+				logger.debug({
+					description: 'Project update called.',
+					func: 'update', obj: 'Project'
+				});
+				return request.put(this.endpoint, updateData).then(function (response) {
+					logger.info({
+						description: 'Project updated successfully.',
+						response: response, func: 'update', obj: 'Project'
+					});
+					return new Project(response);
+				})['catch'](function (error) {
+					logger.error({
+						description: 'Error updating project.',
+						error: error, func: 'update', obj: 'Project'
+					});
+					return Promise.reject(error.response.text || error.response);
+				});
+			}
+			/**
+	   * @description Add static file hosting storage (currrently though AWS S3)
+	   */
+
+		}, {
+			key: 'addStorage',
+			value: function addStorage() {
+				logger.debug({
+					description: 'Project add storage called.', project: this,
+					func: 'addStorage', obj: 'Project'
+				});
+				return request.post(this.endpoint + '/storage', {}).then(function (response) {
+					var project = new Project(response);
+					logger.info({
+						description: 'Storage successfully added to project.',
+						response: response, project: project, func: 'addStorage', obj: 'Project'
+					});
+					return project;
+				})['catch'](function (error) {
+					logger.error({
+						description: 'Error adding storage to project.',
+						error: error, func: 'addStorage', obj: 'Project'
+					});
+					return Promise.reject(error.response.text || error.response);
+				});
+			}
+			/**
+	   * @description Apply a template to Project
+	   */
+
+		}, {
+			key: 'applyTemplate',
+			value: function applyTemplate(template) {
+				var _this = this;
+
+				logger.debug({
+					description: 'Applying template to project.',
+					func: 'applyTemplate', obj: 'Project'
+				});
+				return request.post(this.endpoint, { template: template }).then(function (response) {
+					logger.info({
+						description: 'Template successfully applied to project.',
+						response: response, project: _this,
+						func: 'applyTemplate', obj: 'Project'
+					});
+					return new Project(response);
+				})['catch'](function (error) {
+					logger.error({
+						description: 'Error applying template to project.',
+						error: error, project: _this,
+						func: 'applyTemplate', obj: 'Project'
+					});
+					return Promise.reject(error.response.text || error.response);
+				});
+			}
+			/**
+	   * @description Add collaborators to Project
+	   * @param {Array|String} collabs - Array list of Ids, or a string list of ids
+	   */
+
+		}, {
+			key: 'addCollaborators',
+			value: function addCollaborators(collabs) {
+				logger.debug({
+					description: 'Add collaborators called', collabs: collabs,
+					project: this, func: 'addCollaborators', obj: 'Project'
+				});
+				this.collaborators = collabs;
+				//Handle string of ids
+				if (!(0, _lodash.isArray)(collabs) && (0, _lodash.isString)(collabs)) {
+					this.collaborators = collabs.replace(' ').split(',');
+				}
+				logger.log({
+					description: 'Collaborators list added to project, calling update.',
+					project: this, func: 'addCollaborators', obj: 'Project'
+				});
+				return this.update(this);
+			}
+			//Files object that contains files methods
+
+		}, {
+			key: 'File',
+			value: function File(fileData) {
+				logger.debug({
+					description: 'Projects file action called.',
+					fileData: fileData, project: this,
+					func: 'file', obj: 'Project'
+				});
+				return new _File3.default({ project: this, fileData: fileData });
+			}
+		}, {
+			key: 'User',
+			value: function User(userData) {
+				logger.debug({
+					description: 'Projects user action called.',
+					userData: userData, project: this, func: 'user', obj: 'Project'
+				});
+				return new _actions.Account({ project: this, userData: userData });
+			}
+		}, {
+			key: 'Account',
+			value: function Account(callData) {
+				logger.debug({
+					description: 'Projects account action called.',
+					callData: callData, project: this,
+					func: 'user', obj: 'Project'
+				});
+				return new _actions.Account({ project: this, callData: callData });
+			}
+		}, {
+			key: 'Group',
+			value: function Group(callData) {
+				logger.debug({
+					description: 'Projects group action called.',
+					callData: callData, project: this,
+					func: 'group', obj: 'Project'
+				});
+				return new _Group3.default({ project: this, callData: callData });
+			}
+		}, {
+			key: 'endpoint',
+			get: function get() {
+				if (this.name === 'tessellate') {
+					logger.debug({
+						description: 'Project is tessellate. Using matter endpoint.',
+						project: this, func: 'endpoint', obj: 'Project'
+					});
+					return _Matter2.default.endpoint;
+				}
+				var projectEndpoint = _Matter2.default.endpoint + '/apps/' + this.name;
+				logger.debug({
+					description: 'Project endpoint created.',
+					projectEndpoint: projectEndpoint, func: 'endpoint', obj: 'Project'
+				});
+				return projectEndpoint;
+			}
+			/**
+	   * @description Project files Firebase Url
+	   * @return {String}
+	   */
+
+		}, {
+			key: 'fbUrl',
+			get: function get() {
+				if ((0, _lodash.has)(_config2.default, 'fbUrl') && (0, _lodash.has)(this, 'name')) {
+					if ((0, _lodash.has)(this, 'owner')) {
+						return _config2.default.fbUrl + '/files/' + this.owner + '/' + this.name;
+					}
+					return _config2.default.fbUrl + '/' + this.name;
+				}
+			}
+			/**
+	   * @description Generate Firebase reference based on project url
+	   */
+
+		}, {
+			key: 'fbRef',
+			get: function get() {
+				if (this.fbUrl) {
+					return new _firebase2.default(this.fbUrl);
+				}
+			}
+		}, {
+			key: 'Files',
+			get: function get() {
+				logger.debug({
+					description: 'Projects files action called.',
+					project: this, func: 'files', obj: 'Project'
+				});
+				return new _Files2.default({ project: this });
+			}
+		}, {
+			key: 'Users',
+			get: function get() {
+				logger.debug({
+					description: 'Projects users action called.',
+					project: this, func: 'user', obj: 'Project'
+				});
+				return new _actions.Accounts({ project: this });
+			}
+		}, {
+			key: 'Accounts',
+			get: function get() {
+				logger.debug({
+					description: 'Projects account action called.',
+					project: this, func: 'user', obj: 'Project'
+				});
+				return new _actions.Accounts({ project: this });
+			}
+		}, {
+			key: 'Groups',
+			get: function get() {
+				logger.debug({
+					description: 'Projects groups action called.',
+					project: this, func: 'groups', obj: 'Project'
+				});
+				return new _actions.Groups({ project: this });
+			}
+		}]);
+
+		return Project;
+	})();
+
+	exports.default = Project;
 	module.exports = exports['default'];
 
 /***/ },
