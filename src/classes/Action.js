@@ -15,14 +15,14 @@ export default class Action {
   init(actionData) {
     logger.debug({
       description: 'Init action called.',
-      actionData, func: 'url', obj: 'Action'
+      actionData, func: 'init', obj: 'Action'
     });
-    if (!actionData || !actionData.app) {
+    if (!actionData || !actionData.project) {
       logger.error({
-        description: 'Action data with app is required.',
-        actionData, func: 'url', obj: 'Action'
+        description: 'Action data with project is required.',
+        actionData, func: 'init', obj: 'Action'
       });
-      throw Error('Action data with app is required.');
+      throw Error('Action data with project is required.');
     }
     this.isList = actionData ? false : true;
     extend(this, actionData);
@@ -47,9 +47,9 @@ export default class Action {
    */
   get endpointArray() {
     let endpointArray = [matter.endpoint, this.name];
-    if (has(this, 'app') && has(this.app, 'name') && this.app.name !== config.appName) {
+    if (has(this, 'project') && has(this.project, 'name') && this.project.name !== config.appName) {
       //Splice apps, appName into index 1
-      endpointArray.splice(1, 0, 'apps', this.app.name);
+      endpointArray.splice(1, 0, 'apps', this.project.name);
     }
     return endpointArray;
   }

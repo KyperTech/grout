@@ -6,7 +6,6 @@ import AWS from 'aws-sdk';
 //Convenience vars
 const { logger } = matter.utils;
 
-let firepad = getFirepadLib();
 export default class File {
 	constructor(actionData) {
 		if (!actionData || !isObject(actionData)) {
@@ -114,6 +113,7 @@ export default class File {
 		return new Firebase(this.fbUrl);
 	}
 	get headless() {
+		let firepad = getFirepadLib();
 		if (typeof firepad === 'undefined' || typeof firepad.Headless !== 'function') {
 			logger.error({
 				description: 'Firepad is required to get file content.',
@@ -490,6 +490,7 @@ export default class File {
 			});
 			return;
 		}
+		let firepad = getFirepadLib();
 		if (typeof firepad.fromACE !== 'function') {
 			logger.error({
 				description: 'Firepad does not have fromACE method.',

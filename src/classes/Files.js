@@ -9,7 +9,7 @@ const { logger } = matter.utils;
 
 export default class Files {
 	constructor(filesData) {
-		if(!filesData || (!has(filesData, 'app') && !has(filesData, 'project'))){
+		if(!filesData || !has(filesData, 'project')){
 			logger.error({
 				description: 'Action data object with name is required to start a Files Action.',
 				func: 'constructor', obj: 'Files'
@@ -75,7 +75,6 @@ export default class Files {
 					func: 'get', obj: 'Files'
 				});
 				let filesArray = [];
-				// let filesPathArray =  this.pathArrayFromFbRef;
 				filesSnap.forEach(objSnap => {
 					let objData = objSnap.hasChild('meta') ? objSnap.child('meta').val() : {path: objSnap.key()};
 					//TODO: Have a better fallback for when meta does not exist
@@ -162,11 +161,18 @@ export default class Files {
 		}
 	}
 	/**
-	 * @description Delete file
+	 * @description Remove object from files (folder or file)
 	 */
-	del(fileData) {
+	remove(objData) {
 		//TODO: Delete file from S3 as well if it exists
-		return this.delFromFb(fileData);
+		return this.delFromFb(objData);
+	}
+	/**
+	 * @description Alias for remove
+	 */
+	del(objData) {
+		//TODO: Delete file from S3 as well if it exists
+		return this.remove(objData);
 	}
 	publish() {
 		//TODO: Publish all files
@@ -175,103 +181,9 @@ export default class Files {
 		let dataObj = folderData;
 		dataObj.app = this;
 		let folder = new Folder({app: this})
+		return folder.save();
 	}
-	/**
-	 * @description build child structure from files list
-	 */
-	buildStructure() {
-		logger.debug({
-			description: 'Build Structure called.',
-			func: 'buildStructure', obj: 'Application'
-		});
-		return this.get().then(filesArray => {
-			logger.log({
-				description: 'Child struct from array.',
-				childStructure: childStruct,
-				func: 'buildStructure', obj: 'Application'
-			});
-			const childStruct = childrenStructureFromArray(filesArray);
-			//TODO: have child objects have correct classes (file/folder)
-			logger.log({
-				description: 'Child struct from array.',
-				childStructure: childStruct,
-				func: 'buildStructure', obj: 'Application'
-			});
-			return childStruct;
-		}, error => {
-			logger.error({
-				description: 'Error getting application files.',
-				error, func: 'buildStructure', obj: 'Application'
-			});
-			return Promise.reject({
-				message: 'Error getting files.',
-				error
-			});
-		});
-	}
-	/**
-	 * @description sync file structure from Firebase
-	 */
-	syncStructure() {
-		//TODO: Determine if it is worth storing this in the built structure
-		logger.debug({
-			description: 'Build Structure called.',
-			func: 'syncStructure', obj: 'Application'
-		});
-		return this.sync().then(filesArray => {
-			logger.log({
-				description: 'Child struct from array.',
-				childStruct, func: 'syncStructure', obj: 'Application'
-			});
-			const childStruct = childrenStructureFromArray(filesArray);
-			//TODO: have child objects have correct classes (file/folder)
-			logger.log({
-				description: 'Child struct from array.',
-				childStruct, func: 'syncStructure', obj: 'Application'
-			});
-			return childStruct;
-		}, error => {
-			logger.error({
-				description: 'Error getting application files.',
-				error, func: 'syncStructure', obj: 'Application'
-			});
-			return Promise.reject({
-				message: 'Error getting files.',
-				error
-			});
-		});
-	}
-	getContentFromFile(fileData) {
-		//Get initial content from local file
-		logger.debug({
-			description: 'getContentFromFile called', fileData,
-			func: 'getContentFromFile', obj: 'Application'
-		});
-		return new Promise(resolve => {
-			try {
-				let reader = new FileReader();
-				logger.debug({
-					description: 'reader created', reader,
-					func: 'getContentFromFile', obj: 'Application'
-				});
-				reader.onload = e => {
-					const contents = e.target.result;
-					logger.debug({
-						description: 'Contents loaded', contents,
-						func: 'getContentFromFile', obj: 'Application'
-					});
-					resolve(contents);
-				}
-				reader.readAsText(fileData);
-			} catch(error){
-				logger.error({
-					description: 'Error getting file contents.', error,
-					func: 'getContentFromFile', obj: 'Application'
-				});
-				reject(error);
-			}
-		});
-	}
+
 	/**
 	 * @description Add a file to Firebase
 	 * @param {Object} fileData - Data object for new file
@@ -322,28 +234,10 @@ export default class Files {
 			return new File(newData).save();
 		}
 	}
-	addLocalToFb(fileData) {
-		logger.debug({
-			description: 'Add local to fb called.', fileData,
-			func: 'addLocalToFb', obj: 'Files'
-		});
-		return this.getContentFromFile(fileData).then(content => {
-			logger.info({
-				description: 'Content loaded.', content,
-				func: 'addLocalToFb', obj: 'Files'
-			});
-			fileData.content = content;
-			fileData.path = fileData.name;
-			const file = new File({app: this.project, fileData});
-			logger.info({
-				description: 'File object created.', file,
-				func: 'addLocalToFb', obj: 'Files'
-			});
-			return file.save();
-		});
-	}
 	/**
-	 * @description Delete a file from Firebase
+	 * @description Delete a file or folder from Firebase
+	 * @param {Object} objData - Data of file or folder
+	 * @param {String} path - Path of file or folder
 	 */
 	delFromFb(fileData) {
 		logger.debug({
@@ -371,17 +265,50 @@ export default class Files {
 		});
 	}
 	/**
+	 * @description Upload a local file to Firebase
+	 * @param {File} file - Local file with content to be uploaded
+	 */
+	addLocalToFb(fileData) {
+		logger.debug({
+			description: 'Add local to fb called.', fileData,
+			func: 'addLocalToFb', obj: 'Files'
+		});
+		if (!fileData) {
+			logger.error({
+				description: 'File is required to upload to Firebase.',
+				func: 'addLocalToFb', obj: 'Files'
+			});
+			return Promise.reject({
+				message: 'File is required to upload to Firebase.'
+			});
+		}
+		return getContentFromFile(fileData).then(content => {
+			logger.debug({
+				description: 'Content loaded from local file.', content,
+				func: 'addLocalToFb', obj: 'Files'
+			});
+			fileData.content = content;
+			fileData.path = fileData.name;
+			const file = new File({app: this.project, fileData});
+			logger.info({
+				description: 'File object created.', file,
+				func: 'addLocalToFb', obj: 'Files'
+			});
+			return file.save();
+		});
+	}
+	/**
 	 * @description Get files list from S3
 	 */
 	getFromS3() {
 		if (!this.project.frontend || !this.project.frontend.bucketName) {
 			logger.warn({
-				description: 'Application Frontend data not available. Calling .get().',
+				description: 'Files Frontend data not available. Calling .get().',
 				app: this.project, func: 'getFromS3', obj: 'Files'
 			});
 			return this.project.get().then(applicationData => {
 				logger.log({
-					description: 'Application get returned.',
+					description: 'Files get returned.',
 					data: applicationData, func: 'getFromS3', obj: 'Files'
 				});
 				this.project = applicationData;
@@ -389,16 +316,16 @@ export default class Files {
 					return this.get();
 				} else {
 					logger.error({
-						description: 'Application does not have Frontend to get files from.',
+						description: 'Files does not have Frontend to get files from.',
 						func: 'getFromS3', obj: 'Files'
 					});
 					return Promise.reject({
-						message: 'Application does not have frontend to get files from.'
+						message: 'Files does not have frontend to get files from.'
 					});
 				}
 			}, err => {
 				logger.error({
-					description: 'Application Frontend data not available. Make sure to call .get().',
+					description: 'Files Frontend data not available. Make sure to call .get().',
 					error: err, func: 'getFromS3', obj: 'Files'
 				});
 				return Promise.reject({
@@ -432,6 +359,71 @@ export default class Files {
 			});
 		}
 	}
+	/**
+	 * @description build child structure from files list
+	 */
+	buildStructure() {
+		logger.debug({
+			description: 'Build Structure called.',
+			func: 'buildStructure', obj: 'Files'
+		});
+		return this.get().then(filesArray => {
+			logger.log({
+				description: 'Child struct from array.',
+				childStructure: childStruct,
+				func: 'buildStructure', obj: 'Files'
+			});
+			const childStruct = childrenStructureFromArray(filesArray);
+			//TODO: have child objects have correct classes (file/folder)
+			logger.log({
+				description: 'Child struct from array.',
+				childStructure: childStruct,
+				func: 'buildStructure', obj: 'Files'
+			});
+			return childStruct;
+		}, error => {
+			logger.error({
+				description: 'Error getting application files.',
+				error, func: 'buildStructure', obj: 'Files'
+			});
+			return Promise.reject({
+				message: 'Error getting files.',
+				error
+			});
+		});
+	}
+	/**
+	 * @description sync file structure from Firebase
+	 */
+	syncStructure() {
+		//TODO: Determine if it is worth storing this in the built structure
+		logger.debug({
+			description: 'Build Structure called.',
+			func: 'syncStructure', obj: 'Files'
+		});
+		return this.sync().then(filesArray => {
+			logger.log({
+				description: 'Child struct from array.',
+				childStruct, func: 'syncStructure', obj: 'Files'
+			});
+			const childStruct = childrenStructureFromArray(filesArray);
+			//TODO: have child objects have correct classes (file/folder)
+			logger.log({
+				description: 'Child struct from array.',
+				childStruct, func: 'syncStructure', obj: 'Files'
+			});
+			return childStruct;
+		}, error => {
+			logger.error({
+				description: 'Error getting application files.',
+				error, func: 'syncStructure', obj: 'Files'
+			});
+			return Promise.reject({
+				message: 'Error getting files.',
+				error
+			});
+		});
+	}
 }
 //------------------ Utility Functions ------------------//
 // AWS Config
@@ -441,6 +433,37 @@ function setAWSConfig() {
 		IdentityPoolId: config.aws.cognito.poolId
 	}),
 		region: config.aws.region
+	});
+}
+function getContentFromFile(fileData) {
+	//Get initial content from local file
+	logger.debug({
+		description: 'getContentFromFile called', fileData,
+		func: 'getContentFromFile', obj: 'Files'
+	});
+	return new Promise(resolve => {
+		try {
+			let reader = new FileReader();
+			logger.debug({
+				description: 'reader created', reader,
+				func: 'getContentFromFile', obj: 'Files'
+			});
+			reader.onload = e => {
+				const contents = e.target.result;
+				logger.debug({
+					description: 'Contents loaded', contents,
+					func: 'getContentFromFile', obj: 'Files'
+				});
+				resolve(contents);
+			}
+			reader.readAsText(fileData);
+		} catch(error){
+			logger.error({
+				description: 'Error getting file contents.', error,
+				func: 'getContentFromFile', obj: 'Files'
+			});
+			reject(error);
+		}
 	});
 }
 /**

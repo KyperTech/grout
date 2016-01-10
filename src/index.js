@@ -11,10 +11,8 @@ import matter from './classes/Matter';
 const { logger } = matter.utils;
 export default class Grout extends Matter {
 	constructor(projectName, groutOptions) {
-		//Call matter with tessellate
 		const name = (projectName && isString(projectName)) ? projectName : config.defaultProject;
 		let options = (groutOptions && isObject(groutOptions)) ? groutOptions : config.matterSettings;
-		//handle No App name provided
 		if(isObject(projectName)){
 			options = projectName;
 		}
@@ -23,7 +21,7 @@ export default class Grout extends Matter {
 	}
 	//Start a new Projects Action
 	get Projects() {
-		let action = new Actions.Projects({app: this});
+		let action = new Actions.Projects({project: this});
 		logger.debug({
 			description: 'Projects Action called.',
 			action, func: 'Projects', obj: 'Grout'
@@ -42,16 +40,16 @@ export default class Grout extends Matter {
 
 	//Start a new Accounts action
 	get Accounts() {
-		const action = new Actions.Accounts({app: this});
+		const action = new Actions.Accounts({project: this});
 		logger.debug({
 			description: 'Account Action called.',
 			action, func: 'Accounts', obj: 'Grout'
 		});
-		return new Actions.Accounts({app: this});
+		return new Actions.Accounts({project: this});
 	}
 	//Start a new Account action
 	Account(accountData) {
-		const action = new Actions.Account({app: this, callData: accountData});
+		const action = new Actions.Account({project: this, callData: accountData});
 		logger.debug({
 			description: 'Account Action called.', accountData,
 			action, func: 'Account', obj: 'Grout'
@@ -60,7 +58,7 @@ export default class Grout extends Matter {
 	}
 	//Start a new Groups action
 	get Groups() {
-		const action = new Actions.Groups({app: this});
+		const action = new Actions.Groups({project: this});
 		logger.debug({
 			description: 'Groups Action called.',
 			action, func: 'groups', obj: 'Grout'
@@ -72,18 +70,18 @@ export default class Grout extends Matter {
 	 * @param {Object|String} groupData - Name of group or object containing name parameter
 	 */
 	Group(groupData) {
-		const action = new Actions.Group({app:this, callData: groupData})
+		const action = new Actions.Group({project:this, callData: groupData})
 		logger.debug({
 			description: 'Group Action called.', groupData,
 			action, func: 'group', obj: 'Grout'
 		});
-		return new Actions.Group({app:this, callData: groupData});
+		return new Actions.Group({project:this, callData: groupData});
 	}
 	/**
 	 * @description Start a new Templates Action
 	 */
 	get Templates() {
-		const action = new Actions.Templates({app: this});
+		const action = new Actions.Templates({project: this});
 		logger.debug({
 			description: 'Templates Action called.', action,
 			func: 'Templates', obj: 'Grout'
@@ -95,7 +93,7 @@ export default class Grout extends Matter {
 	 * @param {Object|String} templateData - Name of template or object containing name parameter
 	 */
 	Template(templateData) {
-		const action = new Actions.Template({app: this, callData: templateData});
+		const action = new Actions.Template({project: this, callData: templateData});
 		logger.debug({
 			description: 'Template Action called.', templateData,
 			action, func: 'Template', obj: 'Grout'

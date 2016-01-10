@@ -4,7 +4,7 @@ let grout = new Grout();
 let mockGet, mockPut, mockPost, mockDel, mockLog, mockDebug, mockWarn, mockInfo, mockError;
 
 let exampleAccount;
-describe('Application model', () => {
+describe('Account model', () => {
   beforeEach(() => {
     exampleAccount = grout.Account('exampleUser');
     // console.log('exampleAccount', exampleAccount);

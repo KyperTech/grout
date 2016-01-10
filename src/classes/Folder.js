@@ -17,7 +17,7 @@ class Folder {
 		return new Files(this);
 	}
 	get fbUrl() {
-		return this.Files.fbUrl;
+		return `${this.Files.fbUrl}/`;
 	}
 	get fbRef() {
 		const { fbRef } = this.Files;
@@ -31,36 +31,10 @@ class Folder {
 		return this.add;
 	}
 	remove() {
-
+		return this.Files.remove(this);
 	}
 	add() {
-		//TODO: Handle adding files to folder
-		return this.addToFb();
-	}
-	addToFb() {
-		logger.debug({
-			description: 'addToFb called.', folder: this,
-			func: 'addToFb', obj: 'Folder'
-		});
-		const { fbRef, path, name } = this;
-		const fbData = {meta: {path, name, type: 'folder'}};
-		return new Promise((resolve, reject) => {
-			fbRef.set(fbData, error => {
-				if (!error) {
-					logger.info({
-						description: 'File successfully added to Firebase.',
-						func: 'addToFb', obj: 'Folder'
-					});
-					resolve(fbData);
-				} else {
-					logger.error({
-						description: 'Error creating file on Firebase.',
-						error, func: 'addToFb', obj: 'Folder'
-					});
-					reject(error);
-				}
-			});
-		});
+		return this.Files.add(this);
 	}
 }
 

@@ -1,27 +1,25 @@
 import Grout from '../../src';
-import Matter from 'kyper-matter';
-import App from '../../src/classes/Application';
 import config from '../../src/config';
 let grout = new Grout();
 let mockGet, mockPut, mockPost, mockLog, mockDebug, mockWarn, mockInfo, mockError;
 
 let exampleApp;
-describe('Application model', () => {
+describe('Project model', () => {
   beforeEach(() => {
-    exampleApp = grout.App('exampleApp');
-    mockGet = sinon.stub(grout.utils.request, 'get', function() {
+    exampleApp = grout.Project({name: 'exampleApp', owner: 'test'});
+    mockGet = sinon.stub(grout.utils.request, 'get', () => {
      // console.log('mock get called with:', arguments);
      return new Promise((resolve) => {
        resolve({body: {}});
      });
     });
-    mockPut = sinon.stub(grout.utils.request, 'put', function() {
+    mockPut = sinon.stub(grout.utils.request, 'put', () => {
      // console.log('mock put called with:', arguments);
      return new Promise((resolve) => {
        resolve({body: {}});
      });
     });
-    mockPost = sinon.stub(grout.utils.request, 'post', function(url, postData) {
+    mockPost = sinon.stub(grout.utils.request, 'post', (url, postData) => {
      // console.log('mock post called with:', arguments);
      return new Promise((resolve, reject) => {
        if (!postData || postData == {}) {
@@ -30,16 +28,11 @@ describe('Application model', () => {
        resolve({body: {}});
      });
     });
-    mockLog = sinon.stub(grout.utils.logger, 'log', function() {
-    });
-    mockDebug = sinon.stub(grout.utils.logger, 'debug', function() {
-    });
-    mockWarn = sinon.stub(grout.utils.logger, 'warn', function() {
-    });
-    mockInfo = sinon.stub(grout.utils.logger, 'info', function() {
-    });
-    mockError = sinon.stub(grout.utils.logger, 'error', function() {
-    });
+    mockLog = sinon.stub(grout.utils.logger, 'log', () => {});
+    mockDebug = sinon.stub(grout.utils.logger, 'debug', () => {});
+    mockWarn = sinon.stub(grout.utils.logger, 'warn', () => {});
+    mockInfo = sinon.stub(grout.utils.logger, 'info', () => {});
+    mockError = sinon.stub(grout.utils.logger, 'error', () => {});
   });
   afterEach(() => {
     mockGet.restore();
@@ -62,12 +55,12 @@ describe('Application model', () => {
     expect(exampleApp).to.have.property('fbUrl');
     expect(exampleApp.fbUrl).to.equal(config.fbUrl + '/' + exampleApp.name);
   });
-  describe('appEndpoint', () => {
+  describe('endpoint', () => {
     it('exists', () => {
-      expect(exampleApp).to.have.property('appEndpoint');
+      expect(exampleApp).to.have.property('endpoint');
     });
     it('is correct', () => {
-      expect(exampleApp.appEndpoint).to.equal(`${config.serverUrl}/apps/${exampleApp.name}`);
+      expect(exampleApp.endpoint).to.equal(`${config.serverUrl}/apps/${exampleApp.name}`);
     });
   });
   describe('get method', () => {
@@ -127,8 +120,7 @@ describe('Application model', () => {
     });
     it('sets app data', () => {
       expect(exampleApp.Files).to.be.an('object');
-      expect(exampleApp.Files).to.have.property('app');
-      expect(exampleApp.Files.app).to.have.property('name');
+      expect(exampleApp.Files).to.have.property('project');
     });
   });
   describe('Users model', () => {

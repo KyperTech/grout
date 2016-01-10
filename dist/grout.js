@@ -56,7 +56,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -100,16 +100,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var logger = _Matter3.default.utils.logger;
 
-	var Grout = function (_Matter) {
+	var Grout = (function (_Matter) {
 		_inherits(Grout, _Matter);
 
 		function Grout(projectName, groutOptions) {
 			_classCallCheck(this, Grout);
 
-			//Call matter with tessellate
 			var name = projectName && (0, _lodash.isString)(projectName) ? projectName : _config2.default.defaultProject;
 			var options = groutOptions && (0, _lodash.isObject)(groutOptions) ? groutOptions : _config2.default.matterSettings;
-			//handle No App name provided
 			if ((0, _lodash.isObject)(projectName)) {
 				options = projectName;
 			}
@@ -138,7 +136,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			//Start a new Account action
 			value: function Account(accountData) {
-				var action = new Actions.Account({ app: this, callData: accountData });
+				var action = new Actions.Account({ project: this, callData: accountData });
 				logger.debug({
 					description: 'Account Action called.', accountData: accountData,
 					action: action, func: 'Account', obj: 'Grout'
@@ -155,12 +153,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param {Object|String} groupData - Name of group or object containing name parameter
 	   */
 			value: function Group(groupData) {
-				var action = new Actions.Group({ app: this, callData: groupData });
+				var action = new Actions.Group({ project: this, callData: groupData });
 				logger.debug({
 					description: 'Group Action called.', groupData: groupData,
 					action: action, func: 'group', obj: 'Grout'
 				});
-				return new Actions.Group({ app: this, callData: groupData });
+				return new Actions.Group({ project: this, callData: groupData });
 			}
 			/**
 	   * @description Start a new Templates Action
@@ -174,7 +172,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param {Object|String} templateData - Name of template or object containing name parameter
 	   */
 			value: function Template(templateData) {
-				var action = new Actions.Template({ app: this, callData: templateData });
+				var action = new Actions.Template({ project: this, callData: templateData });
 				logger.debug({
 					description: 'Template Action called.', templateData: templateData,
 					action: action, func: 'Template', obj: 'Grout'
@@ -202,7 +200,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'Projects',
 			get: function get() {
-				var action = new Actions.Projects({ app: this });
+				var action = new Actions.Projects({ project: this });
 				logger.debug({
 					description: 'Projects Action called.',
 					action: action, func: 'Projects', obj: 'Grout'
@@ -212,17 +210,17 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'Accounts',
 			get: function get() {
-				var action = new Actions.Accounts({ app: this });
+				var action = new Actions.Accounts({ project: this });
 				logger.debug({
 					description: 'Account Action called.',
 					action: action, func: 'Accounts', obj: 'Grout'
 				});
-				return new Actions.Accounts({ app: this });
+				return new Actions.Accounts({ project: this });
 			}
 		}, {
 			key: 'Groups',
 			get: function get() {
-				var action = new Actions.Groups({ app: this });
+				var action = new Actions.Groups({ project: this });
 				logger.debug({
 					description: 'Groups Action called.',
 					action: action, func: 'groups', obj: 'Grout'
@@ -232,7 +230,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'Templates',
 			get: function get() {
-				var action = new Actions.Templates({ app: this });
+				var action = new Actions.Templates({ project: this });
 				logger.debug({
 					description: 'Templates Action called.', action: action,
 					func: 'Templates', obj: 'Grout'
@@ -252,7 +250,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}]);
 
 		return Grout;
-	}(_kyperMatter2.default);
+	})(_kyperMatter2.default);
 
 	exports.default = Grout;
 	module.exports = exports['default'];
@@ -280,7 +278,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * @constant
 	   */
-	  VERSION: '2.2.28',
+	  VERSION: '2.2.26',
 
 	  /**
 	   * @api private
@@ -909,7 +907,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  each: function each(object, iterFunction) {
 	    for (var key in object) {
-	      if (Object.prototype.hasOwnProperty.call(object, key)) {
+	      if (object.hasOwnProperty(key)) {
 	        var ret = iterFunction.call(this, key, object[key]);
 	        if (ret === util.abort) break;
 	      }
@@ -15840,7 +15838,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -15890,7 +15888,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var level = null;
 	var isLocal = false;
 
-	var Config = function () {
+	var Config = (function () {
 		function Config() {
 			_classCallCheck(this, Config);
 
@@ -15956,7 +15954,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}]);
 
 		return Config;
-	}();
+	})();
 
 	var config = new Config();
 
@@ -23814,10 +23812,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    if (this.errors.length > 1) {
 	      var msg = this.errors.join('\n* ');
-	      msg = 'There were ' + this.errors.length +
-	        ' validation errors:\n* ' + msg;
-	      throw AWS.util.error(new Error(msg),
-	        {code: 'MultipleValidationErrors', errors: this.errors});
+	      if (this.errors.length > 1) {
+	        msg = 'There were ' + this.errors.length +
+	              ' validation errors:\n* ' + msg;
+	        throw AWS.util.error(new Error(msg),
+	          {code: 'MultipleValidationErrors', errors: this.errors});
+	      }
 	    } else if (this.errors.length === 1) {
 	      throw this.errors[0];
 	    } else {
@@ -25791,7 +25791,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (err) return upload.callback(err);
 	    data.Location =
 	      [endpoint.protocol, '//', endpoint.host, httpReq.path].join('');
-	    data.key = this.request.params.Key;
 	    upload.callback(err, data);
 	  },
 
@@ -25802,7 +25801,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var upload = this._managedUpload;
 	    if (this.operation === 'putObject') {
 	      info.part = 1;
-	      info.key = this.params.Key;
 	    } else {
 	      upload.totalUploadedBytes += info.loaded - this._lastUploadedBytes;
 	      this._lastUploadedBytes = info.loaded;
@@ -29148,7 +29146,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.Group = _Group3.default;
 
-	var Accounts = exports.Accounts = function (_Action) {
+	var Accounts = exports.Accounts = (function (_Action) {
 	  _inherits(Accounts, _Action);
 
 	  function Accounts(actionData) {
@@ -29158,9 +29156,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  return Accounts;
-	}(_Action8.default);
+	})(_Action8.default);
 
-	var Account = exports.Account = function (_Action2) {
+	var Account = exports.Account = (function (_Action2) {
 	  _inherits(Account, _Action2);
 
 	  function Account(actionData) {
@@ -29170,9 +29168,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  return Account;
-	}(_Action8.default);
+	})(_Action8.default);
 
-	var Projects = exports.Projects = function (_Action3) {
+	var Projects = exports.Projects = (function (_Action3) {
 	  _inherits(Projects, _Action3);
 
 	  function Projects(actionData) {
@@ -29182,9 +29180,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  return Projects;
-	}(_Action8.default);
+	})(_Action8.default);
 
-	var Groups = exports.Groups = function (_Action4) {
+	var Groups = exports.Groups = (function (_Action4) {
 	  _inherits(Groups, _Action4);
 
 	  function Groups(actionData) {
@@ -29194,9 +29192,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  return Groups;
-	}(_Action8.default);
+	})(_Action8.default);
 
-	var Templates = exports.Templates = function (_Action5) {
+	var Templates = exports.Templates = (function (_Action5) {
 	  _inherits(Templates, _Action5);
 
 	  function Templates(actionData) {
@@ -29206,9 +29204,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  return Templates;
-	}(_Action8.default);
+	})(_Action8.default);
 
-	var Template = exports.Template = function (_Action6) {
+	var Template = exports.Template = (function (_Action6) {
 	  _inherits(Template, _Action6);
 
 	  function Template(actionData) {
@@ -29218,7 +29216,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  return Template;
-	}(_Action8.default);
+	})(_Action8.default);
 
 /***/ },
 /* 94 */
@@ -29226,7 +29224,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -29250,7 +29248,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var logger = _matter$utils.logger;
 	var request = _matter$utils.request;
 
-	var Action = function () {
+	var Action = (function () {
 	  function Action(actionName, actionData) {
 	    _classCallCheck(this, Action);
 
@@ -29267,14 +29265,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function init(actionData) {
 	      logger.debug({
 	        description: 'Init action called.',
-	        actionData: actionData, func: 'url', obj: 'Action'
+	        actionData: actionData, func: 'init', obj: 'Action'
 	      });
-	      if (!actionData || !actionData.app) {
+	      if (!actionData || !actionData.project) {
 	        logger.error({
-	          description: 'Action data with app is required.',
-	          actionData: actionData, func: 'url', obj: 'Action'
+	          description: 'Action data with project is required.',
+	          actionData: actionData, func: 'init', obj: 'Action'
 	        });
-	        throw Error('Action data with app is required.');
+	        throw Error('Action data with project is required.');
 	      }
 	      this.isList = actionData ? false : true;
 	      (0, _lodash.extend)(this, actionData);
@@ -29424,9 +29422,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'endpointArray',
 	    get: function get() {
 	      var endpointArray = [_Matter2.default.endpoint, this.name];
-	      if ((0, _lodash.has)(this, 'app') && (0, _lodash.has)(this.app, 'name') && this.app.name !== _config2.default.appName) {
+	      if ((0, _lodash.has)(this, 'project') && (0, _lodash.has)(this.project, 'name') && this.project.name !== _config2.default.appName) {
 	        //Splice apps, appName into index 1
-	        endpointArray.splice(1, 0, 'apps', this.app.name);
+	        endpointArray.splice(1, 0, 'apps', this.project.name);
 	      }
 	      return endpointArray;
 	    }
@@ -29447,7 +29445,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }]);
 
 	  return Action;
-	}();
+	})();
 
 	exports.default = Action;
 	module.exports = exports['default'];
@@ -29458,9 +29456,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -29486,14 +29482,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	//Convenience vars
 	var logger = _Matter2.default.utils.logger;
 
-	var firepad = getFirepadLib();
-
-	var File = function () {
+	var File = (function () {
 		function File(actionData) {
 			_classCallCheck(this, File);
 
@@ -29704,7 +29700,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						});
 					});
 				} else {
-					var _ret = function () {
+					var _ret = (function () {
 						//If AWS Credential do not exist, set them
 						if (typeof _awsSdk2.default.config.credentials == 'undefined' || !_awsSdk2.default.config.credentials) {
 							logger.log({
@@ -29761,7 +29757,7 @@ return /******/ (function(modules) { // webpackBootstrap
 								});
 							})
 						};
-					}();
+					})();
 
 					if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
 				}
@@ -29783,7 +29779,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 					return Promise.reject({ message: 'Front end data is required to publish file.' });
 				} else {
-					var _ret2 = function () {
+					var _ret2 = (function () {
 						if (!(0, _lodash.has)(fileData, ['content', 'path'])) {
 							logger.error({
 								description: 'File data including path and content required to publish.',
@@ -29837,7 +29833,7 @@ return /******/ (function(modules) { // webpackBootstrap
 								});
 							})
 						};
-					}();
+					})();
 
 					if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
 				}
@@ -29869,7 +29865,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						});
 					});
 				} else {
-					var _ret3 = function () {
+					var _ret3 = (function () {
 						//If AWS Credential do not exist, set them
 						if (typeof _awsSdk2.default.config.credentials == 'undefined' || !_awsSdk2.default.config.credentials) {
 							logger.debug({
@@ -29918,7 +29914,7 @@ return /******/ (function(modules) { // webpackBootstrap
 								});
 							})
 						};
-					}();
+					})();
 
 					if ((typeof _ret3 === 'undefined' ? 'undefined' : _typeof(_ret3)) === "object") return _ret3.v;
 				}
@@ -29972,6 +29968,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 					return;
 				}
+				var firepad = getFirepadLib();
 				if (typeof firepad.fromACE !== 'function') {
 					logger.error({
 						description: 'Firepad does not have fromACE method.',
@@ -30111,6 +30108,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'headless',
 			get: function get() {
+				var firepad = getFirepadLib();
 				if (typeof firepad === 'undefined' || typeof firepad.Headless !== 'function') {
 					logger.error({
 						description: 'Firepad is required to get file content.',
@@ -30124,7 +30122,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}]);
 
 		return File;
-	}();
+	})();
 	//------------------ Utility Functions ------------------//
 	/**
 	 * @description Initial AWS Config
@@ -30180,7 +30178,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -30206,7 +30204,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var logger = _Matter2.default.utils.logger;
 
-	var Group = function (_Action) {
+	var Group = (function (_Action) {
 		_inherits(Group, _Action);
 
 		function Group(actionData) {
@@ -30263,7 +30261,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}]);
 
 		return Group;
-	}(_Action3.default);
+	})(_Action3.default);
 
 	exports.default = Group;
 	module.exports = exports['default'];
@@ -33290,9 +33288,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -33322,16 +33318,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function _typeof(obj) { return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj; }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	//Convenience vars
 	var logger = _Matter2.default.utils.logger;
 
-	var Files = function () {
+	var Files = (function () {
 		function Files(filesData) {
 			_classCallCheck(this, Files);
 
-			if (!filesData || !(0, _lodash.has)(filesData, 'app') && !(0, _lodash.has)(filesData, 'project')) {
+			if (!filesData || !(0, _lodash.has)(filesData, 'project')) {
 				logger.error({
 					description: 'Action data object with name is required to start a Files Action.',
 					func: 'constructor', obj: 'Files'
@@ -33368,7 +33366,6 @@ return /******/ (function(modules) { // webpackBootstrap
 							func: 'get', obj: 'Files'
 						});
 						var filesArray = [];
-						// let filesPathArray =  this.pathArrayFromFbRef;
 						filesSnap.forEach(function (objSnap) {
 							var objData = objSnap.hasChild('meta') ? objSnap.child('meta').val() : { path: objSnap.key() };
 							//TODO: Have a better fallback for when meta does not exist
@@ -33449,7 +33446,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				if (!(0, _lodash.isArray)(filesData)) {
 					return this.addToFb(filesData);
 				} else {
-					var _ret = function () {
+					var _ret = (function () {
 						logger.warn({
 							description: 'Add called with multiple files.', files: files,
 							app: _this3.project, func: 'upload', obj: 'Files'
@@ -33467,20 +33464,30 @@ return /******/ (function(modules) { // webpackBootstrap
 								return Promise.resolve(_this3);
 							})
 						};
-					}();
+					})();
 
 					if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
 				}
 			}
 			/**
-	   * @description Delete file
+	   * @description Remove object from files (folder or file)
+	   */
+
+		}, {
+			key: 'remove',
+			value: function remove(objData) {
+				//TODO: Delete file from S3 as well if it exists
+				return this.delFromFb(objData);
+			}
+			/**
+	   * @description Alias for remove
 	   */
 
 		}, {
 			key: 'del',
-			value: function del(fileData) {
+			value: function del(objData) {
 				//TODO: Delete file from S3 as well if it exists
-				return this.delFromFb(fileData);
+				return this.remove(objData);
 			}
 		}, {
 			key: 'publish',
@@ -33493,111 +33500,9 @@ return /******/ (function(modules) { // webpackBootstrap
 				var dataObj = folderData;
 				dataObj.app = this;
 				var folder = new Folder({ app: this });
+				return folder.save();
 			}
-			/**
-	   * @description build child structure from files list
-	   */
 
-		}, {
-			key: 'buildStructure',
-			value: function buildStructure() {
-				logger.debug({
-					description: 'Build Structure called.',
-					func: 'buildStructure', obj: 'Application'
-				});
-				return this.get().then(function (filesArray) {
-					logger.log({
-						description: 'Child struct from array.',
-						childStructure: childStruct,
-						func: 'buildStructure', obj: 'Application'
-					});
-					var childStruct = childrenStructureFromArray(filesArray);
-					//TODO: have child objects have correct classes (file/folder)
-					logger.log({
-						description: 'Child struct from array.',
-						childStructure: childStruct,
-						func: 'buildStructure', obj: 'Application'
-					});
-					return childStruct;
-				}, function (error) {
-					logger.error({
-						description: 'Error getting application files.',
-						error: error, func: 'buildStructure', obj: 'Application'
-					});
-					return Promise.reject({
-						message: 'Error getting files.',
-						error: error
-					});
-				});
-			}
-			/**
-	   * @description sync file structure from Firebase
-	   */
-
-		}, {
-			key: 'syncStructure',
-			value: function syncStructure() {
-				//TODO: Determine if it is worth storing this in the built structure
-				logger.debug({
-					description: 'Build Structure called.',
-					func: 'syncStructure', obj: 'Application'
-				});
-				return this.sync().then(function (filesArray) {
-					logger.log({
-						description: 'Child struct from array.',
-						childStruct: childStruct, func: 'syncStructure', obj: 'Application'
-					});
-					var childStruct = childrenStructureFromArray(filesArray);
-					//TODO: have child objects have correct classes (file/folder)
-					logger.log({
-						description: 'Child struct from array.',
-						childStruct: childStruct, func: 'syncStructure', obj: 'Application'
-					});
-					return childStruct;
-				}, function (error) {
-					logger.error({
-						description: 'Error getting application files.',
-						error: error, func: 'syncStructure', obj: 'Application'
-					});
-					return Promise.reject({
-						message: 'Error getting files.',
-						error: error
-					});
-				});
-			}
-		}, {
-			key: 'getContentFromFile',
-			value: function getContentFromFile(fileData) {
-				//Get initial content from local file
-				logger.debug({
-					description: 'getContentFromFile called', fileData: fileData,
-					func: 'getContentFromFile', obj: 'Application'
-				});
-				return new Promise(function (resolve) {
-					try {
-						var reader = new FileReader();
-						logger.debug({
-							description: 'reader created', reader: reader,
-							func: 'getContentFromFile', obj: 'Application'
-						});
-						reader.onload = function (e) {
-							var contents = e.target.result;
-							logger.debug({
-								description: 'Contents loaded', contents: contents,
-								func: 'getContentFromFile', obj: 'Application'
-							});
-							resolve(contents);
-						};
-						reader.readAsText(fileData);
-					} catch (error) {
-						logger.error({
-							description: 'Error getting file contents.', error: error,
-							func: 'getContentFromFile', obj: 'Application'
-						});
-						reject(error);
-					}
-				});
-			}
 			/**
 	   * @description Add a file to Firebase
 	   * @param {Object} fileData - Data object for new file
@@ -33624,7 +33529,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 				}
 				if ((0, _lodash.isArray)(addData)) {
-					var _ret2 = function () {
+					var _ret2 = (function () {
 						var promises = [];
 						addData.forEach(function (file) {
 							promises.push(_this4.addToFb(file));
@@ -33632,7 +33537,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						return {
 							v: Promise.all(promises)
 						};
-					}();
+					})();
 
 					if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
 				}
@@ -33663,32 +33568,10 @@ return /******/ (function(modules) { // webpackBootstrap
 					return new _File2.default(newData).save();
 				}
 			}
-		}, {
-			key: 'addLocalToFb',
-			value: function addLocalToFb(fileData) {
-				var _this5 = this;
-
-				logger.debug({
-					description: 'Add local to fb called.', fileData: fileData,
-					func: 'addLocalToFb', obj: 'Files'
-				});
-				return this.getContentFromFile(fileData).then(function (content) {
-					logger.info({
-						description: 'Content loaded.', content: content,
-						func: 'addLocalToFb', obj: 'Files'
-					});
-					fileData.content = content;
-					fileData.path = fileData.name;
-					var file = new _File2.default({ app: _this5.project, fileData: fileData });
-					logger.info({
-						description: 'File object created.', file: file,
-						func: 'addLocalToFb', obj: 'Files'
-					});
-					return file.save();
-				});
-			}
 			/**
-	   * @description Delete a file from Firebase
+	   * @description Delete a file or folder from Firebase
+	   * @param {Object} objData - Data of file or folder
+	   * @param {String} path - Path of file or folder
 	   */
 
 		}, {
@@ -33719,6 +33602,44 @@ return /******/ (function(modules) { // webpackBootstrap
 				});
 			}
 			/**
+	   * @description Upload a local file to Firebase
+	   * @param {File} file - Local file with content to be uploaded
+	   */
+
+		}, {
+			key: 'addLocalToFb',
+			value: function addLocalToFb(fileData) {
+				var _this5 = this;
+
+				logger.debug({
+					description: 'Add local to fb called.', fileData: fileData,
+					func: 'addLocalToFb', obj: 'Files'
+				});
+				if (!fileData) {
+					logger.error({
+						description: 'File is required to upload to Firebase.',
+						func: 'addLocalToFb', obj: 'Files'
+					});
+					return Promise.reject({
+						message: 'File is required to upload to Firebase.'
+					});
+				}
+				return getContentFromFile(fileData).then(function (content) {
+					logger.debug({
+						description: 'Content loaded from local file.', content: content,
+						func: 'addLocalToFb', obj: 'Files'
+					});
+					fileData.content = content;
+					fileData.path = fileData.name;
+					var file = new _File2.default({ app: _this5.project, fileData: fileData });
+					logger.info({
+						description: 'File object created.', file: file,
+						func: 'addLocalToFb', obj: 'Files'
+					});
+					return file.save();
+				});
+			}
+			/**
 	   * @description Get files list from S3
 	   */
 
@@ -33729,12 +33650,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				if (!this.project.frontend || !this.project.frontend.bucketName) {
 					logger.warn({
-						description: 'Application Frontend data not available. Calling .get().',
+						description: 'Files Frontend data not available. Calling .get().',
 						app: this.project, func: 'getFromS3', obj: 'Files'
 					});
 					return this.project.get().then(function (applicationData) {
 						logger.log({
-							description: 'Application get returned.',
+							description: 'Files get returned.',
 							data: applicationData, func: 'getFromS3', obj: 'Files'
 						});
 						_this6.project = applicationData;
@@ -33742,16 +33663,16 @@ return /******/ (function(modules) { // webpackBootstrap
 							return _this6.get();
 						} else {
 							logger.error({
-								description: 'Application does not have Frontend to get files from.',
+								description: 'Files does not have Frontend to get files from.',
 								func: 'getFromS3', obj: 'Files'
 							});
 							return Promise.reject({
-								message: 'Application does not have frontend to get files from.'
+								message: 'Files does not have frontend to get files from.'
 							});
 						}
 					}, function (err) {
 						logger.error({
-							description: 'Application Frontend data not available. Make sure to call .get().',
+							description: 'Files Frontend data not available. Make sure to call .get().',
 							error: err, func: 'getFromS3', obj: 'Files'
 						});
 						return Promise.reject({
@@ -33759,7 +33680,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						});
 					});
 				} else {
-					var _ret3 = function () {
+					var _ret3 = (function () {
 						//If AWS Credentials do not exist, set them
 						if (typeof _awsSdk2.default.config.credentials == 'undefined' || !_awsSdk2.default.config.credentials) {
 							// logger.info('AWS creds are being updated to make request');
@@ -33786,10 +33707,81 @@ return /******/ (function(modules) { // webpackBootstrap
 								});
 							})
 						};
-					}();
+					})();
 
 					if ((typeof _ret3 === 'undefined' ? 'undefined' : _typeof(_ret3)) === "object") return _ret3.v;
 				}
+			}
+			/**
+	   * @description build child structure from files list
+	   */
+
+		}, {
+			key: 'buildStructure',
+			value: function buildStructure() {
+				logger.debug({
+					description: 'Build Structure called.',
+					func: 'buildStructure', obj: 'Files'
+				});
+				return this.get().then(function (filesArray) {
+					logger.log({
+						description: 'Child struct from array.',
+						childStructure: childStruct,
+						func: 'buildStructure', obj: 'Files'
+					});
+					var childStruct = childrenStructureFromArray(filesArray);
+					//TODO: have child objects have correct classes (file/folder)
+					logger.log({
+						description: 'Child struct from array.',
+						childStructure: childStruct,
+						func: 'buildStructure', obj: 'Files'
+					});
+					return childStruct;
+				}, function (error) {
+					logger.error({
+						description: 'Error getting application files.',
+						error: error, func: 'buildStructure', obj: 'Files'
+					});
+					return Promise.reject({
+						message: 'Error getting files.',
+						error: error
+					});
+				});
+			}
+			/**
+	   * @description sync file structure from Firebase
+	   */
+
+		}, {
+			key: 'syncStructure',
+			value: function syncStructure() {
+				//TODO: Determine if it is worth storing this in the built structure
+				logger.debug({
+					description: 'Build Structure called.',
+					func: 'syncStructure', obj: 'Files'
+				});
+				return this.sync().then(function (filesArray) {
+					logger.log({
+						description: 'Child struct from array.',
+						childStruct: childStruct, func: 'syncStructure', obj: 'Files'
+					});
+					var childStruct = childrenStructureFromArray(filesArray);
+					//TODO: have child objects have correct classes (file/folder)
+					logger.log({
+						description: 'Child struct from array.',
+						childStruct: childStruct, func: 'syncStructure', obj: 'Files'
+					});
+					return childStruct;
+				}, function (error) {
+					logger.error({
+						description: 'Error getting application files.',
+						error: error, func: 'syncStructure', obj: 'Files'
+					});
+					return Promise.reject({
+						message: 'Error getting files.',
+						error: error
+					});
+				});
 			}
 		}, {
 			key: 'fbUrl',
@@ -33837,7 +33829,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}]);
 
 		return Files;
-	}();
+	})();
 	//------------------ Utility Functions ------------------//
 	// AWS Config
 
@@ -33848,6 +33840,37 @@ return /******/ (function(modules) { // webpackBootstrap
 				IdentityPoolId: _config2.default.aws.cognito.poolId
 			}),
 			region: _config2.default.aws.region
+		});
+	}
+	function getContentFromFile(fileData) {
+		//Get initial content from local file
+		logger.debug({
+			description: 'getContentFromFile called', fileData: fileData,
+			func: 'getContentFromFile', obj: 'Files'
+		});
+		return new Promise(function (resolve) {
+			try {
+				var reader = new FileReader();
+				logger.debug({
+					description: 'reader created', reader: reader,
+					func: 'getContentFromFile', obj: 'Files'
+				});
+				reader.onload = function (e) {
+					var contents = e.target.result;
+					logger.debug({
+						description: 'Contents loaded', contents: contents,
+						func: 'getContentFromFile', obj: 'Files'
+					});
+					resolve(contents);
+				};
+				reader.readAsText(fileData);
+			} catch (error) {
+				logger.error({
+					description: 'Error getting file contents.', error: error,
+					func: 'getContentFromFile', obj: 'Files'
+				});
+				reject(error);
+			}
 		});
 	}
 	/**
@@ -33953,7 +33976,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); //Internal libs and config
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })(); //Internal libs and config
 
 	//Actions and Classes
 
@@ -34004,23 +34027,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 */
 
-	var Project = function () {
+	var Project = (function () {
 		function Project(appData) {
 			_classCallCheck(this, Project);
 
-			//Setup application data based on input
-			if (appData && (0, _lodash.isObject)(appData)) {
-				(0, _lodash.extend)(this, appData);
-			} else if (appData && (0, _lodash.isString)(appData)) {
-				this.name = appData;
-				//TODO: Handle no owner data being provided?
+			if (!appData || !(0, _lodash.isObject)(appData) && !(0, _lodash.isString)(appData)) {
+				logger.error({
+					description: 'Project object created.', project: this,
+					func: 'constructor', obj: 'Project'
+				});
 			}
-			if (_firebase2.default && (0, _lodash.has)(_config2.default, 'fbUrl') && (0, _lodash.has)(this, 'name')) {
-				this.fbUrl = _config2.default.fbUrl + '/' + this.name;
-				this.fbRef = new _firebase2.default(this.fbUrl);
+			if ((0, _lodash.isString)(appData)) {
+				this.name = appData;
+				logger.log({
+					description: 'Project object created without owner.', project: this,
+					func: 'constructor', obj: 'Project'
+				});
+			} else {
+				(0, _lodash.extend)(this, appData);
 			}
 			logger.debug({
-				description: 'Project object created.', application: this,
+				description: 'Project object created.', project: this,
 				func: 'constructor', obj: 'Project'
 			});
 		}
@@ -34040,12 +34067,12 @@ return /******/ (function(modules) { // webpackBootstrap
 					description: 'Project get called.', func: 'get', obj: 'Project'
 				});
 				return request.get(this.endpoint).then(function (response) {
-					var application = new Project(response);
+					var project = new Project(response);
 					logger.info({
 						description: 'Project loaded successfully.',
-						response: response, application: application, func: 'get', obj: 'Project'
+						response: response, project: project, func: 'get', obj: 'Project'
 					});
-					return application;
+					return project;
 				})['catch'](function (error) {
 					logger.error({
 						description: 'Error getting Project.',
@@ -34061,12 +34088,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		}, {
 			key: 'update',
-			value: function update(appData) {
+			value: function update(updateData) {
 				logger.debug({
 					description: 'Project update called.',
 					func: 'update', obj: 'Project'
 				});
-				return request.put(this.endpoint, appData).then(function (response) {
+				return request.put(this.endpoint, updateData).then(function (response) {
 					logger.info({
 						description: 'Project updated successfully.',
 						response: response, func: 'update', obj: 'Project'
@@ -34074,7 +34101,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					return new Project(response);
 				})['catch'](function (error) {
 					logger.error({
-						description: 'Error updating application.',
+						description: 'Error updating project.',
 						error: error, func: 'update', obj: 'Project'
 					});
 					return Promise.reject(error.response.text || error.response);
@@ -34088,19 +34115,19 @@ return /******/ (function(modules) { // webpackBootstrap
 			key: 'addStorage',
 			value: function addStorage() {
 				logger.debug({
-					description: 'Project add storage called.', application: this,
+					description: 'Project add storage called.', project: this,
 					func: 'addStorage', obj: 'Project'
 				});
 				return request.post(this.endpoint + '/storage', {}).then(function (response) {
-					var application = new Project(response);
+					var project = new Project(response);
 					logger.info({
-						description: 'Storage successfully added to application.',
-						response: response, application: application, func: 'addStorage', obj: 'Project'
+						description: 'Storage successfully added to project.',
+						response: response, project: project, func: 'addStorage', obj: 'Project'
 					});
-					return application;
+					return project;
 				})['catch'](function (error) {
 					logger.error({
-						description: 'Error adding storage to application.',
+						description: 'Error adding storage to project.',
 						error: error, func: 'addStorage', obj: 'Project'
 					});
 					return Promise.reject(error.response.text || error.response);
@@ -34121,15 +34148,15 @@ return /******/ (function(modules) { // webpackBootstrap
 				});
 				return request.post(this.endpoint, { template: template }).then(function (response) {
 					logger.info({
-						description: 'Template successfully applied to application.',
-						response: response, application: _this,
+						description: 'Template successfully applied to project.',
+						response: response, project: _this,
 						func: 'applyTemplate', obj: 'Project'
 					});
 					return new Project(response);
 				})['catch'](function (error) {
 					logger.error({
-						description: 'Error applying template to application.',
-						error: error, application: _this,
+						description: 'Error applying template to project.',
+						error: error, project: _this,
 						func: 'applyTemplate', obj: 'Project'
 					});
 					return Promise.reject(error.response.text || error.response);
@@ -34145,7 +34172,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function addCollaborators(collabs) {
 				logger.debug({
 					description: 'Add collaborators called', collabs: collabs,
-					application: this, func: 'addCollaborators', obj: 'Project'
+					project: this, func: 'addCollaborators', obj: 'Project'
 				});
 				this.collaborators = collabs;
 				//Handle string of ids
@@ -34153,8 +34180,8 @@ return /******/ (function(modules) { // webpackBootstrap
 					this.collaborators = collabs.replace(' ').split(',');
 				}
 				logger.log({
-					description: 'Collaborators list added to application, calling update.',
-					application: this, func: 'addCollaborators', obj: 'Project'
+					description: 'Collaborators list added to project, calling update.',
+					project: this, func: 'addCollaborators', obj: 'Project'
 				});
 				return this.update(this);
 			}
@@ -34165,39 +34192,39 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function File(fileData) {
 				logger.debug({
 					description: 'Projects file action called.',
-					fileData: fileData, application: this,
+					fileData: fileData, project: this,
 					func: 'file', obj: 'Project'
 				});
-				return new _File3.default({ app: this, fileData: fileData });
+				return new _File3.default({ project: this, fileData: fileData });
 			}
 		}, {
 			key: 'User',
 			value: function User(userData) {
 				logger.debug({
 					description: 'Projects user action called.',
-					userData: userData, application: this, func: 'user', obj: 'Project'
+					userData: userData, project: this, func: 'user', obj: 'Project'
 				});
-				return new _actions.Account({ app: this, userData: userData });
+				return new _actions.Account({ project: this, userData: userData });
 			}
 		}, {
 			key: 'Account',
-			value: function Account(userData) {
+			value: function Account(callData) {
 				logger.debug({
 					description: 'Projects account action called.',
-					userData: userData, application: this,
+					callData: callData, project: this,
 					func: 'user', obj: 'Project'
 				});
-				return new _actions.Account({ app: this, userData: userData });
+				return new _actions.Account({ project: this, callData: callData });
 			}
 		}, {
 			key: 'Group',
-			value: function Group(groupData) {
+			value: function Group(callData) {
 				logger.debug({
 					description: 'Projects group action called.',
-					groupData: groupData, application: this,
+					callData: callData, project: this,
 					func: 'group', obj: 'Project'
 				});
-				return new _Group3.default({ app: this, groupData: groupData });
+				return new _Group3.default({ project: this, callData: callData });
 			}
 		}, {
 			key: 'endpoint',
@@ -34232,41 +34259,41 @@ return /******/ (function(modules) { // webpackBootstrap
 			get: function get() {
 				logger.debug({
 					description: 'Projects files action called.',
-					application: this, func: 'files', obj: 'Project'
+					project: this, func: 'files', obj: 'Project'
 				});
-				return new _Files2.default({ app: this });
+				return new _Files2.default({ project: this });
 			}
 		}, {
 			key: 'Users',
 			get: function get() {
 				logger.debug({
 					description: 'Projects users action called.',
-					application: this, func: 'user', obj: 'Project'
+					project: this, func: 'user', obj: 'Project'
 				});
-				return new _actions.Accounts({ app: this });
+				return new _actions.Accounts({ project: this });
 			}
 		}, {
 			key: 'Accounts',
 			get: function get() {
 				logger.debug({
 					description: 'Projects account action called.',
-					application: this, func: 'user', obj: 'Project'
+					project: this, func: 'user', obj: 'Project'
 				});
-				return new _actions.Accounts({ app: this });
+				return new _actions.Accounts({ project: this });
 			}
 		}, {
 			key: 'Groups',
 			get: function get() {
 				logger.debug({
 					description: 'Projects groups action called.',
-					application: this, func: 'groups', obj: 'Project'
+					project: this, func: 'groups', obj: 'Project'
 				});
-				return new _actions.Groups({ app: this });
+				return new _actions.Groups({ project: this });
 			}
 		}]);
 
 		return Project;
-	}();
+	})();
 
 	exports.default = Project;
 	module.exports = exports['default'];
@@ -34443,16 +34470,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var Base64 = __webpack_require__(118);
 
-	function b64DecodeUnicode(str) {
-	  return decodeURIComponent(atob(str).replace(/(.)/g, function (m, p) {
-	    var code = p.charCodeAt(0).toString(16).toUpperCase();
-	    if (code.length < 2) {
-	      code = '0' + code;
-	    }
-	    return '%' + code;
-	  }));
-	}
-
 	module.exports = function(str) {
 	  var output = str.replace(/-/g, "+").replace(/_/g, "/");
 	  switch (output.length % 4) {
@@ -34468,10 +34485,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      throw "Illegal base64url string!";
 	  }
 
+	  var result = Base64.atob(output);
+
 	  try{
-	    return b64DecodeUnicode(output);
+	    return decodeURIComponent(escape(result));
 	  } catch (err) {
-	    return Base64.atob(output);
+	    return result;
 	  }
 	};
 
