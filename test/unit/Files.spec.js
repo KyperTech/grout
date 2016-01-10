@@ -57,6 +57,10 @@ describe('Files model', () => {
     it('exists', () => {
       expect(exampleApp.Files).to.have.property('fbUrl');
     });
+    it('is correct', () => {
+      expect(exampleApp).to.have.property('fbUrl');
+      expect(exampleApp.Files.fbUrl).to.equal(`${config.fbUrl}/files/${exampleApp.owner}/${exampleApp.name}`);
+    });
   });
   describe('fbRef getter', () => {
     it('exists', () => {

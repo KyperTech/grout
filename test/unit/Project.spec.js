@@ -53,7 +53,7 @@ describe('Project model', () => {
   });
   it('sets fbUrl', () => {
     expect(exampleApp).to.have.property('fbUrl');
-    expect(exampleApp.fbUrl).to.equal(config.fbUrl + '/' + exampleApp.name);
+    expect(exampleApp.fbUrl).to.equal(`${config.fbUrl}/files/${exampleApp.owner}/${exampleApp.name}`);
   });
   describe('endpoint', () => {
     it('exists', () => {
