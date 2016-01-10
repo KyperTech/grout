@@ -18,13 +18,12 @@ class Folder {
 		return `${this.Files.fbUrl}/this.path`;
 	}
 	get fbRef() {
-		const { fbRef } = this.Files;
-		let fbRef = new Files(this).fbRef;
+		let ref = new Files(this).fbRef;
 		logger.debug({
-			description: 'fbRef generated.', fbRef,
+			description: 'fbRef generated.', ref,
 			func: 'fbRef', obj: 'Folder'
 		});
-		return fbRef;
+		return ref;
 	}
 	save() {
 		return this.add;
