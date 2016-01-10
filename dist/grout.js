@@ -29422,8 +29422,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'endpointArray',
 	    get: function get() {
 	      var endpointArray = [_Matter2.default.endpoint, this.name];
-	      if ((0, _lodash.has)(this, 'project') && (0, _lodash.has)(this.project, 'name') && this.project.name !== _config2.default.appName) {
-	        //Splice apps, appName into index 1
+	      if ((0, _lodash.has)(this, 'project') && (0, _lodash.has)(this.project, 'name') && this.project.name !== _config2.default.defaultProject) {
+	        //Splice apps, defaultProject into index 1
 	        endpointArray.splice(1, 0, 'apps', this.project.name);
 	      }
 	      return endpointArray;
@@ -29436,11 +29436,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'url',
 	    get: function get() {
+	      var urlStr = this.endpointArray.join('/');
 	      logger.debug({
-	        description: 'Url created.', url: this.endpointArray.join('/'),
+	        description: 'Url created.', urlStr: urlStr,
 	        func: 'url', obj: 'Action'
 	      });
-	      return this.endpointArray.join('/');
+	      return urlStr;
 	    }
 	  }]);
 
@@ -29471,6 +29472,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _Matter2 = _interopRequireDefault(_Matter);
 
 	var _lodash = __webpack_require__(4);
+
+	var _Files = __webpack_require__(112);
+
+	var _Files2 = _interopRequireDefault(_Files);
 
 	var _firebase = __webpack_require__(52);
 
@@ -29512,13 +29517,14 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 			if (!project) {
 				logger.error({
-					description: 'Action data must be an object that includes app.',
+					description: 'Action data must be an object that includes project.',
 					func: 'constructor', obj: 'File'
 				});
-				throw new Error('File data must be an object that includes app.');
+				throw new Error('File data must be an object that includes project.');
 			}
 			this.type = 'file';
-			(0, _lodash.extend)(this, actionData);
+			this.project = project;
+			(0, _lodash.extend)(this, data);
 			if (!this.path) {
 				if (!this.ref && !this.name) {
 					logger.error({
@@ -29530,8 +29536,10 @@ return /******/ (function(modules) { // webpackBootstrap
 				this.path = this.name ? this.name : this.pathArrayFromRef.join('/');
 			}
 			this.pathArray = this.path.split('/');
-			//Get name from data or from pathArray
-			this.name = fileData.name ? fileData.name : this.pathArray[this.pathArray.length - 1];
+			if (!this.name) {
+				//Get name from data or from pathArray
+				this.name = this.pathArray[this.pathArray.length - 1];
+			}
 			logger.debug({
 				description: 'File object constructed.', file: this,
 				func: 'constructor', obj: 'File'
@@ -30087,7 +30095,8 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 					throw new Error('App information needed to generate fbUrl for File.');
 				}
-				return [_config2.default.fbUrl, 'files', this.project.name, this.safePath].join('/');
+				var files = new _Files2.default({ project: this.project });
+				return [files.fbUrl, this.safePath].join('/');
 			}
 		}, {
 			key: 'fbRef',
@@ -33312,6 +33321,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _firebase2 = _interopRequireDefault(_firebase);
 
+	var _Project = __webpack_require__(113);
+
+	var _Project2 = _interopRequireDefault(_Project);
+
 	var _File = __webpack_require__(95);
 
 	var _File2 = _interopRequireDefault(_File);
@@ -33437,6 +33450,11 @@ return /******/ (function(modules) { // webpackBootstrap
 				}
 				return this.addToFb(fileData);
 			}
+			/**
+	   * @description Add multiple files/folders to project files
+	   * @param {Array} filesData - Array of file objects to upload
+	   */
+
 		}, {
 			key: 'upload',
 			value: function upload(filesData) {
@@ -33448,8 +33466,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				} else {
 					var _ret = (function () {
 						logger.warn({
-							description: 'Add called with multiple files.', files: files,
-							app: _this3.project, func: 'upload', obj: 'Files'
+							description: 'Upload called with multiple files.', filesData: filesData,
+							project: _this3.project, func: 'upload', obj: 'Files'
 						});
 						var promises = [];
 						(0, _lodash.each)(filesData, function (file) {
@@ -33499,7 +33517,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function addFolder(folderData) {
 				var dataObj = folderData;
 				dataObj.app = this;
-				var folder = new Folder({ app: this });
+				var folder = new Folder({ project: this });
 				return folder.save();
 			}
 
@@ -33576,12 +33594,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		}, {
 			key: 'delFromFb',
-			value: function delFromFb(fileData) {
+			value: function delFromFb(data) {
 				logger.debug({
-					description: 'Del from fb called.', fileData: fileData,
+					description: 'Del from fb called.', data: data,
 					func: 'delFromFb', obj: 'Files'
 				});
-				if (!fileData || !fileData.path) {
+				if (!data || !data.path) {
 					logger.error({
 						description: 'Invalid file data. Path must be included.',
 						func: 'delFromFb', obj: 'Files'
@@ -33590,7 +33608,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						message: 'Invalid file data. Path must be included.'
 					});
 				}
-				var file = new _File2.default({ app: this.project, fileData: fileData });
+				var file = new _File2.default({ project: this.project, data: data });
 				return new Promise(function (resolve, reject) {
 					file.fbRef.remove(fileData, function (err) {
 						if (!err) {
@@ -33608,14 +33626,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		}, {
 			key: 'addLocalToFb',
-			value: function addLocalToFb(fileData) {
+			value: function addLocalToFb(data) {
 				var _this5 = this;
 
 				logger.debug({
-					description: 'Add local to fb called.', fileData: fileData,
+					description: 'Add local to fb called.', data: data,
 					func: 'addLocalToFb', obj: 'Files'
 				});
-				if (!fileData) {
+				if (!data) {
 					logger.error({
 						description: 'File is required to upload to Firebase.',
 						func: 'addLocalToFb', obj: 'Files'
@@ -33624,14 +33642,14 @@ return /******/ (function(modules) { // webpackBootstrap
 						message: 'File is required to upload to Firebase.'
 					});
 				}
-				return getContentFromFile(fileData).then(function (content) {
+				return getContentFromFile(data).then(function (content) {
 					logger.debug({
 						description: 'Content loaded from local file.', content: content,
 						func: 'addLocalToFb', obj: 'Files'
 					});
-					fileData.content = content;
-					fileData.path = fileData.name;
-					var file = new _File2.default({ app: _this5.project, fileData: fileData });
+					data.content = content;
+					data.path = data.name;
+					var file = new _File2.default({ project: _this5.project, data: data });
 					logger.info({
 						description: 'File object created.', file: file,
 						func: 'addLocalToFb', obj: 'Files'
@@ -33651,7 +33669,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				if (!this.project.frontend || !this.project.frontend.bucketName) {
 					logger.warn({
 						description: 'Files Frontend data not available. Calling .get().',
-						app: this.project, func: 'getFromS3', obj: 'Files'
+						project: this.project, func: 'getFromS3', obj: 'Files'
 					});
 					return this.project.get().then(function (applicationData) {
 						logger.log({
@@ -33786,14 +33804,18 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'fbUrl',
 			get: function get() {
-				if (!this.project.owner) {
-					logger.warn({
-						description: 'No owner provided. FbUrl does not contain owner name.',
-						func: 'fbUrl', obj: 'Files'
+				if (!this.project.fbUrl) {
+					logger.error({
+						description: 'Project data is required for fbUrl.',
+						func: 'constructor', obj: 'Files', files: this
 					});
-					return _config2.default.fbUrl + '/files/' + this.project.name;
+					throw new Error('Project data is required to create fbUrl.');
 				}
-				return _config2.default.fbUrl + '/files/' + this.project.owner.id + '/' + this.project.name;
+				if (this.project.fbUrl) {
+					return this.project.fbUrl;
+				}
+				var project = new _Project2.default(this.project);
+				return project.fbUrl;
 			}
 			/**
 	   * @description Firebase reference of files list
@@ -34229,7 +34251,19 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'endpoint',
 			get: function get() {
-				return _Matter2.default.endpoint + '/apps/' + this.name;
+				if (this.name === 'tessellate') {
+					logger.debug({
+						description: 'Project is tessellate. Using matter endpoint.',
+						project: this, func: 'endpoint', obj: 'Project'
+					});
+					return _Matter2.default.endpoint;
+				}
+				var projectEndpoint = _Matter2.default.endpoint + '/apps/' + this.name;
+				logger.debug({
+					description: 'Project endpoint created.',
+					projectEndpoint: projectEndpoint, func: 'endpoint', obj: 'Project'
+				});
+				return projectEndpoint;
 			}
 			/**
 	   * @description Project files Firebase Url
@@ -34239,7 +34273,10 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'fbUrl',
 			get: function get() {
-				if (_firebase2.default && (0, _lodash.has)(_config2.default, 'fbUrl') && (0, _lodash.has)(this, 'name')) {
+				if ((0, _lodash.has)(_config2.default, 'fbUrl') && (0, _lodash.has)(this, 'name')) {
+					if ((0, _lodash.has)(this, 'owner')) {
+						return _config2.default.fbUrl + '/files/' + this.owner + '/' + this.name;
+					}
 					return _config2.default.fbUrl + '/' + this.name;
 				}
 			}
@@ -34251,7 +34288,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			key: 'fbRef',
 			get: function get() {
 				if (this.fbUrl) {
-					this.fbRef = new _firebase2.default(this.fbUrl);
+					return new _firebase2.default(this.fbUrl);
 				}
 			}
 		}, {

@@ -3,6 +3,7 @@ import { toArray, isArray, has, pick, take, each, findWhere, union, clone, exten
 import AWS from 'aws-sdk';
 import matter from './Matter';
 import Firebase from 'firebase';
+import Project from './Project';
 import File from './File';
 //Convenience vars
 const { logger } = matter.utils;
@@ -26,14 +27,18 @@ export default class Files {
 	 * @description Firebase URL for files list
 	 */
 	get fbUrl() {
-		if(!this.project.owner){
-			logger.warn({
-				description: 'No owner provided. FbUrl does not contain owner name.',
-				func: 'fbUrl', obj: 'Files'
+		if(!this.project.fbUrl){
+			logger.error({
+				description: 'Project data is required for fbUrl.',
+				func: 'constructor', obj: 'Files', files: this
 			});
-			return `${config.fbUrl}/files/${this.project.name}`;
+			throw new Error('Project data is required to create fbUrl.');
 		}
-		return `${config.fbUrl}/files/${this.project.owner.id}/${this.project.name}`;
+		if(this.project.fbUrl){
+			return this.project.fbUrl;
+		}
+		let project = new Project(this.project);
+		return project.fbUrl;
 	}
 	/**
 	 * @description Firebase reference of files list
@@ -138,14 +143,18 @@ export default class Files {
 		}
 		return this.addToFb(fileData);
 	}
+	/**
+	 * @description Add multiple files/folders to project files
+	 * @param {Array} filesData - Array of file objects to upload
+	 */
 	upload(filesData) {
 		//TODO: Allow for options of where to add the file to
 		if(!isArray(filesData)){
 			return this.addToFb(filesData);
 		} else {
 			logger.warn({
-				description: 'Add called with multiple files.', files,
-				app: this.project, func: 'upload', obj: 'Files'
+				description: 'Upload called with multiple files.', filesData,
+				project: this.project, func: 'upload', obj: 'Files'
 			});
 			let promises = [];
 			each(filesData, file => {
@@ -180,7 +189,7 @@ export default class Files {
 	addFolder(folderData) {
 		let dataObj = folderData;
 		dataObj.app = this;
-		let folder = new Folder({app: this})
+		let folder = new Folder({project: this})
 		return folder.save();
 	}
 
@@ -239,12 +248,12 @@ export default class Files {
 	 * @param {Object} objData - Data of file or folder
 	 * @param {String} path - Path of file or folder
 	 */
-	delFromFb(fileData) {
+	delFromFb(data) {
 		logger.debug({
-			description: 'Del from fb called.', fileData,
+			description: 'Del from fb called.', data,
 			func: 'delFromFb', obj: 'Files'
 		});
-		if (!fileData || !fileData.path) {
+		if (!data || !data.path) {
 			logger.error({
 				description: 'Invalid file data. Path must be included.',
 				func: 'delFromFb', obj: 'Files'
@@ -253,7 +262,7 @@ export default class Files {
 				message: 'Invalid file data. Path must be included.'
 			});
 		}
-		let file = new File({app: this.project, fileData});
+		let file = new File({project: this.project, data});
 		return new Promise((resolve, reject) => {
 			file.fbRef.remove(fileData, err => {
 				if (!err) {
@@ -268,12 +277,12 @@ export default class Files {
 	 * @description Upload a local file to Firebase
 	 * @param {File} file - Local file with content to be uploaded
 	 */
-	addLocalToFb(fileData) {
+	addLocalToFb(data) {
 		logger.debug({
-			description: 'Add local to fb called.', fileData,
+			description: 'Add local to fb called.', data,
 			func: 'addLocalToFb', obj: 'Files'
 		});
-		if (!fileData) {
+		if (!data) {
 			logger.error({
 				description: 'File is required to upload to Firebase.',
 				func: 'addLocalToFb', obj: 'Files'
@@ -282,14 +291,14 @@ export default class Files {
 				message: 'File is required to upload to Firebase.'
 			});
 		}
-		return getContentFromFile(fileData).then(content => {
+		return getContentFromFile(data).then(content => {
 			logger.debug({
 				description: 'Content loaded from local file.', content,
 				func: 'addLocalToFb', obj: 'Files'
 			});
-			fileData.content = content;
-			fileData.path = fileData.name;
-			const file = new File({app: this.project, fileData});
+			data.content = content;
+			data.path = data.name;
+			const file = new File({project: this.project, data});
 			logger.info({
 				description: 'File object created.', file,
 				func: 'addLocalToFb', obj: 'Files'
@@ -304,7 +313,7 @@ export default class Files {
 		if (!this.project.frontend || !this.project.frontend.bucketName) {
 			logger.warn({
 				description: 'Files Frontend data not available. Calling .get().',
-				app: this.project, func: 'getFromS3', obj: 'Files'
+				project: this.project, func: 'getFromS3', obj: 'Files'
 			});
 			return this.project.get().then(applicationData => {
 				logger.log({

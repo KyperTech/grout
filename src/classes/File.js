@@ -1,11 +1,11 @@
 import config from '../config';
 import matter from './Matter';
 import { has, isObject, extend } from 'lodash';
+import Files from './Files';
 import Firebase from 'firebase';
 import AWS from 'aws-sdk';
 //Convenience vars
 const { logger } = matter.utils;
-
 export default class File {
 	constructor(actionData) {
 		if (!actionData || !isObject(actionData)) {
@@ -25,13 +25,14 @@ export default class File {
 		}
 		if(!project){
 			logger.error({
-				description: 'Action data must be an object that includes app.',
+				description: 'Action data must be an object that includes project.',
 				func: 'constructor', obj: 'File'
 			});
-			throw new Error('File data must be an object that includes app.');
+			throw new Error('File data must be an object that includes project.');
 		}
 		this.type = 'file';
-		extend(this, actionData);
+		this.project = project;
+		extend(this, data);
 		if (!this.path) {
 			if (!this.ref && !this.name) {
 				logger.error({
@@ -43,8 +44,10 @@ export default class File {
 			this.path = this.name ? this.name : this.pathArrayFromRef.join('/');
 		}
 		this.pathArray = this.path.split('/');
+		if (!this.name) {
 			//Get name from data or from pathArray
-		this.name = fileData.name ? fileData.name : this.pathArray[this.pathArray.length - 1];
+			this.name = this.pathArray[this.pathArray.length - 1]
+		}
 		logger.debug({
 			description: 'File object constructed.', file: this,
 			func: 'constructor', obj: 'File'
@@ -96,7 +99,8 @@ export default class File {
 			});
 			throw new Error ('App information needed to generate fbUrl for File.');
 		}
-		return [config.fbUrl, 'files', this.project.name, this.safePath].join('/');
+		let files = new Files({project: this.project});
+		return [files.fbUrl, this.safePath].join('/');
 	}
 	get fbRef() {
 		if (this.ref) {

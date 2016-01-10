@@ -48,14 +48,29 @@ class Project {
 	 * @return {String}
 	 */
 	get endpoint() {
-		return `${matter.endpoint}/apps/${this.name}`;
+		if (this.name === 'tessellate') {
+			logger.debug({
+				description: 'Project is tessellate. Using matter endpoint.',
+				project: this, func: 'endpoint', obj: 'Project'
+			});
+			return matter.endpoint;
+		}
+		const projectEndpoint = `${matter.endpoint}/apps/${this.name}`
+		logger.debug({
+			description: 'Project endpoint created.',
+			projectEndpoint, func: 'endpoint', obj: 'Project'
+		});
+		return projectEndpoint;
 	}
 	/**
 	 * @description Project files Firebase Url
 	 * @return {String}
 	 */
 	get fbUrl() {
-		if (Firebase && has(config, 'fbUrl') && has(this, 'name')) {
+		if (has(config, 'fbUrl') && has(this, 'name')) {
+			if(has(this, 'owner')){
+				return `${config.fbUrl}/files/${this.owner}/${this.name}`;
+			}
 			return `${config.fbUrl}/${this.name}`;
 		}
 	}
@@ -64,7 +79,7 @@ class Project {
 	 */
 	get fbRef() {
 		if (this.fbUrl) {
-			this.fbRef = new Firebase(this.fbUrl);
+			return new Firebase(this.fbUrl);
 		}
 	}
 	/**

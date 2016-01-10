@@ -47,8 +47,8 @@ export default class Action {
    */
   get endpointArray() {
     let endpointArray = [matter.endpoint, this.name];
-    if (has(this, 'project') && has(this.project, 'name') && this.project.name !== config.appName) {
-      //Splice apps, appName into index 1
+    if (has(this, 'project') && has(this.project, 'name') && this.project.name !== config.defaultProject) {
+      //Splice apps, defaultProject into index 1
       endpointArray.splice(1, 0, 'apps', this.project.name);
     }
     return endpointArray;
@@ -58,11 +58,12 @@ export default class Action {
    * @return {String}
    */
   get url() {
+    const urlStr = this.endpointArray.join('/');
     logger.debug({
-      description: 'Url created.', url: this.endpointArray.join('/'),
+      description: 'Url created.', urlStr,
       func: 'url', obj: 'Action'
     });
-    return this.endpointArray.join('/');
+    return urlStr;
   }
   /** Get
    * @return {Promise}
