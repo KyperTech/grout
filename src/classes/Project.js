@@ -11,7 +11,7 @@ import {
 } from '../actions';
 import Group from './Group';
 import Files from './Files';
-import File from './File';
+import FileObj from './File';
 
 //External Libs
 import Firebase from 'firebase';
@@ -21,7 +21,7 @@ const {request, logger} = matter.utils;
  * Project class.
  *
  */
-class Project {
+export default class Project {
 	constructor(appData) {
 		if(!appData || (!isObject(appData) && !isString(appData))){
 			logger.error({
@@ -197,18 +197,18 @@ class Project {
 	//Files object that contains files methods
 	get Files() {
 		logger.debug({
-			description: 'Projects files action called.',
+			description: 'Project files action called.',
 			project: this, func: 'files', obj: 'Project'
 		});
 		return new Files({project: this});
 	}
-	File(fileData) {
+	File(data) {
 		logger.debug({
-			description: 'Projects file action called.',
-			fileData, project: this,
+			description: 'Project file action called.',
+			data, project: new Project(this),
 			func: 'file', obj: 'Project'
 		});
-		return new File({project: this, fileData});
+		return new FileObj({project: this, data});
 	}
 	get Users() {
 		logger.debug({
@@ -217,12 +217,12 @@ class Project {
 		});
 		return new Accounts({project: this});
 	}
-	User(userData) {
+	User(data) {
 		logger.debug({
 			description: 'Projects user action called.',
-			userData, project: this, func: 'user', obj: 'Project'
+			data, project: this, func: 'user', obj: 'Project'
 		});
-		return new Account({project: this, userData});
+		return new Account({project: this, data});
 	}
 	get Accounts() {
 		logger.debug({
@@ -231,13 +231,13 @@ class Project {
 		});
 		return new Accounts({project: this});
 	}
-	Account(callData) {
+	Account(data) {
 		logger.debug({
 			description: 'Projects account action called.',
-			callData, project: this,
+			data, project: this,
 			func: 'user', obj: 'Project'
 		});
-		return new Account({project: this, callData});
+		return new Account({project: this, data});
 	}
 	get Groups() {
 		logger.debug({
@@ -246,14 +246,12 @@ class Project {
 		});
 		return new Groups({project: this});
 	}
-	Group(callData) {
+	Group(data) {
 		logger.debug({
 			description: 'Projects group action called.',
-			callData, project: this,
+			data, project: this,
 			func: 'group', obj: 'Project'
 		});
-		return new Group({project: this, callData});
+		return new Group({project: this, data});
 	}
 }
-
-export default Project;

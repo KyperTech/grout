@@ -29,10 +29,10 @@ export default class Grout extends Matter {
 		return action;
 	}
 	//Start a new Project action
-	Project(projectName) {
-		let project = new Project(projectName);
+	Project(projectData) {
+		let project = new Project(projectData);
 		logger.debug({
-			description: 'Project action called.', projectName,
+			description: 'Project action called.', projectData,
 			project, func: 'Project', obj: 'Grout'
 		});
 		return project;

@@ -136,12 +136,12 @@ export default class Files {
 	 * @param {Object|Array} fileData - Array of objects or single object containing file data
 	 * @param {Object} fileData.path - Path of file relative to project
 	 */
-	add(fileData) {
+	add(objData) {
 		//TODO: Allow for options of where to add the file to
-		if(isArray(fileData)){
-			return this.upload(fileData);
+		if(isArray(objData)){
+			return this.upload(objData);
 		}
-		return this.addToFb(fileData);
+		return this.addToFb(objData);
 	}
 	/**
 	 * @description Add multiple files/folders to project files
@@ -192,7 +192,6 @@ export default class Files {
 		let folder = new Folder({project: this})
 		return folder.save();
 	}
-
 	/**
 	 * @description Add a file to Firebase
 	 * @param {Object} fileData - Data object for new file
@@ -213,6 +212,7 @@ export default class Files {
 				message: 'Object data is required to add.'
 			});
 		}
+		//Array of files/folder to upload
 		if (isArray(addData)) {
 			let promises = [];
 			addData.forEach(file => {
