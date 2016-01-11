@@ -8,6 +8,10 @@ import AWS from 'aws-sdk';
 const { logger } = matter.utils;
 export default class File {
 	constructor(actionData) {
+		logger.debug({
+			description: 'File constructor called with', actionData,
+			func: 'constructor', obj: 'File'
+		});
 		if (!actionData || !isObject(actionData)) {
 			logger.error({
 				description: 'File data that includes path and app is needed to create a File action.',
@@ -221,18 +225,22 @@ export default class File {
 	 * @description Add file to Firebase located at file's fbRef
 	 */
 	removeFromFb() {
+		logger.debug({
+			description: 'Remove File from Firebase called.',
+			func: 'removeFromFb', obj: 'File'
+		});
 		return new Promise((resolve, reject) => {
-			fbRef.remove((error) => {
+			this.fbRef.remove((error) => {
 				if (!error) {
 					logger.info({
 						description: 'File successfully removed from Firebase.',
-						func: 'removeFromFb', obj: 'Files'
+						func: 'removeFromFb', obj: 'File'
 					});
-					resolve(fileData);
+					resolve();
 				} else {
 					logger.error({
 						description: 'Error creating file on Firebase.',
-						error, func: 'removeFromFb', obj: 'Files'
+						error, func: 'removeFromFb', obj: 'File'
 					});
 					reject(error);
 				}

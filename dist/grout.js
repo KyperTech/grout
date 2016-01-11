@@ -120,10 +120,10 @@ return /******/ (function(modules) { // webpackBootstrap
 			key: 'Project',
 
 			//Start a new Project action
-			value: function Project(projectName) {
-				var project = new _Project3.default(projectName);
+			value: function Project(projectData) {
+				var project = new _Project3.default(projectData);
 				logger.debug({
-					description: 'Project action called.', projectName: projectName,
+					description: 'Project action called.', projectData: projectData,
 					project: project, func: 'Project', obj: 'Grout'
 				});
 				return project;
@@ -278,7 +278,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * @constant
 	   */
-	  VERSION: '2.2.26',
+	  VERSION: '2.2.28',
 
 	  /**
 	   * @api private
@@ -907,7 +907,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  each: function each(object, iterFunction) {
 	    for (var key in object) {
-	      if (object.hasOwnProperty(key)) {
+	      if (Object.prototype.hasOwnProperty.call(object, key)) {
 	        var ret = iterFunction.call(this, key, object[key]);
 	        if (ret === util.abort) break;
 	      }
@@ -20704,11 +20704,11 @@ return /******/ (function(modules) { // webpackBootstrap
 			},
 			stage: {
 				serverUrl: 'http://tessellate-stage.elasticbeanstalk.com',
-				logLevel: 'debug'
+				logLevel: 'info'
 			},
 			prod: {
 				serverUrl: 'http://tessellate.elasticbeanstalk.com',
-				logLevel: 'info'
+				logLevel: 'error'
 			}
 		},
 		tokenName: 'tessellate',
@@ -20766,6 +20766,9 @@ return /******/ (function(modules) { // webpackBootstrap
 				envName = newEnv;
 				// this.envName = newEnv;
 				// console.log('Environment name set:', envName);
+			},
+			get: function get() {
+				return envName;
 			}
 		}, {
 			key: 'env',
@@ -23812,12 +23815,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    if (this.errors.length > 1) {
 	      var msg = this.errors.join('\n* ');
-	      if (this.errors.length > 1) {
-	        msg = 'There were ' + this.errors.length +
-	              ' validation errors:\n* ' + msg;
-	        throw AWS.util.error(new Error(msg),
-	          {code: 'MultipleValidationErrors', errors: this.errors});
-	      }
+	      msg = 'There were ' + this.errors.length +
+	        ' validation errors:\n* ' + msg;
+	      throw AWS.util.error(new Error(msg),
+	        {code: 'MultipleValidationErrors', errors: this.errors});
 	    } else if (this.errors.length === 1) {
 	      throw this.errors[0];
 	    } else {
@@ -25791,6 +25792,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (err) return upload.callback(err);
 	    data.Location =
 	      [endpoint.protocol, '//', endpoint.host, httpReq.path].join('');
+	    data.key = this.request.params.Key;
 	    upload.callback(err, data);
 	  },
 
@@ -25801,6 +25803,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var upload = this._managedUpload;
 	    if (this.operation === 'putObject') {
 	      info.part = 1;
+	      info.key = this.params.Key;
 	    } else {
 	      upload.totalUploadedBytes += info.loaded - this._lastUploadedBytes;
 	      this._lastUploadedBytes = info.loaded;
@@ -29498,6 +29501,10 @@ return /******/ (function(modules) { // webpackBootstrap
 		function File(actionData) {
 			_classCallCheck(this, File);
 
+			logger.debug({
+				description: 'File constructor called with', actionData: actionData,
+				func: 'constructor', obj: 'File'
+			});
 			if (!actionData || !(0, _lodash.isObject)(actionData)) {
 				logger.error({
 					description: 'File data that includes path and app is needed to create a File action.',
@@ -29663,18 +29670,24 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'removeFromFb',
 			value: function removeFromFb() {
+				var _this2 = this;
+
+				logger.debug({
+					description: 'Remove File from Firebase called.',
+					func: 'removeFromFb', obj: 'File'
+				});
 				return new Promise(function (resolve, reject) {
-					fbRef.remove(function (error) {
+					_this2.fbRef.remove(function (error) {
 						if (!error) {
 							logger.info({
 								description: 'File successfully removed from Firebase.',
-								func: 'removeFromFb', obj: 'Files'
+								func: 'removeFromFb', obj: 'File'
 							});
-							resolve(fileData);
+							resolve();
 						} else {
 							logger.error({
 								description: 'Error creating file on Firebase.',
-								error: error, func: 'removeFromFb', obj: 'Files'
+								error: error, func: 'removeFromFb', obj: 'File'
 							});
 							reject(error);
 						}
@@ -29684,7 +29697,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'getFromS3',
 			value: function getFromS3() {
-				var _this2 = this;
+				var _this3 = this;
 
 				if (!this.project || !this.project.frontend) {
 					logger.log({
@@ -29692,12 +29705,12 @@ return /******/ (function(modules) { // webpackBootstrap
 						func: 'get', obj: 'File'
 					});
 					return this.project.get().then(function (appData) {
-						_this2.project = appData;
+						_this3.project = appData;
 						logger.log({
 							description: 'Application get successful. Getting file.',
 							app: appData, func: 'get', obj: 'File'
 						});
-						return _this2.get();
+						return _this3.get();
 					}, function (error) {
 						logger.error({
 							description: 'Application Frontend data not available.',
@@ -29719,18 +29732,18 @@ return /******/ (function(modules) { // webpackBootstrap
 						}
 						var s3 = new _awsSdk2.default.S3();
 						var getData = {
-							Bucket: _this2.project.frontend.bucketName,
-							Key: _this2.path
+							Bucket: _this3.project.frontend.bucketName,
+							Key: _this3.path
 						};
 						//Set contentType from actionData to ContentType parameter of new object
-						if (_this2.contentType) {
-							getData.ContentType = _this2.contentType;
+						if (_this3.contentType) {
+							getData.ContentType = _this3.contentType;
 						}
 						logger.debug({
 							description: 'File get params built.', getData: getData,
-							file: _this2, func: 'get', obj: 'File'
+							file: _this3, func: 'get', obj: 'File'
 						});
-						var finalData = _this2;
+						var finalData = _this3;
 						return {
 							v: new Promise(function (resolve, reject) {
 								s3.getObject(getData, function (error, data) {
@@ -29773,7 +29786,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'saveToS3',
 			value: function saveToS3(fileData) {
-				var _this3 = this;
+				var _this4 = this;
 
 				//TODO: Publish file to application
 				logger.debug({
@@ -29798,14 +29811,14 @@ return /******/ (function(modules) { // webpackBootstrap
 							};
 						}
 						var saveParams = {
-							Bucket: _this3.project.frontend.bucketName,
+							Bucket: _this4.project.frontend.bucketName,
 							Key: fileData.path,
 							Body: fileData.content,
 							ACL: 'public-read'
 						};
 						//Set contentType from fileData to ContentType parameter of new object
-						if (_this3.contentType) {
-							saveParams.ContentType = _this3.contentType;
+						if (_this4.contentType) {
+							saveParams.ContentType = _this4.contentType;
 						}
 						//If AWS Credential do not exist, set them
 						if (typeof _awsSdk2.default.config.credentials == 'undefined' || !_awsSdk2.default.config.credentials) {
@@ -29818,7 +29831,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						var s3 = new _awsSdk2.default.S3();
 						logger.debug({
 							description: 'File publish params built.',
-							saveParams: saveParams, fileData: _this3,
+							saveParams: saveParams, fileData: _this4,
 							func: 'publish', obj: 'File'
 						});
 						return {
@@ -29849,7 +29862,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'removeFromS3',
 			value: function removeFromS3() {
-				var _this4 = this;
+				var _this5 = this;
 
 				if (!this.project || !this.project.frontend) {
 					logger.log({
@@ -29857,12 +29870,12 @@ return /******/ (function(modules) { // webpackBootstrap
 						func: 'removeFromS3', obj: 'File'
 					});
 					return this.project.get().then(function (appData) {
-						_this4.project = appData;
+						_this5.project = appData;
 						logger.log({
 							description: 'Application get successful. Getting file.',
-							app: _this4.project, func: 'removeFromS3', obj: 'File'
+							app: _this5.project, func: 'removeFromS3', obj: 'File'
 						});
-						return _this4.get();
+						return _this5.get();
 					}, function (error) {
 						logger.error({
 							description: 'Application Frontend data not available. Make sure to call .get().',
@@ -29884,16 +29897,16 @@ return /******/ (function(modules) { // webpackBootstrap
 						}
 						var s3 = new _awsSdk2.default.S3();
 						var saveParams = {
-							Bucket: _this4.project.frontend.bucketName,
-							Key: _this4.path
+							Bucket: _this5.project.frontend.bucketName,
+							Key: _this5.path
 						};
 						//Set contentType from actionData to ContentType parameter of new object
-						if (_this4.contentType) {
-							saveParams.ContentType = _this4.contentType;
+						if (_this5.contentType) {
+							saveParams.ContentType = _this5.contentType;
 						}
 						logger.debug({
 							description: 'File get params built.',
-							saveParams: saveParams, file: _this4, func: 'get', obj: 'File'
+							saveParams: saveParams, file: _this5, func: 'get', obj: 'File'
 						});
 						return {
 							v: new Promise(function (resolve, reject) {
@@ -29935,11 +29948,11 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'openInFirepad',
 			value: function openInFirepad(editor) {
-				var _this5 = this;
+				var _this6 = this;
 
 				//Load file contents from s3
 				return new Promise(function (resolve, reject) {
-					_this5.get().then(function (file) {
+					_this6.get().then(function (file) {
 						logger.info({
 							description: 'File contents loaded. Opening firepad.',
 							editor: editor, file: file, func: 'openInFirepad', obj: 'File'
@@ -30001,10 +30014,10 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'getConnectedUsers',
 			value: function getConnectedUsers() {
-				var _this6 = this;
+				var _this7 = this;
 
 				return new Promise(function (resolve, reject) {
-					_this6.fbRef.child('users').on('value', function (usersSnap) {
+					_this7.fbRef.child('users').on('value', function (usersSnap) {
 						if (usersSnap.val() === null) {
 							resolve([]);
 						} else {
@@ -30333,12 +30346,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		}, {
 			key: 'add',
-			value: function add(fileData) {
+			value: function add(objData) {
 				//TODO: Allow for options of where to add the file to
-				if ((0, _lodash.isArray)(fileData)) {
-					return this.upload(fileData);
+				if ((0, _lodash.isArray)(objData)) {
+					return this.upload(objData);
 				}
-				return this.addToFb(fileData);
+				return this.addToFb(objData);
 			}
 			/**
 	   * @description Add multiple files/folders to project files
@@ -30410,7 +30423,6 @@ return /******/ (function(modules) { // webpackBootstrap
 				var folder = new Folder({ project: this });
 				return folder.save();
 			}
-
 			/**
 	   * @description Add a file to Firebase
 	   * @param {Object} fileData - Data object for new file
@@ -30436,6 +30448,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						message: 'Object data is required to add.'
 					});
 				}
+				//Array of files/folder to upload
 				if ((0, _lodash.isArray)(addData)) {
 					var _ret2 = (function () {
 						var promises = [];
@@ -31012,9 +31025,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Files2 = _interopRequireDefault(_Files);
 
-	var _File2 = __webpack_require__(95);
+	var _File = __webpack_require__(95);
 
-	var _File3 = _interopRequireDefault(_File2);
+	var _File2 = _interopRequireDefault(_File);
 
 	var _firebase = __webpack_require__(52);
 
@@ -31195,42 +31208,42 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		}, {
 			key: 'File',
-			value: function File(fileData) {
+			value: function File(data) {
 				logger.debug({
-					description: 'Projects file action called.',
-					fileData: fileData, project: this,
+					description: 'Project file action called.',
+					data: data, project: new Project(this),
 					func: 'file', obj: 'Project'
 				});
-				return new _File3.default({ project: this, fileData: fileData });
+				return new _File2.default({ project: this, data: data });
 			}
 		}, {
 			key: 'User',
-			value: function User(userData) {
+			value: function User(data) {
 				logger.debug({
 					description: 'Projects user action called.',
-					userData: userData, project: this, func: 'user', obj: 'Project'
+					data: data, project: this, func: 'user', obj: 'Project'
 				});
-				return new _actions.Account({ project: this, userData: userData });
+				return new _actions.Account({ project: this, data: data });
 			}
 		}, {
 			key: 'Account',
-			value: function Account(callData) {
+			value: function Account(data) {
 				logger.debug({
 					description: 'Projects account action called.',
-					callData: callData, project: this,
+					data: data, project: this,
 					func: 'user', obj: 'Project'
 				});
-				return new _actions.Account({ project: this, callData: callData });
+				return new _actions.Account({ project: this, data: data });
 			}
 		}, {
 			key: 'Group',
-			value: function Group(callData) {
+			value: function Group(data) {
 				logger.debug({
 					description: 'Projects group action called.',
-					callData: callData, project: this,
+					data: data, project: this,
 					func: 'group', obj: 'Project'
 				});
-				return new _Group3.default({ project: this, callData: callData });
+				return new _Group3.default({ project: this, data: data });
 			}
 		}, {
 			key: 'endpoint',
@@ -31279,7 +31292,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			key: 'Files',
 			get: function get() {
 				logger.debug({
-					description: 'Projects files action called.',
+					description: 'Project files action called.',
 					project: this, func: 'files', obj: 'Project'
 				});
 				return new _Files2.default({ project: this });
@@ -31902,12 +31915,12 @@ return /******/ (function(modules) { // webpackBootstrap
 					return Promise.reject(errRes);
 				});
 			}
-			/** recoverPassword
+			/** recoverAccount
 	   * @param {String} updateData New password for account.
 	   * @return {Promise}
 	   * @example
 	   * //Recover current users password
-	   * matter.recoverPassword().then(function(updatedAccount){
+	   * matter.recoverAccount().then(function(updatedAccount){
 	   *  console.log('Currently logged in account:', updatedAccount);
 	   * }, function(err){
 	   *  console.error('Error updating profile:', err);
@@ -31915,27 +31928,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 
 		}, {
-			key: 'recoverPassword',
-			value: function recoverPassword() {
-				if (!this.isLoggedIn) {
+			key: 'recoverAccount',
+			value: function recoverAccount(accountData) {
+				if (!accountData || !(0, _lodash.isString)(accountData) && !(0, _lodash.isObject)(accountData)) {
 					_logger2.default.error({
-						description: 'No current user for which to recover password.',
-						func: 'recoverPassword', obj: 'Matter'
+						description: 'Account data is required to recover an account.',
+						func: 'recoverAccount', obj: 'Matter'
 					});
-					return Promise.reject({ message: 'Must be logged in to recover password.' });
+					return Promise.reject({ message: 'Account data is required to recover an account.' });
 				}
+				var account = {};
+				if ((0, _lodash.isString)(accountData)) {
+					account = accountData.indexOf('@') !== -1 ? { email: accountData } : { username: accountData };
+				} else {
+					account = accountData;
+				}
+				_logger2.default.debug({
+					description: 'Requesting recovery of account.', account: account,
+					func: 'recoverAccount', obj: 'Matter'
+				});
 				//Send update request
-				return _request2.default.post(this.urls.recoverPassword).then(function (response) {
+				return _request2.default.post(this.urls.recover, account).then(function (response) {
 					_logger2.default.info({
 						description: 'Recover password request responded.',
-						responseData: response, func: 'recoverPassword',
-						obj: 'Matter'
+						response: response, func: 'recoverAccount', obj: 'Matter'
 					});
 					return response;
 				})['catch'](function (errRes) {
 					_logger2.default.error({
 						description: 'Error requesting password recovery.',
-						error: errRes, func: 'recoverPassword', obj: 'Matter'
+						error: errRes, func: 'recoverAccount', obj: 'Matter'
 					});
 					return Promise.reject(errRes);
 				});
@@ -32148,10 +32170,15 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'urls',
 			get: function get() {
+				if (this.token && this.token.data && this.token.data.username) {
+					return {
+						update: this.endpoint + '/account/' + this.token.data.username,
+						upload: this.endpoint + '/account/' + this.token.data.username + '/upload',
+						recover: this.endpoint + '/recover'
+					};
+				}
 				return {
-					update: this.endpoint + '/account/' + this.token.data.username,
-					upload: this.endpoint + '/account/' + this.token.data.username + '/upload',
-					recoverPassword: this.endpoint + '/account/' + this.token.data.username + '/recover'
+					recover: this.endpoint + '/recover'
 				};
 			}
 		}, {
@@ -34507,6 +34534,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var Base64 = __webpack_require__(118);
 
+	function b64DecodeUnicode(str) {
+	  return decodeURIComponent(atob(str).replace(/(.)/g, function (m, p) {
+	    var code = p.charCodeAt(0).toString(16).toUpperCase();
+	    if (code.length < 2) {
+	      code = '0' + code;
+	    }
+	    return '%' + code;
+	  }));
+	}
+
 	module.exports = function(str) {
 	  var output = str.replace(/-/g, "+").replace(/_/g, "/");
 	  switch (output.length % 4) {
@@ -34522,12 +34559,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      throw "Illegal base64url string!";
 	  }
 
-	  var result = Base64.atob(output);
-
 	  try{
-	    return decodeURIComponent(escape(result));
+	    return b64DecodeUnicode(output);
 	  } catch (err) {
-	    return result;
+	    return Base64.atob(output);
 	  }
 	};
 

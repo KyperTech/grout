@@ -1,4 +1,5 @@
 var grout = new Grout({logLevel: 'trace'});
+
   // console.log('utils', grout.utils);
   //Set logged in status when dom is loaded
   document.addEventListener("DOMContentLoaded", function(event) {
@@ -122,14 +123,6 @@ var grout = new Grout({logLevel: 'trace'});
         document.getElementById("output").innerHTML = JSON.stringify(users);
       });
     });
-
-
-    console.log('fbUrl', file.fbUrl);
-    console.log('fbRef', file.fbRef);
-    // file.get().then(function(fileRes){
-    //   console.log('file loaded', fileRes);
-    //   fileRes.firepadFromAce(editor);
-    // });
   }
   function addFile() {
     grout.App('Aventura').Files.add({path: 'test.js'}).then(function(newFileRes) {
@@ -137,6 +130,13 @@ var grout = new Grout({logLevel: 'trace'});
     }, function(err){
       console.error('Error creating new file: ', err);
     });
+  }
+  function deleteFile() {
+    grout.Project({name: 'Aventura', owner: 'scott'}).File({path: 'hello.js'}).remove().then(res => {
+      console.log('file deleted:', res);
+    }, err => {
+      console.error('error deleting file', err);
+    })
   }
   //Get list of users
   function getUsers(){
