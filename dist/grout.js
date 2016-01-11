@@ -278,7 +278,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * @constant
 	   */
-	  VERSION: '2.2.26',
+	  VERSION: '2.2.28',
 
 	  /**
 	   * @api private
@@ -907,7 +907,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  each: function each(object, iterFunction) {
 	    for (var key in object) {
-	      if (object.hasOwnProperty(key)) {
+	      if (Object.prototype.hasOwnProperty.call(object, key)) {
 	        var ret = iterFunction.call(this, key, object[key]);
 	        if (ret === util.abort) break;
 	      }
@@ -20704,11 +20704,11 @@ return /******/ (function(modules) { // webpackBootstrap
 			},
 			stage: {
 				serverUrl: 'http://tessellate-stage.elasticbeanstalk.com',
-				logLevel: 'debug'
+				logLevel: 'info'
 			},
 			prod: {
 				serverUrl: 'http://tessellate.elasticbeanstalk.com',
-				logLevel: 'info'
+				logLevel: 'error'
 			}
 		},
 		tokenName: 'tessellate',
@@ -20766,6 +20766,9 @@ return /******/ (function(modules) { // webpackBootstrap
 				envName = newEnv;
 				// this.envName = newEnv;
 				// console.log('Environment name set:', envName);
+			},
+			get: function get() {
+				return envName;
 			}
 		}, {
 			key: 'env',
@@ -23812,12 +23815,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    if (this.errors.length > 1) {
 	      var msg = this.errors.join('\n* ');
-	      if (this.errors.length > 1) {
-	        msg = 'There were ' + this.errors.length +
-	              ' validation errors:\n* ' + msg;
-	        throw AWS.util.error(new Error(msg),
-	          {code: 'MultipleValidationErrors', errors: this.errors});
-	      }
+	      msg = 'There were ' + this.errors.length +
+	        ' validation errors:\n* ' + msg;
+	      throw AWS.util.error(new Error(msg),
+	        {code: 'MultipleValidationErrors', errors: this.errors});
 	    } else if (this.errors.length === 1) {
 	      throw this.errors[0];
 	    } else {
@@ -25791,6 +25792,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (err) return upload.callback(err);
 	    data.Location =
 	      [endpoint.protocol, '//', endpoint.host, httpReq.path].join('');
+	    data.key = this.request.params.Key;
 	    upload.callback(err, data);
 	  },
 
@@ -25801,6 +25803,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var upload = this._managedUpload;
 	    if (this.operation === 'putObject') {
 	      info.part = 1;
+	      info.key = this.params.Key;
 	    } else {
 	      upload.totalUploadedBytes += info.loaded - this._lastUploadedBytes;
 	      this._lastUploadedBytes = info.loaded;
@@ -31902,12 +31905,12 @@ return /******/ (function(modules) { // webpackBootstrap
 					return Promise.reject(errRes);
 				});
 			}
-			/** recoverPassword
+			/** recoverAccount
 	   * @param {String} updateData New password for account.
 	   * @return {Promise}
 	   * @example
 	   * //Recover current users password
-	   * matter.recoverPassword().then(function(updatedAccount){
+	   * matter.recoverAccount().then(function(updatedAccount){
 	   *  console.log('Currently logged in account:', updatedAccount);
 	   * }, function(err){
 	   *  console.error('Error updating profile:', err);
@@ -31915,27 +31918,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 
 		}, {
-			key: 'recoverPassword',
-			value: function recoverPassword() {
-				if (!this.isLoggedIn) {
+			key: 'recoverAccount',
+			value: function recoverAccount(accountData) {
+				if (!accountData || !(0, _lodash.isString)(accountData) && !(0, _lodash.isObject)(accountData)) {
 					_logger2.default.error({
-						description: 'No current user for which to recover password.',
-						func: 'recoverPassword', obj: 'Matter'
+						description: 'Account data is required to recover an account.',
+						func: 'recoverAccount', obj: 'Matter'
 					});
-					return Promise.reject({ message: 'Must be logged in to recover password.' });
+					return Promise.reject({ message: 'Account data is required to recover an account.' });
 				}
+				var account = {};
+				if ((0, _lodash.isString)(accountData)) {
+					account = accountData.indexOf('@') !== -1 ? { email: accountData } : { username: accountData };
+				} else {
+					account = accountData;
+				}
+				_logger2.default.debug({
+					description: 'Requesting recovery of account.', account: account,
+					func: 'recoverAccount', obj: 'Matter'
+				});
 				//Send update request
-				return _request2.default.post(this.urls.recoverPassword).then(function (response) {
+				return _request2.default.post(this.urls.recover, account).then(function (response) {
 					_logger2.default.info({
 						description: 'Recover password request responded.',
-						responseData: response, func: 'recoverPassword',
-						obj: 'Matter'
+						response: response, func: 'recoverAccount', obj: 'Matter'
 					});
 					return response;
 				})['catch'](function (errRes) {
 					_logger2.default.error({
 						description: 'Error requesting password recovery.',
-						error: errRes, func: 'recoverPassword', obj: 'Matter'
+						error: errRes, func: 'recoverAccount', obj: 'Matter'
 					});
 					return Promise.reject(errRes);
 				});
@@ -32148,10 +32160,15 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'urls',
 			get: function get() {
+				if (this.token && this.token.data && this.token.data.username) {
+					return {
+						update: this.endpoint + '/account/' + this.token.data.username,
+						upload: this.endpoint + '/account/' + this.token.data.username + '/upload',
+						recover: this.endpoint + '/recover'
+					};
+				}
 				return {
-					update: this.endpoint + '/account/' + this.token.data.username,
-					upload: this.endpoint + '/account/' + this.token.data.username + '/upload',
-					recoverPassword: this.endpoint + '/account/' + this.token.data.username + '/recover'
+					recover: this.endpoint + '/recover'
 				};
 			}
 		}, {
@@ -34507,6 +34524,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var Base64 = __webpack_require__(118);
 
+	function b64DecodeUnicode(str) {
+	  return decodeURIComponent(atob(str).replace(/(.)/g, function (m, p) {
+	    var code = p.charCodeAt(0).toString(16).toUpperCase();
+	    if (code.length < 2) {
+	      code = '0' + code;
+	    }
+	    return '%' + code;
+	  }));
+	}
+
 	module.exports = function(str) {
 	  var output = str.replace(/-/g, "+").replace(/_/g, "/");
 	  switch (output.length % 4) {
@@ -34522,12 +34549,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      throw "Illegal base64url string!";
 	  }
 
-	  var result = Base64.atob(output);
-
 	  try{
-	    return decodeURIComponent(escape(result));
+	    return b64DecodeUnicode(output);
 	  } catch (err) {
-	    return result;
+	    return Base64.atob(output);
 	  }
 	};
 
