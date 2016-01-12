@@ -94,11 +94,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	/**Grout Client Class
+	var logger = _Matter3.default.utils.logger;
+
+	/** Grout Class
 	 * @description Extending matter provides token storage and login/logout/signup capabilities
 	 */
-
-	var logger = _Matter3.default.utils.logger;
 
 	var Grout = (function (_Matter) {
 		_inherits(Grout, _Matter);
@@ -114,12 +114,19 @@ return /******/ (function(modules) { // webpackBootstrap
 			_config2.default.applySettings(options);
 			return _possibleConstructorReturn(this, Object.getPrototypeOf(Grout).call(this, name, _config2.default.matterSettings));
 		}
-		//Start a new Projects Action
+		/**
+	  * @description Projects action
+	  */
 
 		_createClass(Grout, [{
 			key: 'Project',
 
-			//Start a new Project action
+			/**
+	   * @description Projects action
+	   * @param {Object} projectData - Data of project with which to start action
+	   * @param {String} projectData.owner - Project Owner's username (in url)
+	   * @param {String} projectData.name - Name of project with which to start action
+	   */
 			value: function Project(projectData) {
 				var project = new _Project3.default(projectData);
 				logger.debug({
@@ -128,13 +135,19 @@ return /******/ (function(modules) { // webpackBootstrap
 				});
 				return project;
 			}
-
-			//Start a new Accounts action
+			/**
+	   * @description Accounts action
+	   */
 
 		}, {
 			key: 'Account',
 
-			//Start a new Account action
+			/**
+	   * @description Accounts action
+	   * @param {Object|String} accountData - Data of account with which to start action
+	   * @param {String} accountData.username - Username of account with which to start action
+	   * @param {String} accountData.email - Email of account with which to start action
+	   */
 			value: function Account(accountData) {
 				var action = new Actions.Account({ project: this, callData: accountData });
 				logger.debug({
@@ -143,7 +156,9 @@ return /******/ (function(modules) { // webpackBootstrap
 				});
 				return action;
 			}
-			//Start a new Groups action
+			/**
+	   * @description Groups action
+	   */
 
 		}, {
 			key: 'Group',
@@ -31042,8 +31057,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var request = _matter$utils.request;
 	var logger = _matter$utils.logger;
 	/**
-	 * Project class.
-	 *
+	 * @description Project class.
 	 */
 
 	var Project = (function () {

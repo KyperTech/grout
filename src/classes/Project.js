@@ -18,8 +18,7 @@ import Firebase from 'firebase';
 //Convenience vars
 const {request, logger} = matter.utils;
 /**
- * Project class.
- *
+ * @description Project class.
  */
 export default class Project {
 	constructor(appData) {

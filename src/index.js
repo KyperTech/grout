@@ -3,12 +3,12 @@ import config from './config';
 import Matter from 'kyper-matter';
 import Project from './classes/Project';
 import * as Actions from './actions';
-
-/**Grout Client Class
- * @description Extending matter provides token storage and login/logout/signup capabilities
- */
 import matter from './classes/Matter';
 const { logger } = matter.utils;
+
+/** Grout Class
+ * @description Extending matter provides token storage and login/logout/signup capabilities
+ */
 export default class Grout extends Matter {
 	constructor(projectName, groutOptions) {
 		const name = (projectName && isString(projectName)) ? projectName : config.defaultProject;
@@ -19,16 +19,23 @@ export default class Grout extends Matter {
 		config.applySettings(options);
 		super(name, config.matterSettings);
 	}
-	//Start a new Projects Action
+	/**
+	 * @description Projects action
+	 */
 	get Projects() {
-		let action = new Actions.Projects({project: this});
+		const action = new Actions.Projects({project: this});
 		logger.debug({
 			description: 'Projects Action called.',
 			action, func: 'Projects', obj: 'Grout'
 		});
 		return action;
 	}
-	//Start a new Project action
+	/**
+	 * @description Projects action
+	 * @param {Object} projectData - Data of project with which to start action
+	 * @param {String} projectData.owner - Project Owner's username (in url)
+	 * @param {String} projectData.name - Name of project with which to start action
+	 */
 	Project(projectData) {
 		let project = new Project(projectData);
 		logger.debug({
@@ -37,8 +44,9 @@ export default class Grout extends Matter {
 		});
 		return project;
 	}
-
-	//Start a new Accounts action
+	/**
+	 * @description Accounts action
+	 */
 	get Accounts() {
 		const action = new Actions.Accounts({project: this});
 		logger.debug({
@@ -47,7 +55,12 @@ export default class Grout extends Matter {
 		});
 		return new Actions.Accounts({project: this});
 	}
-	//Start a new Account action
+	/**
+	 * @description Accounts action
+	 * @param {Object|String} accountData - Data of account with which to start action
+	 * @param {String} accountData.username - Username of account with which to start action
+	 * @param {String} accountData.email - Email of account with which to start action
+	 */
 	Account(accountData) {
 		const action = new Actions.Account({project: this, callData: accountData});
 		logger.debug({
@@ -56,7 +69,9 @@ export default class Grout extends Matter {
 		});
 		return action;
 	}
-	//Start a new Groups action
+	/**
+	 * @description Groups action
+	 */
 	get Groups() {
 		const action = new Actions.Groups({project: this});
 		logger.debug({
