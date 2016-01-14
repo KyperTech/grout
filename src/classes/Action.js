@@ -171,4 +171,42 @@ export default class Action {
       return Promise.reject(error);
     });
   }
+  /** search
+   * @return {Promise}
+   */
+  search(q) {
+    if (!q || q == '') {
+			logger.log({
+        description: 'Null query, returning empty array.',
+        func: 'search', obj: 'Action'
+      });
+			return Promise.resolve([]);
+		}
+    if (!isString(q)) {
+      logger.log({
+        description: 'Invalid query type in search (should be string).',
+        func: 'search', obj: 'Action'
+      });
+			return Promise.reject('Invalid query type. Search query should be string.');
+		}
+    return request.get(`${this.url}/search/${q}`).then(res => {
+      if (has(res, 'error')) {
+        logger.error({
+          description: 'Error in removal request.', action: this,
+          res, func: 'remove', obj: 'Action'
+        });
+        return Promise.reject(res.error || res);
+      }
+      logger.log({
+        description: 'Remove successful.', res, func: 'remove', obj: 'Action'
+      });
+      return res;
+    }, error => {
+      logger.error({
+        description: 'Error in request for removal.', action: this,
+        error, func: 'remove', obj: 'Action'
+      });
+      return Promise.reject(error);
+    });
+  }
 }

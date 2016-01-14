@@ -71,7 +71,9 @@ class Config {
 		envName = newEnv;
 	}
 	get env() {
-		return defaultConfig.envs[envName];
+		if(defaultConfig.envs[envName]){
+			return defaultConfig.envs[envName];
+		}
 	}
 	get localServer(){
 		return defaultConfig.envs[envName].isLocal || isLocal;
