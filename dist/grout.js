@@ -19327,7 +19327,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var logger = _Matter2.default.utils.logger;
-
 	/**
 	 * @description Initial AWS Config
 	 */
@@ -19340,7 +19339,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	    setConfig();
 	  }
-	  return new _awsSdk2.default.S3();
+	  if (typeof _awsSdk2.default.S3 === 'function') {
+	    return new _awsSdk2.default.S3();
+	  }
 	};
 	/**
 	 * @description Set AWS config credentials
@@ -19349,8 +19350,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return _awsSdk2.default.config.update({
 	    credentials: new _awsSdk2.default.CognitoIdentityCredentials({
 	      IdentityPoolId: _config2.default.aws.cognito.poolId
-	    }),
-	    region: _config2.default.aws.region
+	    }), region: _config2.default.aws.region
 	  });
 	};
 	/**

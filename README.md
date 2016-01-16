@@ -14,7 +14,7 @@ Client library to simplify communication with Tessellate application building se
 
 Grout is isomorphic, so it can be used within a front-end or on a server. Below are options for setups:
 
-### Node or ES6
+### NodeJS
 1. Install:
     `npm install --save kyper-grout`
 
@@ -24,7 +24,13 @@ Grout is isomorphic, so it can be used within a front-end or on a server. Below 
     var Grout = require('kyper-grout');
   var grout = new Grout();
     ```
-    **or**
+
+### ES6
+1. Install:
+    `npm install --save kyper-grout`
+
+2. Include and use `kyper-grout`:
+
     ```javascript
   import Grout from 'kyper-grout';
   let grout = new Grout();
@@ -36,7 +42,7 @@ Grout is isomorphic, so it can be used within a front-end or on a server. Below 
     Add script tag to index.html:
 
       ```html
-      <script src="http://cdn.kyper.io/js/grout/0.1.7/grout.js"></script>
+      <script src="http://cdn.kyper.io/js/grout/0.1.8/grout.js"></script>
       ```
 
     #### Bower
@@ -46,14 +52,15 @@ Grout is isomorphic, so it can be used within a front-end or on a server. Below 
     <script src="./bower_components/kyper-grout/dist/grout.js"></script>
     ```
   2. Begin using grout:
-  ```javascript
-  var grout = new Grout();
-  if(grout.isLoggedIn){
-    console.log('The currently logged in user is', grout.currentUser);
-  } else {
-    console.warn('Not logged into grout');
-  }
-  ```
+
+    ```javascript
+    var grout = new Grout();
+    if(grout.isLoggedIn){
+      console.log('The currently logged in user is', grout.currentUser);
+    } else {
+      console.warn('Not logged into grout');
+    }
+    ```
 
 ## Documentation
 

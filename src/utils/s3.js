@@ -3,7 +3,6 @@ import matter from '../classes/Matter';
 import AWS from 'aws-sdk';
 import { has } from 'lodash';
 const { logger } = matter.utils;
-
 /**
  * @description Initial AWS Config
  */
@@ -15,7 +14,9 @@ export function init() {
     });
     setConfig();
   }
-  return new AWS.S3();
+  if(typeof AWS.S3 === 'function'){
+    return new AWS.S3();
+  }
 };
 /**
  * @description Set AWS config credentials
@@ -24,8 +25,7 @@ export function setConfig() {
 	return AWS.config.update({
 		credentials: new AWS.CognitoIdentityCredentials({
 		IdentityPoolId: config.aws.cognito.poolId
-	}),
-		region: config.aws.region
+	}), region: config.aws.region
 	});
 };
 /**

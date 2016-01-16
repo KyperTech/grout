@@ -8,7 +8,7 @@ module.exports = {
     loaders: [
       { test: /\.js$/, loaders: ['babel-loader'], exclude: [/node_modules/] },
       { test: /aws-sdk/, loaders: ["transform?brfs"], exclude:[]},
-      { test: /\.json$/, loaders: ['json'], exclude:[]},
+      { test: /\.json$/, loaders: ['json'], exclude:[]}
     ]
   },
   output: {
