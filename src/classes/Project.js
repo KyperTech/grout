@@ -54,7 +54,7 @@ export default class Project {
 			});
 			return matter.endpoint;
 		}
-		const projectEndpoint = `${matter.endpoint}/apps/${this.name}`
+		const projectEndpoint = `${matter.endpoint}/apps/${this.name}`;
 		logger.debug({
 			description: 'Project endpoint created.',
 			projectEndpoint, func: 'endpoint', obj: 'Project'
@@ -135,7 +135,7 @@ export default class Project {
 			func: 'addStorage', obj: 'Project'
 		});
 		return request.post(`${this.endpoint}/storage`, {}).then(response => {
-			const project = new Project(response)
+			const project = new Project(response);
 			logger.info({
 				description: 'Storage successfully added to project.',
 				response, project, func: 'addStorage', obj: 'Project'

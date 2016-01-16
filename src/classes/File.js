@@ -3,9 +3,11 @@ import matter from './Matter';
 import { has, isObject, extend } from 'lodash';
 import Files from './Files';
 import Firebase from 'firebase';
-import AWS from 'aws-sdk';
+import * as S3 from '../utils/s3';
 //Convenience vars
 const { logger } = matter.utils;
+const s3 = S3.init();
+
 export default class File {
 	constructor(actionData) {
 		logger.debug({
@@ -57,6 +59,10 @@ export default class File {
 			func: 'constructor', obj: 'File'
 		});
 	}
+	/**
+	 * @description File's path in array form
+	 * @return {Array}
+	 */
 	get pathArrayFromRef() {
 		if (!this.fbRef) {
 			logger.error({
@@ -66,6 +72,10 @@ export default class File {
 		}
 		return this.fbRef.path.o;
 	}
+	/**
+	 * @description File's type
+	 * @return {String}
+	 */
 	get fileType() {
 		if (this.ext == 'js') {
 			return 'javascript';
@@ -73,10 +83,18 @@ export default class File {
 			return this.ext;
 		}
 	}
+	/**
+	 * @description File's extension
+	 * @return {String}
+	 */
 	get ext() {
 		let re = /(?:\.([^.]+))?$/;
 		return re.exec(this.name)[1];
 	}
+	/**
+	 * @description Array of file's path in a format that is safe for Firebase
+	 * @return {Array}
+	 */
 	get safePathArray() {
 		let safeArray = this.pathArray.map((loc) => {
 			//Replace periods with colons and other unsafe chars as --
@@ -88,6 +106,10 @@ export default class File {
 		});
 		return safeArray;
 	}
+	/**
+	 * @description File's path in a format that is safe for Firebase
+	 * @return {String}
+	 */
 	get safePath() {
 		const { safePathArray } = this;
 		if(safePathArray.length === 1){
@@ -95,31 +117,47 @@ export default class File {
 		}
 		return safePathArray.join('/');
 	}
+	/**
+	 * @description File's Firebase url
+	 * @return {String}
+	 */
 	get fbUrl() {
 		if (!this.project || !this.project.name) {
 			logger.error({
 				description: 'App information needed to generate fbUrl for File.',
-				file: this, func: 'fbRef', obj: 'File'
+				file: this, func: 'fbUrl', obj: 'File'
 			});
 			throw new Error ('App information needed to generate fbUrl for File.');
 		}
 		let files = new Files({project: this.project});
-		return [files.fbUrl, this.safePath].join('/');
+		const url = [files.fbUrl, this.safePath].join('/');
+		logger.debug({
+			description: 'FbUrl created for file.', url, file: this,
+			func: 'fbUrl', obj: 'File'
+		});
+		return url;
 	}
+	/**
+	 * @description File's Firebase reference
+	 * @return {Object} Firebase reference
+	 */
 	get fbRef() {
 		if (this.ref) {
-			logger.log({
+			logger.debug({
 				description: 'File already has reference.',
 				ref: this.ref, func: 'fbRef', obj: 'File'
 			});
 			return this.ref;
 		}
-		// logger.log({
-		// 	description: 'Fb ref generated.',
-		// 	url: this.fbUrl, func: 'fbRef', obj: 'File'
-		// });
+		logger.debug({
+			description: 'Fb ref generated.',
+			url: this.fbUrl, func: 'fbRef', obj: 'File'
+		});
 		return new Firebase(this.fbUrl);
 	}
+	/**
+	 * @description Headless Firepad at file location
+	 */
 	get headless() {
 		let firepad = getFirepadLib();
 		if (typeof firepad === 'undefined' || typeof firepad.Headless !== 'function') {
@@ -132,6 +170,9 @@ export default class File {
 			return firepad.Headless(this.fbRef);
 		}
 	}
+	/**
+	 * @description Get a file's content and meta data from default location (Firebase)
+	 */
 	get() {
 		return new Promise((resolve, reject) => {
 			this.fbRef.once('value', (fileSnap) => {
@@ -177,16 +218,27 @@ export default class File {
 			});
 		});
 	}
-	//Alias for get
+	/**
+	 * @description Open a file from default location (Firebase) (Alias for get)
+	 */
 	open() {
 		return this.get();
 	}
-	add() {
-		return this.addToFb();
-	}
+	/**
+	 * @description Remove a file from default location (Firebase)
+	 */
 	remove(removeData) {
 		return this.removeFromFb(removeData);
 	}
+	/**
+	 * @description Save file to default location (Firebase)
+	 */
+	add() {
+		return this.addToFb();
+	}
+	/**
+	 * @description Save file to default location (Firebase)
+	 */
 	save() {
 		return this.add();
 	}
@@ -196,7 +248,7 @@ export default class File {
 	addToFb() {
 		logger.debug({
 			description: 'addToFb called.', file: this,
-			func: 'addToFb', obj: 'Files'
+			func: 'addToFb', obj: 'File'
 		});
 		const { fbRef, path, fileType, content, name } = this;
 		const fbData = {meta: {path, fileType, name}};
@@ -222,7 +274,7 @@ export default class File {
 		});
 	}
 	/**
-	 * @description Add file to Firebase located at file's fbRef
+	 * @description Remove file from Firebase
 	 */
 	removeFromFb() {
 		logger.debug({
@@ -230,263 +282,45 @@ export default class File {
 			func: 'removeFromFb', obj: 'File'
 		});
 		return new Promise((resolve, reject) => {
-			this.fbRef.remove((error) => {
-				if (!error) {
-					logger.info({
-						description: 'File successfully removed from Firebase.',
-						func: 'removeFromFb', obj: 'File'
-					});
-					resolve();
-				} else {
+			this.fbRef.remove(error => {
+				if (error) {
 					logger.error({
 						description: 'Error creating file on Firebase.',
 						error, func: 'removeFromFb', obj: 'File'
 					});
-					reject(error);
+					return reject(error);
 				}
+				logger.info({
+					description: 'File successfully removed from Firebase.',
+					file: this, func: 'removeFromFb', obj: 'File'
+				});
+				resolve(this);
 			});
 		});
-	}
-	getFromS3() {
-		if (!this.project || !this.project.frontend) {
-			logger.log({
-				description: 'Application Frontend data not available. Calling applicaiton get.',
-				func: 'get', obj: 'File'
-			});
-			return this.project.get().then((appData) => {
-				this.project = appData;
-				logger.log({
-					description: 'Application get successful. Getting file.',
-					app: appData, func: 'get', obj: 'File'
-				});
-				return this.get();
-			}, error => {
-				logger.error({
-					description: 'Application Frontend data not available.',
-					error, func: 'get', obj: 'File'
-				});
-				return Promise.reject({
-					message: 'Front end data is required to get file.'
-				});
-			});
-		} else {
-			//If AWS Credential do not exist, set them
-			if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
-				logger.log({
-					description: 'AWS creds do not exist, so they are being set.',
-					func: 'publish', obj: 'File'
-				});
-				setAWSConfig();
-			}
-			let s3 = new AWS.S3();
-			let getData = {
-				Bucket: this.project.frontend.bucketName,
-				Key: this.path
-			};
-			//Set contentType from actionData to ContentType parameter of new object
-			if (this.contentType) {
-				getData.ContentType = this.contentType;
-			}
-			logger.debug({
-				description: 'File get params built.', getData: getData,
-				file: this, func: 'get', obj: 'File'
-			});
-			let finalData = this;
-			return new Promise((resolve, reject) => {
-				s3.getObject(getData, (error, data) => {
-					//[TODO] Add putting object ACL (make public)
-					if (error) {
-						logger.error({
-							description: 'Error loading file from S3.',
-							error, func: 'get', obj: 'File'
-						});
-						return reject(error);
-					}
-					logger.info({
-						description: 'File loaded successfully.',
-						data: data, func: 'get', obj: 'File'
-					});
-					if (has(data, 'Body')) {
-						logger.info({
-							description: 'File has content.',
-							content: data.Body.toString(),
-							metaData: data.Metadata.toString(),
-							func: 'get', obj: 'File'
-						});
-						finalData.content = data.Body.toString();
-						logger.info({
-							description: 'File content has been added to file.',
-							file: finalData, func: 'get', obj: 'File'
-						});
-						resolve(finalData);
-					} else {
-						resolve(data);
-					}
-				});
-			});
-		}
-	}
-	saveToS3(fileData) {
-		//TODO: Publish file to application
-		logger.debug({
-			description: 'File publish called.', file: this,
-			fileData, func: 'publish', obj: 'File'
-		});
-		if (!this.project.frontend) {
-			logger.error({
-				description: 'Application Frontend data not available. Make sure to call .get().',
-				func: 'publish', obj: 'File'
-			});
-			return Promise.reject({message: 'Front end data is required to publish file.'});
-		} else {
-			if (!has(fileData, ['content', 'path'])) {
-				logger.error({
-					description: 'File data including path and content required to publish.',
-					func: 'publish', obj: 'File'
-				});
-				return Promise.reject({message: 'File data including path and content required to publish.'});
-			}
-			let saveParams = {
-				Bucket: this.project.frontend.bucketName,
-				Key: fileData.path,
-				Body: fileData.content,
-				ACL: 'public-read'
-			};
-			//Set contentType from fileData to ContentType parameter of new object
-			if (this.contentType) {
-				saveParams.ContentType = this.contentType;
-			}
-			//If AWS Credential do not exist, set them
-			if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
-				logger.debug({
-					description: 'AWS creds do not exist, so they are being set.',
-					func: 'publish', obj: 'File'
-				});
-				setAWSConfig();
-			}
-			let s3 = new AWS.S3();
-			logger.debug({
-				description: 'File publish params built.',
-				saveParams: saveParams, fileData: this,
-				func: 'publish', obj: 'File'
-			});
-			return new Promise((resolve, reject) => {
-				s3.putObject(saveParams, (error, data) => {
-					//[TODO] Add putting object ACL (make public)
-					if (!error) {
-						logger.log({
-							description: 'File saved successfully.',
-							response: data, func: 'publish', obj: 'File'
-						});
-						resolve(data);
-					}	else {
-						logger.error({
-							description: 'Error saving file to S3.',
-							error, func: 'publish', obj: 'File'
-						});
-						reject(error);
-					}
-				});
-			});
-		}
-	}
-	removeFromS3() {
-		if (!this.project || !this.project.frontend) {
-			logger.log({
-				description: 'Application Frontend data not available. Calling applicaiton get.',
-				func: 'removeFromS3', obj: 'File'
-			});
-			return this.project.get().then(appData => {
-				this.project = appData;
-				logger.log({
-					description: 'Application get successful. Getting file.',
-					app: this.project, func: 'removeFromS3', obj: 'File'
-				});
-				return this.get();
-			}, error => {
-				logger.error({
-					description: 'Application Frontend data not available. Make sure to call .get().',
-					error, func: 'removeFromS3', obj: 'File'
-				});
-				return Promise.reject({
-					message: 'Front end data is required to get file.'
-				});
-			});
-		} else {
-			//If AWS Credential do not exist, set them
-			if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
-				logger.debug({
-					description: 'AWS creds do not exist, so they are being set.',
-					func: 'publish', obj: 'File'
-				});
-				setAWSConfig();
-			}
-			let s3 = new AWS.S3();
-			let saveParams = {
-				Bucket: this.project.frontend.bucketName,
-				Key: this.path
-			};
-			//Set contentType from actionData to ContentType parameter of new object
-			if (this.contentType) {
-				saveParams.ContentType = this.contentType;
-			}
-			logger.debug({
-				description: 'File get params built.',
-				saveParams, file: this, func: 'get', obj: 'File'
-			});
-			return new Promise((resolve, reject) => {
-				s3.deleteObject(saveParams, (error, data) => {
-					//[TODO] Add putting object ACL (make public)
-					if (error) {
-						logger.error({
-							description: 'Error loading file from S3.',
-							error, func: 'get', obj: 'File'
-						});
-						return reject(error);
-					}
-					logger.info({
-						description: 'File loaded successfully.',
-						fileData: data, func: 'get', obj: 'File'
-					});
-					if (has(data, 'Body')) {
-						logger.info({
-							description: 'File has content.',
-							fileData: data.Body.toString(), func: 'get', obj: 'File'
-						});
-						resolve(data.Body.toString());
-					} else {
-						resolve(data);
-					}
-				});
-			});
-		}
 	}
 	/**
 	 * @description Open file in firepad from already existing ace editor instance
 	 * @param {Object} Ace editor object
 	 */
 	openInFirepad(editor) {
-		//Load file contents from s3
-		return new Promise((resolve, reject) => {
-			this.get().then(file => {
-				logger.info({
-					description: 'File contents loaded. Opening firepad.',
-					editor, file, func: 'openInFirepad', obj: 'File'
-				});
-				//Open firepad from ace with file content as default
-				let fileFirepad = file.firepadFromAce(editor);
-				//Wait for firepad to be ready
-				fileFirepad.on('ready', () => {
-					resolve(file);
-					// firepad.setText()
-				});
-			}, error => {
-				logger.error({
-					description: 'Valid ace editor instance required to create firepad.',
-					editor, error, func: 'openInFirepad', obj: 'File'
-				});
-				reject(error);
+		return this.get().then(file => {
+			logger.info({
+				description: 'File contents loaded. Opening firepad.',
+				editor, file, func: 'openInFirepad', obj: 'File'
 			});
+			//Open firepad from ace with file content as default
+			let fileFirepad = file.firepadFromAce(editor);
+			//Wait for firepad to be ready
+			fileFirepad.on('ready', () => {
+				resolve(file);
+				// firepad.setText()
+			});
+		}, error => {
+			logger.error({
+				description: 'Valid ace editor instance required to create firepad.',
+				editor, error, func: 'openInFirepad', obj: 'File'
+			});
+			reject(error);
 		});
 	}
 	/**
@@ -511,19 +345,21 @@ export default class File {
 			return;
 		}
 		let settings = {};
-		// if (this.content) {
-		// 	settings.defaultText = this.content;
-		// }
+		//TODO: Set settings.defaultText with original file content if no history exists
 		//Attach logged in user id
-		// if (matter.isLoggedIn && matter.currentUser) {
-		// 	settings.userId = matter.currentUser.username || matter.currentUser.name;
-		// }
+		if (matter.isLoggedIn && matter.currentUser) {
+			settings.userId = matter.currentUser.username || matter.currentUser.name;
+		}
 		logger.debug({
 			description: 'Creating firepad from ace.',
 			settings, editor, func: 'fbRef', obj: 'File'
 		});
 		return firepad.fromACE(this.fbRef, editor, settings);
 	}
+	/**
+	 * @description Get users currently connected to file
+	 * @return {Promise}
+	 */
 	getConnectedUsers() {
 		return new Promise((resolve, reject) => {
 			this.fbRef.child('users').on('value', usersSnap => {
@@ -551,21 +387,116 @@ export default class File {
 			});
 		});
 	}
-	getDefaultContent() {
-		//TODO: Fill with default data for matching file type
+	/**
+	 * @description Get file from S3
+	 * @param {Object} getData - Object containg data of file
+	 * @param {String} getData.path - Path of file
+	 * @return {Promise}
+	 */
+	getFromS3(getData) {
+		return this.getProject().then(project => {
+			const filesGetParams = {bucket: project.frontend.bucketName, path: this.path};
+			logger.debug({
+				description: 'File get params built.', getData,
+				file: this, func: 'getFromS3', obj: 'File'
+			});
+			return s3.getObject(filesGetParams).then(s3File => {
+				extend(this, s3File);
+				logger.info({
+					description: 'File loaded from s3.', s3File,
+					file: this, func: 'getFromS3', obj: 'File'
+				});
+				return this;
+			}, error => {
+				logger.error({
+					description: 'Error getting file from s3.',
+					file: this, func: 'getFromS3', obj: 'File'
+				});
+				return Promise.reject(error);
+			});
+		}, error => {
+			return Promise.reject(error);
+		});
 	}
-}
-//------------------ Utility Functions ------------------//
-/**
- * @description Initial AWS Config
- */
-function setAWSConfig() {
-	return AWS.config.update({
-		credentials: new AWS.CognitoIdentityCredentials({
-		IdentityPoolId: config.aws.cognito.poolId
-	}),
-		region: config.aws.region
-	});
+	/**
+	 * @description Save file to S3
+	 * @param {Object} saveData - Object containg new file's data
+	 * @param {String} saveData.content - String content of file
+	 * @param {String} saveData.contentType - File's content type
+	 * @return {Promise}
+	 */
+	saveToS3(saveData) {
+		return this.getProject().then(project => {
+			const { content, contentType } = saveData;
+			let saveData = {
+				bucket: project.frontend.bucketName,
+				path: this.path,
+				content
+			}
+			if(contentType){
+				saveData.contentType = contentType;
+			}
+			return s3.saveObject(saveData);
+		}, error => {
+			return Promise.reject(error);
+		});
+	}
+	/**
+	 * @description Remove file from S3
+	 * @return {Promise}
+	 */
+	removeFromS3() {
+		return this.getProject().then(project => {
+			let saveParams = {
+				Bucket: this.project.frontend.bucketName,
+				Key: this.path
+			};
+			logger.debug({
+				description: 'File get params built.',
+				saveParams, file: this, func: 'get', obj: 'File'
+			});
+			return s3.deleteObject(saveParams).then(deletedFile => {
+					logger.info({
+						description: 'File loaded successfully.',
+						deletedFile, func: 'get', obj: 'File'
+					});
+					resolve(deletedFile);
+			}, error => {
+				return Promise.reject(error);
+			});
+		}, error => {
+			return Promise.reject(error);
+		});
+	}
+	/**
+	 * @description Get project data
+	 * @return {Promise}
+	 */
+	getProject() {
+		if(this.project && this.project.frontend) {
+			return Promise.resolve(this.project);
+		}
+		logger.log({
+			description: 'Application Frontend data not available. Calling applicaiton get.',
+			func: 'get', obj: 'File'
+		});
+		return this.project.get().then(appData => {
+			this.project = appData;
+			logger.log({
+				description: 'Application get successful. Getting file.',
+				app: appData, func: 'get', obj: 'File'
+			});
+			return this.get();
+		}, error => {
+			logger.error({
+				description: 'Application Frontend data not available.',
+				error, func: 'get', obj: 'File'
+			});
+			return Promise.reject({
+				message: 'Front end data is required to get file.'
+			});
+		});
+	}
 }
 /**
  * @description Load firepad from local or global

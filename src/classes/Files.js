@@ -1,10 +1,10 @@
 import config from '../config';
 import { toArray, isArray, has, pick, take, each, findWhere, union, clone, extend } from 'lodash';
-import AWS from 'aws-sdk';
 import matter from './Matter';
 import Firebase from 'firebase';
 import Project from './Project';
 import File from './File';
+import * as S3 from '../utils/s3';
 //Convenience vars
 const { logger } = matter.utils;
 
@@ -189,7 +189,7 @@ export default class Files {
 	addFolder(folderData) {
 		let dataObj = folderData;
 		dataObj.app = this;
-		let folder = new Folder({project: this})
+		let folder = new Folder({project: this});
 		return folder.save();
 	}
 	/**
@@ -306,67 +306,65 @@ export default class Files {
 			return file.save();
 		});
 	}
+	getFrontEnd() {
+		if (this.project && this.project.frontend) {
+			return Promise.resolve(this.project);
+		}
+		logger.warn({
+			description: 'Files Frontend data not available. Calling .get().',
+			project: this.project, func: 'getFromS3', obj: 'Files'
+		});
+		return this.project.get().then(applicationData => {
+			logger.log({
+				description: 'Files get returned.',
+				data: applicationData, func: 'getFromS3', obj: 'Files'
+			});
+			this.project = applicationData;
+			if (has(applicationData, 'frontend')) {
+				return this.get();
+			}
+			logger.error({
+				description: 'Files does not have Frontend to get files from.',
+				func: 'getFromS3', obj: 'Files'
+			});
+			return Promise.reject({
+				message: 'Files does not have frontend to get files from.'
+			});
+		}, err => {
+			logger.error({
+				description: 'Files Frontend data not available. Make sure to call .get().',
+				error: err, func: 'getFromS3', obj: 'Files'
+			});
+			return Promise.reject({
+				message: 'Bucket name required to get objects'
+			});
+		});
+	}
 	/**
 	 * @description Get files list from S3
 	 */
 	getFromS3() {
-		if (!this.project.frontend || !this.project.frontend.bucketName) {
+		if (!this.project || !this.project.frontend || !this.project.frontend.bucketName) {
 			logger.warn({
 				description: 'Files Frontend data not available. Calling .get().',
 				project: this.project, func: 'getFromS3', obj: 'Files'
 			});
-			return this.project.get().then(applicationData => {
-				logger.log({
-					description: 'Files get returned.',
-					data: applicationData, func: 'getFromS3', obj: 'Files'
-				});
-				this.project = applicationData;
-				if (has(applicationData, 'frontend')) {
-					return this.get();
-				} else {
-					logger.error({
-						description: 'Files does not have Frontend to get files from.',
-						func: 'getFromS3', obj: 'Files'
-					});
-					return Promise.reject({
-						message: 'Files does not have frontend to get files from.'
-					});
-				}
-			}, err => {
-				logger.error({
-					description: 'Files Frontend data not available. Make sure to call .get().',
-					error: err, func: 'getFromS3', obj: 'Files'
-				});
-				return Promise.reject({
-					message: 'Bucket name required to get objects'
-				});
-			});
-		} else {
-			//If AWS Credentials do not exist, set them
-			if (typeof AWS.config.credentials == 'undefined' || !AWS.config.credentials) {
-				// logger.info('AWS creds are being updated to make request');
-				setAWSConfig();
-			}
-			const s3 = new AWS.S3();
-			const listParams = {Bucket: this.project.frontend.bucketName};
-			return new Promise((resolve, reject) => {
-				s3.listObjects(listParams, (err, data) => {
-					if (!err) {
-						logger.info({
-							description: 'Files list loaded.', filesData: data,
-							func: 'get', obj: 'Files'
-						});
-						return resolve(data.Contents);
-					} else {
-						logger.error({
-							description: 'Error getting files from S3.',
-							error: err, func: 'get', obj: 'Files'
-						});
-						return reject(err);
-					}
-				});
-			});
+			return this.getFrontEnd().then(this.getFromS3);
 		}
+		const s3 = S3.init();
+		s3.listObjects({bucket: this.project.frontend.bucketName}).then(filesList => {
+			logger.info({
+				description: 'Files list loaded.', filesList,
+				func: 'get', obj: 'Files'
+			});
+			return filesList;
+		}, error => {
+			logger.error({
+				description: 'Error getting files from S3.',
+				error, func: 'get', obj: 'Files'
+			});
+			return Promise.reject(error);
+		});
 	}
 	/**
 	 * @description build child structure from files list
@@ -435,15 +433,6 @@ export default class Files {
 	}
 }
 //------------------ Utility Functions ------------------//
-// AWS Config
-function setAWSConfig() {
-	return AWS.config.update({
-		credentials: new AWS.CognitoIdentityCredentials({
-		IdentityPoolId: config.aws.cognito.poolId
-	}),
-		region: config.aws.region
-	});
-}
 function getContentFromFile(fileData) {
 	//Get initial content from local file
 	logger.debug({
@@ -464,7 +453,7 @@ function getContentFromFile(fileData) {
 					func: 'getContentFromFile', obj: 'Files'
 				});
 				resolve(contents);
-			}
+			};
 			reader.readAsText(fileData);
 		} catch(error){
 			logger.error({
@@ -532,7 +521,7 @@ function buildStructureObject(file) {
 				currentObj.type = 'folder';
 				currentObj.children = [{}];
 				//TODO: Find out why this works
-				if (ind == 0) {
+				if (ind === 0) {
 					finalObj = currentObj;
 				}
 				currentObj = currentObj.children[0];
