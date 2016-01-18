@@ -9115,9 +9115,10 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'addFolder',
 			value: function addFolder(folderData) {
+				console.log('folder data commin in hot', folderData);
 				var dataObj = folderData;
 				dataObj.app = this;
-				var folder = new _Folder2.default({ project: this });
+				var folder = new _Folder2.default({ project: this, name: dataObj.name, path: dataObj.path });
 				return folder.save();
 			}
 			/**
@@ -18894,6 +18895,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		function Folder(folderData) {
 			_classCallCheck(this, Folder);
 
+			console.log('this is the folder data', folderData);
 			this.type = 'folder';
 			if (!folderData || !(0, _lodash.isString)(folderData) && !(0, _lodash.isObject)(folderData)) {
 				throw new Error('Folder name or path required.');
@@ -18950,9 +18952,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				});
 				var fbRef = this.fbRef;
 				var path = this.path;
-				var name = this.name;
 
-				var fbData = { meta: { path: path, name: name, type: 'folder' } };
+				var fbData = { meta: { path: path, type: 'folder' } };
 				logger.debug({
 					description: 'calling with', fbData: fbData,
 					func: 'addToFb', obj: 'File'

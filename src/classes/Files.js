@@ -188,9 +188,10 @@ export default class Files {
 		//TODO: Publish all files
 	}
 	addFolder(folderData) {
+		console.log('folder data commin in hot', folderData);
 		let dataObj = folderData;
 		dataObj.app = this;
-		let folder = new Folder({project: this});
+		let folder = new Folder({project: this, name: dataObj.name, path: dataObj.path});
 		return folder.save();
 	}
 	/**
