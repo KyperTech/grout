@@ -11,6 +11,7 @@ import {
 } from '../actions';
 import Group from './Group';
 import Files from './Files';
+import Folder from './Folder';
 import FileObj from './File';
 
 //External Libs

@@ -62,25 +62,25 @@ return /******/ (function(modules) { // webpackBootstrap
 		value: true
 	});
 
-	var _lodash = __webpack_require__(4);
+	var _lodash = __webpack_require__(3);
 
 	var _config = __webpack_require__(8);
 
 	var _config2 = _interopRequireDefault(_config);
 
-	var _kyperMatter = __webpack_require__(101);
+	var _kyperMatter = __webpack_require__(102);
 
 	var _kyperMatter2 = _interopRequireDefault(_kyperMatter);
 
-	var _Project2 = __webpack_require__(99);
+	var _Project2 = __webpack_require__(100);
 
 	var _Project3 = _interopRequireDefault(_Project2);
 
-	var _actions = __webpack_require__(94);
+	var _actions = __webpack_require__(95);
 
 	var Actions = _interopRequireWildcard(_actions);
 
-	var _Matter2 = __webpack_require__(7);
+	var _Matter2 = __webpack_require__(6);
 
 	var _Matter3 = _interopRequireDefault(_Matter2);
 
@@ -315,7 +315,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @api private
 	   */
 	  XML: {
-	    Builder: __webpack_require__(89),
+	    Builder: __webpack_require__(90),
 	    Parser: null // conditionally set based on environment
 	  },
 
@@ -333,7 +333,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  Model: {
 	    Api: __webpack_require__(28),
 	    Operation: __webpack_require__(30),
-	    Shape: __webpack_require__(6),
+	    Shape: __webpack_require__(7),
 	    Paginator: __webpack_require__(31),
 	    ResourceWaiter: __webpack_require__(32)
 	  },
@@ -346,24 +346,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	  apiLoader: function() { throw new Error('No API loader set'); }
 	});
 
-	__webpack_require__(79);
+	__webpack_require__(80);
 
 	__webpack_require__(24);
 	__webpack_require__(25);
-	__webpack_require__(63);
 	__webpack_require__(64);
-	__webpack_require__(57);
-	__webpack_require__(61);
+	__webpack_require__(65);
+	__webpack_require__(58);
+	__webpack_require__(62);
 
-	__webpack_require__(56);
+	__webpack_require__(57);
 	__webpack_require__(12);
 	__webpack_require__(36);
-	__webpack_require__(68);
-	__webpack_require__(75);
-	__webpack_require__(77);
+	__webpack_require__(69);
 	__webpack_require__(76);
-	__webpack_require__(82);
-	__webpack_require__(72);
+	__webpack_require__(78);
+	__webpack_require__(77);
+	__webpack_require__(83);
+	__webpack_require__(73);
 
 	/**
 	 * @readonly
@@ -389,8 +389,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/* WEBPACK VAR INJECTION */(function(process) {/* eslint guard-for-in:0 */
 
-	var cryptoLib = __webpack_require__(110);
-	var Buffer = __webpack_require__(3).Buffer;
+	var cryptoLib = __webpack_require__(111);
+	var Buffer = __webpack_require__(4).Buffer;
 	var AWS;
 
 	/**
@@ -461,7 +461,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 
 	  queryStringParse: function queryStringParse(qs) {
-	    return __webpack_require__(153).parse(qs);
+	    return __webpack_require__(154).parse(qs);
 	  },
 
 	  queryParamsToString: function queryParamsToString(params) {
@@ -1205,6 +1205,12 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = __webpack_require__(124);
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/* WEBPACK VAR INJECTION */(function(Buffer, global) {/*!
 	 * The buffer module from node.js, for the browser.
 	 *
@@ -1215,9 +1221,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict'
 
-	var base64 = __webpack_require__(132)
-	var ieee754 = __webpack_require__(133)
-	var isArray = __webpack_require__(134)
+	var base64 = __webpack_require__(133)
+	var ieee754 = __webpack_require__(134)
+	var isArray = __webpack_require__(135)
 
 	exports.Buffer = Buffer
 	exports.SlowBuffer = SlowBuffer
@@ -2754,13 +2760,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return i
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3).Buffer, (function() { return this; }())))
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(123);
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4).Buffer, (function() { return this; }())))
 
 /***/ },
 /* 5 */
@@ -2861,6 +2861,29 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _config = __webpack_require__(8);
+
+	var _config2 = _interopRequireDefault(_config);
+
+	var _kyperMatter = __webpack_require__(102);
+
+	var _kyperMatter2 = _interopRequireDefault(_kyperMatter);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = new _kyperMatter2.default(_config2.default.defaultProject, _config2.default.matterSettings);
+	module.exports = exports['default'];
+
+/***/ },
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Collection = __webpack_require__(29);
@@ -3212,29 +3235,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _config = __webpack_require__(8);
-
-	var _config2 = _interopRequireDefault(_config);
-
-	var _kyperMatter = __webpack_require__(101);
-
-	var _kyperMatter2 = _interopRequireDefault(_kyperMatter);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = new _kyperMatter2.default(_config2.default.defaultProject, _config2.default.matterSettings);
-	module.exports = exports['default'];
-
-/***/ },
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -3246,7 +3246,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		value: true
 	});
 
-	var _lodash = __webpack_require__(4);
+	var _lodash = __webpack_require__(3);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -3379,7 +3379,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _config2 = _interopRequireDefault(_config);
 
-	var _lodash = __webpack_require__(4);
+	var _lodash = __webpack_require__(3);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -3517,8 +3517,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	util.inherits = __webpack_require__(20);
 	/*</replacement>*/
 
-	var Readable = __webpack_require__(114);
-	var Writable = __webpack_require__(93);
+	var Readable = __webpack_require__(115);
+	var Writable = __webpack_require__(94);
 
 	util.inherits(Duplex, Readable);
 
@@ -3574,60 +3574,60 @@ return /******/ (function(modules) { // webpackBootstrap
 	var map = {
 		"./api_loader": 23,
 		"./api_loader.js": 23,
-		"./aws": 106,
-		"./aws.js": 106,
-		"./browser": 54,
-		"./browser.js": 54,
-		"./cloudfront/signer": 55,
-		"./cloudfront/signer.js": 55,
-		"./config": 56,
-		"./config.js": 56,
+		"./aws": 107,
+		"./aws.js": 107,
+		"./browser": 55,
+		"./browser.js": 55,
+		"./cloudfront/signer": 56,
+		"./cloudfront/signer.js": 56,
+		"./config": 57,
+		"./config.js": 57,
 		"./core": 1,
 		"./core.js": 1,
 		"./credentials": 24,
 		"./credentials.js": 24,
-		"./credentials/cognito_identity_credentials": 57,
-		"./credentials/cognito_identity_credentials.js": 57,
+		"./credentials/cognito_identity_credentials": 58,
+		"./credentials/cognito_identity_credentials.js": 58,
 		"./credentials/credential_provider_chain": 25,
 		"./credentials/credential_provider_chain.js": 25,
-		"./credentials/ec2_metadata_credentials": 58,
-		"./credentials/ec2_metadata_credentials.js": 58,
-		"./credentials/environment_credentials": 59,
-		"./credentials/environment_credentials.js": 59,
-		"./credentials/file_system_credentials": 60,
-		"./credentials/file_system_credentials.js": 60,
-		"./credentials/saml_credentials": 61,
-		"./credentials/saml_credentials.js": 61,
-		"./credentials/shared_ini_file_credentials": 62,
-		"./credentials/shared_ini_file_credentials.js": 62,
-		"./credentials/temporary_credentials": 63,
-		"./credentials/temporary_credentials.js": 63,
-		"./credentials/web_identity_credentials": 64,
-		"./credentials/web_identity_credentials.js": 64,
-		"./dynamodb/converter": 65,
-		"./dynamodb/converter.js": 65,
-		"./dynamodb/document_client": 66,
-		"./dynamodb/document_client.js": 66,
+		"./credentials/ec2_metadata_credentials": 59,
+		"./credentials/ec2_metadata_credentials.js": 59,
+		"./credentials/environment_credentials": 60,
+		"./credentials/environment_credentials.js": 60,
+		"./credentials/file_system_credentials": 61,
+		"./credentials/file_system_credentials.js": 61,
+		"./credentials/saml_credentials": 62,
+		"./credentials/saml_credentials.js": 62,
+		"./credentials/shared_ini_file_credentials": 63,
+		"./credentials/shared_ini_file_credentials.js": 63,
+		"./credentials/temporary_credentials": 64,
+		"./credentials/temporary_credentials.js": 64,
+		"./credentials/web_identity_credentials": 65,
+		"./credentials/web_identity_credentials.js": 65,
+		"./dynamodb/converter": 66,
+		"./dynamodb/converter.js": 66,
+		"./dynamodb/document_client": 67,
+		"./dynamodb/document_client.js": 67,
 		"./dynamodb/set": 26,
 		"./dynamodb/set.js": 26,
-		"./dynamodb/translator": 67,
-		"./dynamodb/translator.js": 67,
+		"./dynamodb/translator": 68,
+		"./dynamodb/translator.js": 68,
 		"./dynamodb/types": 27,
 		"./dynamodb/types.js": 27,
-		"./event_listeners": 68,
-		"./event_listeners.js": 68,
+		"./event_listeners": 69,
+		"./event_listeners.js": 69,
 		"./http": 12,
 		"./http.js": 12,
-		"./http/node": 69,
-		"./http/node.js": 69,
-		"./http/xhr": 70,
-		"./http/xhr.js": 70,
+		"./http/node": 70,
+		"./http/node.js": 70,
+		"./http/xhr": 71,
+		"./http/xhr.js": 71,
 		"./json/builder": 15,
 		"./json/builder.js": 15,
 		"./json/parser": 16,
 		"./json/parser.js": 16,
-		"./metadata_service": 71,
-		"./metadata_service.js": 71,
+		"./metadata_service": 72,
+		"./metadata_service.js": 72,
 		"./model/api": 28,
 		"./model/api.js": 28,
 		"./model/collection": 29,
@@ -3638,10 +3638,10 @@ return /******/ (function(modules) { // webpackBootstrap
 		"./model/paginator.js": 31,
 		"./model/resource_waiter": 32,
 		"./model/resource_waiter.js": 32,
-		"./model/shape": 6,
-		"./model/shape.js": 6,
-		"./param_validator": 72,
-		"./param_validator.js": 72,
+		"./model/shape": 7,
+		"./model/shape.js": 7,
+		"./param_validator": 73,
+		"./param_validator.js": 73,
 		"./protocol/json": 17,
 		"./protocol/json.js": 17,
 		"./protocol/query": 33,
@@ -3652,25 +3652,25 @@ return /******/ (function(modules) { // webpackBootstrap
 		"./protocol/rest_json.js": 34,
 		"./protocol/rest_xml": 35,
 		"./protocol/rest_xml.js": 35,
-		"./query/query_param_serializer": 73,
-		"./query/query_param_serializer.js": 73,
-		"./region_config": 74,
-		"./region_config.js": 74,
-		"./region_config.json": 107,
-		"./request": 75,
-		"./request.js": 75,
-		"./resource_waiter": 76,
-		"./resource_waiter.js": 76,
-		"./response": 77,
-		"./response.js": 77,
-		"./s3/managed_upload": 78,
-		"./s3/managed_upload.js": 78,
+		"./query/query_param_serializer": 74,
+		"./query/query_param_serializer.js": 74,
+		"./region_config": 75,
+		"./region_config.js": 75,
+		"./region_config.json": 108,
+		"./request": 76,
+		"./request.js": 76,
+		"./resource_waiter": 77,
+		"./resource_waiter.js": 77,
+		"./response": 78,
+		"./response.js": 78,
+		"./s3/managed_upload": 79,
+		"./s3/managed_upload.js": 79,
 		"./sequential_executor": 36,
 		"./sequential_executor.js": 36,
-		"./service": 79,
-		"./service.js": 79,
-		"./services": 80,
-		"./services.js": 80,
+		"./service": 80,
+		"./service.js": 80,
+		"./services": 81,
+		"./services.js": 81,
 		"./services/apigateway": 37,
 		"./services/apigateway.js": 37,
 		"./services/cloudfront": 38,
@@ -3699,30 +3699,30 @@ return /******/ (function(modules) { // webpackBootstrap
 		"./services/sts.js": 49,
 		"./services/swf": 50,
 		"./services/swf.js": 50,
-		"./signers/presign": 81,
-		"./signers/presign.js": 81,
-		"./signers/request_signer": 82,
-		"./signers/request_signer.js": 82,
-		"./signers/s3": 83,
-		"./signers/s3.js": 83,
-		"./signers/v2": 84,
-		"./signers/v2.js": 84,
+		"./signers/presign": 82,
+		"./signers/presign.js": 82,
+		"./signers/request_signer": 83,
+		"./signers/request_signer.js": 83,
+		"./signers/s3": 84,
+		"./signers/s3.js": 84,
+		"./signers/v2": 85,
+		"./signers/v2.js": 85,
 		"./signers/v3": 51,
 		"./signers/v3.js": 51,
-		"./signers/v3https": 85,
-		"./signers/v3https.js": 85,
-		"./signers/v4": 86,
-		"./signers/v4.js": 86,
-		"./state_machine": 87,
-		"./state_machine.js": 87,
+		"./signers/v3https": 86,
+		"./signers/v3https.js": 86,
+		"./signers/v4": 87,
+		"./signers/v4.js": 87,
+		"./state_machine": 88,
+		"./state_machine.js": 88,
 		"./util": 2,
 		"./util.js": 2,
-		"./xml/browser_parser": 88,
-		"./xml/browser_parser.js": 88,
-		"./xml/builder": 89,
-		"./xml/builder.js": 89,
-		"./xml/node_parser": 90,
-		"./xml/node_parser.js": 90
+		"./xml/browser_parser": 89,
+		"./xml/browser_parser.js": 89,
+		"./xml/builder": 90,
+		"./xml/builder.js": 90,
+		"./xml/node_parser": 91,
+		"./xml/node_parser.js": 91
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -4116,14 +4116,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Stream;
 
 	var EE = __webpack_require__(18).EventEmitter;
-	var inherits = __webpack_require__(160);
+	var inherits = __webpack_require__(161);
 
 	inherits(Stream, EE);
-	Stream.Readable = __webpack_require__(157);
-	Stream.Writable = __webpack_require__(159);
-	Stream.Duplex = __webpack_require__(154);
-	Stream.Transform = __webpack_require__(158);
-	Stream.PassThrough = __webpack_require__(156);
+	Stream.Readable = __webpack_require__(158);
+	Stream.Writable = __webpack_require__(160);
+	Stream.Duplex = __webpack_require__(155);
+	Stream.Transform = __webpack_require__(159);
+	Stream.PassThrough = __webpack_require__(157);
 
 	// Backwards-compat with node 0.4.x
 	Stream.Stream = Stream;
@@ -4837,7 +4837,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return Object.prototype.toString.call(o);
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4).Buffer))
 
 /***/ },
 /* 20 */
@@ -5397,7 +5397,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 	exports.isPrimitive = isPrimitive;
 
-	exports.isBuffer = __webpack_require__(166);
+	exports.isBuffer = __webpack_require__(167);
 
 	function objectToString(o) {
 	  return Object.prototype.toString.call(o);
@@ -5441,7 +5441,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *     prototype.
 	 * @param {function} superCtor Constructor function to inherit prototype from.
 	 */
-	exports.inherits = __webpack_require__(165);
+	exports.inherits = __webpack_require__(166);
 
 	exports._extend = function(origin, add) {
 	  // Don't do anything if add isn't an object
@@ -5473,7 +5473,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		value: true
 	});
 
-	var _lodash = __webpack_require__(4);
+	var _lodash = __webpack_require__(3);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -5588,7 +5588,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(__dirname) {
-	var path = __webpack_require__(91);
+	var path = __webpack_require__(92);
 
 	var apiRoot = path.join(__dirname, '..', 'apis');
 	var serviceMap = null;
@@ -6115,7 +6115,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var Collection = __webpack_require__(29);
 	var Operation = __webpack_require__(30);
-	var Shape = __webpack_require__(6);
+	var Shape = __webpack_require__(7);
 	var Paginator = __webpack_require__(31);
 	var ResourceWaiter = __webpack_require__(32);
 
@@ -6208,7 +6208,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Shape = __webpack_require__(6);
+	var Shape = __webpack_require__(7);
 
 	var util = __webpack_require__(2);
 	var property = util.property;
@@ -6340,8 +6340,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var AWS = __webpack_require__(1);
 	var util = __webpack_require__(2);
-	var QueryParamSerializer = __webpack_require__(73);
-	var Shape = __webpack_require__(6);
+	var QueryParamSerializer = __webpack_require__(74);
+	var Shape = __webpack_require__(7);
 
 	function buildRequest(req) {
 	  var operation = req.service.api.operations[req.operation];
@@ -6874,7 +6874,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var AWS = __webpack_require__(1);
 
 	// pull in CloudFront signer
-	__webpack_require__(55);
+	__webpack_require__(56);
 
 	AWS.util.update(AWS.CloudFront.prototype, {
 
@@ -7020,7 +7020,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	var AWS = __webpack_require__(1);
-	__webpack_require__(66);
+	__webpack_require__(67);
 
 	AWS.util.update(AWS.DynamoDB.prototype, {
 	  /**
@@ -7424,7 +7424,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var AWS = __webpack_require__(1);
 
 	// Pull in managed upload extension
-	__webpack_require__(78);
+	__webpack_require__(79);
 
 	AWS.util.update(AWS.S3.prototype, {
 	  /**
@@ -8197,7 +8197,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 	// USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-	var punycode = __webpack_require__(161);
+	var punycode = __webpack_require__(162);
 
 	exports.parse = urlParse;
 	exports.resolve = urlResolve;
@@ -8269,7 +8269,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      'gopher:': true,
 	      'file:': true
 	    },
-	    querystring = __webpack_require__(164);
+	    querystring = __webpack_require__(165);
 
 	function urlParse(url, parseQueryString, slashesDenoteHost) {
 	  if (url && isObject(url) && url instanceof Url) return url;
@@ -8887,6 +8887,698 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 53 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _config = __webpack_require__(8);
+
+	var _config2 = _interopRequireDefault(_config);
+
+	var _lodash = __webpack_require__(3);
+
+	var _Matter = __webpack_require__(6);
+
+	var _Matter2 = _interopRequireDefault(_Matter);
+
+	var _firebase = __webpack_require__(54);
+
+	var _firebase2 = _interopRequireDefault(_firebase);
+
+	var _Project = __webpack_require__(100);
+
+	var _Project2 = _interopRequireDefault(_Project);
+
+	var _File = __webpack_require__(97);
+
+	var _File2 = _interopRequireDefault(_File);
+
+	var _Folder = __webpack_require__(98);
+
+	var _Folder2 = _interopRequireDefault(_Folder);
+
+	var _s = __webpack_require__(101);
+
+	var S3 = _interopRequireWildcard(_s);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	//Convenience vars
+	var logger = _Matter2.default.utils.logger;
+
+	var Files = function () {
+		function Files(filesData) {
+			_classCallCheck(this, Files);
+
+			if (!filesData || !(0, _lodash.has)(filesData, 'project')) {
+				logger.error({
+					description: 'Action data object with name is required to start a Files Action.',
+					func: 'constructor', obj: 'Files'
+				});
+				throw new Error('Files Data object with name is required to start a Files action.');
+			}
+			(0, _lodash.extend)(this, filesData);
+			logger.debug({
+				description: 'Files object constructed.',
+				func: 'constructor', obj: 'Files', files: this
+			});
+		}
+		/**
+	  * @description Firebase URL for files list
+	  */
+
+		_createClass(Files, [{
+			key: 'get',
+
+			/**
+	   * @description Get files list single time
+	   */
+			value: function get() {
+				var _this = this;
+
+				logger.log({
+					description: 'Files get called.',
+					func: 'get', obj: 'Files'
+				});
+				return new Promise(function (resolve) {
+					_this.fbRef.once('value', function (filesSnap) {
+						logger.info({
+							description: 'Files loaded from firebase.',
+							func: 'get', obj: 'Files'
+						});
+						var filesArray = [];
+						filesSnap.forEach(function (objSnap) {
+							var objData = objSnap.hasChild('meta') ? objSnap.child('meta').val() : { path: objSnap.key() };
+							//TODO: Have a better fallback for when meta does not exist
+							// if (!objData.path) {
+							// 	objSnap.ref().path.o.splice(0, filesPathArray.length);
+							// }
+							objData.key = objSnap.key();
+							filesArray.push(objData);
+						});
+						logger.debug({
+							description: 'Files array built.',
+							filesArray: filesArray, func: 'get', obj: 'Files'
+						});
+						resolve(filesArray);
+					});
+				});
+			}
+			/**
+	   * @description Get synced files list from firebase
+	   */
+
+		}, {
+			key: 'sync',
+			value: function sync() {
+				var _this2 = this;
+
+				// TODO: get files list from firebase
+				logger.debug({
+					description: 'Files sync called.',
+					func: 'sync', obj: 'Files'
+				});
+				return new Promise(function (resolve) {
+					_this2.fbRef.on('value', function (filesSnap) {
+						logger.info({
+							description: 'Files synced with Firebase.',
+							func: 'sync', obj: 'Files'
+						});
+						var filesArray = [];
+						// let filesPathArray =  this.pathArrayFromFbRef;
+						filesSnap.forEach(function (objSnap) {
+							var objData = objSnap.hasChild('meta') ? objSnap.child('meta').val() : { path: objSnap.key() };
+							//TODO: Have a better fallback for when meta does not exist
+							// if (!objData.path) {
+							// 	objSnap.ref().path.o.splice(0, filesPathArray.length);
+							// }
+							objData.key = objSnap.key();
+							filesArray.push(objData);
+						});
+						logger.log({
+							description: 'Files array built.',
+							filesArray: filesArray, func: 'get', obj: 'Files'
+						});
+						resolve(filesArray);
+					});
+				});
+			}
+			/**
+	   * @description Add a new file or files
+	   * @param {Object|Array} fileData - Array of objects or single object containing file data
+	   * @param {Object} fileData.path - Path of file relative to project
+	   */
+
+		}, {
+			key: 'add',
+			value: function add(objData) {
+				//TODO: Allow for options of where to add the file to
+				if ((0, _lodash.isArray)(objData)) {
+					return this.upload(objData);
+				}
+				return this.addToFb(objData);
+			}
+			/**
+	   * @description Add multiple files/folders to project files
+	   * @param {Array} filesData - Array of file objects to upload
+	   */
+
+		}, {
+			key: 'upload',
+			value: function upload(filesData) {
+				var _this3 = this;
+
+				//TODO: Allow for options of where to add the file to
+				if (!(0, _lodash.isArray)(filesData)) {
+					return this.addToFb(filesData);
+				} else {
+					var _ret = function () {
+						logger.warn({
+							description: 'Upload called with multiple files.', filesData: filesData,
+							project: _this3.project, func: 'upload', obj: 'Files'
+						});
+						var promises = [];
+						(0, _lodash.each)(filesData, function (file) {
+							promises.push(_this3.addToFb(file));
+						});
+						return {
+							v: Promise.all(promises).then(function (resultsArray) {
+								logger.info({
+									description: 'Files uploaded successfully.', resultsArray: resultsArray,
+									func: 'upload', obj: 'Files'
+								});
+								return Promise.resolve(_this3);
+							})
+						};
+					}();
+
+					if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+				}
+			}
+			/**
+	   * @description Remove object from files (folder or file)
+	   */
+
+		}, {
+			key: 'remove',
+			value: function remove(objData) {
+				//TODO: Delete file from S3 as well if it exists
+				return this.delFromFb(objData);
+			}
+			/**
+	   * @description Alias for remove
+	   */
+
+		}, {
+			key: 'del',
+			value: function del(objData) {
+				//TODO: Delete file from S3 as well if it exists
+				return this.remove(objData);
+			}
+		}, {
+			key: 'publish',
+			value: function publish() {
+				//TODO: Publish all files
+			}
+		}, {
+			key: 'addFolder',
+			value: function addFolder(folderData) {
+				var dataObj = folderData;
+				dataObj.app = this;
+				var folder = new _Folder2.default({ project: this });
+				return folder.save();
+			}
+			/**
+	   * @description Add a file to Firebase
+	   * @param {Object} fileData - Data object for new file
+	   * @param {String} fileData.path - Path of file within project
+	   * @param {String} fileData.content - Content of file
+	   */
+
+		}, {
+			key: 'addToFb',
+			value: function addToFb(addData) {
+				var _this4 = this;
+
+				logger.debug({
+					description: 'Add to fb called.', addData: addData,
+					func: 'addToFb', obj: 'Files'
+				});
+				if (!addData) {
+					logger.debug({
+						description: 'Object data is required to add.', addData: addData,
+						func: 'addToFb', obj: 'Files'
+					});
+					return Promise.reject({
+						message: 'Object data is required to add.'
+					});
+				}
+				//Array of files/folder to upload
+				if ((0, _lodash.isArray)(addData)) {
+					var _ret2 = function () {
+						var promises = [];
+						addData.forEach(function (file) {
+							promises.push(_this4.addToFb(file));
+						});
+						return {
+							v: Promise.all(promises)
+						};
+					}();
+
+					if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
+				}
+				var size = addData.size;
+				var path = addData.path;
+				var name = addData.name;
+				var type = addData.type;
+
+				if (size) {
+					return this.addLocalToFb(addData);
+				}
+				if (!path) {
+					logger.error({
+						description: 'Invalid file data. Path must be included.',
+						func: 'addToFb', obj: 'Files'
+					});
+					return Promise.reject({
+						message: 'Invalid file data. Path must be included.'
+					});
+				}
+				var newData = { project: this.project, data: { path: path } };
+				if (name) {
+					newData.data.name = name;
+				}
+				if (type && type === 'folder') {
+					return new _Folder2.default(newData).save();
+				} else {
+					return new _File2.default(newData).save();
+				}
+			}
+			/**
+	   * @description Delete a file or folder from Firebase
+	   * @param {Object} objData - Data of file or folder
+	   * @param {String} path - Path of file or folder
+	   */
+
+		}, {
+			key: 'delFromFb',
+			value: function delFromFb(data) {
+				logger.debug({
+					description: 'Del from fb called.', data: data,
+					func: 'delFromFb', obj: 'Files'
+				});
+				if (!data || !data.path) {
+					logger.error({
+						description: 'Invalid file data. Path must be included.',
+						func: 'delFromFb', obj: 'Files'
+					});
+					return Promise.reject({
+						message: 'Invalid file data. Path must be included.'
+					});
+				}
+				var file = new _File2.default({ project: this.project, data: data });
+				return new Promise(function (resolve, reject) {
+					file.fbRef.remove(fileData, function (err) {
+						if (!err) {
+							resolve(fileData);
+						} else {
+							reject(err);
+						}
+					});
+				});
+			}
+			/**
+	   * @description Upload a local file to Firebase
+	   * @param {File} file - Local file with content to be uploaded
+	   */
+
+		}, {
+			key: 'addLocalToFb',
+			value: function addLocalToFb(data) {
+				var _this5 = this;
+
+				logger.debug({
+					description: 'Add local to fb called.', data: data,
+					func: 'addLocalToFb', obj: 'Files'
+				});
+				if (!data) {
+					logger.error({
+						description: 'File is required to upload to Firebase.',
+						func: 'addLocalToFb', obj: 'Files'
+					});
+					return Promise.reject({
+						message: 'File is required to upload to Firebase.'
+					});
+				}
+				return getContentFromFile(data).then(function (content) {
+					logger.debug({
+						description: 'Content loaded from local file.', content: content,
+						func: 'addLocalToFb', obj: 'Files'
+					});
+					data.content = content;
+					data.path = data.name;
+					var file = new _File2.default({ project: _this5.project, data: data });
+					logger.info({
+						description: 'File object created.', file: file,
+						func: 'addLocalToFb', obj: 'Files'
+					});
+					return file.save();
+				});
+			}
+		}, {
+			key: 'getFrontEnd',
+			value: function getFrontEnd() {
+				var _this6 = this;
+
+				if (this.project && this.project.frontend) {
+					return Promise.resolve(this.project);
+				}
+				logger.warn({
+					description: 'Files Frontend data not available. Calling .get().',
+					project: this.project, func: 'getFromS3', obj: 'Files'
+				});
+				return this.project.get().then(function (applicationData) {
+					logger.log({
+						description: 'Files get returned.',
+						data: applicationData, func: 'getFromS3', obj: 'Files'
+					});
+					_this6.project = applicationData;
+					if ((0, _lodash.has)(applicationData, 'frontend')) {
+						return _this6.get();
+					}
+					logger.error({
+						description: 'Files does not have Frontend to get files from.',
+						func: 'getFromS3', obj: 'Files'
+					});
+					return Promise.reject({
+						message: 'Files does not have frontend to get files from.'
+					});
+				}, function (err) {
+					logger.error({
+						description: 'Files Frontend data not available. Make sure to call .get().',
+						error: err, func: 'getFromS3', obj: 'Files'
+					});
+					return Promise.reject({
+						message: 'Bucket name required to get objects'
+					});
+				});
+			}
+			/**
+	   * @description Get files list from S3
+	   */
+
+		}, {
+			key: 'getFromS3',
+			value: function getFromS3() {
+				if (!this.project || !this.project.frontend || !this.project.frontend.bucketName) {
+					logger.warn({
+						description: 'Files Frontend data not available. Calling .get().',
+						project: this.project, func: 'getFromS3', obj: 'Files'
+					});
+					return this.getFrontEnd().then(this.getFromS3);
+				}
+				var s3 = S3.init();
+				s3.listObjects({ bucket: this.project.frontend.bucketName }).then(function (filesList) {
+					logger.info({
+						description: 'Files list loaded.', filesList: filesList,
+						func: 'get', obj: 'Files'
+					});
+					return filesList;
+				}, function (error) {
+					logger.error({
+						description: 'Error getting files from S3.',
+						error: error, func: 'get', obj: 'Files'
+					});
+					return Promise.reject(error);
+				});
+			}
+			/**
+	   * @description build child structure from files list
+	   */
+
+		}, {
+			key: 'buildStructure',
+			value: function buildStructure() {
+				logger.debug({
+					description: 'Build Structure called.',
+					func: 'buildStructure', obj: 'Files'
+				});
+				return this.get().then(function (filesArray) {
+					logger.log({
+						description: 'Child struct from array.',
+						childStructure: childStruct,
+						func: 'buildStructure', obj: 'Files'
+					});
+					var childStruct = childrenStructureFromArray(filesArray);
+					//TODO: have child objects have correct classes (file/folder)
+					logger.log({
+						description: 'Child struct from array.',
+						childStructure: childStruct,
+						func: 'buildStructure', obj: 'Files'
+					});
+					return childStruct;
+				}, function (error) {
+					logger.error({
+						description: 'Error getting application files.',
+						error: error, func: 'buildStructure', obj: 'Files'
+					});
+					return Promise.reject({
+						message: 'Error getting files.',
+						error: error
+					});
+				});
+			}
+			/**
+	   * @description sync file structure from Firebase
+	   */
+
+		}, {
+			key: 'syncStructure',
+			value: function syncStructure() {
+				//TODO: Determine if it is worth storing this in the built structure
+				logger.debug({
+					description: 'Build Structure called.',
+					func: 'syncStructure', obj: 'Files'
+				});
+				return this.sync().then(function (filesArray) {
+					logger.log({
+						description: 'Child struct from array.',
+						childStruct: childStruct, func: 'syncStructure', obj: 'Files'
+					});
+					var childStruct = childrenStructureFromArray(filesArray);
+					//TODO: have child objects have correct classes (file/folder)
+					logger.log({
+						description: 'Child struct from array.',
+						childStruct: childStruct, func: 'syncStructure', obj: 'Files'
+					});
+					return childStruct;
+				}, function (error) {
+					logger.error({
+						description: 'Error getting application files.',
+						error: error, func: 'syncStructure', obj: 'Files'
+					});
+					return Promise.reject({
+						message: 'Error getting files.',
+						error: error
+					});
+				});
+			}
+		}, {
+			key: 'fbUrl',
+			get: function get() {
+				if (!this.project.fbUrl) {
+					logger.error({
+						description: 'Project data is required for fbUrl.',
+						func: 'constructor', obj: 'Files', files: this
+					});
+					throw new Error('Project data is required to create fbUrl.');
+				}
+				if (this.project.fbUrl) {
+					return this.project.fbUrl;
+				}
+				var project = new _Project2.default(this.project);
+				return project.fbUrl;
+			}
+			/**
+	   * @description Firebase reference of files list
+	   */
+
+		}, {
+			key: 'fbRef',
+			get: function get() {
+				logger.debug({
+					description: 'Url created for files fbRef.',
+					url: this.fbUrl, func: 'fbRef', obj: 'Files'
+				});
+				return new _firebase2.default(this.fbUrl);
+			}
+			/**
+	   * @description Path array that is built from Firebase Reference
+	   * @private
+	   */
+
+		}, {
+			key: 'pathArrayFromFbRef',
+			get: function get() {
+				//Handle fbUrls that have multiple levels
+				var removeArray = _config2.default.fbUrl.replace('https://', '').split('/');
+				removeArray.shift();
+				var pathArray = this.fbRef.path.o.splice(0, removeArray.length);
+				logger.info({
+					description: 'Path array built.',
+					pathArray: pathArray, func: 'fbRef', obj: 'Files'
+				});
+				return pathArray;
+			}
+		}]);
+
+		return Files;
+	}();
+	//------------------ Utility Functions ------------------//
+
+	exports.default = Files;
+	function getContentFromFile(fileData) {
+		//Get initial content from local file
+		logger.debug({
+			description: 'getContentFromFile called', fileData: fileData,
+			func: 'getContentFromFile', obj: 'Files'
+		});
+		return new Promise(function (resolve) {
+			try {
+				var reader = new FileReader();
+				logger.debug({
+					description: 'reader created', reader: reader,
+					func: 'getContentFromFile', obj: 'Files'
+				});
+				reader.onload = function (e) {
+					var contents = e.target.result;
+					logger.debug({
+						description: 'Contents loaded', contents: contents,
+						func: 'getContentFromFile', obj: 'Files'
+					});
+					resolve(contents);
+				};
+				reader.readAsText(fileData);
+			} catch (error) {
+				logger.error({
+					description: 'Error getting file contents.', error: error,
+					func: 'getContentFromFile', obj: 'Files'
+				});
+				reject(error);
+			}
+		});
+	}
+	/**
+	 * @description Convert from array file structure (from S3) to 'children' structure used in Editor GUI
+	 * @private
+	 * @example
+	 * //Array structure: [{path:'index.html'}, {path:'testFolder/file.js'}]
+	 * //Children Structure [{type:'folder', name:'testfolder', children:[{path:'testFolder/file.js', name:'file.js', filetype:'javascript', contentType:'application/javascript'}]}]
+	 * var flatArray = [{path:'index.html'}, {path:'testFolder/file.js'}];
+	 * var childrenStructure = childrenStructureFromArray(flatArray);
+	 */
+	function childrenStructureFromArray(fileArray) {
+		// logger.log('childStructureFromArray called:', fileArray);
+		//Create a object for each file that stores the file in the correct 'children' level
+		var mappedStructure = fileArray.map(function (file) {
+			return buildStructureObject(file);
+		});
+		return combineLikeObjs(mappedStructure);
+	}
+	/**
+	 * @description Convert file with key into a folder/file children object
+	 * @private
+	 */
+	function buildStructureObject(file) {
+		var pathArray = undefined;
+		// console.log('buildStructureObject with:', file);
+		if ((0, _lodash.has)(file, 'path')) {
+			//Coming from files already having path (structure)
+			pathArray = file.path.split('/');
+		} else if ((0, _lodash.has)(file, 'Key')) {
+			//Coming from aws
+			pathArray = file.Key.split('/');
+			// console.log('file before pick:', file);
+			file = (0, _lodash.pick)(file, 'Key');
+			file.path = file.Key;
+			file.name = file.Key;
+		} else {
+			logger.error({
+				description: 'Invalid file.', file: file,
+				func: 'buildStructureObject', obj: 'Files'
+			});
+		}
+		var currentObj = file;
+		if (pathArray.length == 1) {
+			currentObj.name = pathArray[0];
+			if (!(0, _lodash.has)(currentObj, 'type')) {
+				currentObj.type = 'file';
+			}
+			currentObj.path = pathArray[0];
+			return currentObj;
+		} else {
+			var finalObj = {};
+			(0, _lodash.each)(pathArray, function (loc, ind, list) {
+				if (ind != list.length - 1) {
+					//Not the last loc
+					currentObj.name = loc;
+					currentObj.path = (0, _lodash.take)(list, ind + 1).join('/');
+					currentObj.type = 'folder';
+					currentObj.children = [{}];
+					//TODO: Find out why this works
+					if (ind === 0) {
+						finalObj = currentObj;
+					}
+					currentObj = currentObj.children[0];
+				} else {
+					currentObj.type = 'file';
+					currentObj.name = loc;
+					currentObj.path = pathArray.join('/');
+					if (file.$id) {
+						currentObj.$id = file.$id;
+					}
+				}
+			});
+			return finalObj;
+		}
+	}
+	/**
+	 * @description Recursivley combine children of object's that have the same names
+	 * @private
+	 */
+	function combineLikeObjs(mappedArray) {
+		var takenNames = [];
+		var finishedArray = [];
+		(0, _lodash.each)(mappedArray, function (obj) {
+			if (takenNames.indexOf(obj.name) == -1) {
+				takenNames.push(obj.name);
+				finishedArray.push(obj);
+			} else {
+				var likeObj = (0, _lodash.findWhere)(mappedArray, { name: obj.name });
+				//Combine children of like objects
+				likeObj.children = (0, _lodash.union)(obj.children, likeObj.children);
+				likeObj.children = combineLikeObjs(likeObj.children);
+				// logger.log('extended obj:',likeObj);
+			}
+		});
+		return finishedArray;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 54 */
 /***/ function(module, exports) {
 
 	/*! @license Firebase v2.3.2
@@ -9160,7 +9852,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 54 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AWS = __webpack_require__(1);
@@ -9176,20 +9868,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	AWS.apiLoader.services = {};
 
 	// Load the DOMParser XML parser
-	AWS.XML.Parser = __webpack_require__(88);
+	AWS.XML.Parser = __webpack_require__(89);
 
 	// Load the XHR HttpClient
-	__webpack_require__(70);
+	__webpack_require__(71);
 
 	if (typeof window !== 'undefined') window.AWS = AWS;
 	if (true) module.exports = AWS;
 
 
 /***/ },
-/* 55 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var crypto = __webpack_require__(110),
+	var crypto = __webpack_require__(111),
 	    url = __webpack_require__(52),
 	    AWS = __webpack_require__(1),
 	    base64Encode = AWS.util.base64.encode,
@@ -9398,7 +10090,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 56 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AWS = __webpack_require__(1);
@@ -9862,7 +10554,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 57 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AWS = __webpack_require__(1);
@@ -10180,11 +10872,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 58 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AWS = __webpack_require__(1);
-	__webpack_require__(71);
+	__webpack_require__(72);
 
 	/**
 	 * Represents credentials received from the metadata service on an EC2 instance.
@@ -10255,7 +10947,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 59 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {var AWS = __webpack_require__(1);
@@ -10347,7 +11039,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 60 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AWS = __webpack_require__(1);
@@ -10418,7 +11110,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 61 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AWS = __webpack_require__(1);
@@ -10512,11 +11204,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 62 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {var AWS = __webpack_require__(1);
-	var path = __webpack_require__(91);
+	var path = __webpack_require__(92);
 
 	/**
 	 * Represents credentials loaded from shared credentials file
@@ -10621,7 +11313,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 63 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AWS = __webpack_require__(1);
@@ -10738,7 +11430,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 64 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AWS = __webpack_require__(1);
@@ -10839,7 +11531,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 65 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var util = __webpack_require__(1).util;
@@ -10941,11 +11633,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 66 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AWS = __webpack_require__(1);
-	var Translator = __webpack_require__(67);
+	var Translator = __webpack_require__(68);
 	var DynamoDBSet = __webpack_require__(26);
 
 	/**
@@ -11466,11 +12158,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 67 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var util = __webpack_require__(1).util;
-	var convert = __webpack_require__(65);
+	var convert = __webpack_require__(66);
 
 	var Translator = function(options) {
 	  options = options || {};
@@ -11551,7 +12243,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 68 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AWS = __webpack_require__(1);
@@ -12027,7 +12719,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 69 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AWS = __webpack_require__(1);
@@ -12055,7 +12747,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    var useSSL = endpoint.protocol === 'https:';
-	    var http = useSSL ? __webpack_require__(112) : __webpack_require__(111);
+	    var http = useSSL ? __webpack_require__(113) : __webpack_require__(112);
 	    var options = {
 	      host: endpoint.hostname,
 	      port: endpoint.port,
@@ -12124,7 +12816,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 
 	  sslAgent: function sslAgent() {
-	    var https = __webpack_require__(112);
+	    var https = __webpack_require__(113);
 
 	    if (!AWS.NodeHttpClient.sslAgent) {
 	      AWS.NodeHttpClient.sslAgent = new https.Agent({rejectUnauthorized: true});
@@ -12174,7 +12866,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 70 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AWS = __webpack_require__(1);
@@ -12302,7 +12994,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 71 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {var AWS = __webpack_require__(1);
@@ -12436,7 +13128,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 72 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AWS = __webpack_require__(1);
@@ -12696,7 +13388,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 73 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var util = __webpack_require__(2);
@@ -12783,11 +13475,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 74 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var util = __webpack_require__(2);
-	var regionConfig = __webpack_require__(107);
+	var regionConfig = __webpack_require__(108);
 
 	function generateRegionPrefix(region) {
 	  if (!region) return null;
@@ -12852,11 +13544,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 75 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {var AWS = __webpack_require__(1);
-	var AcceptorStateMachine = __webpack_require__(87);
+	var AcceptorStateMachine = __webpack_require__(88);
 	var inherit = AWS.util.inherit;
 	var domain = AWS.util.nodeRequire('domain');
 
@@ -13534,7 +14226,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 76 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -13738,7 +14430,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 77 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AWS = __webpack_require__(1);
@@ -13944,7 +14636,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 78 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {var AWS = __webpack_require__(1);
@@ -14538,15 +15230,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	AWS.util.mixin(AWS.S3.ManagedUpload, AWS.SequentialExecutor);
 	module.exports = AWS.S3.ManagedUpload;
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4).Buffer))
 
 /***/ },
-/* 79 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AWS = __webpack_require__(1);
 	var Api = __webpack_require__(28);
-	var regionConfig = __webpack_require__(74);
+	var regionConfig = __webpack_require__(75);
 	var inherit = AWS.util.inherit;
 
 	/**
@@ -15071,11 +15763,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 80 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(__dirname) {
-	var path = __webpack_require__(91);
+	var path = __webpack_require__(92);
 	var AWS = __webpack_require__(1);
 	var apis = __webpack_require__(23);
 
@@ -15087,13 +15779,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  // load any customizations from lib/services/<svcidentifier>.js
 	  var svcFile = path.join(__dirname, 'services', identifier + '.js');
-	  if (fs.existsSync(svcFile)) __webpack_require__(116)("./" + identifier);
+	  if (fs.existsSync(svcFile)) __webpack_require__(117)("./" + identifier);
 	});
 
 	/* WEBPACK VAR INJECTION */}.call(exports, "/"))
 
 /***/ },
-/* 81 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AWS = __webpack_require__(1);
@@ -15211,7 +15903,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 82 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AWS = __webpack_require__(1);
@@ -15237,16 +15929,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	  throw new Error('Unknown signing version ' + version);
 	};
 
-	__webpack_require__(84);
-	__webpack_require__(51);
 	__webpack_require__(85);
+	__webpack_require__(51);
 	__webpack_require__(86);
-	__webpack_require__(83);
-	__webpack_require__(81);
+	__webpack_require__(87);
+	__webpack_require__(84);
+	__webpack_require__(82);
 
 
 /***/ },
-/* 83 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AWS = __webpack_require__(1);
@@ -15419,7 +16111,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 84 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AWS = __webpack_require__(1);
@@ -15470,7 +16162,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 85 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AWS = __webpack_require__(1);
@@ -15498,7 +16190,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 86 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AWS = __webpack_require__(1);
@@ -15717,7 +16409,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 87 */
+/* 88 */
 /***/ function(module, exports) {
 
 	function AcceptorStateMachine(states, state) {
@@ -15765,11 +16457,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 88 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var util = __webpack_require__(2);
-	var Shape = __webpack_require__(6);
+	var Shape = __webpack_require__(7);
 
 	function DomXmlParser() { }
 
@@ -15938,11 +16630,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 89 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var util = __webpack_require__(2);
-	var builder = __webpack_require__(131);
+	var builder = __webpack_require__(132);
 
 	function XmlBuilder() { }
 
@@ -16030,13 +16722,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 90 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var util = __webpack_require__(2);
-	var Shape = __webpack_require__(6);
+	var Shape = __webpack_require__(7);
 
-	var xml2js = __webpack_require__(128);
+	var xml2js = __webpack_require__(129);
 
 	/**
 	 * @api private
@@ -16195,7 +16887,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 91 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {// Copyright Joyent, Inc. and other Node contributors.
@@ -16426,7 +17118,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 92 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -16641,7 +17333,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 93 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {// Copyright Joyent, Inc. and other Node contributors.
@@ -16672,7 +17364,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Writable;
 
 	/*<replacement>*/
-	var Buffer = __webpack_require__(3).Buffer;
+	var Buffer = __webpack_require__(4).Buffer;
 	/*</replacement>*/
 
 	Writable.WritableState = WritableState;
@@ -17125,7 +17817,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 94 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17135,11 +17827,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.Template = exports.Templates = exports.Groups = exports.Projects = exports.Account = exports.Accounts = exports.Group = undefined;
 
-	var _Action7 = __webpack_require__(95);
+	var _Action7 = __webpack_require__(96);
 
 	var _Action8 = _interopRequireDefault(_Action7);
 
-	var _Group2 = __webpack_require__(98);
+	var _Group2 = __webpack_require__(99);
 
 	var _Group3 = _interopRequireDefault(_Group2);
 
@@ -17226,7 +17918,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}(_Action8.default);
 
 /***/ },
-/* 95 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17241,9 +17933,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _config2 = _interopRequireDefault(_config);
 
-	var _lodash = __webpack_require__(4);
+	var _lodash = __webpack_require__(3);
 
-	var _Matter = __webpack_require__(7);
+	var _Matter = __webpack_require__(6);
 
 	var _Matter2 = _interopRequireDefault(_Matter);
 
@@ -17502,7 +18194,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 96 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
@@ -17517,21 +18209,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _config2 = _interopRequireDefault(_config);
 
-	var _Matter = __webpack_require__(7);
+	var _Matter = __webpack_require__(6);
 
 	var _Matter2 = _interopRequireDefault(_Matter);
 
-	var _lodash = __webpack_require__(4);
+	var _lodash = __webpack_require__(3);
 
-	var _Files = __webpack_require__(97);
+	var _Files = __webpack_require__(53);
 
 	var _Files2 = _interopRequireDefault(_Files);
 
-	var _firebase = __webpack_require__(53);
+	var _firebase = __webpack_require__(54);
 
 	var _firebase2 = _interopRequireDefault(_firebase);
 
-	var _s = __webpack_require__(100);
+	var _s = __webpack_require__(101);
 
 	var S3 = _interopRequireWildcard(_s);
 
@@ -18171,694 +18863,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 97 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _config = __webpack_require__(8);
-
-	var _config2 = _interopRequireDefault(_config);
-
-	var _lodash = __webpack_require__(4);
-
-	var _Matter = __webpack_require__(7);
-
-	var _Matter2 = _interopRequireDefault(_Matter);
-
-	var _firebase = __webpack_require__(53);
-
-	var _firebase2 = _interopRequireDefault(_firebase);
-
-	var _Project = __webpack_require__(99);
-
-	var _Project2 = _interopRequireDefault(_Project);
-
-	var _File = __webpack_require__(96);
-
-	var _File2 = _interopRequireDefault(_File);
-
-	var _s = __webpack_require__(100);
-
-	var S3 = _interopRequireWildcard(_s);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	//Convenience vars
-	var logger = _Matter2.default.utils.logger;
-
-	var Files = function () {
-		function Files(filesData) {
-			_classCallCheck(this, Files);
-
-			if (!filesData || !(0, _lodash.has)(filesData, 'project')) {
-				logger.error({
-					description: 'Action data object with name is required to start a Files Action.',
-					func: 'constructor', obj: 'Files'
-				});
-				throw new Error('Files Data object with name is required to start a Files action.');
-			}
-			(0, _lodash.extend)(this, filesData);
-			logger.debug({
-				description: 'Files object constructed.',
-				func: 'constructor', obj: 'Files', files: this
-			});
-		}
-		/**
-	  * @description Firebase URL for files list
-	  */
-
-		_createClass(Files, [{
-			key: 'get',
-
-			/**
-	   * @description Get files list single time
-	   */
-			value: function get() {
-				var _this = this;
-
-				logger.log({
-					description: 'Files get called.',
-					func: 'get', obj: 'Files'
-				});
-				return new Promise(function (resolve) {
-					_this.fbRef.once('value', function (filesSnap) {
-						logger.info({
-							description: 'Files loaded from firebase.',
-							func: 'get', obj: 'Files'
-						});
-						var filesArray = [];
-						filesSnap.forEach(function (objSnap) {
-							var objData = objSnap.hasChild('meta') ? objSnap.child('meta').val() : { path: objSnap.key() };
-							//TODO: Have a better fallback for when meta does not exist
-							// if (!objData.path) {
-							// 	objSnap.ref().path.o.splice(0, filesPathArray.length);
-							// }
-							objData.key = objSnap.key();
-							filesArray.push(objData);
-						});
-						logger.debug({
-							description: 'Files array built.',
-							filesArray: filesArray, func: 'get', obj: 'Files'
-						});
-						resolve(filesArray);
-					});
-				});
-			}
-			/**
-	   * @description Get synced files list from firebase
-	   */
-
-		}, {
-			key: 'sync',
-			value: function sync() {
-				var _this2 = this;
-
-				// TODO: get files list from firebase
-				logger.debug({
-					description: 'Files sync called.',
-					func: 'sync', obj: 'Files'
-				});
-				return new Promise(function (resolve) {
-					_this2.fbRef.on('value', function (filesSnap) {
-						logger.info({
-							description: 'Files synced with Firebase.',
-							func: 'sync', obj: 'Files'
-						});
-						var filesArray = [];
-						// let filesPathArray =  this.pathArrayFromFbRef;
-						filesSnap.forEach(function (objSnap) {
-							var objData = objSnap.hasChild('meta') ? objSnap.child('meta').val() : { path: objSnap.key() };
-							//TODO: Have a better fallback for when meta does not exist
-							// if (!objData.path) {
-							// 	objSnap.ref().path.o.splice(0, filesPathArray.length);
-							// }
-							objData.key = objSnap.key();
-							filesArray.push(objData);
-						});
-						logger.log({
-							description: 'Files array built.',
-							filesArray: filesArray, func: 'get', obj: 'Files'
-						});
-						resolve(filesArray);
-					});
-				});
-			}
-			/**
-	   * @description Add a new file or files
-	   * @param {Object|Array} fileData - Array of objects or single object containing file data
-	   * @param {Object} fileData.path - Path of file relative to project
-	   */
-
-		}, {
-			key: 'add',
-			value: function add(objData) {
-				//TODO: Allow for options of where to add the file to
-				if ((0, _lodash.isArray)(objData)) {
-					return this.upload(objData);
-				}
-				return this.addToFb(objData);
-			}
-			/**
-	   * @description Add multiple files/folders to project files
-	   * @param {Array} filesData - Array of file objects to upload
-	   */
-
-		}, {
-			key: 'upload',
-			value: function upload(filesData) {
-				var _this3 = this;
-
-				//TODO: Allow for options of where to add the file to
-				if (!(0, _lodash.isArray)(filesData)) {
-					return this.addToFb(filesData);
-				} else {
-					var _ret = function () {
-						logger.warn({
-							description: 'Upload called with multiple files.', filesData: filesData,
-							project: _this3.project, func: 'upload', obj: 'Files'
-						});
-						var promises = [];
-						(0, _lodash.each)(filesData, function (file) {
-							promises.push(_this3.addToFb(file));
-						});
-						return {
-							v: Promise.all(promises).then(function (resultsArray) {
-								logger.info({
-									description: 'Files uploaded successfully.', resultsArray: resultsArray,
-									func: 'upload', obj: 'Files'
-								});
-								return Promise.resolve(_this3);
-							})
-						};
-					}();
-
-					if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
-				}
-			}
-			/**
-	   * @description Remove object from files (folder or file)
-	   */
-
-		}, {
-			key: 'remove',
-			value: function remove(objData) {
-				//TODO: Delete file from S3 as well if it exists
-				return this.delFromFb(objData);
-			}
-			/**
-	   * @description Alias for remove
-	   */
-
-		}, {
-			key: 'del',
-			value: function del(objData) {
-				//TODO: Delete file from S3 as well if it exists
-				return this.remove(objData);
-			}
-		}, {
-			key: 'publish',
-			value: function publish() {
-				//TODO: Publish all files
-			}
-		}, {
-			key: 'addFolder',
-			value: function addFolder(folderData) {
-				var dataObj = folderData;
-				dataObj.app = this;
-				var folder = new Folder({ project: this });
-				return folder.save();
-			}
-			/**
-	   * @description Add a file to Firebase
-	   * @param {Object} fileData - Data object for new file
-	   * @param {String} fileData.path - Path of file within project
-	   * @param {String} fileData.content - Content of file
-	   */
-
-		}, {
-			key: 'addToFb',
-			value: function addToFb(addData) {
-				var _this4 = this;
-
-				logger.debug({
-					description: 'Add to fb called.', addData: addData,
-					func: 'addToFb', obj: 'Files'
-				});
-				if (!addData) {
-					logger.debug({
-						description: 'Object data is required to add.', addData: addData,
-						func: 'addToFb', obj: 'Files'
-					});
-					return Promise.reject({
-						message: 'Object data is required to add.'
-					});
-				}
-				//Array of files/folder to upload
-				if ((0, _lodash.isArray)(addData)) {
-					var _ret2 = function () {
-						var promises = [];
-						addData.forEach(function (file) {
-							promises.push(_this4.addToFb(file));
-						});
-						return {
-							v: Promise.all(promises)
-						};
-					}();
-
-					if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
-				}
-				var size = addData.size;
-				var path = addData.path;
-				var name = addData.name;
-				var type = addData.type;
-
-				if (size) {
-					return this.addLocalToFb(addData);
-				}
-				if (!path) {
-					logger.error({
-						description: 'Invalid file data. Path must be included.',
-						func: 'addToFb', obj: 'Files'
-					});
-					return Promise.reject({
-						message: 'Invalid file data. Path must be included.'
-					});
-				}
-				var newData = { project: this.project, data: { path: path } };
-				if (name) {
-					newData.data.name = name;
-				}
-				if (type && type === 'folder') {
-					return new Folder(newData).save();
-				} else {
-					return new _File2.default(newData).save();
-				}
-			}
-			/**
-	   * @description Delete a file or folder from Firebase
-	   * @param {Object} objData - Data of file or folder
-	   * @param {String} path - Path of file or folder
-	   */
-
-		}, {
-			key: 'delFromFb',
-			value: function delFromFb(data) {
-				logger.debug({
-					description: 'Del from fb called.', data: data,
-					func: 'delFromFb', obj: 'Files'
-				});
-				if (!data || !data.path) {
-					logger.error({
-						description: 'Invalid file data. Path must be included.',
-						func: 'delFromFb', obj: 'Files'
-					});
-					return Promise.reject({
-						message: 'Invalid file data. Path must be included.'
-					});
-				}
-				var file = new _File2.default({ project: this.project, data: data });
-				return new Promise(function (resolve, reject) {
-					file.fbRef.remove(fileData, function (err) {
-						if (!err) {
-							resolve(fileData);
-						} else {
-							reject(err);
-						}
-					});
-				});
-			}
-			/**
-	   * @description Upload a local file to Firebase
-	   * @param {File} file - Local file with content to be uploaded
-	   */
-
-		}, {
-			key: 'addLocalToFb',
-			value: function addLocalToFb(data) {
-				var _this5 = this;
-
-				logger.debug({
-					description: 'Add local to fb called.', data: data,
-					func: 'addLocalToFb', obj: 'Files'
-				});
-				if (!data) {
-					logger.error({
-						description: 'File is required to upload to Firebase.',
-						func: 'addLocalToFb', obj: 'Files'
-					});
-					return Promise.reject({
-						message: 'File is required to upload to Firebase.'
-					});
-				}
-				return getContentFromFile(data).then(function (content) {
-					logger.debug({
-						description: 'Content loaded from local file.', content: content,
-						func: 'addLocalToFb', obj: 'Files'
-					});
-					data.content = content;
-					data.path = data.name;
-					var file = new _File2.default({ project: _this5.project, data: data });
-					logger.info({
-						description: 'File object created.', file: file,
-						func: 'addLocalToFb', obj: 'Files'
-					});
-					return file.save();
-				});
-			}
-		}, {
-			key: 'getFrontEnd',
-			value: function getFrontEnd() {
-				var _this6 = this;
-
-				if (this.project && this.project.frontend) {
-					return Promise.resolve(this.project);
-				}
-				logger.warn({
-					description: 'Files Frontend data not available. Calling .get().',
-					project: this.project, func: 'getFromS3', obj: 'Files'
-				});
-				return this.project.get().then(function (applicationData) {
-					logger.log({
-						description: 'Files get returned.',
-						data: applicationData, func: 'getFromS3', obj: 'Files'
-					});
-					_this6.project = applicationData;
-					if ((0, _lodash.has)(applicationData, 'frontend')) {
-						return _this6.get();
-					}
-					logger.error({
-						description: 'Files does not have Frontend to get files from.',
-						func: 'getFromS3', obj: 'Files'
-					});
-					return Promise.reject({
-						message: 'Files does not have frontend to get files from.'
-					});
-				}, function (err) {
-					logger.error({
-						description: 'Files Frontend data not available. Make sure to call .get().',
-						error: err, func: 'getFromS3', obj: 'Files'
-					});
-					return Promise.reject({
-						message: 'Bucket name required to get objects'
-					});
-				});
-			}
-			/**
-	   * @description Get files list from S3
-	   */
-
-		}, {
-			key: 'getFromS3',
-			value: function getFromS3() {
-				if (!this.project || !this.project.frontend || !this.project.frontend.bucketName) {
-					logger.warn({
-						description: 'Files Frontend data not available. Calling .get().',
-						project: this.project, func: 'getFromS3', obj: 'Files'
-					});
-					return this.getFrontEnd().then(this.getFromS3);
-				}
-				var s3 = S3.init();
-				s3.listObjects({ bucket: this.project.frontend.bucketName }).then(function (filesList) {
-					logger.info({
-						description: 'Files list loaded.', filesList: filesList,
-						func: 'get', obj: 'Files'
-					});
-					return filesList;
-				}, function (error) {
-					logger.error({
-						description: 'Error getting files from S3.',
-						error: error, func: 'get', obj: 'Files'
-					});
-					return Promise.reject(error);
-				});
-			}
-			/**
-	   * @description build child structure from files list
-	   */
-
-		}, {
-			key: 'buildStructure',
-			value: function buildStructure() {
-				logger.debug({
-					description: 'Build Structure called.',
-					func: 'buildStructure', obj: 'Files'
-				});
-				return this.get().then(function (filesArray) {
-					logger.log({
-						description: 'Child struct from array.',
-						childStructure: childStruct,
-						func: 'buildStructure', obj: 'Files'
-					});
-					var childStruct = childrenStructureFromArray(filesArray);
-					//TODO: have child objects have correct classes (file/folder)
-					logger.log({
-						description: 'Child struct from array.',
-						childStructure: childStruct,
-						func: 'buildStructure', obj: 'Files'
-					});
-					return childStruct;
-				}, function (error) {
-					logger.error({
-						description: 'Error getting application files.',
-						error: error, func: 'buildStructure', obj: 'Files'
-					});
-					return Promise.reject({
-						message: 'Error getting files.',
-						error: error
-					});
-				});
-			}
-			/**
-	   * @description sync file structure from Firebase
-	   */
-
-		}, {
-			key: 'syncStructure',
-			value: function syncStructure() {
-				//TODO: Determine if it is worth storing this in the built structure
-				logger.debug({
-					description: 'Build Structure called.',
-					func: 'syncStructure', obj: 'Files'
-				});
-				return this.sync().then(function (filesArray) {
-					logger.log({
-						description: 'Child struct from array.',
-						childStruct: childStruct, func: 'syncStructure', obj: 'Files'
-					});
-					var childStruct = childrenStructureFromArray(filesArray);
-					//TODO: have child objects have correct classes (file/folder)
-					logger.log({
-						description: 'Child struct from array.',
-						childStruct: childStruct, func: 'syncStructure', obj: 'Files'
-					});
-					return childStruct;
-				}, function (error) {
-					logger.error({
-						description: 'Error getting application files.',
-						error: error, func: 'syncStructure', obj: 'Files'
-					});
-					return Promise.reject({
-						message: 'Error getting files.',
-						error: error
-					});
-				});
-			}
-		}, {
-			key: 'fbUrl',
-			get: function get() {
-				if (!this.project.fbUrl) {
-					logger.error({
-						description: 'Project data is required for fbUrl.',
-						func: 'constructor', obj: 'Files', files: this
-					});
-					throw new Error('Project data is required to create fbUrl.');
-				}
-				if (this.project.fbUrl) {
-					return this.project.fbUrl;
-				}
-				var project = new _Project2.default(this.project);
-				return project.fbUrl;
-			}
-			/**
-	   * @description Firebase reference of files list
-	   */
-
-		}, {
-			key: 'fbRef',
-			get: function get() {
-				logger.debug({
-					description: 'Url created for files fbRef.',
-					url: this.fbUrl, func: 'fbRef', obj: 'Files'
-				});
-				return new _firebase2.default(this.fbUrl);
-			}
-			/**
-	   * @description Path array that is built from Firebase Reference
-	   * @private
-	   */
-
-		}, {
-			key: 'pathArrayFromFbRef',
-			get: function get() {
-				//Handle fbUrls that have multiple levels
-				var removeArray = _config2.default.fbUrl.replace('https://', '').split('/');
-				removeArray.shift();
-				var pathArray = this.fbRef.path.o.splice(0, removeArray.length);
-				logger.info({
-					description: 'Path array built.',
-					pathArray: pathArray, func: 'fbRef', obj: 'Files'
-				});
-				return pathArray;
-			}
-		}]);
-
-		return Files;
-	}();
-	//------------------ Utility Functions ------------------//
-
-	exports.default = Files;
-	function getContentFromFile(fileData) {
-		//Get initial content from local file
-		logger.debug({
-			description: 'getContentFromFile called', fileData: fileData,
-			func: 'getContentFromFile', obj: 'Files'
-		});
-		return new Promise(function (resolve) {
-			try {
-				var reader = new FileReader();
-				logger.debug({
-					description: 'reader created', reader: reader,
-					func: 'getContentFromFile', obj: 'Files'
-				});
-				reader.onload = function (e) {
-					var contents = e.target.result;
-					logger.debug({
-						description: 'Contents loaded', contents: contents,
-						func: 'getContentFromFile', obj: 'Files'
-					});
-					resolve(contents);
-				};
-				reader.readAsText(fileData);
-			} catch (error) {
-				logger.error({
-					description: 'Error getting file contents.', error: error,
-					func: 'getContentFromFile', obj: 'Files'
-				});
-				reject(error);
-			}
-		});
-	}
-	/**
-	 * @description Convert from array file structure (from S3) to 'children' structure used in Editor GUI
-	 * @private
-	 * @example
-	 * //Array structure: [{path:'index.html'}, {path:'testFolder/file.js'}]
-	 * //Children Structure [{type:'folder', name:'testfolder', children:[{path:'testFolder/file.js', name:'file.js', filetype:'javascript', contentType:'application/javascript'}]}]
-	 * var flatArray = [{path:'index.html'}, {path:'testFolder/file.js'}];
-	 * var childrenStructure = childrenStructureFromArray(flatArray);
-	 */
-	function childrenStructureFromArray(fileArray) {
-		// logger.log('childStructureFromArray called:', fileArray);
-		//Create a object for each file that stores the file in the correct 'children' level
-		var mappedStructure = fileArray.map(function (file) {
-			return buildStructureObject(file);
-		});
-		return combineLikeObjs(mappedStructure);
-	}
-	/**
-	 * @description Convert file with key into a folder/file children object
-	 * @private
-	 */
-	function buildStructureObject(file) {
-		var pathArray = undefined;
-		// console.log('buildStructureObject with:', file);
-		if ((0, _lodash.has)(file, 'path')) {
-			//Coming from files already having path (structure)
-			pathArray = file.path.split('/');
-		} else if ((0, _lodash.has)(file, 'Key')) {
-			//Coming from aws
-			pathArray = file.Key.split('/');
-			// console.log('file before pick:', file);
-			file = (0, _lodash.pick)(file, 'Key');
-			file.path = file.Key;
-			file.name = file.Key;
-		} else {
-			logger.error({
-				description: 'Invalid file.', file: file,
-				func: 'buildStructureObject', obj: 'Files'
-			});
-		}
-		var currentObj = file;
-		if (pathArray.length == 1) {
-			currentObj.name = pathArray[0];
-			if (!(0, _lodash.has)(currentObj, 'type')) {
-				currentObj.type = 'file';
-			}
-			currentObj.path = pathArray[0];
-			return currentObj;
-		} else {
-			var finalObj = {};
-			(0, _lodash.each)(pathArray, function (loc, ind, list) {
-				if (ind != list.length - 1) {
-					//Not the last loc
-					currentObj.name = loc;
-					currentObj.path = (0, _lodash.take)(list, ind + 1).join('/');
-					currentObj.type = 'folder';
-					currentObj.children = [{}];
-					//TODO: Find out why this works
-					if (ind === 0) {
-						finalObj = currentObj;
-					}
-					currentObj = currentObj.children[0];
-				} else {
-					currentObj.type = 'file';
-					currentObj.name = loc;
-					currentObj.path = pathArray.join('/');
-					if (file.$id) {
-						currentObj.$id = file.$id;
-					}
-				}
-			});
-			return finalObj;
-		}
-	}
-	/**
-	 * @description Recursivley combine children of object's that have the same names
-	 * @private
-	 */
-	function combineLikeObjs(mappedArray) {
-		var takenNames = [];
-		var finishedArray = [];
-		(0, _lodash.each)(mappedArray, function (obj) {
-			if (takenNames.indexOf(obj.name) == -1) {
-				takenNames.push(obj.name);
-				finishedArray.push(obj);
-			} else {
-				var likeObj = (0, _lodash.findWhere)(mappedArray, { name: obj.name });
-				//Combine children of like objects
-				likeObj.children = (0, _lodash.union)(obj.children, likeObj.children);
-				likeObj.children = combineLikeObjs(likeObj.children);
-				// logger.log('extended obj:',likeObj);
-			}
-		});
-		return finishedArray;
-	}
-	module.exports = exports['default'];
-
-/***/ },
 /* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -18870,13 +18874,199 @@ return /******/ (function(modules) { // webpackBootstrap
 		value: true
 	});
 
-	var _Matter = __webpack_require__(7);
+	var _lodash = __webpack_require__(3);
+
+	var _Files2 = __webpack_require__(53);
+
+	var _Files3 = _interopRequireDefault(_Files2);
+
+	var _Matter = __webpack_require__(6);
 
 	var _Matter2 = _interopRequireDefault(_Matter);
 
-	var _lodash = __webpack_require__(4);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var _Action2 = __webpack_require__(95);
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var logger = _Matter2.default.utils.logger;
+
+	var Folder = function () {
+		function Folder(folderData) {
+			_classCallCheck(this, Folder);
+
+			this.type = 'folder';
+			if (!folderData || !(0, _lodash.isString)(folderData) && !(0, _lodash.isObject)(folderData)) {
+				throw new Error('Folder name or path required.');
+			}
+			if ((0, _lodash.isString)(folderData)) {
+				return this.path = folderData;
+			}
+			(0, _lodash.extend)(this, folderData);
+		}
+
+		_createClass(Folder, [{
+			key: 'Files',
+			value: function Files() {
+				return new _Files3.default({ project: this.project });
+			}
+		}, {
+			key: 'save',
+			value: function save() {
+				return this.add();
+			}
+		}, {
+			key: 'remove',
+			value: function remove() {
+				return this.Files.remove(this);
+			}
+			/**
+	   * @description Save file to default location (Firebase)
+	   */
+
+		}, {
+			key: 'add',
+			value: function add() {
+				return this.addToFb();
+			}
+			/**
+	   * @description Save file to default location (Firebase)
+	   */
+
+		}, {
+			key: 'save',
+			value: function save() {
+				return this.add();
+			}
+			/**
+	   * TODO: REMOVE THIS IN FAVOR OF SUPER CLASS METHOD
+	   */
+
+		}, {
+			key: 'addToFb',
+			value: function addToFb() {
+				logger.debug({
+					description: 'addToFb called.', file: this,
+					func: 'addToFb', obj: 'File'
+				});
+				var fbRef = this.fbRef;
+				var path = this.path;
+				var name = this.name;
+
+				var fbData = { meta: { path: path, name: name, type: 'folder' } };
+				logger.debug({
+					description: 'calling with', fbData: fbData,
+					func: 'addToFb', obj: 'File'
+				});
+				return new Promise(function (resolve, reject) {
+					fbRef.set(fbData, function (error) {
+						if (!error) {
+							logger.info({
+								description: 'Folder successfully added to Firebase.',
+								func: 'addToFb', obj: 'Folder'
+							});
+							resolve(fbData);
+						} else {
+							logger.error({
+								description: 'Error creating file on Firebase.',
+								error: error, func: 'addToFb', obj: 'Folder'
+							});
+							reject(error);
+						}
+					});
+				});
+			}
+		}, {
+			key: 'pathArrayFromRef',
+			get: function get() {
+				if (!this.fbRef) {
+					logger.error({
+						description: 'Folder fbRef is required to get path array.', file: this,
+						func: 'pathArrayFromRef', obj: 'Folder'
+					});
+				}
+				return this.fbRef.path.o;
+			}
+		}, {
+			key: 'fileType',
+			get: function get() {
+				if (this.ext == 'js') {
+					return 'javascript';
+				} else {
+					return this.ext;
+				}
+			}
+		}, {
+			key: 'ext',
+			get: function get() {
+				var re = /(?:\.([^.]+))?$/;
+				return re.exec(this.name)[1];
+			}
+		}, {
+			key: 'safePathArray',
+			get: function get() {
+				var safeArray = this.pathArray.map(function (loc) {
+					//Replace periods with colons and other unsafe chars as --
+					return loc.replace(/[.]/g, ':').replace(/[#$\[\]]/g, '--');
+				});
+				logger.debug({
+					description: 'Safe path array created.',
+					safeArray: safeArray, func: 'safePathArray', obj: 'Folder'
+				});
+				return safeArray;
+			}
+		}, {
+			key: 'safePath',
+			get: function get() {
+				var safePathArray = this.safePathArray;
+
+				if (safePathArray.length === 1) {
+					return safePathArray[0];
+				}
+				return safePathArray.join('/');
+			}
+		}, {
+			key: 'fbUrl',
+			get: function get() {
+				var files = new _Files3.default(this);
+				return '' + this.Files.fbUrl;
+			}
+		}, {
+			key: 'fbRef',
+			get: function get() {
+				var ref = new _Files3.default(this).fbRef;
+				logger.debug({
+					description: 'fbRef generated.', ref: ref,
+					func: 'fbRef', obj: 'Folder'
+				});
+				return ref;
+			}
+		}]);
+
+		return Folder;
+	}();
+
+	exports.default = Folder;
+	module.exports = exports['default'];
+
+/***/ },
+/* 99 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _Matter = __webpack_require__(6);
+
+	var _Matter2 = _interopRequireDefault(_Matter);
+
+	var _lodash = __webpack_require__(3);
+
+	var _Action2 = __webpack_require__(96);
 
 	var _Action3 = _interopRequireDefault(_Action2);
 
@@ -18953,7 +19143,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 99 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -18972,27 +19162,31 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _config2 = _interopRequireDefault(_config);
 
-	var _lodash = __webpack_require__(4);
+	var _lodash = __webpack_require__(3);
 
-	var _Matter = __webpack_require__(7);
+	var _Matter = __webpack_require__(6);
 
 	var _Matter2 = _interopRequireDefault(_Matter);
 
-	var _actions = __webpack_require__(94);
+	var _actions = __webpack_require__(95);
 
-	var _Group2 = __webpack_require__(98);
+	var _Group2 = __webpack_require__(99);
 
 	var _Group3 = _interopRequireDefault(_Group2);
 
-	var _Files = __webpack_require__(97);
+	var _Files = __webpack_require__(53);
 
 	var _Files2 = _interopRequireDefault(_Files);
 
-	var _File = __webpack_require__(96);
+	var _Folder = __webpack_require__(98);
+
+	var _Folder2 = _interopRequireDefault(_Folder);
+
+	var _File = __webpack_require__(97);
 
 	var _File2 = _interopRequireDefault(_File);
 
-	var _firebase = __webpack_require__(53);
+	var _firebase = __webpack_require__(54);
 
 	var _firebase2 = _interopRequireDefault(_firebase);
 
@@ -19295,7 +19489,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 100 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19314,15 +19508,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _config2 = _interopRequireDefault(_config);
 
-	var _Matter = __webpack_require__(7);
+	var _Matter = __webpack_require__(6);
 
 	var _Matter2 = _interopRequireDefault(_Matter);
 
-	var _awsSdk = __webpack_require__(54);
+	var _awsSdk = __webpack_require__(55);
 
 	var _awsSdk2 = _interopRequireDefault(_awsSdk);
 
-	var _lodash = __webpack_require__(4);
+	var _lodash = __webpack_require__(3);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19543,7 +19737,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 101 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19564,27 +19758,27 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _logger2 = _interopRequireDefault(_logger);
 
-	var _dom = __webpack_require__(102);
+	var _dom = __webpack_require__(103);
 
 	var dom = _interopRequireWildcard(_dom);
 
-	var _request = __webpack_require__(104);
+	var _request = __webpack_require__(105);
 
 	var _request2 = _interopRequireDefault(_request);
 
-	var _token = __webpack_require__(105);
+	var _token = __webpack_require__(106);
 
 	var _token2 = _interopRequireDefault(_token);
 
-	var _envStorage = __webpack_require__(103);
+	var _envStorage = __webpack_require__(104);
 
 	var _envStorage2 = _interopRequireDefault(_envStorage);
 
-	var _providerAuth = __webpack_require__(118);
+	var _providerAuth = __webpack_require__(119);
 
 	var _providerAuth2 = _interopRequireDefault(_providerAuth);
 
-	var _lodash = __webpack_require__(4);
+	var _lodash = __webpack_require__(3);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -20491,7 +20685,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 102 */
+/* 103 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20508,7 +20702,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _logger2 = _interopRequireDefault(_logger);
 
-	var _lodash = __webpack_require__(4);
+	var _lodash = __webpack_require__(3);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20589,7 +20783,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 103 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20602,7 +20796,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _logger2 = _interopRequireDefault(_logger);
 
-	var _lodash = __webpack_require__(4);
+	var _lodash = __webpack_require__(3);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -20748,7 +20942,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 104 */
+/* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20761,11 +20955,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _logger2 = _interopRequireDefault(_logger);
 
-	var _token = __webpack_require__(105);
+	var _token = __webpack_require__(106);
 
 	var _token2 = _interopRequireDefault(_token);
 
-	var _superagent = __webpack_require__(124);
+	var _superagent = __webpack_require__(125);
 
 	var _superagent2 = _interopRequireDefault(_superagent);
 
@@ -20841,7 +21035,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 105 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20858,15 +21052,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _logger2 = _interopRequireDefault(_logger);
 
-	var _envStorage = __webpack_require__(103);
+	var _envStorage = __webpack_require__(104);
 
 	var _envStorage2 = _interopRequireDefault(_envStorage);
 
-	var _jwtDecode = __webpack_require__(120);
+	var _jwtDecode = __webpack_require__(121);
 
 	var _jwtDecode2 = _interopRequireDefault(_jwtDecode);
 
-	var _lodash = __webpack_require__(4);
+	var _lodash = __webpack_require__(3);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -20986,7 +21180,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 106 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {var AWS = __webpack_require__(1);
@@ -20996,19 +21190,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	AWS.apiLoader = __webpack_require__(23).load;
 
 	// Load the xml2js XML parser
-	AWS.XML.Parser = __webpack_require__(90);
+	AWS.XML.Parser = __webpack_require__(91);
 
 	// Load Node HTTP client
-	__webpack_require__(69);
+	__webpack_require__(70);
 
 	// Load all service classes
-	__webpack_require__(80);
+	__webpack_require__(81);
 
 	// Load custom credential providers
-	__webpack_require__(58);
 	__webpack_require__(59);
 	__webpack_require__(60);
-	__webpack_require__(62);
+	__webpack_require__(61);
+	__webpack_require__(63);
 
 	// Setup default chain providers
 	AWS.CredentialProviderChain.defaultProviders = [
@@ -21045,7 +21239,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 107 */
+/* 108 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -21111,7 +21305,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 108 */
+/* 109 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -21127,13 +21321,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 109 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Buffer) {var createHash = __webpack_require__(141)
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var createHash = __webpack_require__(142)
 
-	var md5 = toConstructor(__webpack_require__(137))
-	var rmd160 = toConstructor(__webpack_require__(139))
+	var md5 = toConstructor(__webpack_require__(138))
+	var rmd160 = toConstructor(__webpack_require__(140))
 
 	function toConstructor (fn) {
 	  return function () {
@@ -21161,13 +21355,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return createHash(alg)
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4).Buffer))
 
 /***/ },
-/* 110 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Buffer) {var rng = __webpack_require__(146)
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var rng = __webpack_require__(147)
 
 	function error () {
 	  var m = [].slice.call(arguments).join(' ')
@@ -21178,9 +21372,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    ].join('\n'))
 	}
 
-	exports.createHash = __webpack_require__(109)
+	exports.createHash = __webpack_require__(110)
 
-	exports.createHmac = __webpack_require__(135)
+	exports.createHmac = __webpack_require__(136)
 
 	exports.randomBytes = function(size, callback) {
 	  if (callback && callback.call) {
@@ -21201,7 +21395,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return ['sha1', 'sha256', 'sha512', 'md5', 'rmd160']
 	}
 
-	var p = __webpack_require__(145)(exports)
+	var p = __webpack_require__(146)(exports)
 	exports.pbkdf2 = p.pbkdf2
 	exports.pbkdf2Sync = p.pbkdf2Sync
 
@@ -21221,15 +21415,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	})
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4).Buffer))
 
 /***/ },
-/* 111 */
+/* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var http = module.exports;
 	var EventEmitter = __webpack_require__(18).EventEmitter;
-	var Request = __webpack_require__(147);
+	var Request = __webpack_require__(148);
 	var url = __webpack_require__(52)
 
 	http.request = function (params, cb) {
@@ -21374,10 +21568,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 112 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var http = __webpack_require__(111);
+	var http = __webpack_require__(112);
 
 	var https = module.exports;
 
@@ -21393,7 +21587,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 113 */
+/* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -21423,7 +21617,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	module.exports = PassThrough;
 
-	var Transform = __webpack_require__(92);
+	var Transform = __webpack_require__(93);
 
 	/*<replacement>*/
 	var util = __webpack_require__(19);
@@ -21445,7 +21639,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 114 */
+/* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {// Copyright Joyent, Inc. and other Node contributors.
@@ -21472,12 +21666,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Readable;
 
 	/*<replacement>*/
-	var isArray = __webpack_require__(155);
+	var isArray = __webpack_require__(156);
 	/*</replacement>*/
 
 
 	/*<replacement>*/
-	var Buffer = __webpack_require__(3).Buffer;
+	var Buffer = __webpack_require__(4).Buffer;
 	/*</replacement>*/
 
 	Readable.ReadableState = ReadableState;
@@ -21501,7 +21695,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	/*<replacement>*/
-	var debug = __webpack_require__(168);
+	var debug = __webpack_require__(169);
 	if (debug && debug.debuglog) {
 	  debug = debug.debuglog('stream');
 	} else {
@@ -21574,7 +21768,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.encoding = null;
 	  if (options.encoding) {
 	    if (!StringDecoder)
-	      StringDecoder = __webpack_require__(115).StringDecoder;
+	      StringDecoder = __webpack_require__(116).StringDecoder;
 	    this.decoder = new StringDecoder(options.encoding);
 	    this.encoding = options.encoding;
 	  }
@@ -21684,7 +21878,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// backwards compatibility.
 	Readable.prototype.setEncoding = function(enc) {
 	  if (!StringDecoder)
-	    StringDecoder = __webpack_require__(115).StringDecoder;
+	    StringDecoder = __webpack_require__(116).StringDecoder;
 	  this._readableState.decoder = new StringDecoder(enc);
 	  this._readableState.encoding = enc;
 	  return this;
@@ -22403,7 +22597,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 115 */
+/* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -22427,7 +22621,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 	// USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-	var Buffer = __webpack_require__(3).Buffer;
+	var Buffer = __webpack_require__(4).Buffer;
 
 	var isBufferEncoding = Buffer.isEncoding
 	  || function(encoding) {
@@ -22630,7 +22824,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 116 */
+/* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
@@ -22674,11 +22868,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 116;
+	webpackContext.id = 117;
 
 
 /***/ },
-/* 117 */
+/* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22697,7 +22891,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.logger = _logger3.default;
 
 /***/ },
-/* 118 */
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22708,7 +22902,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		value: true
 	});
 
-	var _request = __webpack_require__(104);
+	var _request = __webpack_require__(105);
 
 	var _request2 = _interopRequireDefault(_request);
 
@@ -22716,11 +22910,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _logger2 = _interopRequireDefault(_logger);
 
-	var _dom = __webpack_require__(102);
+	var _dom = __webpack_require__(103);
 
 	var dom = _interopRequireWildcard(_dom);
 
-	var _index = __webpack_require__(117);
+	var _index = __webpack_require__(118);
 
 	var _config = __webpack_require__(22);
 
@@ -22947,10 +23141,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 119 */
+/* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Base64 = __webpack_require__(122);
+	var Base64 = __webpack_require__(123);
 
 	function b64DecodeUnicode(str) {
 	  return decodeURIComponent(atob(str).replace(/(.)/g, function (m, p) {
@@ -22986,13 +23180,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 120 */
+/* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var base64_url_decode = __webpack_require__(119);
-	var json_parse = __webpack_require__(121);
+	var base64_url_decode = __webpack_require__(120);
+	var json_parse = __webpack_require__(122);
 
 	module.exports = function (token) {
 	  if (!token) {
@@ -23004,7 +23198,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 121 */
+/* 122 */
 /***/ function(module, exports) {
 
 	module.exports = function (str) {
@@ -23019,7 +23213,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 122 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
 	;(function () {
@@ -23080,7 +23274,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 123 */
+/* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
@@ -37484,18 +37678,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(108)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(109)(module), (function() { return this; }())))
 
 /***/ },
-/* 124 */
+/* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module dependencies.
 	 */
 
-	var Emitter = __webpack_require__(125);
-	var reduce = __webpack_require__(126);
+	var Emitter = __webpack_require__(126);
+	var reduce = __webpack_require__(127);
 
 	/**
 	 * Root reference for iframes.
@@ -38694,7 +38888,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 125 */
+/* 126 */
 /***/ function(module, exports) {
 
 	
@@ -38864,7 +39058,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 126 */
+/* 127 */
 /***/ function(module, exports) {
 
 	
@@ -38893,7 +39087,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 127 */
+/* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// wrapper for non-node envs
@@ -40214,7 +40408,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 128 */
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {// Generated by CoffeeScript 1.6.3
@@ -40224,7 +40418,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
 	    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-	  sax = __webpack_require__(127);
+	  sax = __webpack_require__(128);
 
 	  events = __webpack_require__(18);
 
@@ -40520,14 +40714,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 129 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Generated by CoffeeScript 1.3.3
 	(function() {
 	  var XMLBuilder, XMLFragment;
 
-	  XMLFragment = __webpack_require__(130);
+	  XMLFragment = __webpack_require__(131);
 
 	  XMLBuilder = (function() {
 
@@ -40645,7 +40839,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 130 */
+/* 131 */
 /***/ function(module, exports) {
 
 	// Generated by CoffeeScript 1.3.3
@@ -41073,14 +41267,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 131 */
+/* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Generated by CoffeeScript 1.3.3
 	(function() {
 	  var XMLBuilder;
 
-	  XMLBuilder = __webpack_require__(129);
+	  XMLBuilder = __webpack_require__(130);
 
 	  module.exports.create = function(name, xmldec, doctype) {
 	    if (name != null) {
@@ -41094,7 +41288,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 132 */
+/* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
@@ -41224,7 +41418,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 133 */
+/* 134 */
 /***/ function(module, exports) {
 
 	exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -41314,7 +41508,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 134 */
+/* 135 */
 /***/ function(module, exports) {
 
 	var toString = {}.toString;
@@ -41325,10 +41519,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 135 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Buffer) {var createHash = __webpack_require__(109)
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var createHash = __webpack_require__(110)
 
 	var zeroBuffer = new Buffer(128)
 	zeroBuffer.fill(0)
@@ -41372,10 +41566,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4).Buffer))
 
 /***/ },
-/* 136 */
+/* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {var intSize = 4;
@@ -41413,10 +41607,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	module.exports = { hash: hash };
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4).Buffer))
 
 /***/ },
-/* 137 */
+/* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -41428,7 +41622,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * See http://pajhome.org.uk/crypt/md5 for more info.
 	 */
 
-	var helpers = __webpack_require__(136);
+	var helpers = __webpack_require__(137);
 
 	/*
 	 * Calculate the MD5 of an array of little-endian words, and a bit length
@@ -41577,7 +41771,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 138 */
+/* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {module.exports = function(crypto) {
@@ -41665,10 +41859,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4).Buffer))
 
 /***/ },
-/* 139 */
+/* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {
@@ -41877,10 +42071,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4).Buffer))
 
 /***/ },
-/* 140 */
+/* 141 */
 /***/ function(module, exports) {
 
 	module.exports = function (Buffer) {
@@ -41963,7 +42157,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 141 */
+/* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var exports = module.exports = function (alg) {
@@ -41972,16 +42166,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return new Alg()
 	}
 
-	var Buffer = __webpack_require__(3).Buffer
-	var Hash   = __webpack_require__(140)(Buffer)
+	var Buffer = __webpack_require__(4).Buffer
+	var Hash   = __webpack_require__(141)(Buffer)
 
-	exports.sha1 = __webpack_require__(142)(Buffer, Hash)
-	exports.sha256 = __webpack_require__(143)(Buffer, Hash)
-	exports.sha512 = __webpack_require__(144)(Buffer, Hash)
+	exports.sha1 = __webpack_require__(143)(Buffer, Hash)
+	exports.sha256 = __webpack_require__(144)(Buffer, Hash)
+	exports.sha512 = __webpack_require__(145)(Buffer, Hash)
 
 
 /***/ },
-/* 142 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -42125,7 +42319,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 143 */
+/* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -42278,7 +42472,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 144 */
+/* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var inherits = __webpack_require__(21).inherits
@@ -42528,10 +42722,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 145 */
+/* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var pbkdf2Export = __webpack_require__(138)
+	var pbkdf2Export = __webpack_require__(139)
 
 	module.exports = function (crypto, exports) {
 	  exports = exports || {}
@@ -42546,13 +42740,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 146 */
+/* 147 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, Buffer) {(function() {
 	  var g = ('undefined' === typeof window ? global : window) || {}
 	  _crypto = (
-	    g.crypto || g.msCrypto || __webpack_require__(167)
+	    g.crypto || g.msCrypto || __webpack_require__(168)
 	  )
 	  module.exports = function(size) {
 	    // Modern Browsers
@@ -42576,16 +42770,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}())
 
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(3).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(4).Buffer))
 
 /***/ },
-/* 147 */
+/* 148 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Stream = __webpack_require__(14);
-	var Response = __webpack_require__(148);
-	var Base64 = __webpack_require__(149);
-	var inherits = __webpack_require__(150);
+	var Response = __webpack_require__(149);
+	var Base64 = __webpack_require__(150);
+	var inherits = __webpack_require__(151);
 
 	var Request = module.exports = function (xhr, params) {
 	    var self = this;
@@ -42794,7 +42988,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 148 */
+/* 149 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Stream = __webpack_require__(14);
@@ -42920,7 +43114,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 149 */
+/* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
 	;(function () {
@@ -42986,7 +43180,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 150 */
+/* 151 */
 /***/ function(module, exports) {
 
 	if (typeof Object.create === 'function') {
@@ -43015,7 +43209,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 151 */
+/* 152 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -43105,7 +43299,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 152 */
+/* 153 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -43196,24 +43390,24 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 153 */
+/* 154 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	exports.decode = exports.parse = __webpack_require__(151);
-	exports.encode = exports.stringify = __webpack_require__(152);
+	exports.decode = exports.parse = __webpack_require__(152);
+	exports.encode = exports.stringify = __webpack_require__(153);
 
 
 /***/ },
-/* 154 */
+/* 155 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(10)
 
 
 /***/ },
-/* 155 */
+/* 156 */
 /***/ function(module, exports) {
 
 	module.exports = Array.isArray || function (arr) {
@@ -43222,30 +43416,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 156 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(113)
-
-
-/***/ },
 /* 157 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(114);
-	exports.Stream = __webpack_require__(14);
-	exports.Readable = exports;
-	exports.Writable = __webpack_require__(93);
-	exports.Duplex = __webpack_require__(10);
-	exports.Transform = __webpack_require__(92);
-	exports.PassThrough = __webpack_require__(113);
+	module.exports = __webpack_require__(114)
 
 
 /***/ },
 /* 158 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(92)
+	exports = module.exports = __webpack_require__(115);
+	exports.Stream = __webpack_require__(14);
+	exports.Readable = exports;
+	exports.Writable = __webpack_require__(94);
+	exports.Duplex = __webpack_require__(10);
+	exports.Transform = __webpack_require__(93);
+	exports.PassThrough = __webpack_require__(114);
 
 
 /***/ },
@@ -43257,6 +43444,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 160 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(94)
+
+
+/***/ },
+/* 161 */
 /***/ function(module, exports) {
 
 	if (typeof Object.create === 'function') {
@@ -43285,7 +43479,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 161 */
+/* 162 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*! https://mths.be/punycode v1.3.2 by @mathias */
@@ -43817,10 +44011,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	}(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(108)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(109)(module), (function() { return this; }())))
 
 /***/ },
-/* 162 */
+/* 163 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -43906,7 +44100,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 163 */
+/* 164 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -43976,17 +44170,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 164 */
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	exports.decode = exports.parse = __webpack_require__(162);
-	exports.encode = exports.stringify = __webpack_require__(163);
+	exports.decode = exports.parse = __webpack_require__(163);
+	exports.encode = exports.stringify = __webpack_require__(164);
 
 
 /***/ },
-/* 165 */
+/* 166 */
 /***/ function(module, exports) {
 
 	if (typeof Object.create === 'function') {
@@ -44015,7 +44209,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 166 */
+/* 167 */
 /***/ function(module, exports) {
 
 	module.exports = function isBuffer(arg) {
@@ -44026,13 +44220,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 167 */
+/* 168 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 168 */
+/* 169 */
 /***/ function(module, exports) {
 
 	/* (ignored) */

@@ -1,4 +1,4 @@
-import { extend, isString } from 'lodash';
+import { extend, has, isString, isObject } from 'lodash';
 import Files from './Files';
 import matter from './Matter';
 const { logger } = matter.utils;
@@ -89,7 +89,7 @@ class Folder {
 		});
 		return ref;
 	}
-	FilesList() {
+	Files() {
 		return new Files({project: this.project});
 	}
 	save() {
@@ -98,8 +98,49 @@ class Folder {
 	remove() {
 		return this.Files.remove(this);
 	}
+	/**
+	 * @description Save file to default location (Firebase)
+	 */
 	add() {
-		return this.Files.add(this);
+		return this.addToFb();
+	}
+	/**
+	 * @description Save file to default location (Firebase)
+	 */
+	save() {
+		return this.add();
+	}
+	/**
+	 * TODO: REMOVE THIS IN FAVOR OF SUPER CLASS METHOD
+	 */
+	addToFb() {
+		logger.debug({
+			description: 'addToFb called.', file: this,
+			func: 'addToFb', obj: 'File'
+		});
+		const { fbRef, path, name } = this;
+		const fbData = {meta: {path, name, type: 'folder'}};
+		logger.debug({
+			description: 'calling with', fbData,
+			func: 'addToFb', obj: 'File'
+		});
+		return new Promise((resolve, reject) => {
+			fbRef.set(fbData, error => {
+				if (!error) {
+					logger.info({
+						description: 'Folder successfully added to Firebase.',
+						func: 'addToFb', obj: 'Folder'
+					});
+					resolve(fbData);
+				} else {
+					logger.error({
+						description: 'Error creating file on Firebase.',
+						error, func: 'addToFb', obj: 'Folder'
+					});
+					reject(error);
+				}
+			});
+		});
 	}
 }
 

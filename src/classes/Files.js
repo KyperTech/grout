@@ -4,6 +4,7 @@ import matter from './Matter';
 import Firebase from 'firebase';
 import Project from './Project';
 import File from './File';
+import Folder from './Folder';
 import * as S3 from '../utils/s3';
 //Convenience vars
 const { logger } = matter.utils;
