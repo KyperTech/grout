@@ -202,14 +202,6 @@ export default class Project {
 		});
 		return new Files({project: this});
 	}
-	File(data) {
-		logger.debug({
-			description: 'Project file action called.',
-			data, project: new Project(this),
-			func: 'file', obj: 'Project'
-		});
-		return new FileObj({project: this, data});
-	}
 	get Users() {
 		logger.debug({
 			description: 'Projects users action called.',

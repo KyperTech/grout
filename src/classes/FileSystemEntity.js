@@ -1,11 +1,12 @@
-import { utils: { logger }} from './Matter';
+import matter from './Matter';
 import { last, omitBy, isUndefined } from 'lodash';
 import Firebase from 'firebase';
+const { logger } = matter.utils;
 
 export default class FileSystemEntity {
 	constructor(project, path, name) {
 		logger.debug({
-			description: 'FileSystemEntity constructor called with', actionData,
+			description: `FileSystemEntity constructor called with project ${project}, path: ${path}, and name: ${name}`,
 			func: 'constructor', obj: 'FileSystemEntity'
 		});
 		if (!project || !path) {
@@ -13,13 +14,17 @@ export default class FileSystemEntity {
 				description: 'FileSystemEntity that includes path and project is needed to create a FileSystemEntity action.',
 				func: 'constructor', obj: 'FileSystemEntity'
 			});
-			throw new Error('FileSystemEntity with path and app is needed to create file action.');
+			throw new Error('FileSystemEntity with path and project is needed to create file action.');
 		}
 		this.project = project;
+    if (path.indexOf('/') === 0) {
+      path = path.slice(1);
+    }
     this.path = path;
+    console.log('this is the path----', this.path);
     this.name = name || last(path.split('/'));
 		logger.debug({
-			description: 'FileSystemEntity object constructed.', file: this,
+			description: 'FileSystemEntity object constructed.', entity: this,
 			func: 'constructor', obj: 'FileSystemEntity'
 		});
 	}
@@ -27,7 +32,7 @@ export default class FileSystemEntity {
   static pathToSafePath(path) {
 		logger.debug({
 			description: 'Safe path array created.',
-			safeArray, func: 'safePathArray', obj: 'FileSystemEntity'
+			path, func: 'safePathArray', obj: 'FileSystemEntity'
 		});
     return path.replace(/[.]/g, ':').replace(/[#$\[\]]/g, '_-_');
   }
@@ -40,7 +45,7 @@ export default class FileSystemEntity {
 		if (!this.project || !this.project.name) {
 			logger.error({
 				description: 'App information needed to generate fbUrl for FileSystemEntity.',
-				file: this, func: 'fbUrl', obj: 'FileSystemEntity'
+				entity: this, func: 'fbUrl', obj: 'FileSystemEntity'
 			});
 			throw new Error ('App information needed to generate fbUrl for FileSystemEntity.');
 		}
@@ -90,12 +95,12 @@ export default class FileSystemEntity {
 	 */
 	addToFb() {
 		logger.debug({
-			description: 'addToFb called.', file: this,
+			description: 'addToFb called.', entity: this,
 			func: 'addToFb', obj: 'FileSystemEntity'
 		});
 		const { fbRef, path, name, entityType, fileType, content } = this;
 		let fbData = {meta: {path, name, entityType, fileType}};
-    fbData = omit(fbData, isUndefined);
+    fbData.meta = omitBy(fbData.meta, isUndefined);
 		if (content){
 			fbData.original = content;
 		}
@@ -137,7 +142,7 @@ export default class FileSystemEntity {
 				}
 				logger.info({
 					description: 'FileSystemEntity successfully removed from Firebase.',
-					file: this, func: 'removeFromFb', obj: 'FileSystemEntity'
+					entity: this, func: 'removeFromFb', obj: 'FileSystemEntity'
 				});
 				resolve(this);
 			});

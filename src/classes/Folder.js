@@ -13,7 +13,7 @@ class Folder extends FileSystemEntity {
 	 * @description Add folder to project
 	 * @return {Promise}
 	 */
-	add() {
+	save() {
 		return this.addToFb();
 	}
 
