@@ -21,7 +21,6 @@ export default class FileSystemEntity {
       path = path.slice(1);
     }
     this.path = path;
-    console.log('this is the path----', this.path);
     this.name = name || last(path.split('/'));
 		logger.debug({
 			description: 'FileSystemEntity object constructed.', entity: this,

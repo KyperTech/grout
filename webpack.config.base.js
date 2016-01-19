@@ -2,7 +2,7 @@
 var fs = require('fs');
 var path = require('path');
 var webpack = require('webpack');
-
+var pkg = require('./package.json');
 module.exports = {
   module: {
     loaders: [
@@ -11,6 +11,10 @@ module.exports = {
       { test: /\.json$/, loaders: ['json'], exclude:[]}
     ]
   },
+  plugins: [
+    new webpack.BannerPlugin('grout.js v' + pkg.version + '| (c) Kyper Digital, Inc.', {raw: false, entryOnly: true}),
+    new webpack.optimize.OccurenceOrderPlugin()
+  ],
   output: {
     library: 'Grout',
     libraryTarget: 'umd'
