@@ -9383,9 +9383,15 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 		}, {
 			key: 'publish',
-			value: function publish() {
-				//TODO: Publish all files
-			}
+			value: function publish() {}
+			//TODO: Publish all files
+
+			/**
+	   * @description Add a folder
+	   * @param {string} path - Path of where the folder should be saved
+	   * @param {String} name - optionally provide name of folder
+	   */
+
 		}, {
 			key: 'addFolder',
 			value: function addFolder(path, name) {

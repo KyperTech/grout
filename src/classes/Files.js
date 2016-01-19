@@ -187,6 +187,11 @@ export default class Files {
 	publish() {
 		//TODO: Publish all files
 	}
+	/**
+	 * @description Add a folder
+	 * @param {string} path - Path of where the folder should be saved
+	 * @param {String} name - optionally provide name of folder
+	 */
 	addFolder(path, name) {
 		let folder = new Folder(this.project, path, name);
 		return folder.save();
