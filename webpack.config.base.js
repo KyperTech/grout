@@ -12,7 +12,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.BannerPlugin('grout.js v' + pkg.version + '| (c) Kyper Digital, Inc.', {raw: false, entryOnly: true}),
+    new webpack.BannerPlugin('grout.js v' + pkg.version + ' | (c) Kyper Digital Inc.', {raw: false, entryOnly: true}),
     new webpack.optimize.OccurenceOrderPlugin()
   ],
   output: {
