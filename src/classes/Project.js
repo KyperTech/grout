@@ -12,7 +12,7 @@ import {
 import Group from './Group';
 import Files from './Files';
 import Folder from './Folder';
-import FileObj from './File';
+import File from './File';
 
 //External Libs
 import Firebase from 'firebase';
@@ -201,6 +201,14 @@ export default class Project {
 			project: this, func: 'files', obj: 'Project'
 		});
 		return new Files({project: this});
+	}
+	File(fileData) {
+		logger.debug({
+			description: 'Projects file action called.',
+			fileData, project: this,
+			func: 'file', obj: 'Project'
+		});
+		return new File({project: this, data: fileData});
 	}
 	get Users() {
 		logger.debug({
