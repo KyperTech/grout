@@ -8,14 +8,6 @@ class Folder extends FileSystemEntity {
 		this.entityType = 'folder';
 	}
 
-	/**
-	 * @description Add folder to project
-	 * @return {Promise}
-	 */
-	save() {
-		return this.addToFb();
-	}
-
 }
 
 export default Folder;

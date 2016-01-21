@@ -36,8 +36,8 @@ export default class Grout extends Matter {
 	 * @param {String} projectData.owner - Project Owner's username (in url)
 	 * @param {String} projectData.name - Name of project with which to start action
 	 */
-	Project(projectData) {
-		let project = new Project(projectData);
+	Project(owner, name) {
+		let project = new Project(owner, name);
 		logger.debug({
 			description: 'Project action called.', projectData,
 			project, func: 'Project', obj: 'Grout'

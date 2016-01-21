@@ -104,7 +104,8 @@ export default class Directory {
 		if(isArray(objData)){
 			return this.upload(objData);
 		}
-		return this.addToFb(objData);
+		let file = new File(this.project, path, name)
+		return file.save();
 	}
 
 	/**

@@ -84,6 +84,14 @@ export default class FileSystemEntity {
   }
 
 	/**
+	 * @description Add folder to project
+	 * @return {Promise}
+	 */
+	save() {
+		return this.addToFb();
+	}
+
+	/**
 	 * @description Add file to Firebase located at file's fbRef
 	 */
 	addToFb() {

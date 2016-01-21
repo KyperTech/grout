@@ -128,8 +128,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param {String} projectData.owner - Project Owner's username (in url)
 	   * @param {String} projectData.name - Name of project with which to start action
 	   */
-			value: function Project(projectData) {
-				var project = new _Project3.default(projectData);
+			value: function Project(owner, name) {
+				var project = new _Project3.default(owner, name);
 				logger.debug({
 					description: 'Project action called.', projectData: projectData,
 					project: project, func: 'Project', obj: 'Grout'
@@ -17745,104 +17745,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 				});
 			}
-			/**
-	   * @description Get file from S3
-	   * @param {Object} getData - Object containg data of file
-	   * @param {String} getData.path - Path of file
-	   * @return {Promise}
-	   */
 
-		}, {
-			key: 'getFromS3',
-			value: function getFromS3(getData) {
-				var _this3 = this;
-
-				return this.getProject().then(function (project) {
-					var filesGetParams = { bucket: project.frontend.bucketName, path: _this3.path };
-					logger.debug({
-						description: 'File get params built.', getData: getData,
-						file: _this3, func: 'getFromS3', obj: 'File'
-					});
-					return s3.getObject(filesGetParams).then(function (s3File) {
-						(0, _lodash.extend)(_this3, s3File);
-						logger.info({
-							description: 'File loaded from s3.', s3File: s3File,
-							file: _this3, func: 'getFromS3', obj: 'File'
-						});
-						return _this3;
-					}, function (error) {
-						logger.error({
-							description: 'Error getting file from s3.',
-							file: _this3, func: 'getFromS3', obj: 'File'
-						});
-						return Promise.reject(error);
-					});
-				}, function (error) {
-					return Promise.reject(error);
-				});
-			}
-			/**
-	   * @description Save file to S3
-	   * @param {Object} saveData - Object containg new file's data
-	   * @param {String} saveData.content - String content of file
-	   * @param {String} saveData.contentType - File's content type
-	   * @return {Promise}
-	   */
-
-		}, {
-			key: 'saveToS3',
-			value: function saveToS3(saveData) {
-				var _this4 = this;
-
-				return this.getProject().then(function (project) {
-					var content = saveData.content;
-					var contentType = saveData.contentType;
-
-					var saveData = {
-						bucket: project.frontend.bucketName,
-						path: _this4.path,
-						content: content
-					};
-					if (contentType) {
-						saveData.contentType = contentType;
-					}
-					return s3.saveObject(saveData);
-				}, function (error) {
-					return Promise.reject(error);
-				});
-			}
-			/**
-	   * @description Remove file from S3
-	   * @return {Promise}
-	   */
-
-		}, {
-			key: 'removeFromS3',
-			value: function removeFromS3() {
-				var _this5 = this;
-
-				return this.getProject().then(function (project) {
-					var saveParams = {
-						Bucket: _this5.project.frontend.bucketName,
-						Key: _this5.path
-					};
-					logger.debug({
-						description: 'File get params built.',
-						saveParams: saveParams, file: _this5, func: 'get', obj: 'File'
-					});
-					return s3.deleteObject(saveParams).then(function (deletedFile) {
-						logger.info({
-							description: 'File loaded successfully.',
-							deletedFile: deletedFile, func: 'get', obj: 'File'
-						});
-						resolve(deletedFile);
-					}, function (error) {
-						return Promise.reject(error);
-					});
-				}, function (error) {
-					return Promise.reject(error);
-				});
-			}
 			/**
 	   * @description Get project data
 	   * @return {Promise}
@@ -17851,7 +17754,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'getProject',
 			value: function getProject() {
-				var _this6 = this;
+				var _this3 = this;
 
 				if (this.project && this.project.frontend) {
 					return Promise.resolve(this.project);
@@ -17861,12 +17764,12 @@ return /******/ (function(modules) { // webpackBootstrap
 					func: 'get', obj: 'File'
 				});
 				return this.project.get().then(function (appData) {
-					_this6.project = appData;
+					_this3.project = appData;
 					logger.log({
 						description: 'Application get successful. Getting file.',
 						app: appData, func: 'get', obj: 'File'
 					});
-					return _this6.get();
+					return _this3.get();
 				}, function (error) {
 					logger.error({
 						description: 'Application Frontend data not available.',
@@ -17931,8 +17834,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
@@ -17968,18 +17869,6 @@ return /******/ (function(modules) { // webpackBootstrap
 			_this.entityType = 'folder';
 			return _this;
 		}
-
-		/**
-	  * @description Add folder to project
-	  * @return {Promise}
-	  */
-
-		_createClass(Folder, [{
-			key: 'save',
-			value: function save() {
-				return this.addToFb();
-			}
-		}]);
 
 		return Folder;
 	}(_FileSystemEntity3.default);
@@ -22063,7 +21952,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				if ((0, _lodash.isArray)(objData)) {
 					return this.upload(objData);
 				}
-				return this.addToFb(objData);
+				var file = new _File2.default(this.project, path, name);
+				return file.save();
 			}
 
 			/**
@@ -22658,6 +22548,17 @@ return /******/ (function(modules) { // webpackBootstrap
 			key: 'move',
 			value: function move() {
 				return null;
+			}
+
+			/**
+	   * @description Add folder to project
+	   * @return {Promise}
+	   */
+
+		}, {
+			key: 'save',
+			value: function save() {
+				return this.addToFb();
 			}
 
 			/**
