@@ -1,33 +1,25 @@
 import config from '../config';
 import matter from './Matter';
 import { has, isObject, extend } from 'lodash';
-import Files from './Files';
 import Firebase from 'firebase';
+import firebaseUtil from '../utils/firebase';
 import * as S3 from '../utils/s3';
 //Convenience vars
 const { logger } = matter.utils;
 const s3 = S3.init();
 
 export default class File {
-	constructor(actionData) {
+	constructor(project, path, name) {
 		logger.debug({
-			description: 'File constructor called with', actionData,
+			description: 'File constructor called with', project, path, name,
 			func: 'constructor', obj: 'File'
 		});
-		if (!actionData || !isObject(actionData)) {
+		if(!path){
 			logger.error({
-				description: 'File data that includes path and app is needed to create a File action.',
+				description: 'File must include path.',
 				func: 'constructor', obj: 'File'
 			});
-			throw new Error('File data with path and app is needed to create file action.');
-		}
-		const { data, project } = actionData;
-		if(!data){
-			logger.error({
-				description: 'Action data must be an object that includes data.',
-				func: 'constructor', obj: 'File'
-			});
-			throw new Error('File data must be an object that includes data.');
+			throw new Error('File must include a path.');
 		}
 		if(!project){
 			logger.error({
@@ -38,40 +30,9 @@ export default class File {
 		}
 		this.type = 'file';
 		this.project = project;
-		extend(this, data);
-		if (!this.path) {
-			if (!this.ref && !this.name) {
-				logger.error({
-					description: 'Path, name, or ref required to create a file object.',
-					func: 'constructor', obj: 'File'
-				});
-				throw new Error('Path or ref required to create file.');
-			}
-			this.path = this.name ? this.name : this.pathArrayFromRef.join('/');
-		}
-		this.pathArray = this.path.split('/');
-		if (!this.name) {
-			//Get name from data or from pathArray
-			this.name = this.pathArray[this.pathArray.length - 1]
-		}
-		logger.debug({
-			description: 'File object constructed.', file: this,
-			func: 'constructor', obj: 'File'
-		});
+		this.name = name;
 	}
-	/**
-	 * @description File's path in array form
-	 * @return {Array}
-	 */
-	get pathArrayFromRef() {
-		if (!this.fbRef) {
-			logger.error({
-				description: 'File fbRef is required to get path array.', file: this,
-				func: 'pathArrayFromRef', obj: 'File'
-			});
-		}
-		return this.fbRef.path.o;
-	}
+
 	/**
 	 * @description File's type
 	 * @return {String}
@@ -83,6 +44,7 @@ export default class File {
 			return this.ext;
 		}
 	}
+
 	/**
 	 * @description File's extension
 	 * @return {String}
@@ -91,75 +53,12 @@ export default class File {
 		let re = /(?:\.([^.]+))?$/;
 		return re.exec(this.name)[1];
 	}
-	/**
-	 * @description Array of file's path in a format that is safe for Firebase
-	 * @return {Array}
-	 */
-	get safePathArray() {
-		let safeArray = this.pathArray.map((loc) => {
-			//Replace periods with colons and other unsafe chars as --
-			return loc.replace(/[.]/g, ':').replace(/[#$\[\]]/g, '--');
-		});
-		logger.debug({
-			description: 'Safe path array created.',
-			safeArray, func: 'safePathArray', obj: 'File'
-		});
-		return safeArray;
-	}
-	/**
-	 * @description File's path in a format that is safe for Firebase
-	 * @return {String}
-	 */
-	get safePath() {
-		const { safePathArray } = this;
-		if(safePathArray.length === 1){
-			return safePathArray[0];
-		}
-		return safePathArray.join('/');
-	}
-	/**
-	 * @description File's Firebase url
-	 * @return {String}
-	 */
-	get fbUrl() {
-		if (!this.project || !this.project.name) {
-			logger.error({
-				description: 'App information needed to generate fbUrl for File.',
-				file: this, func: 'fbUrl', obj: 'File'
-			});
-			throw new Error ('App information needed to generate fbUrl for File.');
-		}
-		let files = new Files({project: this.project});
-		const url = [files.fbUrl, this.safePath].join('/');
-		logger.debug({
-			description: 'FbUrl created for file.', url, file: this,
-			func: 'fbUrl', obj: 'File'
-		});
-		return url;
-	}
-	/**
-	 * @description File's Firebase reference
-	 * @return {Object} Firebase reference
-	 */
-	get fbRef() {
-		if (this.ref) {
-			logger.debug({
-				description: 'File already has reference.',
-				ref: this.ref, func: 'fbRef', obj: 'File'
-			});
-			return this.ref;
-		}
-		logger.debug({
-			description: 'Fb ref generated.',
-			url: this.fbUrl, func: 'fbRef', obj: 'File'
-		});
-		return new Firebase(this.fbUrl);
-	}
+
 	/**
 	 * @description Headless Firepad at file location
 	 */
 	get headless() {
-		let firepad = getFirepadLib();
+		let firepad = firebaseUtil.getFirepadLib();
 		if (typeof firepad === 'undefined' || typeof firepad.Headless !== 'function') {
 			logger.error({
 				description: 'Firepad is required to get file content.',
@@ -170,6 +69,7 @@ export default class File {
 			return firepad.Headless(this.fbRef);
 		}
 	}
+
 	/**
 	 * @description Get a file's content and meta data from default location (Firebase)
 	 */
@@ -218,86 +118,14 @@ export default class File {
 			});
 		});
 	}
+
 	/**
 	 * @description Open a file from default location (Firebase) (Alias for get)
 	 */
 	open() {
 		return this.get();
 	}
-	/**
-	 * @description Remove a file from default location (Firebase)
-	 */
-	remove(removeData) {
-		return this.removeFromFb(removeData);
-	}
-	/**
-	 * @description Save file to default location (Firebase)
-	 */
-	add() {
-		return this.addToFb();
-	}
-	/**
-	 * @description Save file to default location (Firebase)
-	 */
-	save() {
-		return this.add();
-	}
-	/**
-	 * @description Add file to Firebase located at file's fbRef
-	 */
-	addToFb() {
-		logger.debug({
-			description: 'addToFb called.', file: this,
-			func: 'addToFb', obj: 'File'
-		});
-		const { fbRef, path, fileType, content, name } = this;
-		const fbData = {meta: {path, fileType, name}};
-		if(content){
-			fbData.original = content;
-		}
-		return new Promise((resolve, reject) => {
-			fbRef.set(fbData, error => {
-				if (!error) {
-					logger.info({
-						description: 'File successfully added to Firebase.',
-						func: 'addToFb', obj: 'File'
-					});
-					resolve(fbData);
-				} else {
-					logger.error({
-						description: 'Error creating file on Firebase.',
-						error, func: 'addToFb', obj: 'File'
-					});
-					reject(error);
-				}
-			});
-		});
-	}
-	/**
-	 * @description Remove file from Firebase
-	 */
-	removeFromFb() {
-		logger.debug({
-			description: 'Remove File from Firebase called.',
-			func: 'removeFromFb', obj: 'File'
-		});
-		return new Promise((resolve, reject) => {
-			this.fbRef.remove(error => {
-				if (error) {
-					logger.error({
-						description: 'Error creating file on Firebase.',
-						error, func: 'removeFromFb', obj: 'File'
-					});
-					return reject(error);
-				}
-				logger.info({
-					description: 'File successfully removed from Firebase.',
-					file: this, func: 'removeFromFb', obj: 'File'
-				});
-				resolve(this);
-			});
-		});
-	}
+
 	/**
 	 * @description Open file in firepad from already existing ace editor instance
 	 * @param {Object} Ace editor object
@@ -496,37 +324,5 @@ export default class File {
 				message: 'Front end data is required to get file.'
 			});
 		});
-	}
-}
-/**
- * @description Load firepad from local or global
- */
-function getFirepadLib() {
-	logger.debug({
-		description: 'Get firepad lib called',
-		func: 'File => getFirepadLib', file: 'classes/File'
-	});
-	if (typeof window !== 'undefined' && window.Firepad && window.ace) {
-		return window.Firepad;
-	} else if (typeof global !== 'undefined' && global.Firepad && global.ace) {
-		return global.Firepad;
-	} else {
-		logger.debug({
-			description: 'Firepad does not currently exist.',
-			func: 'fbRef', obj: 'File'
-		});
-		return null;
-		//TODO: Correctly load firepad
-		// dom.loadJs('https://cdn.firebase.com/libs/firepad/1.2.0/firepad.js');
-		// if (typeof global !== 'undefined' && global.Firepad) {
-		// 	return global.Firepad;
-		// } else if (typeof window !== 'undefined' && window.Firepad) {
-		// 	return window.Firepad;
-		// } else {
-		// 	logger.error({
-		// 		description: 'Adding firepad did not help.',
-		// 		func: 'fbRef', obj: 'File'
-		// 	});
-		// }
 	}
 }

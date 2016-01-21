@@ -1,5 +1,4 @@
 import { extend, has, isString, isObject, last } from 'lodash';
-import Files from './Files';
 import FileSystemEntity from './FileSystemEntity';
 import matter from './Matter';
 const { logger } = matter.utils;

@@ -1,6 +1,8 @@
 import matter from './Matter';
 import { last, omitBy, isUndefined } from 'lodash';
 import Firebase from 'firebase';
+import firebaseUtil from '../utils/firebase';
+
 const { logger } = matter.utils;
 
 export default class FileSystemEntity {
@@ -28,14 +30,6 @@ export default class FileSystemEntity {
 		});
 	}
 
-  static pathToSafePath(path) {
-		logger.debug({
-			description: 'Safe path array created.',
-			path, func: 'safePathArray', obj: 'FileSystemEntity'
-		});
-    return path.replace(/[.]/g, ':').replace(/[#$\[\]]/g, '_-_');
-  }
-
 	/**
 	 * @description FileSystemEntity's Firebase reference
 	 * @return {Object} Firebase reference
@@ -48,7 +42,7 @@ export default class FileSystemEntity {
 			});
 			throw new Error ('App information needed to generate fbUrl for FileSystemEntity.');
 		}
-		const url = [this.project.fbUrl, FileSystemEntity.pathToSafePath(this.path)].join('/');
+		const url = [this.project.fbUrl, firebaseUtil.pathToSafePath(this.path)].join('/');
 		logger.debug({
 			description: 'Fb ref generated.',
 			url, func: 'fbRef', obj: 'FileSystemEntity'

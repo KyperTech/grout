@@ -10,7 +10,7 @@ import {
 	Groups
 } from '../actions';
 import Group from './Group';
-import Files from './Files';
+import Directory from './Directory';
 import Folder from './Folder';
 import File from './File';
 
@@ -22,27 +22,19 @@ const {request, logger} = matter.utils;
  * @description Project class.
  */
 export default class Project {
-	constructor(appData) {
-		if(!appData || (!isObject(appData) && !isString(appData))){
-			logger.error({
-				description: 'Project object created.', project: this,
-				func: 'constructor', obj: 'Project'
-			});
+	constructor(owner, name) {
+		if (!owner) {
+			throw new Error('Owner is required to create a project');
 		}
-		if (isString(appData)) {
-			this.name = appData;
-			logger.log({
-				description: 'Project object created without owner.', project: this,
-				func: 'constructor', obj: 'Project'
-			});
-		} else {
-			extend(this, appData);
+		if (!name) {
+			throw new Error('Name is required to create a project');
 		}
 		logger.debug({
 			description: 'Project object created.', project: this,
 			func: 'constructor', obj: 'Project'
 		});
 	}
+
 	/**
 	 * @description Project endpoint on Tessellate server
 	 * @return {String}
@@ -55,33 +47,21 @@ export default class Project {
 			});
 			return matter.endpoint;
 		}
-		const projectEndpoint = `${matter.endpoint}/apps/${this.name}`;
+		const projectEndpoint = `${matter.endpoint}/projects/${this.name}`;
 		logger.debug({
 			description: 'Project endpoint created.',
 			projectEndpoint, func: 'endpoint', obj: 'Project'
 		});
 		return projectEndpoint;
 	}
-	/**
-	 * @description Project files Firebase Url
-	 * @return {String}
-	 */
-	get fbUrl() {
-		if (has(config, 'fbUrl') && has(this, 'name')) {
-			if(has(this, 'owner')){
-				return `${config.fbUrl}/files/${this.owner}/${this.name}`;
-			}
-			return `${config.fbUrl}/${this.name}`;
-		}
-	}
+
 	/**
 	 * @description Generate Firebase reference based on project url
 	 */
 	get fbRef() {
-		if (this.fbUrl) {
-			return new Firebase(this.fbUrl);
-		}
+		return this.owner ?  firebase.ref(`${this.owner}/${this.name}`) : firebase.ref(`${this.name}`);
 	}
+
 	/**
 	 * @description Get project data
 	 */
@@ -105,6 +85,7 @@ export default class Project {
 			return Promise.reject(error.response.text || error.response);
 		});
 	}
+
 	/**
 	 * @description Update project data
 	 */
@@ -194,13 +175,13 @@ export default class Project {
 		});
 		return this.update(this);
 	}
-	//Files object that contains files methods
-	get Files() {
+	//Directory object that contains files methods
+	get Directory() {
 		logger.debug({
 			description: 'Project files action called.',
 			project: this, func: 'files', obj: 'Project'
 		});
-		return new Files({project: this});
+		return new Directory(this);
 	}
 	File(fileData) {
 		logger.debug({
@@ -208,7 +189,7 @@ export default class Project {
 			fileData, project: this,
 			func: 'file', obj: 'Project'
 		});
-		return new File({project: this, data: fileData});
+		return new File(this, file);
 	}
 	get Users() {
 		logger.debug({

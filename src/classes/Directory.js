@@ -9,76 +9,44 @@ import * as S3 from '../utils/s3';
 //Convenience vars
 const { logger } = matter.utils;
 
-export default class Files {
-	constructor(filesData) {
-		if(!filesData || !has(filesData, 'project')){
-			logger.error({
-				description: 'Action data object with name is required to start a Files Action.',
-				func: 'constructor', obj: 'Files'
-			});
-			throw new Error('Files Data object with name is required to start a Files action.');
-		}
-		extend(this, filesData);
+export default class Directory {
+	constructor(project) {
 		logger.debug({
-			description: 'Files object constructed.',
-			func: 'constructor', obj: 'Files', files: this
+			description: 'Directory object constructed.',
+			func: 'constructor', obj: 'Directory', dir: this
 		});
-	}
-	/**
-	 * @description Firebase URL for files list
-	 */
-	get fbUrl() {
-		if(!this.project.fbUrl){
-			logger.error({
-				description: 'Project data is required for fbUrl.',
-				func: 'constructor', obj: 'Files', files: this
-			});
-			throw new Error('Project data is required to create fbUrl.');
+		if(!project) {
+			throw new Error('Project is required to create directory');
 		}
-		if(this.project.fbUrl){
-			return this.project.fbUrl;
-		}
-		let project = new Project(this.project);
-		return project.fbUrl;
+		this.project = project;
 	}
+
 	/**
-	 * @description Firebase reference of files list
+	 * @description Firebase reference of directory
 	 */
 	get fbRef() {
 		logger.debug({
-			description: 'Url created for files fbRef.',
-			url: this.fbUrl, func: 'fbRef', obj: 'Files'
+			description: 'Url created for directory fbRef.',
+			url: this.project.fbUrl, func: 'fbRef', obj: 'Directory'
 		});
-		return new Firebase(this.fbUrl);
+		return new Firebase(this.project.fbUrl);
 	}
-	/**
-	 * @description Path array that is built from Firebase Reference
-	 * @private
-	 */
-	get pathArrayFromFbRef() {
-		//Handle fbUrls that have multiple levels
-		let removeArray = config.fbUrl.replace('https://', '').split('/');
-		removeArray.shift();
-		const pathArray = this.fbRef.path.o.splice(0, removeArray.length);
-		logger.info({
-			description: 'Path array built.',
-			pathArray, func: 'fbRef', obj: 'Files'
-		});
-		return pathArray;
-	}
+
+
+
 	/**
 	 * @description Get files list single time
 	 */
 	get() {
 		logger.log({
-			description: 'Files get called.',
-			func: 'get', obj: 'Files'
+			description: 'Directory get called.',
+			func: 'get', obj: 'Directory'
 		});
 		return new Promise(resolve => {
 			this.fbRef.once('value', filesSnap => {
 				logger.info({
-					description: 'Files loaded from firebase.',
-					func: 'get', obj: 'Files'
+					description: 'Directory loaded from firebase.',
+					func: 'get', obj: 'Directory'
 				});
 				let filesArray = [];
 				filesSnap.forEach(objSnap => {
@@ -91,59 +59,64 @@ export default class Files {
 					filesArray.push(objData);
 				});
 				logger.debug({
-					description: 'Files array built.',
-					filesArray, func: 'get', obj: 'Files'
+					description: 'Directory array built.',
+					filesArray, func: 'get', obj: 'Directory'
 				});
 				resolve(filesArray);
 			});
 		});
 	}
+
 	/**
 	 * @description Get synced files list from firebase
 	 */
-	sync() {
+	sync(callback) {
 		// TODO: get files list from firebase
 		logger.debug({
-			description: 'Files sync called.',
-			func: 'sync', obj: 'Files'
+			description: 'Directory sync called.',
+			func: 'sync', obj: 'Directory'
 		});
-		return new Promise(resolve => {
-			this.fbRef.on('value', filesSnap => {
-				logger.info({
-					description: 'Files synced with Firebase.',
-					func: 'sync', obj: 'Files'
-				});
-				let filesArray = [];
-				// let filesPathArray =  this.pathArrayFromFbRef;
-				filesSnap.forEach(objSnap => {
-					let objData = objSnap.hasChild('meta') ? objSnap.child('meta').val() : {path: objSnap.key()};
-					//TODO: Have a better fallback for when meta does not exist
-					// if (!objData.path) {
-					// 	objSnap.ref().path.o.splice(0, filesPathArray.length);
-					// }
-					objData.key = objSnap.key();
-					filesArray.push(objData);
-				});
-				logger.log({
-					description: 'Files array built.',
-					filesArray, func: 'get', obj: 'Files'
-				});
-				resolve(filesArray);
-			});
-		});
+		this.listenerCallback = callback;
+		return this.fbRef.on('value', this.listenerCallback);
 	}
+
+	/**
+	 * @description Get synced files list from firebase
+	 */
+	unsync() {
+		// TODO: get files list from firebase
+		logger.debug({
+			description: 'Directory sync called.',
+			func: 'sync', obj: 'Directory'
+		});
+		return this.fbRef.off('value', this.listenerCallback);
+	}
+
+
+
 	/**
 	 * @description Add a new file or files
 	 * @param {Object|Array} fileData - Array of objects or single object containing file data
 	 * @param {Object} fileData.path - Path of file relative to project
 	 */
-	add(objData) {
+	addFile(objData) {
 		//TODO: Allow for options of where to add the file to
 		if(isArray(objData)){
 			return this.upload(objData);
 		}
 		return this.addToFb(objData);
 	}
+
+	/**
+	 * @description Add a folder
+	 * @param {string} path - Path of where the folder should be saved
+	 * @param {String} name - optionally provide name of folder
+	 */
+	addFolder(path, name) {
+		let folder = new Folder(this.project, path, name);
+		return folder.save();
+	}
+
 	/**
 	 * @description Add multiple files/folders to project files
 	 * @param {Array} filesData - Array of file objects to upload
@@ -155,7 +128,7 @@ export default class Files {
 		} else {
 			logger.warn({
 				description: 'Upload called with multiple files.', filesData,
-				project: this.project, func: 'upload', obj: 'Files'
+				project: this.project, func: 'upload', obj: 'Directory'
 			});
 			let promises = [];
 			each(filesData, file => {
@@ -163,13 +136,14 @@ export default class Files {
 			});
 			return Promise.all(promises).then(resultsArray => {
 				logger.info({
-					description: 'Files uploaded successfully.', resultsArray,
-					func: 'upload', obj: 'Files'
+					description: 'Directory uploaded successfully.', resultsArray,
+					func: 'upload', obj: 'Directory'
 				});
 				return Promise.resolve(this);
 			});
 		}
 	}
+
 	/**
 	 * @description Remove object from files (folder or file)
 	 */
@@ -177,25 +151,7 @@ export default class Files {
 		//TODO: Delete file from S3 as well if it exists
 		return this.delFromFb(objData);
 	}
-	/**
-	 * @description Alias for remove
-	 */
-	del(objData) {
-		//TODO: Delete file from S3 as well if it exists
-		return this.remove(objData);
-	}
-	publish() {
-		//TODO: Publish all files
-	}
-	/**
-	 * @description Add a folder
-	 * @param {string} path - Path of where the folder should be saved
-	 * @param {String} name - optionally provide name of folder
-	 */
-	addFolder(path, name) {
-		let folder = new Folder(this.project, path, name);
-		return folder.save();
-	}
+
 	/**
 	 * @description Add a file to Firebase
 	 * @param {Object} fileData - Data object for new file
@@ -205,12 +161,12 @@ export default class Files {
 	addToFb(addData) {
 		logger.debug({
 			description: 'Add to fb called.', addData,
-			func: 'addToFb', obj: 'Files'
+			func: 'addToFb', obj: 'Directory'
 		});
 		if (!addData) {
 			logger.debug({
 				description: 'Object data is required to add.', addData,
-				func: 'addToFb', obj: 'Files'
+				func: 'addToFb', obj: 'Directory'
 			});
 			return Promise.reject({
 				message: 'Object data is required to add.'
@@ -231,22 +187,19 @@ export default class Files {
 		if (!path) {
 			logger.error({
 				description: 'Invalid file data. Path must be included.',
-				func: 'addToFb', obj: 'Files'
+				func: 'addToFb', obj: 'Directory'
 			});
 			return Promise.reject({
 				message: 'Invalid file data. Path must be included.'
 			});
 		}
-		let newData = {project: this.project, data: { path }};
-		if(name){
-			newData.data.name = name;
-		}
 		if (type && type === 'folder') {
-			return new Folder(newData).save();
+			return new Folder(this.project, path, name).save();
 		} else {
-			return new File(newData).save();
+			return new File(this.project, path, name).save();
 		}
 	}
+
 	/**
 	 * @description Delete a file or folder from Firebase
 	 * @param {Object} objData - Data of file or folder
@@ -255,12 +208,12 @@ export default class Files {
 	delFromFb(data) {
 		logger.debug({
 			description: 'Del from fb called.', data,
-			func: 'delFromFb', obj: 'Files'
+			func: 'delFromFb', obj: 'Directory'
 		});
 		if (!data || !data.path) {
 			logger.error({
 				description: 'Invalid file data. Path must be included.',
-				func: 'delFromFb', obj: 'Files'
+				func: 'delFromFb', obj: 'Directory'
 			});
 			return Promise.reject({
 				message: 'Invalid file data. Path must be included.'
@@ -277,19 +230,21 @@ export default class Files {
 			});
 		});
 	}
+
 	/**
 	 * @description Upload a local file to Firebase
 	 * @param {File} file - Local file with content to be uploaded
 	 */
+	//  TODO: Handle folders
 	addLocalToFb(data) {
 		logger.debug({
 			description: 'Add local to fb called.', data,
-			func: 'addLocalToFb', obj: 'Files'
+			func: 'addLocalToFb', obj: 'Directory'
 		});
 		if (!data) {
 			logger.error({
 				description: 'File is required to upload to Firebase.',
-				func: 'addLocalToFb', obj: 'Files'
+				func: 'addLocalToFb', obj: 'Directory'
 			});
 			return Promise.reject({
 				message: 'File is required to upload to Firebase.'
@@ -298,104 +253,107 @@ export default class Files {
 		return getContentFromFile(data).then(content => {
 			logger.debug({
 				description: 'Content loaded from local file.', content,
-				func: 'addLocalToFb', obj: 'Files'
+				func: 'addLocalToFb', obj: 'Directory'
 			});
 			data.content = content;
 			data.path = data.name;
 			const file = new File({project: this.project, data});
 			logger.info({
 				description: 'File object created.', file,
-				func: 'addLocalToFb', obj: 'Files'
+				func: 'addLocalToFb', obj: 'Directory'
 			});
 			return file.save();
 		});
 	}
+
 	getFrontEnd() {
 		if (this.project && this.project.frontend) {
 			return Promise.resolve(this.project);
 		}
 		logger.warn({
-			description: 'Files Frontend data not available. Calling .get().',
-			project: this.project, func: 'getFromS3', obj: 'Files'
+			description: 'Directory Frontend data not available. Calling .get().',
+			project: this.project, func: 'getFromS3', obj: 'Directory'
 		});
 		return this.project.get().then(applicationData => {
 			logger.log({
-				description: 'Files get returned.',
-				data: applicationData, func: 'getFromS3', obj: 'Files'
+				description: 'Directory get returned.',
+				data: applicationData, func: 'getFromS3', obj: 'Directory'
 			});
 			this.project = applicationData;
 			if (has(applicationData, 'frontend')) {
 				return this.get();
 			}
 			logger.error({
-				description: 'Files does not have Frontend to get files from.',
-				func: 'getFromS3', obj: 'Files'
+				description: 'Directory does not have Frontend to get files from.',
+				func: 'getFromS3', obj: 'Directory'
 			});
 			return Promise.reject({
-				message: 'Files does not have frontend to get files from.'
+				message: 'Directory does not have frontend to get files from.'
 			});
 		}, err => {
 			logger.error({
-				description: 'Files Frontend data not available. Make sure to call .get().',
-				error: err, func: 'getFromS3', obj: 'Files'
+				description: 'Directory Frontend data not available. Make sure to call .get().',
+				error: err, func: 'getFromS3', obj: 'Directory'
 			});
 			return Promise.reject({
 				message: 'Bucket name required to get objects'
 			});
 		});
 	}
+
 	/**
 	 * @description Get files list from S3
 	 */
 	getFromS3() {
 		if (!this.project || !this.project.frontend || !this.project.frontend.bucketName) {
 			logger.warn({
-				description: 'Files Frontend data not available. Calling .get().',
-				project: this.project, func: 'getFromS3', obj: 'Files'
+				description: 'Directory Frontend data not available. Calling .get().',
+				project: this.project, func: 'getFromS3', obj: 'Directory'
 			});
 			return this.getFrontEnd().then(this.getFromS3);
 		}
 		const s3 = S3.init();
 		s3.listObjects({bucket: this.project.frontend.bucketName}).then(filesList => {
 			logger.info({
-				description: 'Files list loaded.', filesList,
-				func: 'get', obj: 'Files'
+				description: 'Directory list loaded.', filesList,
+				func: 'get', obj: 'Directory'
 			});
 			return filesList;
 		}, error => {
 			logger.error({
 				description: 'Error getting files from S3.',
-				error, func: 'get', obj: 'Files'
+				error, func: 'get', obj: 'Directory'
 			});
 			return Promise.reject(error);
 		});
 	}
+
 	/**
 	 * @description build child structure from files list
 	 */
 	buildStructure() {
 		logger.debug({
 			description: 'Build Structure called.',
-			func: 'buildStructure', obj: 'Files'
+			func: 'buildStructure', obj: 'Directory'
 		});
 		return this.get().then(filesArray => {
 			logger.log({
 				description: 'Child struct from array.',
 				childStructure: childStruct,
-				func: 'buildStructure', obj: 'Files'
+				func: 'buildStructure', obj: 'Directory'
 			});
 			const childStruct = childrenStructureFromArray(filesArray);
 			//TODO: have child objects have correct classes (file/folder)
 			logger.log({
 				description: 'Child struct from array.',
 				childStructure: childStruct,
-				func: 'buildStructure', obj: 'Files'
+				func: 'buildStructure', obj: 'Directory'
 			});
 			return childStruct;
 		}, error => {
 			logger.error({
 				description: 'Error getting application files.',
-				error, func: 'buildStructure', obj: 'Files'
+				error, func: 'buildStructure', obj: 'Directory'
 			});
 			return Promise.reject({
 				message: 'Error getting files.',
@@ -403,6 +361,7 @@ export default class Files {
 			});
 		});
 	}
+
 	/**
 	 * @description sync file structure from Firebase
 	 */
@@ -410,24 +369,24 @@ export default class Files {
 		//TODO: Determine if it is worth storing this in the built structure
 		logger.debug({
 			description: 'Build Structure called.',
-			func: 'syncStructure', obj: 'Files'
+			func: 'syncStructure', obj: 'Directory'
 		});
 		return this.sync().then(filesArray => {
 			logger.log({
 				description: 'Child struct from array.',
-				childStruct, func: 'syncStructure', obj: 'Files'
+				childStruct, func: 'syncStructure', obj: 'Directory'
 			});
 			const childStruct = childrenStructureFromArray(filesArray);
 			//TODO: have child objects have correct classes (file/folder)
 			logger.log({
 				description: 'Child struct from array.',
-				childStruct, func: 'syncStructure', obj: 'Files'
+				childStruct, func: 'syncStructure', obj: 'Directory'
 			});
 			return childStruct;
 		}, error => {
 			logger.error({
 				description: 'Error getting application files.',
-				error, func: 'syncStructure', obj: 'Files'
+				error, func: 'syncStructure', obj: 'Directory'
 			});
 			return Promise.reject({
 				message: 'Error getting files.',
@@ -441,20 +400,20 @@ function getContentFromFile(fileData) {
 	//Get initial content from local file
 	logger.debug({
 		description: 'getContentFromFile called', fileData,
-		func: 'getContentFromFile', obj: 'Files'
+		func: 'getContentFromFile', obj: 'Directory'
 	});
 	return new Promise(resolve => {
 		try {
 			let reader = new FileReader();
 			logger.debug({
 				description: 'reader created', reader,
-				func: 'getContentFromFile', obj: 'Files'
+				func: 'getContentFromFile', obj: 'Directory'
 			});
 			reader.onload = e => {
 				const contents = e.target.result;
 				logger.debug({
 					description: 'Contents loaded', contents,
-					func: 'getContentFromFile', obj: 'Files'
+					func: 'getContentFromFile', obj: 'Directory'
 				});
 				resolve(contents);
 			};
@@ -462,7 +421,7 @@ function getContentFromFile(fileData) {
 		} catch(error){
 			logger.error({
 				description: 'Error getting file contents.', error,
-				func: 'getContentFromFile', obj: 'Files'
+				func: 'getContentFromFile', obj: 'Directory'
 			});
 			reject(error);
 		}
@@ -505,7 +464,7 @@ function buildStructureObject(file) {
 	} else {
 		logger.error({
 			description: 'Invalid file.', file: file,
-			func: 'buildStructureObject', obj: 'Files'
+			func: 'buildStructureObject', obj: 'Directory'
 		});
 	}
 	let currentObj = file;
