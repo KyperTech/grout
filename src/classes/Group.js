@@ -1,11 +1,11 @@
 import matter from './Matter';
 import { isString } from 'lodash';
 const { logger } = matter.utils;
-import Action from './Action';
+import ApiAction from './ApiAction';
 
-export default class Group extends Action {
-	constructor(actionData) {
-		super('group', actionData);
+export default class Group extends ApiAction {
+	constructor(groupName,  project) {
+		super(`groups/${groupName}`, project);
 	}
 	/**
 	 * @description Add accounts to a group

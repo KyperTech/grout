@@ -1,7 +1,6 @@
 import config from '../config';
-import { toArray, isArray, has, pick, take, each, findWhere, union, clone, extend } from 'lodash';
+import { isArray, has, each } from 'lodash';
 import matter from './Matter';
-import Firebase from 'firebase';
 import Project from './Project';
 import File from './File';
 import Folder from './Folder';
@@ -27,12 +26,10 @@ export default class Directory {
 	get fbRef() {
 		logger.debug({
 			description: 'Url created for directory fbRef.',
-			url: this.project.fbUrl, func: 'fbRef', obj: 'Directory'
+			url: this.project.fbRef, func: 'fbRef', obj: 'Directory'
 		});
-		return new Firebase(this.project.fbUrl);
+		return this.project.fbRef;
 	}
-
-
 
 	/**
 	 * @description Get files list single time
@@ -427,98 +424,4 @@ function getContentFromFile(fileData) {
 			reject(error);
 		}
 	});
-}
-/**
- * @description Convert from array file structure (from S3) to 'children' structure used in Editor GUI
- * @private
- * @example
- * //Array structure: [{path:'index.html'}, {path:'testFolder/file.js'}]
- * //Children Structure [{type:'folder', name:'testfolder', children:[{path:'testFolder/file.js', name:'file.js', filetype:'javascript', contentType:'application/javascript'}]}]
- * var flatArray = [{path:'index.html'}, {path:'testFolder/file.js'}];
- * var childrenStructure = childrenStructureFromArray(flatArray);
- */
-function childrenStructureFromArray(fileArray) {
-	// logger.log('childStructureFromArray called:', fileArray);
-	//Create a object for each file that stores the file in the correct 'children' level
-	let mappedStructure = fileArray.map((file) => {
-		return buildStructureObject(file);
-	});
-	return combineLikeObjs(mappedStructure);
-}
-/**
- * @description Convert file with key into a folder/file children object
- * @private
- */
-function buildStructureObject(file) {
-	let pathArray;
-	// console.log('buildStructureObject with:', file);
-	if (has(file, 'path')) {
-		//Coming from files already having path (structure)
-		pathArray = file.path.split('/');
-	} else if (has(file, 'Key')) {
-		//Coming from aws
-		pathArray = file.Key.split('/');
-		// console.log('file before pick:', file);
-		file = pick(file, 'Key');
-		file.path = file.Key;
-		file.name = file.Key;
-	} else {
-		logger.error({
-			description: 'Invalid file.', file: file,
-			func: 'buildStructureObject', obj: 'Directory'
-		});
-	}
-	let currentObj = file;
-	if (pathArray.length == 1) {
-		currentObj.name = pathArray[0];
-		if (!has(currentObj,'type')) {
-			currentObj.type = 'file';
-		}
-		currentObj.path = pathArray[0];
-		return currentObj;
-	} else {
-		let finalObj = {};
-		each(pathArray, (loc, ind, list) => {
-			if (ind != list.length - 1) {//Not the last loc
-				currentObj.name = loc;
-				currentObj.path = take(list, ind + 1).join('/');
-				currentObj.type = 'folder';
-				currentObj.children = [{}];
-				//TODO: Find out why this works
-				if (ind === 0) {
-					finalObj = currentObj;
-				}
-				currentObj = currentObj.children[0];
-			} else {
-				currentObj.type = 'file';
-				currentObj.name = loc;
-				currentObj.path = pathArray.join('/');
-				if (file.$id) {
-					currentObj.$id = file.$id;
-				}
-			}
-		});
-		return finalObj;
-	}
-}
-/**
- * @description Recursivley combine children of object's that have the same names
- * @private
- */
-function combineLikeObjs(mappedArray) {
-	let takenNames = [];
-	let finishedArray = [];
-	each(mappedArray, (obj) => {
-		if (takenNames.indexOf(obj.name) == -1) {
-			takenNames.push(obj.name);
-			finishedArray.push(obj);
-		} else {
-			let likeObj = findWhere(mappedArray, {name: obj.name});
-			//Combine children of like objects
-			likeObj.children = union(obj.children, likeObj.children);
-			likeObj.children = combineLikeObjs(likeObj.children);
-			// logger.log('extended obj:',likeObj);
-		}
-	});
-	return finishedArray;
 }

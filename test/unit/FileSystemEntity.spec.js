@@ -5,7 +5,7 @@ let grout = new Grout();
 let mockGet, mockPut, mockPost, mockLog, mockDebug, mockWarn, mockInfo, mockError;
 let exampleApp, exampleEntity;
 const exampleData = {project: {name: 'exampleApp', owner: 'test'}, entity: 'somefile.js'};
-describe.skip('FileSystemEntity class', () => {
+describe('FileSystemEntity class', () => {
   beforeEach(() => {
     exampleApp = grout.Project(exampleData.project.owner, exampleData.project.name);
     exampleEntity = new FileSystemEntity(exampleApp, exampleData.entity);
@@ -49,7 +49,7 @@ describe.skip('FileSystemEntity class', () => {
   it('exists', () => {
     expect(exampleEntity).to.exist;
   });
-  describe.skip('constructor', () => {
+  describe('constructor', () => {
     it('sets project', () => {
       expect(exampleEntity).to.have.property('project');
       expect(exampleEntity.project).to.have.property('owner');

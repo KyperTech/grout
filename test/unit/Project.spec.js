@@ -4,7 +4,7 @@ let grout = new Grout();
 let mockGet, mockPut, mockPost, mockLog, mockDebug, mockWarn, mockInfo, mockError;
 
 let exampleApp;
-describe.skip('Project model', () => {
+describe('Project model', () => {
   beforeEach(() => {
     exampleApp = grout.Project('test', 'exampleApp');
     mockGet = sinon.stub(grout.utils.request, 'get', () => {
@@ -44,23 +44,19 @@ describe.skip('Project model', () => {
     mockInfo.restore();
     mockError.restore();
   });
-  it.skip('exists', () => {
+  it('exists', () => {
     expect(exampleApp).to.exist;
   });
   it('sets name', () => {
     expect(exampleApp).to.have.property('name');
     expect(exampleApp.name).to.equal('exampleApp');
   });
-  it('sets fbUrl', () => {
-    expect(exampleApp).to.have.property('fbUrl');
-    expect(exampleApp.fbUrl).to.equal(`${config.fbUrl}/files/${exampleApp.owner}/${exampleApp.name}`);
-  });
-  describe('endpoint', () => {
+  describe('url', () => {
     it('exists', () => {
-      expect(exampleApp).to.have.property('endpoint');
+      expect(exampleApp).to.have.property('url');
     });
     it('is correct', () => {
-      expect(exampleApp.endpoint).to.equal(`${config.serverUrl}/apps/${exampleApp.name}`);
+      expect(exampleApp.url).to.equal(`${config.serverUrl}/projects/${exampleApp.name}`);
     });
   });
   describe('get method', () => {
@@ -77,8 +73,11 @@ describe.skip('Project model', () => {
     it('exists', () => {
       expect(exampleApp).to.respondTo('update');
     });
+    it('throws if no update data is passed', () => {
+      return expect(exampleApp.update()).to.eventually.throw;
+    });
     it('makes request', () => {
-      return exampleApp.update().then(() => {
+      return exampleApp.update({}).then(() => {
         return expect(mockPut).to.have.been.called;
       });
     });
@@ -98,9 +97,12 @@ describe.skip('Project model', () => {
       expect(exampleApp).to.respondTo('applyTemplate');
     });
     it('makes request', () => {
-      return exampleApp.applyTemplate().then(() => {
+      return exampleApp.applyTemplate('test').then(() => {
         return expect(mockPost).to.have.been.called;
       });
+    });
+    it('throws if no template name is provided', () => {
+      return expect(exampleApp.applyTemplate()).to.eventually.throw;
     });
   });
   describe('addCollaborators method', () => {
@@ -113,21 +115,6 @@ describe.skip('Project model', () => {
       });
     });
   });
-  describe('Files model', () => {
-    it('exists', () => {
-      expect(exampleApp).to.have.property('Files');
-      console.log('files:', exampleApp.Files);
-    });
-    it('sets app data', () => {
-      expect(exampleApp.Files).to.be.an('object');
-      expect(exampleApp.Files).to.have.property('project');
-    });
-  });
-  describe('Users model', () => {
-    it('exists', () => {
-      expect(exampleApp).to.have.property('Users');
-    });
-  });
   describe('Accounts model', () => {
     it('exists', () => {
       expect(exampleApp).to.have.property('Accounts');
@@ -138,9 +125,9 @@ describe.skip('Project model', () => {
       expect(exampleApp).to.have.property('Groups');
     });
   });
-  describe('Structure', () => {
-    // it('has structure', () => {
-    //   expect(exampleApp.Structure).to.be.an('object');
-    // });
+  describe('Directory', () => {
+    it('has structure', () => {
+      expect(exampleApp.Directory).to.be.an('object');
+    });
   });
 });

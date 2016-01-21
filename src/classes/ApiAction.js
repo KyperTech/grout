@@ -3,65 +3,24 @@ import { has, isString, extend } from 'lodash';
 import matter from './Matter';
 const { logger, request } = matter.utils;
 
-export default class Action {
-  constructor(actionName, actionData) {
-    this.name = actionName;
-    this.init(actionData);
-  }
-  /**
-   * @description Initialize action
-   * @param {Object} actionData - Data with which to initialize action
-   */
-  init(actionData) {
+export default class ApiAction {
+  constructor(endpoint, project) {
+    this.endpoint = endpoint;
+    this.project = project;
     logger.debug({
       description: 'Init action called.',
-      actionData, func: 'init', obj: 'Action'
+      project: this, func: 'init', obj: 'ApiAction'
     });
-    if (!actionData || !actionData.project) {
-      logger.error({
-        description: 'Action data with project is required.',
-        actionData, func: 'init', obj: 'Action'
-      });
-      throw Error('Action data with project is required.');
-    }
-    this.isList = actionData ? false : true;
-    extend(this, actionData);
-    if (!this.isList) {
-      this.actionData = actionData;
-      if (isString(actionData)) {
-        this.id = this.actionData;
-      } else {
-        this.callData = actionData.callData || {};
-        // logger.warn({
-        //   description: 'Invalid action data object.',
-        //   func: 'constructor', obj: 'Action'
-        // });
-        this.isList = false;
-        // return Promise.reject('Invalid this.actionData');
-      }
-    }
-  }
-  /**
-   * @description Build endpoint in the form of an array
-   * @return {Array}
-   */
-  get endpointArray() {
-    let endpointArray = [matter.endpoint, this.name];
-    if (has(this, 'project') && has(this.project, 'name') && this.project.name !== config.defaultProject) {
-      //Splice apps, defaultProject into index 1
-      endpointArray.splice(1, 0, 'apps', this.project.name);
-    }
-    return endpointArray;
   }
   /** url
-   * @description Action url
+   * @description ApiAction url
    * @return {String}
    */
   get url() {
-    const urlStr = this.endpointArray.join('/');
+    const urlStr = [config.serverUrl, this.endpoint].join('/');
     logger.debug({
       description: 'Url created.', urlStr,
-      func: 'url', obj: 'Action'
+      func: 'url', obj: 'ApiAction'
     });
     return urlStr;
   }
@@ -72,12 +31,12 @@ export default class Action {
     return request.get(this.url).then(res => {
       logger.log({
         description: 'Get responded successfully.',
-        res, func: 'get', obj: 'Action'
+        res, func: 'get', obj: 'ApiAction'
       });
       if (has(res, 'error')) {
         logger.error({
           description: 'Error in get response.', error: res.error,
-          res, func: 'get', obj: 'Action'
+          res, func: 'get', obj: 'ApiAction'
         });
         return Promise.reject(res.error);
       }
@@ -85,7 +44,7 @@ export default class Action {
     }, error => {
       logger.error({
         description: 'Error in GET request.', error,
-        func: 'get', obj: 'Action'
+        func: 'get', obj: 'ApiAction'
       });
       return Promise.reject(error);
     });
@@ -98,54 +57,63 @@ export default class Action {
     return request.post(this.url, newData).then(res => {
       logger.log({
         description: 'Add request responded successfully.',
-        res, func: 'add', obj: 'Action'
+        res, func: 'add', obj: 'ApiAction'
       });
       if (has(res, 'error')) {
         logger.error({
           description: 'Error in add request.', error: res.error,
-          action: this, res, func: 'add', obj: 'Action'
+          action: this, res, func: 'add', obj: 'ApiAction'
         });
         return Promise.reject(res.error);
       }
       logger.log({
         description: 'Add successful.', res, action: this,
-        func: 'add', obj: 'Action'
+        func: 'add', obj: 'ApiAction'
       });
       return res;
     }, error => {
       logger.error({
         description: `Error in add request.`,
-        action: this, error, func: 'add', obj: 'Action'
+        action: this, error, func: 'add', obj: 'ApiAction'
       });
       return Promise.reject(error);
     });
   }
+
   /** Update
    * @param {Object} updateData - Object containing data with which to update
    * @return {Promise}
    */
   update(updateData) {
+    if (!updateData) {
+      logger.error({
+        description: 'Data is required to update.',
+        func: 'update', obj: 'ApiAction'
+      });
+      return Promise.reject('Data is required to update.');
+    }
     return request.put(this.url, updateData).then(res => {
       if (has(res, 'error')) {
         logger.error({
           description: 'Error in update request.',
-          error: res.error, res, func: 'update', obj: 'Action'
+          error: res.error, res, func: 'update', obj: 'ApiAction'
         });
         return Promise.reject(res.error);
       }
       logger.log({
         description: 'Update successful.', res,
-        func: 'update', obj: 'Action'
+        func: 'update', obj: 'ApiAction'
       });
       return res;
     }, error => {
       logger.error({
         description: 'Error in update request.',
-        error, func: 'update', obj: 'Action'
+        error, func: 'update', obj: 'ApiAction'
       });
       return Promise.reject(error);
     });
   }
+
   /** Remove
    * @return {Promise}
    */
@@ -154,57 +122,58 @@ export default class Action {
       if (has(res, 'error')) {
         logger.error({
           description: 'Error in removal request.', action: this,
-          error: res.error, res, func: 'remove', obj: 'Action'
+          error: res.error, res, func: 'remove', obj: 'ApiAction'
         });
         return Promise.reject(res.error);
       }
       logger.log({
         description: 'Remove successful.',
-        res, func: 'remove', obj: 'Action'
+        res, func: 'remove', obj: 'ApiAction'
       });
       return res;
     }, error => {
       logger.error({
         description: 'Error in request for removal.', action: this,
-        error, func: 'remove', obj: 'Action'
+        error, func: 'remove', obj: 'ApiAction'
       });
       return Promise.reject(error);
     });
   }
+
   /** search
    * @return {Promise}
    */
-  search(q) {
-    if (!q || q == '') {
+  search(query) {
+    if (!query || query == '') {
 			logger.log({
         description: 'Null query, returning empty array.',
-        func: 'search', obj: 'Action'
+        func: 'search', obj: 'ApiAction'
       });
 			return Promise.resolve([]);
 		}
-    if (!isString(q)) {
+    if (!isString(query)) {
       logger.log({
         description: 'Invalid query type in search (should be string).',
-        func: 'search', obj: 'Action'
+        func: 'search', obj: 'ApiAction'
       });
 			return Promise.reject('Invalid query type. Search query should be string.');
 		}
-    return request.get(`${this.url}/search/${q}`).then(res => {
+    return request.get(`${this.url}/search/${query}`).then(res => {
       if (has(res, 'error')) {
         logger.error({
           description: 'Error in removal request.', action: this,
-          res, func: 'remove', obj: 'Action'
+          res, func: 'remove', obj: 'ApiAction'
         });
         return Promise.reject(res.error || res);
       }
       logger.log({
-        description: 'Remove successful.', res, func: 'remove', obj: 'Action'
+        description: 'Remove successful.', res, func: 'remove', obj: 'ApiAction'
       });
       return res;
     }, error => {
       logger.error({
         description: 'Error in request for removal.', action: this,
-        error, func: 'remove', obj: 'Action'
+        error, func: 'remove', obj: 'ApiAction'
       });
       return Promise.reject(error);
     });

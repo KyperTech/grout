@@ -2,8 +2,9 @@ import { isString, isObject } from 'lodash';
 import config from './config';
 import Matter from 'kyper-matter';
 import Project from './classes/Project';
-import * as Actions from './actions';
+import Group from './classes/Group';
 import matter from './classes/Matter';
+import ApiAction from './classes/ApiAction'
 const { logger } = matter.utils;
 
 /** Grout Class
@@ -19,19 +20,21 @@ export default class Grout extends Matter {
 		config.applySettings(options);
 		super(name, config.matterSettings);
 	}
+
 	/**
 	 * @description Projects action
 	 */
 	get Projects() {
-		const action = new Actions.Projects({project: this});
+		const action = new ApiAction('projects', this);
 		logger.debug({
-			description: 'Projects Action called.',
+			description: 'Projects ApiAction called.',
 			action, func: 'Projects', obj: 'Grout'
 		});
 		return action;
 	}
+
 	/**
-	 * @description Projects action
+	 * @description Project action
 	 * @param {Object} projectData - Data of project with which to start action
 	 * @param {String} projectData.owner - Project Owner's username (in url)
 	 * @param {String} projectData.name - Name of project with which to start action
@@ -39,96 +42,86 @@ export default class Grout extends Matter {
 	Project(owner, name) {
 		let project = new Project(owner, name);
 		logger.debug({
-			description: 'Project action called.', projectData,
+			description: 'Project action called.', owner, name,
 			project, func: 'Project', obj: 'Grout'
 		});
 		return project;
 	}
+
 	/**
 	 * @description Accounts action
 	 */
 	get Accounts() {
-		const action = new Actions.Accounts({project: this});
+		const action = new ApiAction('accounts', this);
 		logger.debug({
-			description: 'Account Action called.',
+			description: 'Account ApiAction called.',
 			action, func: 'Accounts', obj: 'Grout'
 		});
-		return new Actions.Accounts({project: this});
+		return action;
 	}
+
 	/**
 	 * @description Accounts action
 	 * @param {Object|String} accountData - Data of account with which to start action
 	 * @param {String} accountData.username - Username of account with which to start action
 	 * @param {String} accountData.email - Email of account with which to start action
 	 */
-	Account(accountData) {
-		const action = new Actions.Account({project: this, callData: accountData});
+	Account(username) {
+		const action = new ApiAction(`accounts/${username}`, this);
 		logger.debug({
-			description: 'Account Action called.', accountData,
+			description: 'Account ApiAction called.', username,
 			action, func: 'Account', obj: 'Grout'
 		});
 		return action;
 	}
+
 	/**
 	 * @description Groups action
 	 */
 	get Groups() {
-		const action = new Actions.Groups({project: this});
+		const action = new ApiAction('groups', this);
 		logger.debug({
-			description: 'Groups Action called.',
+			description: 'Groups ApiAction called.',
 			action, func: 'groups', obj: 'Grout'
 		});
 		return action;
 	}
+
 	/**
 	 * @description Start a new Group action
-	 * @param {Object|String} groupData - Name of group or object containing name parameter
+	 * @param {String} groupName - Name of group
 	 */
-	Group(groupData) {
-		const action = new Actions.Group({project:this, callData: groupData})
+	Group(groupName) {
+		const action =  new Group(groupName, this);
 		logger.debug({
-			description: 'Group Action called.', groupData,
+			description: 'Group ApiAction called.', groupName,
 			action, func: 'group', obj: 'Grout'
 		});
-		return new Actions.Group({project:this, callData: groupData});
+		return action;
 	}
+
 	/**
-	 * @description Start a new Templates Action
+	 * @description Start a new Templates ApiAction
 	 */
 	get Templates() {
-		const action = new Actions.Templates({project: this});
+		const action = new ApiAction('templates', this);
 		logger.debug({
-			description: 'Templates Action called.', action,
+			description: 'Templates ApiAction called.', action,
 			func: 'Templates', obj: 'Grout'
 		});
 		return action;
 	}
+
 	/**
 	 * @description Start a new Template action
-	 * @param {Object|String} templateData - Name of template or object containing name parameter
+	 * @param {String} templateName - Name of template
 	 */
-	Template(templateData) {
-		const action = new Actions.Template({project: this, callData: templateData});
+	Template(templateName) {
+		const action = new ApiAction(`templates/${templateName}`, this);
 		logger.debug({
-			description: 'Template Action called.', templateData,
+			description: 'Template ApiAction called.', templateName,
 			action, func: 'Template', obj: 'Grout'
 		});
 		return action;
-	}
-	//Alias of Projects
-	get Apps() {
-		return this.Projects;
-	}
-	//Alias of Project
-	App(projectData) {
-		return this.Project(projectData);
-	}
-	//Alias of Accounts
-	get Users() {
-		return this.Accounts;
-	}
-	//Alias of Account
-	User(accountData) {
-		return this.Account(accountData);
 	}
 }

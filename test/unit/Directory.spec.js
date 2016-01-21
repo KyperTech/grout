@@ -3,7 +3,7 @@ import config from '../../src/config';
 let grout = new Grout();
 let mockGet, mockPut, mockPost, mockLog, mockDebug, mockWarn, mockInfo, mockError;
 let exampleApp;
-describe.skip('Files model', () => {
+describe('Directory model', () => {
   beforeEach(() => {
     exampleApp = grout.Project('test', 'exampleApp');
     mockGet = sinon.stub(grout.utils.request, 'get', () => {
@@ -44,90 +44,78 @@ describe.skip('Files model', () => {
     mockError.restore();
   });
   it('exists', () => {
-    expect(exampleApp).to.have.property('Files');
+    expect(exampleApp).to.have.property('Directory');
   });
   describe('constructor', () => {
     it('sets project', () => {
-      expect(exampleApp.Files).to.have.property('project');
-      expect(exampleApp.Files.project).to.have.property('owner');
-      expect(exampleApp.Files.project).to.have.property('name');
-    });
-  });
-  describe('fbUrl getter', () => {
-    it('exists', () => {
-      expect(exampleApp.Files).to.have.property('fbUrl');
-    });
-    it('is correct', () => {
-      expect(exampleApp).to.have.property('fbUrl');
-      expect(exampleApp.Files.fbUrl).to.equal(`${config.fbUrl}/files/${exampleApp.owner}/${exampleApp.name}`);
+      expect(exampleApp.Directory).to.have.property('project');
+      expect(exampleApp.Directory.project).to.have.property('owner');
+      expect(exampleApp.Directory.project).to.have.property('name');
     });
   });
   describe('fbRef getter', () => {
     it('exists', () => {
-      expect(exampleApp.Files).to.have.property('fbRef');
-    });
-  });
-  describe('pathArrayFromFbRef getter', () => {
-    it('exists', () => {
-      expect(exampleApp.Files).to.have.property('pathArrayFromFbRef');
+      expect(exampleApp.Directory).to.have.property('fbRef');
     });
   });
   describe('get method', () => {
     it('exists', () => {
-      expect(exampleApp.Files).to.respondTo('get');
+      expect(exampleApp.Directory).to.respondTo('get');
     });
   });
   describe('sync method', () => {
     it('exists', () => {
-      expect(exampleApp.Files).to.respondTo('sync');
+      expect(exampleApp.Directory).to.respondTo('sync');
     });
   });
-  describe('add method', () => {
+  describe('addFile method', () => {
     it('exists', () => {
-      expect(exampleApp.Files).to.respondTo('add');
+      expect(exampleApp.Directory).to.respondTo('addFile');
+    });
+  });
+  describe('addFolder method', () => {
+    it('exists', () => {
+      expect(exampleApp.Directory).to.respondTo('addFolder');
     });
   });
   describe('upload method', () => {
     it('exists', () => {
-      expect(exampleApp.Files).to.respondTo('upload');
+      expect(exampleApp.Directory).to.respondTo('upload');
     });
   });
   describe('remove method', () => {
     it('exists', () => {
-      expect(exampleApp.Files).to.respondTo('remove');
-    });
-    it('has del alias', () => {
-      expect(exampleApp.Files).to.respondTo('del');
+      expect(exampleApp.Directory).to.respondTo('remove');
     });
   });
   describe('addToFb method', () => {
     it('exists', () => {
-      expect(exampleApp.Files).to.respondTo('addToFb');
+      expect(exampleApp.Directory).to.respondTo('addToFb');
     });
   });
   describe('delFromFb method', () => {
     it('exists', () => {
-      expect(exampleApp.Files).to.respondTo('delFromFb');
+      expect(exampleApp.Directory).to.respondTo('delFromFb');
     });
   });
   describe('addLocalToFb method', () => {
     it('exists', () => {
-      expect(exampleApp.Files).to.respondTo('addLocalToFb');
+      expect(exampleApp.Directory).to.respondTo('addLocalToFb');
     });
   });
   describe('getFromS3 method', () => {
     it('exists', () => {
-      expect(exampleApp.Files).to.respondTo('getFromS3');
+      expect(exampleApp.Directory).to.respondTo('getFromS3');
     });
   });
   describe('buildStructure method', () => {
     it('exists', () => {
-      expect(exampleApp.Files).to.respondTo('buildStructure');
+      expect(exampleApp.Directory).to.respondTo('buildStructure');
     });
   });
   describe('syncStructure method', () => {
     it('exists', () => {
-      expect(exampleApp.Files).to.respondTo('syncStructure');
+      expect(exampleApp.Directory).to.respondTo('syncStructure');
     });
   });
 });

@@ -65,43 +65,23 @@ describe('Grout', () => {
 		it('exists', () => {
 			expect(grout.Projects).to.be.an('object');
 		});
-		it('has alias "Apps"', () => {
-			expect(grout.Apps).to.be.an('object');
-		});
 	});
 	describe('Project', () => {
 		it('exists', () => {
 			expect(grout).to.respondTo('Project');
-		});
-		it('has alias "App"', () => {
-			expect(grout).to.respondTo('App');
 		});
 	});
 	describe('Accounts', () => {
 		it('exists', () => {
 			expect(grout.Accounts).to.be.an('object');
 		});
-		it('has alias "Users"', () => {
-			expect(grout.Users).to.be.an('object');
-		});
 	});
 	describe('Account', () => {
 		it('exists', () => {
 			expect(grout).to.respondTo('Account');
 		});
-		it('has alias "User"', () => {
-			expect(grout).to.respondTo('User');
-		});
 		it('accepts a name', () => {
 			expect(grout.Account('test')).to.be.an('object');
-		});
-	});
-	describe('Accounts alias "User"', () => {
-		it('exists', () => {
-			expect(grout).to.respondTo('User');
-		});
-		it('accepts a name', () => {
-			expect(grout.User('test')).to.be.an('object');
 		});
 	});
 	describe('Groups', () => {

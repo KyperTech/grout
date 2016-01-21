@@ -23,7 +23,7 @@ export default class File {
 		}
 		if(!project){
 			logger.error({
-				description: 'Action data must be an object that includes project.',
+				description: 'ApiAction data must be an object that includes project.',
 				func: 'constructor', obj: 'File'
 			});
 			throw new Error('File data must be an object that includes project.');

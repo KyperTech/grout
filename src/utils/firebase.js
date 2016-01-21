@@ -35,7 +35,7 @@ export default class firebaseUtil {
    */
 
   static ref(location) {
-    return new Firebase(url(location));
+    return new Firebase(this.url(location));
   }
 
   /**
