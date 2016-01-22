@@ -19,11 +19,11 @@ export default class FileSystemEntity {
 			throw new Error('FileSystemEntity with path and project is needed to create file action.');
 		}
 		this.project = project;
-    if (path.indexOf('/') === 0) {
-      path = path.slice(1);
-    }
-    this.path = path;
-    this.name = name || last(path.split('/'));
+		if (path.indexOf('/') === 0) {
+			path = path.slice(1);
+		}
+		this.path = path;
+		this.name = name || last(path.split('/'));
 		logger.debug({
 			description: 'FileSystemEntity object constructed.', entity: this,
 			func: 'constructor', obj: 'FileSystemEntity'
@@ -56,9 +56,9 @@ export default class FileSystemEntity {
 	get() {
 		return new Promise((resolve, reject) => {
 			this.fbRef.once('value', (fileSnap) => {
-        if (!fileSnap.val()) {
-          reject('no firebase value found');
-        }
+				if (!fileSnap.val()) {
+					reject('no firebase value found');
+				}
 				resolve(fileSnap.val());
 			});
 		});
@@ -78,10 +78,10 @@ export default class FileSystemEntity {
 		return this.removeFromFb();
 	}
 
-  //TODO: move file
-  move() {
-    return null;
-  }
+	//TODO: move file
+	move() {
+		return null;
+	}
 
 	/**
 	 * @description Add folder to project
@@ -101,7 +101,7 @@ export default class FileSystemEntity {
 		});
 		const { fbRef, path, name, entityType, fileType, content } = this;
 		let fbData = {meta: {path, name, entityType, fileType}};
-    fbData.meta = omitBy(fbData.meta, isUndefined);
+		fbData.meta = omitBy(fbData.meta, isUndefined);
 		if (content){
 			fbData.original = content;
 		}

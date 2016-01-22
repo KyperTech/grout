@@ -16,5 +16,8 @@
     "spy": true,
     "expect": true,
     "sinon": true
-  }
+  },
+  "plugins": [
+    "react"
+  ]
 }

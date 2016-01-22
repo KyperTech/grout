@@ -7,7 +7,10 @@ branches:
   only:
     - master
 sudo: false
-script: "npm test"
+script: "npm run test:cov"
+addons:
+  code_climate:
+    repo_token: 53d54bc864b6406f01f7774871adad68df4890ce798c565e2dd632b70482fdad
 after_success:
   - npm install -g codeclimate-test-reporter
   - codeclimate-test-reporter < coverage/lcov.info

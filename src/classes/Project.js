@@ -36,6 +36,13 @@ export default class Project extends ApiAction {
 	}
 
 	/**
+	 * @description Start an Api action using project
+	 */
+	apiAction(actionEndpoint) {
+		return new ApiAction(actionEndpoint, this);
+	}
+
+	/**
 	 * @description Add static file hosting storage to Project (currrently though AWS S3)
 	 */
 	addStorage() {
@@ -142,7 +149,7 @@ export default class Project extends ApiAction {
 			description: 'Projects account action called.',
 			project: this, func: 'user', obj: 'Project'
 		});
-		return new ApiAction('accounts', this);
+		return this.apiAction('accounts');
 	}
 
 	/**
@@ -153,7 +160,7 @@ export default class Project extends ApiAction {
 			description: 'Projects account action called.',
 			username, project: this, func: 'user', obj: 'Project'
 		});
-		return new ApiAction(`accounts/${username}`, this);
+		return this.apiAction(`accounts/${username}`);
 	}
 
 	/**
@@ -164,7 +171,7 @@ export default class Project extends ApiAction {
 			description: 'Projects groups action called.',
 			project: this, func: 'groups', obj: 'Project'
 		});
-		return new ApiAction('groups', this);
+		return this.apiAction('groups');
 	}
 
 	/**

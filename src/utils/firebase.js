@@ -2,7 +2,7 @@ import config from '../config';
 import Firebase from 'firebase';
 
 export default class firebaseUtil {
-  /**
+	/**
 	 * @description Path array that is built from Firebase Reference
 	 * @private
 	 */
@@ -18,32 +18,32 @@ export default class firebaseUtil {
 		return pathArray;
 	}
 
-  /**
+	/**
 	 * @description Path array that is built from Firebase Reference
 	 */
-  static pathToSafePath(path) {
-    logger.debug({
-      description: 'Safe path array created.',
-      path, func: 'safePathArray', obj: 'FileSystemEntity'
-    });
-    return path.replace(/[.]/g, ':').replace(/[#$\[\]]/g, '_-_');
-  }
+	static pathToSafePath(path) {
+		logger.debug({
+			description: 'Safe path array created.',
+			path, func: 'safePathArray', obj: 'FileSystemEntity'
+		});
+		return path.replace(/[.]/g, ':').replace(/[#$\[\]]/g, '_-_');
+	}
 
-  /**
-   * @description Firebase reference from relative location
-   * @param {String} location - Relative location to create firebase ref for
-   */
+	/**
+	 * @description Firebase reference from relative location
+	 * @param {String} location - Relative location to create firebase ref for
+	 */
 
-  static ref(location) {
-    return new Firebase(this.url(location));
-  }
+	static ref(location) {
+		return new Firebase(this.url(location));
+	}
 
-  /**
+	/**
 	 * @description Path array that is built from Firebase Reference
 	 */
-  static url(location) {
-   return `${config.fbUrl}/files/${location}`;
-  }
+	static url(location) {
+		return `${config.fbUrl}/files/${location}`;
+	}
 }
 /**
  * @description Load firepad from local or global

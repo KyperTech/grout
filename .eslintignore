@@ -1,1 +1,4 @@
-["src/lib/**/*.js", "test/unit/**/*.js"]
+**/dist/*
+**/node_modules/*
+**/server.js
+**/webpack.config*.js

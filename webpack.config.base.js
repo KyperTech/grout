@@ -13,11 +13,11 @@ module.exports = {
   },
   plugins: [
     new webpack.BannerPlugin('grout.js v' + pkg.version + ' | (c) Kyper Digital Inc.', {raw: false, entryOnly: true}),
-    new webpack.optimize.OccurenceOrderPlugin()
   ],
   output: {
     library: 'Grout',
-    libraryTarget: 'umd'
+    libraryTarget: 'umd',
+    publicPath: '/dist/'
   },
   resolve: {
     extensions: ['', '.js']
