@@ -25,7 +25,7 @@ export default class Grout extends Matter {
 	 * @description Projects action
 	 */
 	Projects(username) {
-		const action = new ApiAction('${username}/projects');
+		const action = new ApiAction(`users/${username}/projects`);
 		logger.debug({
 			description: 'Projects ApiAction called.',
 			action, func: 'Projects', obj: 'Grout'
