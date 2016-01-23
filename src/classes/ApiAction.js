@@ -6,12 +6,13 @@ const { logger, request } = matter.utils;
 export default class ApiAction {
 	constructor(endpoint, project) {
 		this.endpoint = endpoint;
-		this.project = project;
+		this.project = project || null;
 		logger.debug({
 			description: 'Init action called.',
 			project: this, func: 'init', obj: 'ApiAction'
 		});
 	}
+
 	/** url
 	 * @description ApiAction url
 	 * @return {String}
@@ -24,6 +25,7 @@ export default class ApiAction {
 		});
 		return urlStr;
 	}
+
 	/** Get
 	 * @return {Promise}
 	 */
@@ -49,6 +51,7 @@ export default class ApiAction {
 			return Promise.reject(error);
 		});
 	}
+
 	/** Add
 	 * @param {Object} newData - Object containing data to create with
 	 * @return {Promise}
@@ -141,6 +144,7 @@ export default class ApiAction {
 	}
 
 	/** search
+	 * @param {String} query - String query
 	 * @return {Promise}
 	 */
 	search(query) {

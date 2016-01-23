@@ -25,7 +25,7 @@ export default class Grout extends Matter {
 	 * @description Projects action
 	 */
 	get Projects() {
-		const action = new ApiAction('projects', this);
+		const action = new ApiAction('projects');
 		logger.debug({
 			description: 'Projects ApiAction called.',
 			action, func: 'Projects', obj: 'Grout'
@@ -52,7 +52,7 @@ export default class Grout extends Matter {
 	 * @description Accounts action
 	 */
 	get Accounts() {
-		const action = new ApiAction('accounts', this);
+		const action = new ApiAction('accounts');
 		logger.debug({
 			description: 'Account ApiAction called.',
 			action, func: 'Accounts', obj: 'Grout'
@@ -67,7 +67,7 @@ export default class Grout extends Matter {
 	 * @param {String} accountData.email - Email of account with which to start action
 	 */
 	Account(username) {
-		const action = new ApiAction(`accounts/${username}`, this);
+		const action = new ApiAction(`accounts/${username}`);
 		logger.debug({
 			description: 'Account ApiAction called.', username,
 			action, func: 'Account', obj: 'Grout'
@@ -79,7 +79,7 @@ export default class Grout extends Matter {
 	 * @description Groups action
 	 */
 	get Groups() {
-		const action = new ApiAction('groups', this);
+		const action = new ApiAction('groups');
 		logger.debug({
 			description: 'Groups ApiAction called.',
 			action, func: 'groups', obj: 'Grout'
@@ -92,7 +92,7 @@ export default class Grout extends Matter {
 	 * @param {String} groupName - Name of group
 	 */
 	Group(groupName) {
-		const action =  new Group(groupName, this);
+		const action =  new Group(groupName);
 		logger.debug({
 			description: 'Group ApiAction called.', groupName,
 			action, func: 'group', obj: 'Grout'
@@ -104,7 +104,7 @@ export default class Grout extends Matter {
 	 * @description Start a new Templates ApiAction
 	 */
 	get Templates() {
-		const action = new ApiAction('templates', this);
+		const action = new ApiAction('templates');
 		logger.debug({
 			description: 'Templates ApiAction called.', action,
 			func: 'Templates', obj: 'Grout'
@@ -117,7 +117,7 @@ export default class Grout extends Matter {
 	 * @param {String} templateName - Name of template
 	 */
 	Template(templateName) {
-		const action = new ApiAction(`templates/${templateName}`, this);
+		const action = new ApiAction(`templates/${templateName}`);
 		logger.debug({
 			description: 'Template ApiAction called.', templateName,
 			action, func: 'Template', obj: 'Grout'
