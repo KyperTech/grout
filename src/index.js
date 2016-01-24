@@ -49,28 +49,28 @@ export default class Grout extends Matter {
 	}
 
 	/**
-	 * @description Accounts action
+	 * @description Users action
 	 */
-	get Accounts() {
-		const action = new ApiAction('accounts');
+	get Users() {
+		const action = new ApiAction('users');
 		logger.debug({
-			description: 'Account ApiAction called.',
-			action, func: 'Accounts', obj: 'Grout'
+			description: 'User ApiAction called.',
+			action, func: 'Users', obj: 'Grout'
 		});
 		return action;
 	}
 
 	/**
-	 * @description Accounts action
+	 * @description Users action
 	 * @param {Object|String} accountData - Data of account with which to start action
 	 * @param {String} accountData.username - Username of account with which to start action
 	 * @param {String} accountData.email - Email of account with which to start action
 	 */
-	Account(username) {
-		const action = new ApiAction(`accounts/${username}`);
+	User(username) {
+		const action = new ApiAction(`users/${username}`);
 		logger.debug({
-			description: 'Account ApiAction called.', username,
-			action, func: 'Account', obj: 'Grout'
+			description: 'User ApiAction called.', username,
+			action, func: 'User', obj: 'Grout'
 		});
 		return action;
 	}

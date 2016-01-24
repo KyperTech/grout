@@ -160,7 +160,7 @@ export default class ApiAction {
 			return Promise.resolve([]);
 		}
 		if (!isString(query)) {
-			logger.log({
+			logger.warn({
 				description: 'Invalid query type in search (should be string).',
 				func: 'search', obj: 'ApiAction'
 			});
@@ -169,19 +169,19 @@ export default class ApiAction {
 		return request.get(`${this.url}/search/${query}`).then(res => {
 			if (has(res, 'error')) {
 				logger.error({
-					description: 'Error in removal request.', action: this,
-					res, func: 'remove', obj: 'ApiAction'
+					description: 'Error in search request.', action: this,
+					res, func: 'search', obj: 'ApiAction'
 				});
 				return Promise.reject(res.error || res);
 			}
-			logger.log({
-				description: 'Remove successful.', res, func: 'remove', obj: 'ApiAction'
+			logger.info({
+				description: 'Search successful.', res, func: 'search', obj: 'ApiAction'
 			});
 			return res;
 		}, error => {
 			logger.error({
-				description: 'Error in request for removal.', action: this,
-				error, func: 'remove', obj: 'ApiAction'
+				description: 'Error in request for search.', action: this,
+				error, func: 'search', obj: 'ApiAction'
 			});
 			return Promise.reject(error);
 		});

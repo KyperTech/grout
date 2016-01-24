@@ -122,7 +122,7 @@ export default class Project extends ApiAction {
 			description: 'Collaborators list added to project, calling update.',
 			project: this, func: 'addCollaborators', obj: 'Project'
 		});
-		return this.update(this);
+		return this.update();
 	}
 
 	/**
@@ -139,13 +139,13 @@ export default class Project extends ApiAction {
 	/**
 	 * @description File within project
 	 */
-	File(fileData) {
+	File(path) {
 		logger.debug({
 			description: 'Projects file action called.',
-			fileData, project: this,
+			path, project: this,
 			func: 'file', obj: 'Project'
 		});
-		return new File(this, fileData);
+		return new File(this, path);
 	}
 
 	/**
