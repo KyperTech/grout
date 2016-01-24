@@ -1,5 +1,7 @@
 import config from '../config';
 import Firebase from 'firebase';
+import matter from '../classes/Matter';
+const { logger } = matter.utils;
 
 export default class firebaseUtil {
 	/**

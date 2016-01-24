@@ -3,17 +3,26 @@ import matter from './Matter';
 import { has, isObject, extend } from 'lodash';
 import Firebase from 'firebase';
 import firebaseUtil from '../utils/firebase';
+import FileSystemEntity from './FileSystemEntity';
 import * as S3 from '../utils/s3';
 //Convenience vars
 const { logger } = matter.utils;
 const s3 = S3.init();
 
-export default class File {
-	constructor(project, path, name) {
+export default class File extends FileSystemEntity {
+	constructor(project, path) {
+		super(project, path);
 		logger.debug({
-			description: 'File constructor called with', project, path, name,
+			description: 'File constructor called with', project, path,
 			func: 'constructor', obj: 'File'
 		});
+		if(!project){
+			logger.error({
+				description: 'Project required to create file.',
+				func: 'constructor', obj: 'File'
+			});
+			throw new Error('File must include project.');
+		}
 		if(!path){
 			logger.error({
 				description: 'File must include path.',
@@ -21,16 +30,8 @@ export default class File {
 			});
 			throw new Error('File must include a path.');
 		}
-		if(!project){
-			logger.error({
-				description: 'ApiAction data must be an object that includes project.',
-				func: 'constructor', obj: 'File'
-			});
-			throw new Error('File data must be an object that includes project.');
-		}
 		this.type = 'file';
 		this.project = project;
-		this.name = name;
 	}
 
 	/**
@@ -215,7 +216,7 @@ export default class File {
 			});
 		});
 	}
-	
+
 	/**
 	 * @description Get project data
 	 * @return {Promise}

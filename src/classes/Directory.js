@@ -90,18 +90,17 @@ export default class Directory {
 	}
 
 
-
 	/**
 	 * @description Add a new file or files
 	 * @param {Object|Array} fileData - Array of objects or single object containing file data
 	 * @param {Object} fileData.path - Path of file relative to project
 	 */
-	addFile(objData) {
+	addFile(path) {
 		//TODO: Allow for options of where to add the file to
-		if(isArray(objData)){
-			return this.upload(objData);
+		if(path && isArray(path)){
+			return this.upload(path);
 		}
-		let file = new File(this.project, path, name)
+		let file = new File(this.project, path);
 		return file.save();
 	}
 
@@ -110,8 +109,8 @@ export default class Directory {
 	 * @param {string} path - Path of where the folder should be saved
 	 * @param {String} name - optionally provide name of folder
 	 */
-	addFolder(path, name) {
-		let folder = new Folder(this.project, path, name);
+	addFolder(path) {
+		let folder = new Folder(this.project, path);
 		return folder.save();
 	}
 

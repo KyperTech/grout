@@ -9,7 +9,7 @@ export default class ApiAction {
 		this.project = project || null;
 		logger.debug({
 			description: 'Init action called.',
-			project: this, func: 'init', obj: 'ApiAction'
+			Action: this, func: 'init', obj: 'ApiAction'
 		});
 	}
 
@@ -57,6 +57,10 @@ export default class ApiAction {
 	 * @return {Promise}
 	 */
 	add(newData) {
+		logger.debug({
+			description: 'Add request responded successfully.',
+			newData, func: 'add', obj: 'ApiAction'
+		});
 		return request.post(this.url, newData).then(res => {
 			logger.log({
 				description: 'Add request responded successfully.',

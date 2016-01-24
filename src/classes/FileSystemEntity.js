@@ -1,17 +1,17 @@
 import matter from './Matter';
-import { last, omitBy, isUndefined } from 'lodash';
+import { last, omitBy, isUndefined, isString } from 'lodash';
 import Firebase from 'firebase';
 import firebaseUtil from '../utils/firebase';
 
 const { logger } = matter.utils;
 
 export default class FileSystemEntity {
-	constructor(project, path, name) {
+	constructor(project, path) {
 		logger.debug({
-			description: `FileSystemEntity constructor called with project ${project}, path: ${path}, and name: ${name}`,
+			description: 'FileSystemEntity constructor called.', project, path,
 			func: 'constructor', obj: 'FileSystemEntity'
 		});
-		if (!project || !path) {
+		if (!project || !isString(path)) {
 			logger.error({
 				description: 'FileSystemEntity that includes path and project is needed to create a FileSystemEntity action.',
 				func: 'constructor', obj: 'FileSystemEntity'
@@ -19,11 +19,8 @@ export default class FileSystemEntity {
 			throw new Error('FileSystemEntity with path and project is needed to create file action.');
 		}
 		this.project = project;
-		if (path.indexOf('/') === 0) {
-			path = path.slice(1);
-		}
-		this.path = path;
-		this.name = name || last(path.split('/'));
+		this.path = path.indexOf('/') === 0 ? path.slice(1) : path;
+		this.name = last(path.split('/'));
 		logger.debug({
 			description: 'FileSystemEntity object constructed.', entity: this,
 			func: 'constructor', obj: 'FileSystemEntity'

@@ -12,20 +12,27 @@ import firebase from '../utils/firebase';
 const {request, logger} = matter.utils;
 
 export default class Project extends ApiAction {
-	constructor(owner, name) {
+	constructor(name, owner) {
 		if (!owner) {
 			throw new Error('Owner is required to create a project');
 		}
 		if (!name) {
 			throw new Error('Name is required to create a project');
 		}
-		super(`projects/${name}`, { owner, name })
+		const endpoint = owner ? `${owner}/projects/${name}` : `projects/${name}`;
+		super(endpoint, { owner, name });
 		this.owner = owner;
 		this.name = name;
 		logger.debug({
 			description: 'Project object created.', project: this,
 			func: 'constructor', obj: 'Project'
 		});
+	}
+	/**
+	 * @description Generate Firebase reference based on project url
+	 */
+	get fbUrl() {
+		return this.owner ?  firebase.url(`${this.owner}/${this.name}`) : firebase.url(`${this.name}`);
 	}
 
 	/**
