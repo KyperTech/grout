@@ -93,11 +93,7 @@ export default class ApiAction {
 	 */
 	update(updateData) {
 		if (!updateData) {
-			logger.error({
-				description: 'Data is required to update.',
-				func: 'update', obj: 'ApiAction'
-			});
-			return Promise.reject('Data is required to update.');
+			updateData = this;
 		}
 		return request.put(this.url, updateData).then(res => {
 			if (has(res, 'error')) {

@@ -18462,11 +18462,11 @@ return /******/ (function(modules) { // webpackBootstrap
 					description: 'Add collaborators called', collabs: collabs,
 					project: this, func: 'addCollaborators', obj: 'Project'
 				});
-				this.collaborators = collabs;
 				//Handle string of ids
-				if ((0, _lodash.isString)(collabs)) {
-					this.collaborators = collabs.replace(' ').split(',');
+				if ((0, _lodash.isObject)(collabs)) {
+					collabs = [collabs];
 				}
+				this.collaborators = collabs;
 				logger.log({
 					description: 'Collaborators list added to project, calling update.',
 					project: this, func: 'addCollaborators', obj: 'Project'
@@ -18726,11 +18726,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			key: 'update',
 			value: function update(updateData) {
 				if (!updateData) {
-					logger.error({
-						description: 'Data is required to update.',
-						func: 'update', obj: 'ApiAction'
-					});
-					return Promise.reject('Data is required to update.');
+					updateData = this;
 				}
 				return request.put(this.url, updateData).then(function (res) {
 					if ((0, _lodash.has)(res, 'error')) {

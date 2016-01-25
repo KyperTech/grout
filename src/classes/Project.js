@@ -1,6 +1,6 @@
 
 import config from '../config';
-import { isString } from 'lodash';
+import { isString, isObject } from 'lodash';
 import matter from './Matter';
 import ApiAction from './ApiAction';
 import Group from './Group';
@@ -113,11 +113,11 @@ export default class Project extends ApiAction {
 			description: 'Add collaborators called', collabs,
 			project: this, func: 'addCollaborators', obj: 'Project'
 		});
-		this.collaborators = collabs;
 		//Handle string of ids
-		if (isString(collabs)) {
-			this.collaborators =  collabs.replace(' ').split(',');
+		if (isObject(collabs)) {
+			collabs = [collabs];
 		}
+		this.collaborators = collabs;
 		logger.log({
 			description: 'Collaborators list added to project, calling update.',
 			project: this, func: 'addCollaborators', obj: 'Project'
