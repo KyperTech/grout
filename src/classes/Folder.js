@@ -1,13 +1,14 @@
-import { extend, has, isString, isObject, last } from 'lodash';
 import FileSystemEntity from './FileSystemEntity';
 import matter from './Matter';
 const { logger } = matter.utils;
-class Folder extends FileSystemEntity {
+
+export default class Folder extends FileSystemEntity {
 	constructor(project, path, name) {
 		super(project, path, name);
 		this.entityType = 'folder';
+		logger.debug({
+			description: 'Folder object created.', folder: this,
+			func: 'constructor', obj: 'Folder'
+		});
 	}
-
 }
-
-export default Folder;

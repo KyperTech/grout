@@ -46,36 +46,36 @@ export default class firebaseUtil {
 	static url(location) {
 		return `${config.fbUrl}/files/${location}`;
 	}
-}
-/**
- * @description Load firepad from local or global
- */
-function getFirepadLib() {
-	logger.debug({
-		description: 'Get firepad lib called',
-		func: 'File => getFirepadLib', file: 'classes/File'
-	});
-	if (typeof window !== 'undefined' && window.Firepad && window.ace) {
-		return window.Firepad;
-	} else if (typeof global !== 'undefined' && global.Firepad && global.ace) {
-		return global.Firepad;
-	} else {
+	/**
+	 * @description Load firepad from local or global
+	 */
+	static getLib() {
 		logger.debug({
-			description: 'Firepad does not currently exist.',
-			func: 'fbRef', obj: 'File'
+			description: 'Get firepad lib called',
+			func: 'File => getFirepadLib', file: 'classes/File'
 		});
-		return null;
-		//TODO: Correctly load firepad
-		// dom.loadJs('https://cdn.firebase.com/libs/firepad/1.2.0/firepad.js');
-		// if (typeof global !== 'undefined' && global.Firepad) {
-		// 	return global.Firepad;
-		// } else if (typeof window !== 'undefined' && window.Firepad) {
-		// 	return window.Firepad;
-		// } else {
-		// 	logger.error({
-		// 		description: 'Adding firepad did not help.',
-		// 		func: 'fbRef', obj: 'File'
-		// 	});
-		// }
+		if (typeof window !== 'undefined' && window.Firepad && window.ace) {
+			return window.Firepad;
+		} else if (typeof global !== 'undefined' && global.Firepad && global.ace) {
+			return global.Firepad;
+		} else {
+			logger.debug({
+				description: 'Firepad does not currently exist.',
+				func: 'fbRef', obj: 'File'
+			});
+			return null;
+			//TODO: Correctly load firepad
+			// dom.loadJs('https://cdn.firebase.com/libs/firepad/1.2.0/firepad.js');
+			// if (typeof global !== 'undefined' && global.Firepad) {
+			// 	return global.Firepad;
+			// } else if (typeof window !== 'undefined' && window.Firepad) {
+			// 	return window.Firepad;
+			// } else {
+			// 	logger.error({
+			// 		description: 'Adding firepad did not help.',
+			// 		func: 'fbRef', obj: 'File'
+			// 	});
+			// }
+		}
 	}
 }

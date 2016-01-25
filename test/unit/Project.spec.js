@@ -4,7 +4,7 @@ let grout = new Grout();
 let mockGet, mockPut, mockPost, mockLog, mockDebug, mockWarn, mockInfo, mockError;
 
 let exampleApp;
-describe('Project model', () => {
+describe.skip('Project model', () => {
 	beforeEach(() => {
 		exampleApp = grout.Project('test', 'exampleApp');
 		mockGet = sinon.stub(grout.utils.request, 'get', () => {

@@ -7,7 +7,7 @@ branches:
   only:
     - master
 sudo: false
-script: "npm run test:cov"
+script: "npm run test"
 addons:
   code_climate:
     repo_token: 53d54bc864b6406f01f7774871adad68df4890ce798c565e2dd632b70482fdad

@@ -1,11 +1,8 @@
-
-import config from '../config';
-import { isString, isObject } from 'lodash';
+import { isObject } from 'lodash';
 import matter from './Matter';
 import ApiAction from './ApiAction';
 import Group from './Group';
 import Directory from './Directory';
-import Folder from './Folder';
 import File from './File';
 import firebase from '../utils/firebase';
 

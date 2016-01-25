@@ -47,7 +47,7 @@ class Config {
 		return merge(instance, defaultConfig);
 	}
 	get serverUrl() {
-		let url = defaultConfig.envs[envName].serverUrl || defaultServerUrl;
+		let url = defaultConfig.envs[envName].serverUrl || defaultConfig.defaultServerUrl;
 		if (typeof window !== 'undefined' && has(window, 'location') && has(window.location, 'host') && window.location.host !== '') {
 			let matchingEnv = find(defaultConfig.envs, (e) => {
 				return e.serverUrl === window.location.host;

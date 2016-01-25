@@ -1,13 +1,9 @@
-import config from '../config';
 import matter from './Matter';
-import { has, isObject, extend } from 'lodash';
-import Firebase from 'firebase';
 import firebaseUtil from '../utils/firebase';
 import FileSystemEntity from './FileSystemEntity';
-import * as S3 from '../utils/s3';
+
 //Convenience vars
 const { logger } = matter.utils;
-const s3 = S3.init();
 
 export default class File extends FileSystemEntity {
 	constructor(project, path) {
@@ -76,7 +72,14 @@ export default class File extends FileSystemEntity {
 	 */
 	get() {
 		return new Promise((resolve, reject) => {
-			this.fbRef.once('value', (fileSnap) => {
+			this.fbRef.once('value', fileSnap => {
+				if(!fileSnap.val()){
+					logger.log({
+						description: 'File data does not exist.',
+						func: 'get', obj: 'File'
+					});
+					return reject({message: 'File data does not exist.'});
+				}
 				// Load file from firepad original content if no history available
 				if (fileSnap.hasChild('original') && !fileSnap.hasChild('history')) {
 					//File has not yet been opened in firepad
@@ -137,19 +140,21 @@ export default class File extends FileSystemEntity {
 				description: 'File contents loaded. Opening firepad.',
 				editor, file, func: 'openInFirepad', obj: 'File'
 			});
-			//Open firepad from ace with file content as default
-			let fileFirepad = file.firepadFromAce(editor);
-			//Wait for firepad to be ready
-			fileFirepad.on('ready', () => {
-				resolve(file);
-				// firepad.setText()
+			return new Promise(resolve => {
+				//Open firepad from ace with file content as default
+				let fileFirepad = file.firepadFromAce(editor);
+				//Wait for firepad to be ready
+				fileFirepad.on('ready', () => {
+					resolve(file);
+					// firepad.setText()
+				});
 			});
 		}, error => {
 			logger.error({
 				description: 'Valid ace editor instance required to create firepad.',
 				editor, error, func: 'openInFirepad', obj: 'File'
 			});
-			reject(error);
+			Promise.reject(error);
 		});
 	}
 	/**
@@ -165,7 +170,7 @@ export default class File extends FileSystemEntity {
 			});
 			return;
 		}
-		let firepad = getFirepadLib();
+		let firepad = firebaseUtil.getLib();
 		if (typeof firepad.fromACE !== 'function') {
 			logger.error({
 				description: 'Firepad does not have fromACE method.',

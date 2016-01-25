@@ -1,13 +1,15 @@
 import Grout from '../../src';
+import sinon from 'sinon';
 
 let grout = new Grout();
+
 let mockGet, mockPut, mockPost, mockDel, mockLog, mockDebug, mockWarn, mockInfo, mockError;
 
-let exampleAccount;
-describe('Account model', () => {
+let exampleUser;
+describe.skip('User model', () => {
 	beforeEach(() => {
-		exampleAccount = grout.Account('exampleUser');
-		// console.log('exampleAccount', exampleAccount);
+		exampleUser = grout.User('exampleUser');
+		// console.log('exampleUser', exampleUser);
 		mockGet = sinon.stub(grout.utils.request, 'get', () => {
 			return new Promise((resolve) => {
 				resolve({body: {}});
@@ -58,30 +60,30 @@ describe('Account model', () => {
 		mockWarn.restore();
 		mockInfo.restore();
 		mockError.restore();
-		exampleAccount = null;
+		exampleUser = null;
 	});
 	describe('Get Method', () => {
 		it('exists', () => {
-			expect(exampleAccount).to.respondTo('get');
+			expect(exampleUser).to.respondTo('get');
 		});
 		it('resolves', () => {
-			expect(exampleAccount.get()).to.eventually.be.an('object');
+			expect(exampleUser.get()).to.eventually.be.an('object');
 		});
 	});
 	describe('Update Method', () => {
 		it('exists', () => {
-			expect(exampleAccount).to.respondTo('update');
+			expect(exampleUser).to.respondTo('update');
 		});
 		it('resolves', () => {
-			expect(exampleAccount.update()).to.eventually.be.an('object');
+			expect(exampleUser.update()).to.eventually.be.an('object');
 		});
 	});
 	describe('Remove Method', () => {
 		it('exists', () => {
-			expect(exampleAccount).to.respondTo('remove');
+			expect(exampleUser).to.respondTo('remove');
 		});
 		it('resolves', () => {
-			expect(exampleAccount.remove()).to.eventually.be.an('object');
+			expect(exampleUser.remove()).to.eventually.be.an('object');
 		});
 	});
 });

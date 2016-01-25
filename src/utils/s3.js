@@ -17,7 +17,7 @@ export function init() {
 	if(typeof AWS.S3 === 'function'){
 		return new AWS.S3();
 	}
-};
+}
 /**
  * @description Set AWS config credentials
  */
@@ -27,7 +27,7 @@ export function setConfig() {
 			IdentityPoolId: config.aws.cognito.poolId
 		}), region: config.aws.region
 	});
-};
+}
 /**
  * @description Get objects from S3 bucket
  * @param {String} bucket - Bucket name to get objects from
@@ -55,7 +55,7 @@ export function getObjects(bucket) {
 			resolve(data.Contents);
 		});
 	});
-};
+}
 /**
  * @description Get object from S3
  */
@@ -78,6 +78,7 @@ export function getObject(getData) {
 		description: 'File get params built.', getReq,
 		func: 'getObject', obj: 's3'
 	});
+	const s3 = init();
 	return new Promise((resolve, reject) => {
 		s3.getObject(getReq, (error, data) => {
 			//[TODO] Add putting object ACL (make public)
@@ -110,7 +111,7 @@ export function getObject(getData) {
 			resolve(file);
 		});
 	});
-};
+}
 /**
  * @description Save object to S3
  */
@@ -161,14 +162,14 @@ export function saveObject(saveData) {
 			resolve(response);
 		});
 	});
-};
+}
 /**
  * @description Delete object from S3
  */
 export function deleteObject(deleteData) {
 	logger.debug({
 		description: 'Error loading file from S3.',
-		error, func: 'deleteObject', obj: 'File'
+		func: 'deleteObject', obj: 'File'
 	});
 	//TODO: Publish file to application
 	const { bucket, path } = deleteData;
@@ -181,6 +182,7 @@ export function deleteObject(deleteData) {
 			message: 'Delete data including path and content required to delete object.'
 		});
 	}
+	let s3 = this.init();
 	return new Promise((resolve, reject) => {
 		s3.deleteObject({
 			Bucket: bucket,
@@ -207,8 +209,7 @@ export function deleteObject(deleteData) {
 			resolve(data.Body.toString());
 		});
 	});
-};
-
+}
 
 /**
  * @description Convert from array file structure (from S3) to 'children' structure used in Editor GUI
@@ -219,7 +220,7 @@ export function deleteObject(deleteData) {
  * var flatArray = [{path:'index.html'}, {path:'testFolder/file.js'}];
  * var childrenStructure = childrenStructureFromArray(flatArray);
  */
-function childrenStructureFromArray(fileArray) {
+export function childrenStructureFromArray(fileArray) {
 	// logger.log('childStructureFromArray called:', fileArray);
 	//Create a object for each file that stores the file in the correct 'children' level
 	let mappedStructure = fileArray.map((file) => {

@@ -4,7 +4,7 @@ import Matter from 'kyper-matter';
 import Project from './classes/Project';
 import Group from './classes/Group';
 import matter from './classes/Matter';
-import ApiAction from './classes/ApiAction'
+import ApiAction from './classes/ApiAction';
 const { logger } = matter.utils;
 
 /** Grout Class

@@ -1,7 +1,5 @@
-import config from '../config';
-import { isArray, has, each } from 'lodash';
+import { isArray, isString, has, each } from 'lodash';
 import matter from './Matter';
-import Project from './Project';
 import File from './File';
 import Folder from './Folder';
 import * as S3 from '../utils/s3';
@@ -202,28 +200,35 @@ export default class Directory {
 	 * @param {Object} objData - Data of file or folder
 	 * @param {String} path - Path of file or folder
 	 */
-	delFromFb(data) {
+	delFromFb(path) {
 		logger.debug({
-			description: 'Del from fb called.', data,
+			description: 'Del from fb called.', path,
 			func: 'delFromFb', obj: 'Directory'
 		});
-		if (!data || !data.path) {
+		if (!path || !isString(path)) {
 			logger.error({
-				description: 'Invalid file data. Path must be included.',
+				description: 'Invalid file path. Path must be included.',
 				func: 'delFromFb', obj: 'Directory'
 			});
 			return Promise.reject({
-				message: 'Invalid file data. Path must be included.'
+				message: 'Invalid file path. Path must be included to delete.'
 			});
 		}
-		let file = new File({project: this.project, data});
+		let file = new File(this.project, path);
 		return new Promise((resolve, reject) => {
-			file.fbRef.remove(fileData, err => {
-				if (!err) {
-					resolve(fileData);
-				} else {
-					reject(err);
+			file.fbRef.remove(file, err => {
+				if(err){
+					logger.error({
+						description: 'Error deleting from Firebase.',
+						func: 'delFromFb', obj: 'Directory'
+					});
+					return reject(err);
 				}
+				logger.info({
+					description: 'Successfully deleted.',
+					func: 'delFromFb', obj: 'Directory'
+				});
+				resolve({message: 'Delete successful.'});
 			});
 		});
 	}
@@ -324,73 +329,6 @@ export default class Directory {
 			return Promise.reject(error);
 		});
 	}
-
-	/**
-	 * @description build child structure from files list
-	 */
-	buildStructure() {
-		logger.debug({
-			description: 'Build Structure called.',
-			func: 'buildStructure', obj: 'Directory'
-		});
-		return this.get().then(filesArray => {
-			logger.log({
-				description: 'Child struct from array.',
-				childStructure: childStruct,
-				func: 'buildStructure', obj: 'Directory'
-			});
-			const childStruct = childrenStructureFromArray(filesArray);
-			//TODO: have child objects have correct classes (file/folder)
-			logger.log({
-				description: 'Child struct from array.',
-				childStructure: childStruct,
-				func: 'buildStructure', obj: 'Directory'
-			});
-			return childStruct;
-		}, error => {
-			logger.error({
-				description: 'Error getting application files.',
-				error, func: 'buildStructure', obj: 'Directory'
-			});
-			return Promise.reject({
-				message: 'Error getting files.',
-				error
-			});
-		});
-	}
-
-	/**
-	 * @description sync file structure from Firebase
-	 */
-	syncStructure() {
-		//TODO: Determine if it is worth storing this in the built structure
-		logger.debug({
-			description: 'Build Structure called.',
-			func: 'syncStructure', obj: 'Directory'
-		});
-		return this.sync().then(filesArray => {
-			logger.log({
-				description: 'Child struct from array.',
-				childStruct, func: 'syncStructure', obj: 'Directory'
-			});
-			const childStruct = childrenStructureFromArray(filesArray);
-			//TODO: have child objects have correct classes (file/folder)
-			logger.log({
-				description: 'Child struct from array.',
-				childStruct, func: 'syncStructure', obj: 'Directory'
-			});
-			return childStruct;
-		}, error => {
-			logger.error({
-				description: 'Error getting application files.',
-				error, func: 'syncStructure', obj: 'Directory'
-			});
-			return Promise.reject({
-				message: 'Error getting files.',
-				error
-			});
-		});
-	}
 }
 //------------------ Utility Functions ------------------//
 function getContentFromFile(fileData) {
@@ -399,7 +337,7 @@ function getContentFromFile(fileData) {
 		description: 'getContentFromFile called', fileData,
 		func: 'getContentFromFile', obj: 'Directory'
 	});
-	return new Promise(resolve => {
+	return new Promise((resolve, reject) => {
 		try {
 			let reader = new FileReader();
 			logger.debug({
