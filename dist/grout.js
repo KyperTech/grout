@@ -1,4 +1,4 @@
-/*! grout.js v0.2.0 | (c) Kyper Digital Inc. */
+/*! grout.js v0.2.1 | (c) Kyper Digital Inc. */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -5075,20 +5075,24 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var Matter = function () {
 		/** Constructor
-	  * @param {String} appName Name of application
+	  * @param {String} project Name of application
 	  */
 
-		function Matter(appName, opts) {
+		function Matter(project, opts) {
 			_classCallCheck(this, Matter);
 
-			if (!appName) {
+			if (!project) {
 				_logger2.default.error({
 					description: 'Application name required to use Matter.',
 					func: 'constructor', obj: 'Matter'
 				});
 				throw new Error('Application name is required to use Matter');
+			}
+			if ((0, _lodash.isObject)(project)) {
+				this.name = project.name;
+				this.owner = project.owner || null;
 			} else {
-				this.name = appName;
+				this.name = project;
 			}
 			if (opts) {
 				this.options = opts;
@@ -5102,6 +5106,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				func: 'constructor', obj: 'Matter'
 			});
 		}
+
 		/** Get current logged in status
 	  * @return {Boolean}
 	  * @example
@@ -5132,6 +5137,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * });
 	   */
 			value: function signup(signupData) {
+				var _this = this;
+
 				_logger2.default.debug({
 					description: 'Signup called.', signupData: signupData,
 					func: 'signup', obj: 'Matter'
@@ -5146,72 +5153,49 @@ return /******/ (function(modules) { // webpackBootstrap
 						status: 'NULL_DATA'
 					});
 				}
-				if ((0, _lodash.isObject)(signupData)) {
-					//Handle no username or email
-					if (!signupData.username && !signupData.email) {
-						_logger2.default.error({
-							description: 'Email or Username required to signup.',
-							func: 'signup', obj: 'Matter'
-						});
-						return Promise.reject({
-							message: 'Email or Username required to signup.',
-							status: 'ID_REQUIRED'
-						});
-					}
-					if (!signupData.password) {
-						_logger2.default.error({
-							description: 'Password is required to signup.',
-							func: 'signup', obj: 'Matter'
-						});
-						return Promise.reject({
-							message: 'Password is required to signup.',
-							status: 'PASS_REQUIRED'
-						});
-					}
-					return _request2.default.post(this.endpoint + '/signup', signupData).then(function (res) {
-						_logger2.default.info({
-							description: 'Signup successful.',
-							signupData: signupData, res: res, func: 'signup', obj: 'Matter'
-						});
-						if ((0, _lodash.has)(res, 'account')) {
-							return res.account;
-						} else {
-							_logger2.default.warn({
-								description: 'Account was not contained in signup res.',
-								signupData: signupData, res: res, func: 'signup', obj: 'Matter'
-							});
-							return res;
-						}
-					})['catch'](function (error) {
-						_logger2.default.error({
-							description: 'Error requesting signup.', error: error,
-							signupData: signupData, func: 'signup', obj: 'Matter'
-						});
-						return Promise.reject(error);
+				//Handle no username or email
+				if (!signupData.username || !signupData.email) {
+					_logger2.default.error({
+						description: 'Email and Username required to signup.',
+						func: 'signup', obj: 'Matter'
 					});
-				} else {
-					//Handle 3rd Party signups
-					_logger2.default.debug({
-						description: 'Third party signup called.',
-						provider: signupData, func: 'signup', obj: 'Matter'
-					});
-					var auth = new _providerAuth2.default({ provider: signupData, app: this });
-					return auth.signup(signupData).then(function (res) {
-						_logger2.default.info({
-							description: 'Provider signup successful.', provider: signupData,
-							res: res, func: 'signup', obj: 'Matter'
-						});
-						return res;
-					}, function (error) {
-						_logger2.default.error({
-							description: 'Error with provider authentication.',
-							provider: signupData, error: error, func: 'signup', obj: 'Matter'
-						});
-						return Promise.reject(error);
+					return Promise.reject({
+						message: 'Email and Username required to signup.',
+						status: 'EMPTY_DATA'
 					});
 				}
+				if (!signupData.password) {
+					_logger2.default.error({
+						description: 'Password is required to signup.',
+						func: 'signup', obj: 'Matter'
+					});
+					return Promise.reject({
+						message: 'Password is required to signup.',
+						status: 'PASS_REQUIRED'
+					});
+				}
+				return _request2.default.post(this.endpoint + '/signup', signupData).then(function (response) {
+					if (response.token) {
+						_this.token.string = response.token;
+					}
+					if (response.user) {
+						_this.currentUser = response.user;
+					}
+					_logger2.default.info({
+						description: 'Signup successful.', user: _this.currentUser,
+						func: 'signup', obj: 'Matter'
+					});
+					return _this.currentUser;
+				})['catch'](function (error) {
+					_logger2.default.error({
+						description: 'Error requesting signup.', error: error,
+						signupData: signupData, func: 'signup', obj: 'Matter'
+					});
+					return Promise.reject(error);
+				});
 			}
-			/** Login by username/email or external provider
+
+			/** Login by username/email
 	   * @param {Object} loginData - Object containing data to use while logging in to application.
 	   * @param {String} loginData.username - Username of user to login as
 	   * @param {String} loginData.email - Email of new user (Optional instead of username)
@@ -5221,7 +5205,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * //Login as 'testuser1'
 	   * var loginData = {username: 'testuser1', password: 'testpassword'};
 	   * matter.login(loginData).then(function(loginRes){
-	   *  console.log('New user logged in succesfully. Account: ', loginRes.account);
+	   *  console.log('New user logged in succesfully. Account: ', loginRes.user);
 	   * }, function(err){
 	   *  console.error('Error logging in:', err);
 	   * });
@@ -5230,7 +5214,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'login',
 			value: function login(loginData) {
-				var _this = this;
+				var _this2 = this;
 
 				if (!loginData || !(0, _lodash.isObject)(loginData) && !(0, _lodash.isString)(loginData)) {
 					_logger2.default.error({
@@ -5242,106 +5226,56 @@ return /******/ (function(modules) { // webpackBootstrap
 						status: 'DATA_REQUIRED'
 					});
 				}
-				if ((0, _lodash.isObject)(loginData)) {
-					//Handle no username or email
-					if (!loginData.username && !loginData.email) {
-						_logger2.default.error({
-							description: 'Email or Username required to login.',
-							func: 'login', obj: 'Matter'
-						});
-						return Promise.reject({
-							message: 'Email or Username required to login.',
-							status: 'ID_REQUIRED'
-						});
-					}
-					//Handle null or invalid password
-					if (!loginData.password || loginData.password === '') {
-						return Promise.reject({
-							message: 'Password is required to login.',
-							status: 'PASS_REQUIRED'
-						});
-					}
-					//Username/Email Login
-					return _request2.default.put(this.endpoint + '/login', loginData).then(function (response) {
-						if ((0, _lodash.has)(response, 'data') && (0, _lodash.has)(response.data, 'status') && response.data.status == 409) {
-							_logger2.default.error({
-								description: 'Account not found.', response: response,
-								func: 'login', obj: 'Matter'
-							});
-							return Promise.reject(response.data);
-						} else {
-							_logger2.default.info({
-								description: 'Successful login.', response: response,
-								func: 'login', obj: 'Matter'
-							});
-							if ((0, _lodash.has)(response, 'token')) {
-								_this.token.string = response.token;
-							}
-							var userAccount = {};
-							//Get user data either directly from response or from token
-							if ((0, _lodash.has)(response, 'account')) {
-								userAccount = response.account;
-							} else if (_this.token.data) {
-								//TODO: Handle more Auth Provider tokens
-								//Check for AuthRocket style token
-								_logger2.default.debug({
-									description: 'User data available from token.',
-									tokenData: _this.token.data, type: _typeof(_this.token.data),
-									func: 'login', obj: 'Matter'
-								});
-								if (_this.token.data.un) {
-									_logger2.default.log({
-										description: 'Token is AuthRocket format.',
-										func: 'login', obj: 'Matter'
-									});
-									userAccount = {
-										username: _this.token.data.un,
-										name: _this.token.data.n || null,
-										authrocketId: _this.token.data.uid || null
-									};
-								} else {
-									_logger2.default.debug({
-										description: 'Token is default format.',
-										func: 'login', obj: 'Matter'
-									});
-									//Default token style
-									userAccount = _this.token.data;
-								}
-							} else {
-								_logger2.default.error({
-									description: 'User data not available from response or token.',
-									func: 'login', obj: 'Matter'
-								});
-								userAccount = { token: _this.token.string };
-							}
-							//Set userdata to local storage
-							_this.storage.setItem(_config2.default.tokenUserDataName, userAccount);
-							return userAccount;
-						}
-					})['catch'](function (errRes) {
-						_logger2.default.error({
-							description: 'Error requesting login.',
-							error: errRes, status: errRes.status,
-							func: 'login', obj: 'Matter'
-						});
-						if (errRes.status == 409 || errRes.status == 400) {
-							errRes = errRes.response.text;
-						}
-						return Promise.reject(errRes);
+				//Handle no username or email
+				if (!loginData.username && !loginData.email) {
+					_logger2.default.error({
+						description: 'Email or Username required to login.',
+						func: 'login', obj: 'Matter'
 					});
-				} else {
-					//Provider login
-					var auth = new _providerAuth2.default({ provider: loginData, app: this });
-					return auth.login().then(function (res) {
-						_logger2.default.info({
-							description: 'Provider login successful.',
-							provider: loginData, res: res,
-							func: 'login', obj: 'Matter'
-						});
-						return res;
+					return Promise.reject({
+						message: 'Email or Username required to login.',
+						status: 'ID_REQUIRED'
 					});
 				}
+				//Handle null or invalid password
+				if (!loginData.password || loginData.password === '') {
+					return Promise.reject({
+						message: 'Password is required to login.',
+						status: 'PASS_REQUIRED'
+					});
+				}
+				//Username/Email Login
+				return _request2.default.put(this.endpoint + '/login', loginData).then(function (response) {
+					if (response.data && response.data.status && response.data.status == 409) {
+						_logger2.default.error({
+							description: 'User not found.', response: response,
+							func: 'login', obj: 'Matter'
+						});
+						return Promise.reject(response.data);
+					}
+					if (response.token) {
+						_this2.token.string = response.token;
+					}
+					if (response.user) {
+						_this2.currentUser = response.user;
+					}
+					_logger2.default.info({
+						description: 'Successful login.', user: _this2.currentUser,
+						func: 'login', obj: 'Matter'
+					});
+					return _this2.currentUser;
+				})['catch'](function (error) {
+					_logger2.default.error({
+						description: 'Error requesting login.',
+						error: error, func: 'login', obj: 'Matter'
+					});
+					if (error.status == 409 || error.status == 400) {
+						error = error.response.text;
+					}
+					return Promise.reject(error);
+				});
 			}
+
 			/** logout
 	   * @description Log out of currently logged in user account
 	   * @return {Promise}
@@ -5357,7 +5291,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'logout',
 			value: function logout() {
-				var _this2 = this;
+				var _this3 = this;
 
 				//TODO: Handle logging out of providers
 				if (!this.isLoggedIn) {
@@ -5375,42 +5309,80 @@ return /******/ (function(modules) { // webpackBootstrap
 						description: 'Logout successful.',
 						response: response, func: 'logout', obj: 'Matter'
 					});
-					_this2.currentUser = null;
-					_this2.token.delete();
+					_this3.currentUser = null;
+					_this3.token.delete();
 					return response;
-				})['catch'](function (errRes) {
+				})['catch'](function (error) {
 					_logger2.default.error({
 						description: 'Error requesting log out: ',
-						error: errRes, func: 'logout', obj: 'Matter'
+						error: error, func: 'logout', obj: 'Matter'
 					});
-					_this2.storage.removeItem(_config2.default.tokenUserDataName);
-					_this2.token.delete();
-					return Promise.reject(errRes);
+					_this3.storage.removeItem(_config2.default.tokenUserDataName);
+					_this3.token.delete();
+					return Promise.reject(error);
 				});
 			}
-		}, {
-			key: 'providerSignup',
-			value: function providerSignup(providerData) {
-				if (!providerData) {
-					return Promise.reject('Provider data is required to signup.');
-				}
-				var provider = providerData.provider;
-				var code = providerData.code;
 
-				if (!provider) {
-					return Promise.reject('Provider name is required to signup.');
-				}
-				if (!code) {
-					return Promise.reject('Provider code is required to signup.');
-				}
+			/** Login using external provider
+	   * @param {String} provider - Provider name
+	   * @return {Promise}
+	   * @example
+	   * matter.loginWithProvider('google').then(function(loginRes){
+	   *  console.log('New user logged in succesfully. Account: ', loginRes.user);
+	   * }, function(err){
+	   *  console.error('Error logging in:', err);
+	   * });
+	   */
+
+		}, {
+			key: 'loginUsingProvider',
+			value: function loginUsingProvider(provider) {
+				//Handle 3rd Party signups
+				_logger2.default.debug({
+					description: 'Third party signup called.',
+					provider: provider, func: 'signup', obj: 'Matter'
+				});
 				var auth = new _providerAuth2.default({ provider: provider, app: this });
-				return auth.accountFromCode(code).then(function (res) {
+				return auth.signup(provider).then(function (res) {
 					_logger2.default.info({
-						description: 'Provider login successful.',
-						providerData: providerData, res: res,
-						func: 'providerSignup', obj: 'Matter'
+						description: 'Provider signup successful.', provider: provider,
+						res: res, func: 'signup', obj: 'Matter'
 					});
 					return res;
+				}, function (error) {
+					_logger2.default.error({
+						description: 'Error with provider authentication.',
+						provider: provider, error: error, func: 'signup', obj: 'Matter'
+					});
+					return Promise.reject(error);
+				});
+			}
+
+			/** Signup using external provider
+	   * @param {String} provider - Provider name
+	   * @return {Promise}
+	   * @example
+	   * //Signup using google
+	   * matter.signupUsingProvider('google').then(function(signupRes){
+	   *  console.log('New user logged in succesfully. Account: ', signupRes.user);
+	   * }, function(err){
+	   *  console.error('Error logging in:', err);
+	   * });
+	   */
+
+		}, {
+			key: 'signupUsingProvider',
+			value: function signupUsingProvider(provider) {
+				if (!provider) {
+					return Promise.reject('Provider data is required to signup.');
+				}
+				var auth = new _providerAuth2.default({ provider: provider, app: this });
+				return auth.signup(provider).then(function (response) {
+					_logger2.default.info({
+						description: 'Provider login successful.',
+						response: response, func: 'providerSignup', obj: 'Matter'
+					});
+					return response;
 				}, function (error) {
 					_logger2.default.error({
 						description: 'Provider signup error.', error: error,
@@ -5419,6 +5391,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					return Promise.reject(error);
 				});
 			}
+
 			/** getCurrentUser
 	   * @return {Promise}
 	   * @example
@@ -5433,7 +5406,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'getCurrentUser',
 			value: function getCurrentUser() {
-				var _this3 = this;
+				var _this4 = this;
 
 				if (this.currentUser) {
 					_logger2.default.debug({
@@ -5455,7 +5428,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						description: 'Current User Request responded.',
 						responseData: response, func: 'currentUser', obj: 'Matter'
 					});
-					_this3.currentUser = response;
+					_this4.currentUser = response;
 					return response;
 				})['catch'](function (errRes) {
 					if (errRes.status == 401) {
@@ -5473,6 +5446,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					return Promise.reject(errRes);
 				});
 			}
+
 			/** updateAccount
 	   * @param {Object} updateData - Data to update within profile (only provided data will be modified).
 	   * @return {Promise}
@@ -5488,7 +5462,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'updateAccount',
 			value: function updateAccount(updateData) {
-				var _this4 = this;
+				var _this5 = this;
 
 				if (!this.isLoggedIn) {
 					_logger2.default.error({
@@ -5515,7 +5489,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						description: 'Update profile request responded.',
 						responseData: response, func: 'updateAccount', obj: 'Matter'
 					});
-					_this4.currentUser = response;
+					_this5.currentUser = response;
 					return response;
 				})['catch'](function (errRes) {
 					_logger2.default.error({
@@ -5525,6 +5499,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					return Promise.reject(errRes);
 				});
 			}
+
 			/** uploadImage
 	   * @description Upload image to Tessellate
 	   * @param {Object} file - File object to upload
@@ -5541,7 +5516,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'uploadImage',
 			value: function uploadImage(fileData) {
-				var _this5 = this;
+				var _this6 = this;
 
 				if (!this.isLoggedIn) {
 					_logger2.default.error({
@@ -5563,13 +5538,12 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 				}
 				//Send update request
-				var uploadUrl = this.endpoint + '/user/' + this.token.data.username;
 				return _request2.default.put(this.urls.upload, fileData).then(function (response) {
 					_logger2.default.info({
 						description: 'Upload image request responded.',
-						responseData: response, func: 'uploadImage', obj: 'Matter'
+						response: response, func: 'uploadImage', obj: 'Matter'
 					});
-					_this5.currentUser = response;
+					_this6.currentUser = response;
 					return response;
 				})['catch'](function (errRes) {
 					_logger2.default.error({
@@ -5579,6 +5553,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					return Promise.reject(errRes);
 				});
 			}
+
 			/** uploadAccountImage
 	   * @description Upload image and add url to currently logged in account
 	   * @param {Object} file - File object to upload
@@ -5595,12 +5570,13 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'uploadAccountImage',
 			value: function uploadAccountImage(fileData) {
-				var _this6 = this;
+				var _this7 = this;
 
 				return this.uploadImage(fileData).then(function (imgUrl) {
-					return _this6.updateAccount({ image: { url: imgUrl } });
+					return _this7.updateAccount({ image: { url: imgUrl } });
 				});
 			}
+
 			/** changePassword
 	   * @param {String} updateData New password for account.
 	   * @return {Promise}
@@ -5641,6 +5617,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					return Promise.reject(error);
 				});
 			}
+
 			/** recoverAccount
 	   * @param {String} updateData New password for account.
 	   * @return {Promise}
@@ -5689,17 +5666,6 @@ return /******/ (function(modules) { // webpackBootstrap
 				});
 			}
 
-			/** Save current user (handled automatically by default)
-	   * @param {Object} userData - Account data to set for current user
-	   * @example
-	   * //Save account response to current user
-	   * matter.currentUser = {username: 'testuser1', email: 'test@email.com'};
-	   * console.log('New current user set:', matter.currentUser);
-	   */
-
-		}, {
-			key: 'isInGroup',
-
 			/** Check that user is in a single group or in all of a list of groups
 	   * @param {Array} checkGroups - List of groups to check for account membership
 	   * @return {Boolean}
@@ -5712,8 +5678,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * console.warn('Current account is not an admin.');
 	   * }
 	   */
+
+		}, {
+			key: 'isInGroup',
 			value: function isInGroup(checkGroups) {
-				var _this7 = this;
+				var _this8 = this;
 
 				if (!this.isLoggedIn) {
 					_logger2.default.error({
@@ -5729,7 +5698,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 					return false;
 				}
-				//Check if user is
+				//Check if user is within groups
 				if ((0, _lodash.isString)(checkGroups)) {
 					var _ret = function () {
 						var groupName = checkGroups;
@@ -5742,37 +5711,31 @@ return /******/ (function(modules) { // webpackBootstrap
 								func: 'isInGroup', obj: 'Matter'
 							});
 							return {
-								v: _this7.isInGroups(groupsArray)
-							};
-						} else {
-							//Single group
-							var groups = _this7.token.data.groups || [];
-							_logger2.default.log({
-								description: 'Checking if user is in group.',
-								group: groupName, userGroups: _this7.token.data.groups,
-								func: 'isInGroup', obj: 'Matter'
-							});
-							return {
-								v: (0, _lodash.some)(groups, function (group) {
-									return groupName == group.name;
-								})
+								v: _this8.isInGroups(groupsArray)
 							};
 						}
+						//Single group
+						var groups = _this8.token.data.groups || [];
+						_logger2.default.log({
+							description: 'Checking if user is in group.',
+							group: groupName, userGroups: _this8.token.data.groups,
+							func: 'isInGroup', obj: 'Matter'
+						});
+						return {
+							v: (0, _lodash.some)(groups, function (group) {
+								return groupName == group.name;
+							})
+						};
 					}();
 
 					if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
-				} else if ((0, _lodash.isArray)(checkGroups)) {
-					//Array of groups/roles
-					//Check that user is in every group
-					_logger2.default.info({
-						description: 'Array of groups.', list: checkGroups,
-						func: 'isInGroup', obj: 'Matter'
-					});
-					return this.isInGroups(checkGroups);
-				} else {
-					return false;
 				}
+				if ((0, _lodash.isArray)(checkGroups)) {
+					return this.isInGroups(checkGroups);
+				}
+				return false;
 			}
+
 			/** Check that user is in all of a list of groups
 	   * @param {Array|String} checkGroups - List of groups to check for account membership
 	   * @return {Boolean}
@@ -5784,13 +5747,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * } else {
 	   * console.warn('Current account is not both an admin and a user')
 	   * }
-	   *
 	   */
 
 		}, {
 			key: 'isInGroups',
 			value: function isInGroups(checkGroups) {
-				var _this8 = this;
+				var _this9 = this;
 
 				if (!this.isLoggedIn) {
 					_logger2.default.log({
@@ -5811,40 +5773,39 @@ return /******/ (function(modules) { // webpackBootstrap
 					return (0, _lodash.every)(checkGroups.map(function (group) {
 						if ((0, _lodash.isString)(group)) {
 							//Group is string
-							return _this8.isInGroup(group);
-						} else {
-							//Group is object
-							if ((0, _lodash.has)(group, 'name')) {
-								return _this8.isInGroup(group.name);
-							} else {
-								_logger2.default.error({
-									description: 'Invalid group object.',
-									group: group, func: 'isInGroups', obj: 'Matter'
-								});
-								return false;
-							}
+							return _this9.isInGroup(group);
 						}
+						//Group is object
+						if ((0, _lodash.has)(group, 'name')) {
+							return _this9.isInGroup(group.name);
+						}
+						_logger2.default.error({
+							description: 'Invalid group object.',
+							group: group, func: 'isInGroups', obj: 'Matter'
+						});
+						return false;
 					}), true);
-				} else if ((0, _lodash.isString)(checkGroups)) {
+				}
+				if ((0, _lodash.isString)(checkGroups)) {
 					//TODO: Handle spaces within string list
 					var groupsArray = checkGroups.split(',');
 					if (groupsArray.length > 1) {
 						return this.isInGroups(groupsArray);
 					}
 					return this.isInGroup(groupsArray[0]);
-				} else {
-					_logger2.default.error({
-						description: 'Invalid groups list.',
-						func: 'isInGroups', obj: 'Matter'
-					});
-					return false;
 				}
+				_logger2.default.error({
+					description: 'Invalid groups list.',
+					func: 'isInGroups', obj: 'Matter'
+				});
+				return false;
 			}
 		}, {
 			key: 'isLoggedIn',
 			get: function get() {
 				return this.token.string ? true : false;
 			}
+
 			/** Endpoint generation that handles default/provided settings and environment
 	   * @return {String} endpoint - endpoint for tessellate application
 	   */
@@ -5869,7 +5830,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						});
 					}
 				}
-				var appEndpoint = _config2.default.serverUrl + '/apps/' + this.name;
+				var appEndpoint = this.owner ? _config2.default.serverUrl + '/users/' + this.owner + '/projects/' + this.name : _config2.default.serverUrl + '/projects/' + this.name;
 				//Handle tessellate as name
 				if (this.name == 'tessellate') {
 					//Remove url if host is a tessellate server
@@ -5907,6 +5868,15 @@ return /******/ (function(modules) { // webpackBootstrap
 					recover: this.endpoint + '/recover'
 				};
 			}
+
+			/** Save current user (handled automatically by default)
+	   * @param {Object} userData - Account data to set for current user
+	   * @example
+	   * //Save account response to current user
+	   * matter.currentUser = {username: 'testuser1', email: 'test@email.com'};
+	   * console.log('New current user set:', matter.currentUser);
+	   */
+
 		}, {
 			key: 'currentUser',
 			set: function set(userData) {
@@ -5916,6 +5886,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				});
 				this.storage.setItem(_config2.default.tokenUserDataName, userData);
 			}
+
 			/** Get currently logged in user or returns null
 	   * @return {Object|null}
 	   * @example
@@ -5936,6 +5907,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					return null;
 				}
 			}
+
 			/* Utility to handle safley writing to localStorage, sessionStorage, and cookies
 	   * @return {Object}
 	   */
@@ -5945,6 +5917,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			get: function get() {
 				return _envStorage2.default;
 			}
+
 			/** Utility to handle token writing/deleting/decoding
 	   * @return {Object}
 	   */
@@ -5954,6 +5927,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			get: function get() {
 				return _token2.default;
 			}
+
 			/** Utils placed in base library
 	   * @return {Object}
 	   */
@@ -20720,10 +20694,10 @@ return /******/ (function(modules) { // webpackBootstrap
 		}
 	}
 	function getQueryParam(name) {
-		name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-		var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+		name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+		var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'),
 		    results = regex.exec(location.search);
-		return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+		return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 	}
 
 /***/ },
@@ -20788,22 +20762,22 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 			req.end(function (errorRes, res) {
 				if (errorRes) {
-					var error = errorRes.response.body.error ? errorRes.response.body.error : errorRes.response.body;
-					_logger2.default.warn({
-						description: 'Error in request.', error: error,
-						errorRes: errorRes, func: 'handleResponse'
-					});
 					if (errorRes.status == 401) {
 						_logger2.default.warn({
 							description: 'Unauthorized. You must be signed into make this request.',
 							func: 'handleResponse'
 						});
 					}
+					var response = errorRes.response;
+
+					var error = response && response.body ? response.body.error : errorRes;
+					_logger2.default.error({
+						description: 'Error in request.', error: error, func: 'handleResponse'
+					});
 					return reject(error.message || error);
 				}
 				try {
-					var response = JSON.parse(res.body);
-					resolve(response);
+					resolve(JSON.parse(res.body));
 				} catch (err) {
 					resolve(res.body);
 				}
