@@ -133,7 +133,7 @@ export default class FileSystemEntity {
 			this.fbRef.remove(error => {
 				if (error) {
 					logger.error({
-						description: 'Error creating file on Firebase.',
+						description: 'Error removing file from Firebase.', entity: this,
 						error, func: 'removeFromFb', obj: 'FileSystemEntity'
 					});
 					return reject(error);

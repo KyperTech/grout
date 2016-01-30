@@ -5029,9 +5029,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+		return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	} : function (obj) {
+		return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	};
+
+	var _createClass = function () {
+		function defineProperties(target, props) {
+			for (var i = 0; i < props.length; i++) {
+				var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+			}
+		}return function (Constructor, protoProps, staticProps) {
+			if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+		};
+	}();
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -5067,11 +5081,27 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lodash = __webpack_require__(136);
 
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	function _interopRequireWildcard(obj) {
+		if (obj && obj.__esModule) {
+			return obj;
+		} else {
+			var newObj = {};if (obj != null) {
+				for (var key in obj) {
+					if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+				}
+			}newObj.default = obj;return newObj;
+		}
+	}
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) {
+		return obj && obj.__esModule ? obj : { default: obj };
+	}
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	function _classCallCheck(instance, Constructor) {
+		if (!(instance instanceof Constructor)) {
+			throw new TypeError("Cannot call a class as a function");
+		}
+	}
 
 	var Matter = function () {
 		/** Constructor
@@ -5899,8 +5929,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * matter.currentUser
 	   * console.log('New current user set:', matter.currentUser);
 	   */
-			,
-			get: function get() {
+
+			, get: function get() {
 				if (this.storage.getItem(_config2.default.tokenUserDataName)) {
 					return this.storage.getItem(_config2.default.tokenUserDataName);
 				} else {
@@ -5951,7 +5981,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = function () {
+		function defineProperties(target, props) {
+			for (var i = 0; i < props.length; i++) {
+				var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+			}
+		}return function (Constructor, protoProps, staticProps) {
+			if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+		};
+	}();
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -5959,7 +5997,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lodash = __webpack_require__(136);
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	function _classCallCheck(instance, Constructor) {
+		if (!(instance instanceof Constructor)) {
+			throw new TypeError("Cannot call a class as a function");
+		}
+	}
 
 	var defaultConfig = {
 		envs: {
@@ -20512,9 +20554,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lodash = __webpack_require__(136);
 
-	var _lodash2 = _interopRequireDefault(_lodash);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) {
+		return obj && obj.__esModule ? obj : { default: obj };
+	}
 
 	var logger = {
 		log: function log(logData) {
@@ -20564,41 +20606,35 @@ return /******/ (function(modules) { // webpackBootstrap
 		var msgObj = {};
 		//TODO: Attach time stamp
 		//Attach location information to the beginning of message
-		if (_lodash2.default.isObject(logData)) {
-			if (_config2.default.logLevel !== 'error') {
-				if (_lodash2.default.has(logData, 'func')) {
-					if (_lodash2.default.has(logData, 'obj')) {
+		if ((0, _lodash.isObject)(logData)) {
+			(function () {
+				if (logData.func) {
+					if (logData.obj) {
 						//Object and function provided
 						msgStr += '[' + logData.obj + '.' + logData.func + '()]\n ';
-					} else if (_lodash2.default.has(logData, 'file')) {
+					} else if (logData.file) {
 						msgStr += '[' + logData.file + ' > ' + logData.func + '()]\n ';
 					} else {
 						msgStr += '[' + logData.func + '()]\n ';
 					}
 				}
-			}
-			//Print each key and its value other than obj and func
-			_lodash2.default.each(_lodash2.default.omit(_lodash2.default.keys(logData)), function (key) {
-				if (key != 'func' && key != 'obj') {
-					if (key == 'description' || key == 'message') {
-						msgStr += logData[key];
-					} else if (_lodash2.default.isString(logData[key])) {
-						// msgStr += key + ': ' + logData[key] + ', ';
-						msgObj[key] = logData[key];
-					} else {
-						//Print objects differently
-						// msgStr += key + ': ' + logData[key] + ', ';
+				var hideList = ['func', 'obj', 'file'];
+				//Print each key and its value other than obj and func
+				(0, _lodash.each)((0, _lodash.omit)((0, _lodash.keys)(logData)), function (key) {
+					if (hideList.indexOf(key) === -1) {
+						if (key == 'description' || key == 'message') {
+							return msgStr += logData[key];
+						}
 						msgObj[key] = logData[key];
 					}
-				}
-			});
-			msgStr += '\n';
-		} else if (_lodash2.default.isString(logData)) {
+				});
+				msgStr += '\n';
+			})();
+		} else if (_.isString(logData)) {
 			msgStr = logData;
 		}
-		var msg = [msgStr, msgObj];
 
-		return msg;
+		return [msgStr, msgObj];
 	}
 	module.exports = exports['default'];
 
@@ -20622,7 +20658,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lodash = __webpack_require__(136);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) {
+		return obj && obj.__esModule ? obj : { default: obj };
+	}
 
 	/**
 	 * @description
@@ -20722,7 +20760,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _superagent2 = _interopRequireDefault(_superagent);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) {
+		return obj && obj.__esModule ? obj : { default: obj };
+	}
 
 	var request = {
 		get: function get(endpoint, queryData) {
@@ -20761,6 +20801,10 @@ return /******/ (function(modules) { // webpackBootstrap
 				return reject('req.end is not a function');
 			}
 			req.end(function (errorRes, res) {
+				_logger2.default.debug({
+					message: 'Response recieved.', response: res, errorResponse: errorRes,
+					func: 'addAuthHeader', file: 'request'
+				});
 				if (errorRes) {
 					if (errorRes.status == 401) {
 						_logger2.default.warn({
@@ -20770,11 +20814,12 @@ return /******/ (function(modules) { // webpackBootstrap
 					}
 					var response = errorRes.response;
 
-					var error = response && response.body ? response.body.error : errorRes;
+					var error = response && response.body ? response.body : errorRes;
 					_logger2.default.error({
-						description: 'Error in request.', error: error, func: 'handleResponse'
+						description: 'Error in request.', error: error,
+						file: 'request', func: 'handleResponse'
 					});
-					return reject(error.message || error);
+					return reject(error || errorRes);
 				}
 				try {
 					resolve(JSON.parse(res.body));
@@ -20787,7 +20832,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	function addAuthHeader(req) {
 		if (_token2.default.string) {
 			req = req.set('Authorization', 'Bearer ' + _token2.default.string);
-			// logger.info({message: 'Set auth header', func: 'addAuthHeader', file: 'request'});
+			_logger2.default.debug({
+				message: 'Set auth header', token: _token2.default.string,
+				func: 'addAuthHeader', file: 'request'
+			});
 		}
 		return req;
 	}
@@ -20823,7 +20871,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) {
+		return obj && obj.__esModule ? obj : { default: obj };
+	}
 
 	var token = {
 		/** Get string value of token
@@ -20956,7 +21006,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) {
+		return obj && obj.__esModule ? obj : { default: obj };
+	}
 
 	var data = {};
 
@@ -22027,26 +22079,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	Request.prototype.attach = function(field, file, filename){
 	  if (!this._formData) this._formData = new root.FormData();
-	  this._formData.append(field, file, filename);
+	  this._formData.append(field, file, filename || file.name);
 	  return this;
 	};
 
 	/**
-	 * Send `data`, defaulting the `.type()` to "json" when
+	 * Send `data` as the request body, defaulting the `.type()` to "json" when
 	 * an object is given.
 	 *
 	 * Examples:
-	 *
-	 *       // querystring
-	 *       request.get('/search')
-	 *         .end(callback)
-	 *
-	 *       // multiple data "writes"
-	 *       request.get('/search')
-	 *         .send({ search: 'query' })
-	 *         .send({ range: '1..5' })
-	 *         .send({ order: 'desc' })
-	 *         .end(callback)
 	 *
 	 *       // manual json
 	 *       request.post('/user')
@@ -22212,6 +22253,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (e.total > 0) {
 	      e.percent = e.loaded / e.total * 100;
 	    }
+	    e.direction = 'download';
 	    self.emit('progress', e);
 	  };
 	  if (this.hasListeners('progress')) {
@@ -22373,8 +22415,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return req;
 	};
 
-	request.del = del;
-	request.delete = del;
+	request['del'] = del;
+	request['delete'] = del;
 
 	/**
 	 * PATCH `url` with optional `data` and callback `fn(res)`.
@@ -22485,7 +22527,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Emitter.prototype.on =
 	Emitter.prototype.addEventListener = function(event, fn){
 	  this._callbacks = this._callbacks || {};
-	  (this._callbacks[event] = this._callbacks[event] || [])
+	  (this._callbacks['$' + event] = this._callbacks['$' + event] || [])
 	    .push(fn);
 	  return this;
 	};
@@ -22501,11 +22543,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	Emitter.prototype.once = function(event, fn){
-	  var self = this;
-	  this._callbacks = this._callbacks || {};
-
 	  function on() {
-	    self.off(event, on);
+	    this.off(event, on);
 	    fn.apply(this, arguments);
 	  }
 
@@ -22537,12 +22576,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  // specific event
-	  var callbacks = this._callbacks[event];
+	  var callbacks = this._callbacks['$' + event];
 	  if (!callbacks) return this;
 
 	  // remove all handlers
 	  if (1 == arguments.length) {
-	    delete this._callbacks[event];
+	    delete this._callbacks['$' + event];
 	    return this;
 	  }
 
@@ -22569,7 +22608,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	Emitter.prototype.emit = function(event){
 	  this._callbacks = this._callbacks || {};
 	  var args = [].slice.call(arguments, 1)
-	    , callbacks = this._callbacks[event];
+	    , callbacks = this._callbacks['$' + event];
 
 	  if (callbacks) {
 	    callbacks = callbacks.slice(0);
@@ -22591,7 +22630,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	Emitter.prototype.listeners = function(event){
 	  this._callbacks = this._callbacks || {};
-	  return this._callbacks[event] || [];
+	  return this._callbacks['$' + event] || [];
 	};
 
 	/**
@@ -22642,7 +22681,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = function () {
+		function defineProperties(target, props) {
+			for (var i = 0; i < props.length; i++) {
+				var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+			}
+		}return function (Constructor, protoProps, staticProps) {
+			if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+		};
+	}();
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -22666,11 +22713,27 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _config2 = _interopRequireDefault(_config);
 
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	function _interopRequireWildcard(obj) {
+		if (obj && obj.__esModule) {
+			return obj;
+		} else {
+			var newObj = {};if (obj != null) {
+				for (var key in obj) {
+					if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+				}
+			}newObj.default = obj;return newObj;
+		}
+	}
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) {
+		return obj && obj.__esModule ? obj : { default: obj };
+	}
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	function _classCallCheck(instance, Constructor) {
+		if (!(instance instanceof Constructor)) {
+			throw new TypeError("Cannot call a class as a function");
+		}
+	}
 
 	// import hello from 'hellojs'; //Modifies objects to have id parameter?
 
@@ -22901,7 +22964,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _logger3 = _interopRequireDefault(_logger2);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { default: obj };
+	}
 
 	exports.logger = _logger3.default;
 
@@ -22937,9 +23002,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _Directory2 = _interopRequireDefault(_Directory);
 
-	var _File2 = __webpack_require__(161);
+	var _File = __webpack_require__(161);
 
-	var _File3 = _interopRequireDefault(_File2);
+	var _File2 = _interopRequireDefault(_File);
 
 	var _firebase = __webpack_require__(162);
 
@@ -22969,7 +23034,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			if (!name) {
 				throw new Error('Name is required to create a project');
 			}
-			var endpoint = owner ? owner + '/projects/' + name : 'projects/' + name;
+			var endpoint = 'users/' + owner + '/projects/' + name;
 
 			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Project).call(this, endpoint, { owner: owner, name: name }));
 
@@ -23095,12 +23160,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @description File within project
 	   */
 			value: function File(path) {
+				var file = new _File2.default(this, path);
 				logger.debug({
 					description: 'Projects file action called.',
-					path: path, project: this,
-					func: 'file', obj: 'Project'
+					path: path, project: this, file: file,
+					func: 'File', obj: 'Project'
 				});
-				return new _File3.default(this, path);
+				return file;
 			}
 
 			/**
@@ -23421,7 +23487,8 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 					return Promise.reject('Invalid query type. Search query should be string.');
 				}
-				return request.get(this.url + '/search/' + query).then(function (res) {
+				var key = query.indexOf('@') !== -1 ? 'username' : 'email';
+				return request.get(this.url + '/search?' + key + '=' + query).then(function (res) {
 					if ((0, _has2.default)(res, 'error')) {
 						logger.error({
 							description: 'Error in search request.', action: _this3,
@@ -25036,7 +25103,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					_this2.fbRef.remove(function (error) {
 						if (error) {
 							logger.error({
-								description: 'Error creating file on Firebase.',
+								description: 'Error removing file from Firebase.', entity: _this2,
 								error: error, func: 'removeFromFb', obj: 'FileSystemEntity'
 							});
 							return reject(error);
