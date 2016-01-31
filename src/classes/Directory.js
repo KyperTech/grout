@@ -2,7 +2,6 @@ import { isArray, isString, has, each } from 'lodash';
 import matter from './Matter';
 import File from './File';
 import Folder from './Folder';
-import * as S3 from '../utils/s3';
 //Convenience vars
 const { logger } = matter.utils;
 
