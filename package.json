@@ -53,9 +53,8 @@
   },
   "homepage": "https://github.com/kypertech/grout",
   "dependencies": {
-    "aws-sdk": "^2.2.28",
     "firebase": "^2.3.2",
-    "kyper-matter": "0.2.1",
+    "kyper-matter": "0.2.2",
     "lodash": "4.0.0",
     "qs": "^6.0.1",
     "superagent": "^1.6.1"

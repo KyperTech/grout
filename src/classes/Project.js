@@ -3,10 +3,10 @@ import matter from './Matter';
 import ApiAction from './ApiAction';
 import Group from './Group';
 import Directory from './Directory';
-import File from './File';
+import FileObj from './File';
 import firebase from '../utils/firebase';
 
-const {request, logger} = matter.utils;
+const { request, logger } = matter.utils;
 
 export default class Project extends ApiAction {
 	constructor(name, owner) {
@@ -16,7 +16,7 @@ export default class Project extends ApiAction {
 		if (!name) {
 			throw new Error('Name is required to create a project');
 		}
-		const endpoint = owner ? `${owner}/projects/${name}` : `projects/${name}`;
+		const endpoint = `users/${owner}/projects/${name}`;
 		super(endpoint, { owner, name });
 		this.owner = owner;
 		this.name = name;
@@ -137,12 +137,13 @@ export default class Project extends ApiAction {
 	 * @description File within project
 	 */
 	File(path) {
+		const file = new FileObj(this, path);
 		logger.debug({
 			description: 'Projects file action called.',
-			path, project: this,
-			func: 'file', obj: 'Project'
+			path, project: this, file,
+			func: 'File', obj: 'Project'
 		});
-		return new File(this, path);
+		return file;
 	}
 
 	/**

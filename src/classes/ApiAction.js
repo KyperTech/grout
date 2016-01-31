@@ -162,7 +162,8 @@ export default class ApiAction {
 			});
 			return Promise.reject('Invalid query type. Search query should be string.');
 		}
-		return request.get(`${this.url}/search/${query}`).then(res => {
+		let key = query.indexOf('@') !== -1 ? 'username' : 'email';
+		return request.get(`${this.url}/search?${key}=${query}`).then(res => {
 			if (has(res, 'error')) {
 				logger.error({
 					description: 'Error in search request.', action: this,
