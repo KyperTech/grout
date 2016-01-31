@@ -48,7 +48,7 @@ export default class FileSystemEntity {
 	}
 
 	/**
-	 * @description Get a file's content and meta data from default location (Firebase)
+	 * @description Get a file or folder's content and meta data from default location (Firebase)
 	 */
 	get() {
 		return new Promise((resolve, reject) => {
@@ -103,7 +103,15 @@ export default class FileSystemEntity {
 			fbData.original = content;
 		}
 		return new Promise((resolve, reject) => {
-			fbRef.set(fbData, error => {
+			if (entityType === 'file' && fbData.original) {
+				let editor = createAce('headless');
+				let firepad = window.Firepad.fromACE(fbRef, editor);
+				firepad.on('ready', () => {
+					firepad.setText(content);
+					editor.destroy();
+				});
+			}
+			fbRef.update(fbData, error => {
 				if (!error) {
 					logger.info({
 						description: 'FileSystemEntity successfully added to Firebase.',

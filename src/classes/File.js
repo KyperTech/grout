@@ -6,28 +6,14 @@ import FileSystemEntity from './FileSystemEntity';
 const { logger } = matter.utils;
 
 export default class File extends FileSystemEntity {
-	constructor(project, path) {
+	constructor(project, path, content) {
 		super(project, path);
 		logger.debug({
 			description: 'File constructor called with', project, path,
 			func: 'constructor', obj: 'File'
 		});
-		if(!project){
-			logger.error({
-				description: 'Project required to create file.',
-				func: 'constructor', obj: 'File'
-			});
-			throw new Error('File must include project.');
-		}
-		if(!path){
-			logger.error({
-				description: 'File must include path.',
-				func: 'constructor', obj: 'File'
-			});
-			throw new Error('File must include a path.');
-		}
-		this.type = 'file';
-		this.project = project;
+		this.entityType = 'file';
+		this.content = content;
 	}
 
 	/**
@@ -68,9 +54,9 @@ export default class File extends FileSystemEntity {
 	}
 
 	/**
-	 * @description Get a file's content and meta data from default location (Firebase)
+	 * @description Get a file's content from default location (Firebase)
 	 */
-	get() {
+	getContent() {
 		return new Promise((resolve, reject) => {
 			this.fbRef.once('value', fileSnap => {
 				if(!fileSnap.val()){
@@ -88,37 +74,36 @@ export default class File extends FileSystemEntity {
 						description: 'File content loaded.',
 						content: this.content, func: 'get', obj: 'File'
 					});
-					this.headless.setText(this.content, error => {
+					return this.headless.setText(this.content, error => {
 						this.headless.dispose();
 						if (!error) {
 							logger.log({
 								description: 'File content set to Headless Firepad.',
 								func: 'get', obj: 'File'
 							});
-							resolve(this);
-						} else {
-							logger.error({
-								description: 'Error setting file text.',
-								error, func: 'get', obj: 'File'
-							});
-							reject(error);
+							return resolve(this.content);
 						}
-					});
-				} else {
-					//Get firepad text from history
-					this.headless.getText((text) => {
-						logger.log({
-							description: 'Text loaded from headless',
-							text, func: 'get', obj: 'File'
+						logger.error({
+							description: 'Error setting file text.',
+							error, func: 'get', obj: 'File'
 						});
-						this.content = text;
-						// this.fbRef.once('value', (fileSnap) => {
-						// 	let meta = fileSnap.child('meta').val();
-						// });
-						this.headless.dispose();
-						resolve(this);
+						reject(error);
 					});
 				}
+
+				//Get firepad text from history
+				this.headless.getText((text) => {
+					logger.log({
+						description: 'Text loaded from headless',
+						text, func: 'get', obj: 'File'
+					});
+					this.content = text;
+					// this.fbRef.once('value', (fileSnap) => {
+					// 	let meta = fileSnap.child('meta').val();
+					// });
+					this.headless.dispose();
+					resolve(this.content);
+				});
 			});
 		});
 	}

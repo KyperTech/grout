@@ -93,12 +93,8 @@ export default class Directory {
 	 * @param {Object|Array} fileData - Array of objects or single object containing file data
 	 * @param {Object} fileData.path - Path of file relative to project
 	 */
-	addFile(path) {
-		//TODO: Allow for options of where to add the file to
-		if(path && isArray(path)){
-			return this.upload(path);
-		}
-		let file = new File(this.project, path);
+	addFile(path, content) {
+		let file = new File(this.project, path, content);
 		return file.save();
 	}
 
@@ -114,19 +110,22 @@ export default class Directory {
 
 	/**
 	 * @description Add multiple files/folders to project files
-	 * @param {Array} filesData - Array of file objects to upload
+	 * @param {Array} files - Array of file objects to upload
 	 */
-	upload(filesData) {
+	upload(files) {
+		return new Promise((resolve, reject) => {
+			resolve(console.log('files', files));
+		});
 		//TODO: Allow for options of where to add the file to
-		if(!isArray(filesData)){
-			return this.addToFb(filesData);
+		if(!isArray(files)){
+			return this.addToFb(files);
 		} else {
 			logger.warn({
-				description: 'Upload called with multiple files.', filesData,
+				description: 'Upload called with multiple files.', files,
 				project: this.project, func: 'upload', obj: 'Directory'
 			});
 			let promises = [];
-			each(filesData, file => {
+			each(files, file => {
 				promises.push(this.addToFb(file));
 			});
 			return Promise.all(promises).then(resultsArray => {
@@ -232,133 +231,4 @@ export default class Directory {
 			});
 		});
 	}
-
-	/**
-	 * @description Upload a local file to Firebase
-	 * @param {File} file - Local file with content to be uploaded
-	 */
-	//  TODO: Handle folders
-	addLocalToFb(data) {
-		logger.debug({
-			description: 'Add local to fb called.', data,
-			func: 'addLocalToFb', obj: 'Directory'
-		});
-		if (!data) {
-			logger.error({
-				description: 'File is required to upload to Firebase.',
-				func: 'addLocalToFb', obj: 'Directory'
-			});
-			return Promise.reject({
-				message: 'File is required to upload to Firebase.'
-			});
-		}
-		return getContentFromFile(data).then(content => {
-			logger.debug({
-				description: 'Content loaded from local file.', content,
-				func: 'addLocalToFb', obj: 'Directory'
-			});
-			data.content = content;
-			data.path = data.name;
-			const file = new File({project: this.project, data});
-			logger.info({
-				description: 'File object created.', file,
-				func: 'addLocalToFb', obj: 'Directory'
-			});
-			return file.save();
-		});
-	}
-
-	getFrontEnd() {
-		if (this.project && this.project.frontend) {
-			return Promise.resolve(this.project);
-		}
-		logger.warn({
-			description: 'Directory Frontend data not available. Calling .get().',
-			project: this.project, func: 'getFromS3', obj: 'Directory'
-		});
-		return this.project.get().then(applicationData => {
-			logger.log({
-				description: 'Directory get returned.',
-				data: applicationData, func: 'getFromS3', obj: 'Directory'
-			});
-			this.project = applicationData;
-			if (has(applicationData, 'frontend')) {
-				return this.get();
-			}
-			logger.error({
-				description: 'Directory does not have Frontend to get files from.',
-				func: 'getFromS3', obj: 'Directory'
-			});
-			return Promise.reject({
-				message: 'Directory does not have frontend to get files from.'
-			});
-		}, err => {
-			logger.error({
-				description: 'Directory Frontend data not available. Make sure to call .get().',
-				error: err, func: 'getFromS3', obj: 'Directory'
-			});
-			return Promise.reject({
-				message: 'Bucket name required to get objects'
-			});
-		});
-	}
-
-	/**
-	 * @description Get files list from S3
-	 */
-	getFromS3() {
-		if (!this.project || !this.project.frontend || !this.project.frontend.bucketName) {
-			logger.warn({
-				description: 'Directory Frontend data not available. Calling .get().',
-				project: this.project, func: 'getFromS3', obj: 'Directory'
-			});
-			return this.getFrontEnd().then(this.getFromS3);
-		}
-		const s3 = S3.init();
-		s3.listObjects({bucket: this.project.frontend.bucketName}).then(filesList => {
-			logger.info({
-				description: 'Directory list loaded.', filesList,
-				func: 'get', obj: 'Directory'
-			});
-			return filesList;
-		}, error => {
-			logger.error({
-				description: 'Error getting files from S3.',
-				error, func: 'get', obj: 'Directory'
-			});
-			return Promise.reject(error);
-		});
-	}
-}
-//------------------ Utility Functions ------------------//
-function getContentFromFile(fileData) {
-	//Get initial content from local file
-	logger.debug({
-		description: 'getContentFromFile called', fileData,
-		func: 'getContentFromFile', obj: 'Directory'
-	});
-	return new Promise((resolve, reject) => {
-		try {
-			let reader = new FileReader();
-			logger.debug({
-				description: 'reader created', reader,
-				func: 'getContentFromFile', obj: 'Directory'
-			});
-			reader.onload = e => {
-				const contents = e.target.result;
-				logger.debug({
-					description: 'Contents loaded', contents,
-					func: 'getContentFromFile', obj: 'Directory'
-				});
-				resolve(contents);
-			};
-			reader.readAsText(fileData);
-		} catch(error){
-			logger.error({
-				description: 'Error getting file contents.', error,
-				func: 'getContentFromFile', obj: 'Directory'
-			});
-			reject(error);
-		}
-	});
 }
