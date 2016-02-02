@@ -9232,6 +9232,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	var _isString = __webpack_require__(2);
+
+	var _isString2 = _interopRequireDefault(_isString);
+
 	var _isObject = __webpack_require__(1);
 
 	var _isObject2 = _interopRequireDefault(_isObject);
@@ -9241,6 +9245,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
+
+	var _config = __webpack_require__(5);
+
+	var _config2 = _interopRequireDefault(_config);
 
 	var _Matter = __webpack_require__(172);
 
@@ -9284,13 +9292,19 @@ return /******/ (function(modules) { // webpackBootstrap
 		function Project(name, owner) {
 			_classCallCheck(this, Project);
 
+			if (!name) {
+				throw new Error('Name and Owner are required to create a project');
+			}
+			if ((0, _isObject2.default)(name)) {
+				if (!name.owner) throw new Error('Owner is required to create a project');
+				if (!name.name) throw new Error('Name is required to create a project');
+				owner = name.owner;
+				name = name.name;
+			}
 			if (!owner) {
 				throw new Error('Owner is required to create a project');
 			}
-			if (!name) {
-				throw new Error('Name is required to create a project');
-			}
-			var endpoint = 'users/' + owner + '/projects/' + name;
+			var endpoint = 'projects/' + owner + '/' + name;
 
 			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Project).call(this, endpoint, { owner: owner, name: name }));
 
@@ -9323,26 +9337,11 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'addStorage',
 			value: function addStorage() {
-				var _this2 = this;
-
 				logger.debug({
 					description: 'Project add storage called.', project: this,
 					func: 'addStorage', obj: 'Project'
 				});
-				return request.post(this.url + '/storage', {}).then(function (response) {
-					logger.info({
-						description: 'Storage successfully added to project.',
-						response: response, func: 'addStorage', obj: 'Project'
-					});
-					_this2.frontend = response.frontend ? response.frontend : {};
-					return _this2;
-				})['catch'](function (error) {
-					logger.error({
-						description: 'Error adding storage to project.',
-						error: error, func: 'addStorage', obj: 'Project'
-					});
-					return Promise.reject(error.response ? error.response.text : error);
-				});
+				return request.post(this.url + '/storage', {});
 			}
 
 			/**
@@ -9352,8 +9351,6 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'applyTemplate',
 			value: function applyTemplate(template) {
-				var _this3 = this;
-
 				logger.debug({
 					description: 'Applying template to project.',
 					func: 'applyTemplate', obj: 'Project'
@@ -9365,44 +9362,55 @@ return /******/ (function(modules) { // webpackBootstrap
 					});
 					return Promise.reject('Template name is required to apply a template');
 				}
-				return request.post(this.url, { template: template }).then(function (response) {
-					logger.info({
-						description: 'Template successfully applied to project.',
-						response: response, project: _this3,
-						func: 'applyTemplate', obj: 'Project'
-					});
-					return _this3;
-				})['catch'](function (error) {
-					logger.error({
-						description: 'Error applying template to project.', project: _this3,
-						error: error, func: 'applyTemplate', obj: 'Project'
-					});
-					return Promise.reject(error.response ? error.response.text : error);
-				});
+				return request.post(this.url, { template: template });
 			}
 
 			/**
-	   * @description Add collaborators to Project
-	   * @param {Array|String} collabs - Array list of Ids, or a string list of ids
+	   * @description Add a collaborator to Project
+	   * @param {String} username - Username of user to add as collaborator
+	   * @param {Array} rights - Read/Write rights of collaborator
 	   */
 
 		}, {
-			key: 'addCollaborators',
-			value: function addCollaborators(collabs) {
+			key: 'addCollaborator',
+			value: function addCollaborator(username, rights) {
 				logger.debug({
-					description: 'Add collaborators called', collabs: collabs,
-					project: this, func: 'addCollaborators', obj: 'Project'
+					description: 'Add collaborator called', username: username,
+					project: this, func: 'addCollaborator', obj: 'Project'
 				});
-				//Handle string of ids
-				if ((0, _isObject2.default)(collabs)) {
-					collabs = [collabs];
+				if (!username || !(0, _isString2.default)(username)) {
+					logger.error({
+						description: 'Username required to add collaborator',
+						func: 'addCollaborator', obj: 'Project'
+					});
+					return Promise.reject({ message: 'Username required to add collaborator' });
 				}
-				this.collaborators = collabs;
-				logger.log({
-					description: 'Collaborators list added to project, calling update.',
-					project: this, func: 'addCollaborators', obj: 'Project'
+				var endpointUrl = _config2.default.serverUrl + '/projects/' + this.owner + '/' + this.name + '/collaborators/' + username;
+				return request.put(endpointUrl, rights || {});
+			}
+
+			/**
+	   * @description Remove a collaborator from a Project
+	   * @param {String} username - Username of user to add as collaborator
+	   * @param {Array} rights - Read/Write rights of collaborator
+	   */
+
+		}, {
+			key: 'removeCollaborator',
+			value: function removeCollaborator(username, rights) {
+				logger.debug({
+					description: 'Remove collaborator called', username: username,
+					project: this, func: 'removeCollaborator', obj: 'Project'
 				});
-				return this.update();
+				if (!username || !(0, _isString2.default)(username)) {
+					logger.error({
+						description: 'Username required to add collaborator',
+						func: 'removeCollaborator', obj: 'Project'
+					});
+					return Promise.reject({ message: 'Username required to add collaborator' });
+				}
+				var endpointUrl = _config2.default.serverUrl + '/projects/' + this.owner + '/' + this.name + '/collaborators/' + username;
+				return request.del(endpointUrl);
 			}
 
 			/**
@@ -9543,10 +9551,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _isString2 = _interopRequireDefault(_isString);
 
-	var _has = __webpack_require__(95);
-
-	var _has2 = _interopRequireDefault(_has);
-
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	Object.defineProperty(exports, "__esModule", {
@@ -9593,26 +9597,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @return {Promise}
 	   */
 			value: function get() {
-				return request.get(this.url).then(function (res) {
-					logger.log({
-						description: 'Get responded successfully.',
-						res: res, func: 'get', obj: 'ApiAction'
-					});
-					if ((0, _has2.default)(res, 'error')) {
-						logger.error({
-							description: 'Error in get response.', error: res.error,
-							res: res, func: 'get', obj: 'ApiAction'
-						});
-						return Promise.reject(res.error);
-					}
-					return res.collection ? res.collection : res;
-				}, function (error) {
-					logger.error({
-						description: 'Error in GET request.', error: error,
-						func: 'get', obj: 'ApiAction'
-					});
-					return Promise.reject(error);
-				});
+				return request.get(this.url);
 			}
 
 			/** Add
@@ -9623,36 +9608,11 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'add',
 			value: function add(newData) {
-				var _this = this;
-
 				logger.debug({
 					description: 'Add request responded successfully.',
 					newData: newData, func: 'add', obj: 'ApiAction'
 				});
-				return request.post(this.url, newData).then(function (res) {
-					logger.log({
-						description: 'Add request responded successfully.',
-						res: res, func: 'add', obj: 'ApiAction'
-					});
-					if ((0, _has2.default)(res, 'error')) {
-						logger.error({
-							description: 'Error in add request.', error: res.error,
-							action: _this, res: res, func: 'add', obj: 'ApiAction'
-						});
-						return Promise.reject(res.error);
-					}
-					logger.log({
-						description: 'Add successful.', res: res, action: _this,
-						func: 'add', obj: 'ApiAction'
-					});
-					return res;
-				}, function (error) {
-					logger.error({
-						description: 'Error in add request.',
-						action: _this, error: error, func: 'add', obj: 'ApiAction'
-					});
-					return Promise.reject(error);
-				});
+				return request.post(this.url, newData);
 			}
 
 			/** Update
@@ -9666,26 +9626,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				if (!updateData) {
 					updateData = this;
 				}
-				return request.put(this.url, updateData).then(function (res) {
-					if ((0, _has2.default)(res, 'error')) {
-						logger.error({
-							description: 'Error in update request.',
-							error: res.error, res: res, func: 'update', obj: 'ApiAction'
-						});
-						return Promise.reject(res.error);
-					}
-					logger.log({
-						description: 'Update successful.', res: res,
-						func: 'update', obj: 'ApiAction'
-					});
-					return res;
-				}, function (error) {
-					logger.error({
-						description: 'Error in update request.',
-						error: error, func: 'update', obj: 'ApiAction'
-					});
-					return Promise.reject(error);
-				});
+				return request.put(this.url, updateData);
 			}
 
 			/** Remove
@@ -9695,28 +9636,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'remove',
 			value: function remove() {
-				var _this2 = this;
-
-				return request.del(this.url).then(function (res) {
-					if ((0, _has2.default)(res, 'error')) {
-						logger.error({
-							description: 'Error in removal request.', action: _this2,
-							error: res.error, res: res, func: 'remove', obj: 'ApiAction'
-						});
-						return Promise.reject(res.error);
-					}
-					logger.log({
-						description: 'Remove successful.',
-						res: res, func: 'remove', obj: 'ApiAction'
-					});
-					return res;
-				}, function (error) {
-					logger.error({
-						description: 'Error in request for removal.', action: _this2,
-						error: error, func: 'remove', obj: 'ApiAction'
-					});
-					return Promise.reject(error);
-				});
+				return request.del(this.url);
 			}
 
 			/** search
@@ -9727,8 +9647,6 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'search',
 			value: function search(query) {
-				var _this3 = this;
-
 				if (!query || query == '') {
 					logger.log({
 						description: 'Null query, returning empty array.',
@@ -9741,28 +9659,13 @@ return /******/ (function(modules) { // webpackBootstrap
 						description: 'Invalid query type in search (should be string).',
 						func: 'search', obj: 'ApiAction'
 					});
-					return Promise.reject('Invalid query type. Search query should be string.');
+					return Promise.reject({
+						message: 'Invalid query type. Search query should be string.'
+					});
 				}
-				var key = query.indexOf('@') !== -1 ? 'username' : 'email';
-				return request.get(this.url + '/search?' + key + '=' + query).then(function (res) {
-					if ((0, _has2.default)(res, 'error')) {
-						logger.error({
-							description: 'Error in search request.', action: _this3,
-							res: res, func: 'search', obj: 'ApiAction'
-						});
-						return Promise.reject(res.error || res);
-					}
-					logger.info({
-						description: 'Search successful.', res: res, func: 'search', obj: 'ApiAction'
-					});
-					return res;
-				}, function (error) {
-					logger.error({
-						description: 'Error in request for search.', action: _this3,
-						error: error, func: 'search', obj: 'ApiAction'
-					});
-					return Promise.reject(error);
-				});
+				//Search email if query contains @
+				var key = query.indexOf('@') === -1 ? 'username' : 'email';
+				return request.get(this.url + '/search?' + key + '=' + query);
 			}
 		}, {
 			key: 'url',
@@ -9856,19 +9759,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					description: 'Updating group with accounts array.',
 					accountsArray: accountsArray, func: 'update', obj: 'Group'
 				});
-				return this.update({ accounts: accountsArray }).then(function (response) {
-					logger.info({
-						description: 'Account(s) added to group successfully.',
-						response: response, func: 'addAccounts', obj: 'Group'
-					});
-					return response;
-				})['catch'](function (error) {
-					logger.error({
-						description: 'Error addAccountseting group.',
-						error: error, func: 'addAccounts', obj: 'Group'
-					});
-					return Promise.reject(error.response.text || error.response);
-				});
+				return this.update({ accounts: accountsArray });
 			}
 		}]);
 

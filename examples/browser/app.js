@@ -61,9 +61,9 @@ var grout = new Grout({logLevel: 'trace'});
     });
   }
   //Get list of applications
-  function getApps(){
-    console.log('getApps called');
-    grout.Apps.get().then(function(appsList){
+  function getProjects(){
+    console.log('getProjects called');
+    grout.Projects.get().then(function(appsList){
       console.log('apps list loaded:', appsList);
       var outHtml = '<h2>No app data</h2>';
       if (appsList) {
@@ -76,26 +76,10 @@ var grout = new Grout({logLevel: 'trace'});
       document.getElementById("output").innerHTML = outHtml;
     });
   }
-  //Get File/Folder structure for application
-  function getStructure(){
-    console.log('getStructure called');
-    grout.App('Aventura').Files.buildStructure().then(function(fileStructure){
-      console.log('structure loaded:', fileStructure);
-      document.getElementById("output").innerHTML = JSON.stringify(fileStructure);
-    });
-    // var file = grout.App('Aventura').File({key: 'index.html', path: 'index.html'});
-    // console.log('fbUrl', file.safePathArray);
-    // console.log('fbUrl', file.safePath);
-    // console.log('fbUrl', file.fbUrl);
-    // console.log('fbRef', file.fbRef);
-    // file.get().then(function(app){
-    //   console.log('apps list loaded:', app);
-    //   document.getElementById("output").innerHTML = JSON.stringify(app);
-    // });
-  }
+
   //Get single file content
   function getFile() {
-    var file = grout.App('Aventura').File({key: 'index.html', path: 'index.html'});
+    var file = grout.Project('test', 'scott').File({key: 'index.html', path: 'index.html'});
     console.log('fbUrl', file.fbUrl);
     console.log('fbRef', file.fbRef);
     file.get().then(function(app){
@@ -106,11 +90,11 @@ var grout = new Grout({logLevel: 'trace'});
   //Get File/Folder structure for application
   function getFirepad(){
     console.log('getStructure called');
-    // grout.App('exampleApp').Files.buildStructure().then(function(app){
+    // grout.Project('exampleProject').Directory.buildStructure().then(function(app){
     //   console.log('apps list loaded:', app);
     //   document.getElementById("output").innerHTML = JSON.stringify(app);
     // });
-    var file = grout.App('Aventura').File({name: 'index.html', key: 'index.html', path: 'index.html'});
+    var file = grout.Project('test').File({name: 'index.html', key: 'index.html', path: 'index.html'});
     //// Create ACE
     var editor = ace.edit("firepad-container");
     editor.setTheme("ace/theme/textmate");
@@ -125,18 +109,26 @@ var grout = new Grout({logLevel: 'trace'});
     });
   }
   function addFile() {
-    grout.App('Aventura').Files.add({path: 'test.js'}).then(function(newFileRes) {
+    grout.Project('test', 'scott').Directory.addFile({path: 'test.js'}).then(function(newFileRes) {
       console.log('New file created successfully', newFileRes);
     }, function(err){
       console.error('Error creating new file: ', err);
     });
   }
+
   function deleteFile() {
-    grout.Project({name: 'Aventura', owner: 'scott'}).File({path: 'hello.js'}).remove().then(res => {
+    grout.Project({name: 'test', owner: 'scott'}).File('hello.js').remove().then(res => {
       console.log('file deleted:', res);
     }, err => {
       console.error('error deleting file', err);
     })
+  }
+  function addCollaborator() {
+    grout.Project({name: 'test', owner: 'scott'}).addCollaborator('mel').then(res => {
+      console.log('collaborator added successfully:', res);
+    }, err => {
+      console.error('error adding collaborator', err);
+    });
   }
   //Get list of users
   function getUsers(){
