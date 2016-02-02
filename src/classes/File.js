@@ -70,6 +70,19 @@ export default class File extends FileSystemEntity {
 	}
 
 	/**
+	 * @description Get content from firepad instance
+	 */
+	getContent() {
+		return new Promise((resolve, reject) => {
+				let headless = new Firepad.Headless(this.fbRef);
+				headless.getText(text => {
+					this.content = text;
+					resolve(this.content);
+				});
+		});
+	}
+
+	/**
 	 * @description Open a file from default location (Firebase) (Alias for get)
 	 */
 	open() {

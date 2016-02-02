@@ -53,7 +53,9 @@
   },
   "homepage": "https://github.com/kypertech/grout",
   "dependencies": {
+    "filesaver.js": "^0.2.0",
     "firebase": "^2.3.2",
+    "jszip": "^2.5.0",
     "kyper-matter": "0.2.2",
     "lodash": "4.0.0",
     "qs": "^6.0.1",

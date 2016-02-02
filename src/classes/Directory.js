@@ -2,6 +2,8 @@ import { isArray, isString, has, each } from 'lodash';
 import matter from './Matter';
 import File from './File';
 import Folder from './Folder';
+import jszip from 'jszip';
+import filesave from 'filesaver.js';
 //Convenience vars
 const { logger } = matter.utils;
 
@@ -18,6 +20,19 @@ export default class Directory {
 	}
 
 	/**
+	 * @description File within directory
+	 */
+	File(path) {
+		const file = new File(this.project, path);
+		logger.debug({
+			description: 'Projects file action called.',
+			path, project: this, file,
+			func: 'File', obj: 'Directory'
+		});
+		return file;
+	}
+
+	/**
 	 * @description Firebase reference of directory
 	 */
 	get fbRef() {
@@ -29,7 +44,7 @@ export default class Directory {
 	}
 
 	/**
-	 * @description Get files list single time
+	 * @description Get directory
 	 */
 	get() {
 		logger.log({
@@ -42,21 +57,41 @@ export default class Directory {
 					description: 'Directory loaded from firebase.',
 					func: 'get', obj: 'Directory'
 				});
-				let filesArray = [];
-				filesSnap.forEach(objSnap => {
-					let objData = objSnap.hasChild('meta') ? objSnap.child('meta').val() : {path: objSnap.key()};
-					//TODO: Have a better fallback for when meta does not exist
-					// if (!objData.path) {
-					// 	objSnap.ref().path.o.splice(0, filesPathArray.length);
-					// }
-					objData.key = objSnap.key();
-					filesArray.push(objData);
+				this.fbData  = filesSnap.val();
+				resolve(this);
+			});
+		});
+	}
+
+	/**
+	 * @description Download files from firebase
+	 */
+	downloadFiles() {
+		logger.debug({
+			description: 'Download files called.',
+			func: 'downloadFiles', obj: 'Directory'
+		});
+
+		return this.get().then((directory) => {
+			directory = directory.fbData;
+			let zip = new jszip();
+			let promiseArray = [];
+			let handleZip = (fbChildren) => {
+				each(fbChildren, child => {
+					if (!child.meta || child.meta.entityType === 'folder') {
+						delete child.meta;
+						return handleZip(child);
+					}
+					let promise = this.File(child.meta.path).getContent().then((content) => {
+						return zip.file(child.meta.path, content);
+					});
+					promiseArray.push(promise);
 				});
-				logger.debug({
-					description: 'Directory array built.',
-					filesArray, func: 'get', obj: 'Directory'
-				});
-				resolve(filesArray);
+			}
+			handleZip(directory);
+			return Promise.all(promiseArray).then(() => {
+				var content = zip.generate({type:"blob"});
+				return filesave.saveAs(content, `${this.project.name}-devShare-export.zip`);
 			});
 		});
 	}
