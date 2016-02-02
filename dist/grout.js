@@ -24228,12 +24228,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  */
 
 		_createClass(File, [{
-			key: 'getContent',
+			key: 'getOriginalContent',
 
 			/**
 	   * @description Get a file's content from default location (Firebase)
 	   */
-			value: function getContent() {
+			value: function getOriginalContent() {
 				var _this2 = this;
 
 				return new Promise(function (resolve, reject) {
@@ -24253,36 +24253,13 @@ return /******/ (function(modules) { // webpackBootstrap
 								description: 'File content loaded.',
 								content: _this2.content, func: 'get', obj: 'File'
 							});
-							return _this2.headless.setText(_this2.content, function (error) {
-								_this2.headless.dispose();
-								if (!error) {
-									logger.log({
-										description: 'File content set to Headless Firepad.',
-										func: 'get', obj: 'File'
-									});
-									return resolve(_this2.content);
-								}
-								logger.error({
-									description: 'Error setting file text.',
-									error: error, func: 'get', obj: 'File'
-								});
-								reject(error);
-							});
+							return resolve(_this2.content);
 						}
-
-						//Get firepad text from history
-						_this2.headless.getText(function (text) {
-							logger.log({
-								description: 'Text loaded from headless',
-								text: text, func: 'get', obj: 'File'
-							});
-							_this2.content = text;
-							// this.fbRef.once('value', (fileSnap) => {
-							// 	let meta = fileSnap.child('meta').val();
-							// });
-							_this2.headless.dispose();
-							resolve(_this2.content);
+						logger.warn({
+							description: 'Cannot get content of file with existing firepad content.',
+							func: 'get', obj: 'File'
 						});
+						reject({ message: 'no orignal content or has existing history' });
 					});
 				});
 			}
@@ -24456,25 +24433,6 @@ return /******/ (function(modules) { // webpackBootstrap
 			get: function get() {
 				var re = /(?:\.([^.]+))?$/;
 				return re.exec(this.name)[1];
-			}
-
-			/**
-	   * @description Headless Firepad at file location
-	   */
-
-		}, {
-			key: 'headless',
-			get: function get() {
-				var firepad = _firebase2.default.getFirepadLib();
-				if (typeof firepad === 'undefined' || typeof firepad.Headless !== 'function') {
-					logger.error({
-						description: 'Firepad is required to get file content.',
-						func: 'get', obj: 'File'
-					});
-					throw Error('Firepad is required to get file content');
-				} else {
-					return firepad.Headless(this.fbRef);
-				}
 			}
 		}]);
 
@@ -25047,16 +25005,6 @@ return /******/ (function(modules) { // webpackBootstrap
 					fbData.original = content;
 				}
 				return new Promise(function (resolve, reject) {
-					if (entityType === 'file' && fbData.original) {
-						(function () {
-							var editor = createAce('headless');
-							var firepad = window.Firepad.fromACE(fbRef, editor);
-							firepad.on('ready', function () {
-								firepad.setText(content);
-								editor.destroy();
-							});
-						})();
-					}
 					fbRef.update(fbData, function (error) {
 						if (!error) {
 							logger.info({

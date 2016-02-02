@@ -103,14 +103,6 @@ export default class FileSystemEntity {
 			fbData.original = content;
 		}
 		return new Promise((resolve, reject) => {
-			if (entityType === 'file' && fbData.original) {
-				let editor = createAce('headless');
-				let firepad = window.Firepad.fromACE(fbRef, editor);
-				firepad.on('ready', () => {
-					firepad.setText(content);
-					editor.destroy();
-				});
-			}
 			fbRef.update(fbData, error => {
 				if (!error) {
 					logger.info({
