@@ -30,26 +30,7 @@ export default class ApiAction {
 	 * @return {Promise}
 	 */
 	get() {
-		return request.get(this.url).then(res => {
-			logger.log({
-				description: 'Get responded successfully.',
-				res, func: 'get', obj: 'ApiAction'
-			});
-			if (has(res, 'error')) {
-				logger.error({
-					description: 'Error in get response.', error: res.error,
-					res, func: 'get', obj: 'ApiAction'
-				});
-				return Promise.reject(res.error);
-			}
-			return res.collection ? res.collection : res;
-		}, error => {
-			logger.error({
-				description: 'Error in GET request.', error,
-				func: 'get', obj: 'ApiAction'
-			});
-			return Promise.reject(error);
-		});
+		return request.get(this.url);
 	}
 
 	/** Add
@@ -61,30 +42,7 @@ export default class ApiAction {
 			description: 'Add request responded successfully.',
 			newData, func: 'add', obj: 'ApiAction'
 		});
-		return request.post(this.url, newData).then(res => {
-			logger.log({
-				description: 'Add request responded successfully.',
-				res, func: 'add', obj: 'ApiAction'
-			});
-			if (has(res, 'error')) {
-				logger.error({
-					description: 'Error in add request.', error: res.error,
-					action: this, res, func: 'add', obj: 'ApiAction'
-				});
-				return Promise.reject(res.error);
-			}
-			logger.log({
-				description: 'Add successful.', res, action: this,
-				func: 'add', obj: 'ApiAction'
-			});
-			return res;
-		}, error => {
-			logger.error({
-				description: `Error in add request.`,
-				action: this, error, func: 'add', obj: 'ApiAction'
-			});
-			return Promise.reject(error);
-		});
+		return request.post(this.url, newData);
 	}
 
 	/** Update
@@ -95,52 +53,14 @@ export default class ApiAction {
 		if (!updateData) {
 			updateData = this;
 		}
-		return request.put(this.url, updateData).then(res => {
-			if (has(res, 'error')) {
-				logger.error({
-					description: 'Error in update request.',
-					error: res.error, res, func: 'update', obj: 'ApiAction'
-				});
-				return Promise.reject(res.error);
-			}
-			logger.log({
-				description: 'Update successful.', res,
-				func: 'update', obj: 'ApiAction'
-			});
-			return res;
-		}, error => {
-			logger.error({
-				description: 'Error in update request.',
-				error, func: 'update', obj: 'ApiAction'
-			});
-			return Promise.reject(error);
-		});
+		return request.put(this.url, updateData);
 	}
 
 	/** Remove
 	 * @return {Promise}
 	 */
 	remove() {
-		return request.del(this.url).then(res => {
-			if (has(res, 'error')) {
-				logger.error({
-					description: 'Error in removal request.', action: this,
-					error: res.error, res, func: 'remove', obj: 'ApiAction'
-				});
-				return Promise.reject(res.error);
-			}
-			logger.log({
-				description: 'Remove successful.',
-				res, func: 'remove', obj: 'ApiAction'
-			});
-			return res;
-		}, error => {
-			logger.error({
-				description: 'Error in request for removal.', action: this,
-				error, func: 'remove', obj: 'ApiAction'
-			});
-			return Promise.reject(error);
-		});
+		return request.del(this.url);
 	}
 
 	/** search
@@ -160,27 +80,12 @@ export default class ApiAction {
 				description: 'Invalid query type in search (should be string).',
 				func: 'search', obj: 'ApiAction'
 			});
-			return Promise.reject('Invalid query type. Search query should be string.');
+			return Promise.reject({
+				message:'Invalid query type. Search query should be string.'
+			});
 		}
-		let key = query.indexOf('@') !== -1 ? 'username' : 'email';
-		return request.get(`${this.url}/search?${key}=${query}`).then(res => {
-			if (has(res, 'error')) {
-				logger.error({
-					description: 'Error in search request.', action: this,
-					res, func: 'search', obj: 'ApiAction'
-				});
-				return Promise.reject(res.error || res);
-			}
-			logger.info({
-				description: 'Search successful.', res, func: 'search', obj: 'ApiAction'
-			});
-			return res;
-		}, error => {
-			logger.error({
-				description: 'Error in request for search.', action: this,
-				error, func: 'search', obj: 'ApiAction'
-			});
-			return Promise.reject(error);
-		});
+		//Search email if query contains @
+		const key = query.indexOf('@') === -1 ? 'username' : 'email';
+		return request.get(`${this.url}/search?${key}=${query}`);
 	}
 }

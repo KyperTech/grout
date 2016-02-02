@@ -36,18 +36,6 @@ export default class Group extends ApiAction {
 			description: 'Updating group with accounts array.',
 			accountsArray, func: 'update', obj: 'Group'
 		});
-		return this.update({accounts: accountsArray}).then(response => {
-			logger.info({
-				description: 'Account(s) added to group successfully.',
-				response, func: 'addAccounts', obj: 'Group'
-			});
-			return response;
-		})['catch'](error => {
-			logger.error({
-				description: 'Error addAccountseting group.',
-				error, func: 'addAccounts', obj: 'Group'
-			});
-			return Promise.reject(error.response.text || error.response);
-		});
+		return this.update({accounts: accountsArray});
 	}
 }
