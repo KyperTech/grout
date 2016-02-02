@@ -38,25 +38,9 @@ export default class File extends FileSystemEntity {
 	}
 
 	/**
-	 * @description Headless Firepad at file location
-	 */
-	get headless() {
-		let firepad = firebaseUtil.getFirepadLib();
-		if (typeof firepad === 'undefined' || typeof firepad.Headless !== 'function') {
-			logger.error({
-				description: 'Firepad is required to get file content.',
-				func: 'get', obj: 'File'
-			});
-			throw Error('Firepad is required to get file content');
-		} else {
-			return firepad.Headless(this.fbRef);
-		}
-	}
-
-	/**
 	 * @description Get a file's content from default location (Firebase)
 	 */
-	getContent() {
+	getOriginalContent() {
 		return new Promise((resolve, reject) => {
 			this.fbRef.once('value', fileSnap => {
 				if(!fileSnap.val()){
@@ -74,36 +58,13 @@ export default class File extends FileSystemEntity {
 						description: 'File content loaded.',
 						content: this.content, func: 'get', obj: 'File'
 					});
-					return this.headless.setText(this.content, error => {
-						this.headless.dispose();
-						if (!error) {
-							logger.log({
-								description: 'File content set to Headless Firepad.',
-								func: 'get', obj: 'File'
-							});
-							return resolve(this.content);
-						}
-						logger.error({
-							description: 'Error setting file text.',
-							error, func: 'get', obj: 'File'
-						});
-						reject(error);
-					});
+					return resolve(this.content);
 				}
-
-				//Get firepad text from history
-				this.headless.getText((text) => {
-					logger.log({
-						description: 'Text loaded from headless',
-						text, func: 'get', obj: 'File'
-					});
-					this.content = text;
-					// this.fbRef.once('value', (fileSnap) => {
-					// 	let meta = fileSnap.child('meta').val();
-					// });
-					this.headless.dispose();
-					resolve(this.content);
+				logger.warn({
+					description: 'Cannot get content of file with existing firepad content.',
+					func: 'get', obj: 'File'
 				});
+				reject({ message: 'no orignal content or has existing history'});
 			});
 		});
 	}
