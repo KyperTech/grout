@@ -9831,9 +9831,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _jszip2 = _interopRequireDefault(_jszip);
 
-	var _filesaver = __webpack_require__(228);
+	var _nodeSafeFilesaver = __webpack_require__(228);
 
-	var _filesaver2 = _interopRequireDefault(_filesaver);
+	var _nodeSafeFilesaver2 = _interopRequireDefault(_nodeSafeFilesaver);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -9934,7 +9934,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					handleZip(directory);
 					return Promise.all(promiseArray).then(function () {
 						var content = zip.generate({ type: "blob" });
-						return _filesaver2.default.saveAs(content, _this2.project.name + '-devShare-export.zip');
+						return _nodeSafeFilesaver2.default.saveAs(content, _this2.project.name + '-devShare-export.zip');
 					});
 				});
 			}
@@ -22439,7 +22439,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* FileSaver.js
 	 * A saveAs() FileSaver implementation.
-	 * 1.1.20150716
+	 * 2015-05-07.2
 	 *
 	 * By Eli Grey, http://eligrey.com
 	 * License: X11/MIT
@@ -22453,6 +22453,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var saveAs = saveAs || (function(view) {
 		"use strict";
+		
+		// If no view just quit, probably we are in node.js
+		if(typeof view === "undefined") {
+		  	return;
+		}
+		
 		// IE <10 is explicitly unsupported
 		if (typeof navigator !== "undefined" && /MSIE [1-9]\./.test(navigator.userAgent)) {
 			return;
@@ -22466,7 +22472,11 @@ return /******/ (function(modules) { // webpackBootstrap
 			, save_link = doc.createElementNS("http://www.w3.org/1999/xhtml", "a")
 			, can_use_save_link = "download" in save_link
 			, click = function(node) {
-				var event = new MouseEvent("click");
+				var event = doc.createEvent("MouseEvents");
+				event.initMouseEvent(
+					"click", true, false, view, 0, 0, 0, 0, 0
+					, false, false, false, false, 0, null
+				);
 				node.dispatchEvent(event);
 			}
 			, webkit_req_fs = view.webkitRequestFileSystem
@@ -22517,10 +22527,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				}
 				return blob;
 			}
-			, FileSaver = function(blob, name, no_auto_bom) {
-				if (!no_auto_bom) {
-					blob = auto_bom(blob);
-				}
+			, FileSaver = function(blob, name) {
+				blob = auto_bom(blob);
 				// First try a.download, then web filesystem, then object URLs
 				var
 					  filesaver = this
@@ -22568,12 +22576,10 @@ return /******/ (function(modules) { // webpackBootstrap
 					object_url = get_URL().createObjectURL(blob);
 					save_link.href = object_url;
 					save_link.download = name;
-					setTimeout(function() {
-						click(save_link);
-						dispatch_all();
-						revoke(object_url);
-						filesaver.readyState = filesaver.DONE;
-					});
+					click(save_link);
+					filesaver.readyState = filesaver.DONE;
+					dispatch_all();
+					revoke(object_url);
 					return;
 				}
 				// Object and web filesystem URLs have a problem saving in Google Chrome when
@@ -22644,17 +22650,14 @@ return /******/ (function(modules) { // webpackBootstrap
 				}), fs_error);
 			}
 			, FS_proto = FileSaver.prototype
-			, saveAs = function(blob, name, no_auto_bom) {
-				return new FileSaver(blob, name, no_auto_bom);
+			, saveAs = function(blob, name) {
+				return new FileSaver(blob, name);
 			}
 		;
 		// IE 10+ (native saveAs)
 		if (typeof navigator !== "undefined" && navigator.msSaveOrOpenBlob) {
-			return function(blob, name, no_auto_bom) {
-				if (!no_auto_bom) {
-					blob = auto_bom(blob);
-				}
-				return navigator.msSaveOrOpenBlob(blob, name || "download");
+			return function(blob, name) {
+				return navigator.msSaveOrOpenBlob(auto_bom(blob), name);
 			};
 		}
 
