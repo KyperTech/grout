@@ -1,4 +1,4 @@
-/*! grout.js v0.2.1 | (c) Kyper Digital Inc. */
+/*! grout.js v0.2.2 | (c) Kyper Digital Inc. */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
