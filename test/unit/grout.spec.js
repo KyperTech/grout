@@ -3,7 +3,7 @@ import Grout from '../../src';
 let grout = new Grout();
 let mockGet, mockPut, mockPost, mockLog, mockDebug, mockWarn, mockInfo, mockError;
 
-describe.skip('Grout', () => {
+describe('Grout', () => {
 	beforeEach(() => {
 		mockGet = sinon.stub(grout.utils.request, 'get', () => {
 		//console.log('mock get called with:', arguments);
@@ -60,7 +60,7 @@ describe.skip('Grout', () => {
 
 	describe('Projects', () => {
 		it('exists', () => {
-			expect(grout.Projects).to.be.an('object');
+			expect(grout).to.respondTo('Projects');
 		});
 	});
 	describe('Project', () => {
@@ -70,15 +70,15 @@ describe.skip('Grout', () => {
 	});
 	describe('Accounts', () => {
 		it('exists', () => {
-			expect(grout.Accounts).to.be.an('object');
+			expect(grout.Users).to.be.an('object');
 		});
 	});
-	describe('Account', () => {
+	describe('User', () => {
 		it('exists', () => {
-			expect(grout).to.respondTo('Account');
+			expect(grout).to.respondTo('User');
 		});
 		it('accepts a name', () => {
-			expect(grout.Account('test')).to.be.an('object');
+			expect(grout.User('test')).to.be.an('object');
 		});
 	});
 	describe('Groups', () => {

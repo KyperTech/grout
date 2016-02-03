@@ -284,8 +284,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * // => false
 	 */
 	function isObject(value) {
-	  // Avoid a V8 JIT bug in Chrome 19-20.
-	  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
 	  var type = typeof value;
 	  return !!value && (type == 'object' || type == 'function');
 	}
@@ -835,9 +833,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function indexKeys(object) {
 	  var length = object ? object.length : undefined;
-	  return (isLength(length) && (isArray(object) || isString(object) || isArguments(object)))
-	    ? baseTimes(length, String)
-	    : null;
+	  if (isLength(length) &&
+	      (isArray(object) || isString(object) || isArguments(object))) {
+	    return baseTimes(length, String);
+	  }
+	  return null;
 	}
 
 	module.exports = indexKeys;
@@ -1221,7 +1221,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * The base implementation of methods like `_.find` and `_.findKey`, without
 	 * support for iteratee shorthands, which iterates over `collection` using
-	 * the provided `eachFunc`.
+	 * `eachFunc`.
 	 *
 	 * @private
 	 * @param {Array|Object} collection The collection to search.
@@ -1398,7 +1398,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var stack = new Stack,
 	          result = customizer ? customizer(objValue, srcValue, key, object, source, stack) : undefined;
 
-	      if (!(result === undefined ? baseIsEqual(srcValue, objValue, customizer, UNORDERED_COMPARE_FLAG | PARTIAL_COMPARE_FLAG, stack) : result)) {
+	      if (!(result === undefined
+	            ? baseIsEqual(srcValue, objValue, customizer, UNORDERED_COMPARE_FLAG | PARTIAL_COMPARE_FLAG, stack)
+	            : result
+	          )) {
 	        return false;
 	      }
 	    }
@@ -2457,8 +2460,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Uint8Array = __webpack_require__(65),
-	    _Symbol = __webpack_require__(66),
+	var Symbol = __webpack_require__(65),
+	    Uint8Array = __webpack_require__(66),
 	    mapToArray = __webpack_require__(67),
 	    setToArray = __webpack_require__(68);
 
@@ -2480,8 +2483,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var arrayBufferTag = '[object ArrayBuffer]';
 
 	/** Used to convert symbols to primitives and strings. */
-	var symbolProto = _Symbol ? _Symbol.prototype : undefined,
-	    symbolValueOf = _Symbol ? symbolProto.valueOf : undefined;
+	var symbolProto = Symbol ? Symbol.prototype : undefined,
+	    symbolValueOf = Symbol ? symbolProto.valueOf : undefined;
 
 	/**
 	 * A specialized version of `baseIsEqualDeep` for comparing objects of
@@ -2539,7 +2542,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        equalFunc(convert(object), convert(other), customizer, bitmask | UNORDERED_COMPARE_FLAG);
 
 	    case symbolTag:
-	      return !!_Symbol && (symbolValueOf.call(object) == symbolValueOf.call(other));
+	      return !!Symbol && (symbolValueOf.call(object) == symbolValueOf.call(other));
 	  }
 	  return false;
 	}
@@ -2552,9 +2555,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/** Built-in value references. */
-	var Uint8Array = global.Uint8Array;
+	var Symbol = global.Symbol;
 
-	module.exports = Uint8Array;
+	module.exports = Symbol;
 
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
@@ -2563,9 +2566,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/** Built-in value references. */
-	var _Symbol = global.Symbol;
+	var Uint8Array = global.Uint8Array;
 
-	module.exports = _Symbol;
+	module.exports = Uint8Array;
 
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
@@ -2625,8 +2628,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    keys = __webpack_require__(11);
 
 	/** Used to compose bitmasks for comparison styles. */
-	var UNORDERED_COMPARE_FLAG = 1,
-	    PARTIAL_COMPARE_FLAG = 2;
+	var PARTIAL_COMPARE_FLAG = 2;
 
 	/**
 	 * A specialized version of `baseIsEqualDeep` for objects with support for
@@ -2643,7 +2645,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	function equalObjects(object, other, equalFunc, customizer, bitmask, stack) {
 	  var isPartial = bitmask & PARTIAL_COMPARE_FLAG,
-	      isUnordered = bitmask & UNORDERED_COMPARE_FLAG,
 	      objProps = keys(object),
 	      objLength = objProps.length,
 	      othProps = keys(other),
@@ -2655,8 +2656,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var index = objLength;
 	  while (index--) {
 	    var key = objProps[index];
-	    if (!(isPartial ? key in other : baseHas(other, key)) ||
-	        !(isUnordered || key == othProps[index])) {
+	    if (!(isPartial ? key in other : baseHas(other, key))) {
 	      return false;
 	    }
 	  }
@@ -3153,15 +3153,15 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var _Symbol = __webpack_require__(66),
+	var Symbol = __webpack_require__(65),
 	    isSymbol = __webpack_require__(84);
 
 	/** Used as references for various `Number` constants. */
 	var INFINITY = 1 / 0;
 
 	/** Used to convert symbols to primitives and strings. */
-	var symbolProto = _Symbol ? _Symbol.prototype : undefined,
-	    symbolToString = _Symbol ? symbolProto.toString : undefined;
+	var symbolProto = Symbol ? Symbol.prototype : undefined,
+	    symbolToString = Symbol ? symbolProto.toString : undefined;
 
 	/**
 	 * Converts `value` to a string if it's not one. An empty string is returned
@@ -3192,7 +3192,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return '';
 	  }
 	  if (isSymbol(value)) {
-	    return _Symbol ? symbolToString.call(value) : '';
+	    return Symbol ? symbolToString.call(value) : '';
 	  }
 	  var result = (value + '');
 	  return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result;
@@ -3368,8 +3368,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      result = hasFunc(object, path);
 	    }
 	  }
-	  return result || (isLength(object && object.length) && isIndex(path, object.length) &&
-	    (isArray(object) || isString(object) || isArguments(object)));
+	  var length = object ? object.length : undefined;
+	  return result || (
+	    !!length && isLength(length) && isIndex(path, length) &&
+	    (isArray(object) || isString(object) || isArguments(object))
+	  );
 	}
 
 	module.exports = hasPath;
@@ -3619,8 +3622,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * _.merge(users, ages);
 	 * // => { 'data': [{ 'user': 'barney', 'age': 36 }, { 'user': 'fred', 'age': 40 }] }
 	 */
-	var merge = createAssigner(function(object, source) {
-	  baseMerge(object, source);
+	var merge = createAssigner(function(object, source, srcIndex) {
+	  baseMerge(object, source, srcIndex);
 	});
 
 	module.exports = merge;
@@ -3645,10 +3648,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @private
 	 * @param {Object} object The destination object.
 	 * @param {Object} source The source object.
+	 * @param {number} srcIndex The index of `source`.
 	 * @param {Function} [customizer] The function to customize merged values.
 	 * @param {Object} [stack] Tracks traversed source values and their merged counterparts.
 	 */
-	function baseMerge(object, source, customizer, stack) {
+	function baseMerge(object, source, srcIndex, customizer, stack) {
 	  if (object === source) {
 	    return;
 	  }
@@ -3660,7 +3664,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    if (isObject(srcValue)) {
 	      stack || (stack = new Stack);
-	      baseMergeDeep(object, source, key, baseMerge, customizer, stack);
+	      baseMergeDeep(object, source, key, srcIndex, baseMerge, customizer, stack);
 	    }
 	    else {
 	      var newValue = customizer ? customizer(object[key], srcValue, (key + ''), object, source, stack) : undefined;
@@ -3752,14 +3756,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {Object} object The destination object.
 	 * @param {Object} source The source object.
 	 * @param {string} key The key of the value to merge.
+	 * @param {number} srcIndex The index of `source`.
 	 * @param {Function} mergeFunc The function to merge values.
 	 * @param {Function} [customizer] The function to customize assigned values.
 	 * @param {Object} [stack] Tracks traversed source values and their merged counterparts.
 	 */
-	function baseMergeDeep(object, source, key, mergeFunc, customizer, stack) {
+	function baseMergeDeep(object, source, key, srcIndex, mergeFunc, customizer, stack) {
 	  var objValue = object[key],
 	      srcValue = source[key],
-	      stacked = stack.get(srcValue) || stack.get(objValue);
+	      stacked = stack.get(srcValue);
 
 	  if (stacked) {
 	    assignMergeValue(object, key, stacked);
@@ -3771,24 +3776,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (isCommon) {
 	    newValue = srcValue;
 	    if (isArray(srcValue) || isTypedArray(srcValue)) {
-	      newValue = isArray(objValue)
-	        ? objValue
-	        : ((isArrayLikeObject(objValue)) ? copyArray(objValue) : baseClone(srcValue));
+	      if (isArray(objValue)) {
+	        newValue = srcIndex ? copyArray(objValue) : objValue;
+	      }
+	      else if (isArrayLikeObject(objValue)) {
+	        newValue = copyArray(objValue);
+	      }
+	      else {
+	        isCommon = false;
+	        newValue = baseClone(srcValue);
+	      }
 	    }
 	    else if (isPlainObject(srcValue) || isArguments(srcValue)) {
-	      newValue = isArguments(objValue)
-	        ? toPlainObject(objValue)
-	        : (isObject(objValue) ? objValue : baseClone(srcValue));
+	      if (isArguments(objValue)) {
+	        newValue = toPlainObject(objValue);
+	      }
+	      else if (!isObject(objValue) || (srcIndex && isFunction(objValue))) {
+	        isCommon = false;
+	        newValue = baseClone(srcValue);
+	      }
+	      else {
+	        newValue = srcIndex ? baseClone(objValue) : objValue;
+	      }
 	    }
 	    else {
-	      isCommon = isFunction(srcValue);
+	      isCommon = false;
 	    }
 	  }
 	  stack.set(srcValue, newValue);
 
 	  if (isCommon) {
 	    // Recursively merge objects and arrays (susceptible to call stack limits).
-	    mergeFunc(newValue, srcValue, customizer, stack);
+	    mergeFunc(newValue, srcValue, srcIndex, customizer, stack);
 	  }
 	  assignMergeValue(object, key, newValue);
 	}
@@ -4226,7 +4245,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Uint8Array = __webpack_require__(65);
+	var Uint8Array = __webpack_require__(66);
 
 	/**
 	 * Creates a clone of `buffer`.
@@ -4302,14 +4321,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {Array} array The array to iterate over.
 	 * @param {Function} iteratee The function invoked per iteration.
 	 * @param {*} [accumulator] The initial value.
-	 * @param {boolean} [initFromArray] Specify using the first element of `array` as the initial value.
+	 * @param {boolean} [initAccum] Specify using the first element of `array` as the initial value.
 	 * @returns {*} Returns the accumulated value.
 	 */
-	function arrayReduce(array, iteratee, accumulator, initFromArray) {
+	function arrayReduce(array, iteratee, accumulator, initAccum) {
 	  var index = -1,
 	      length = array.length;
 
-	  if (initFromArray && length) {
+	  if (initAccum && length) {
 	    accumulator = array[++index];
 	  }
 	  while (++index < length) {
@@ -4393,11 +4412,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var _Symbol = __webpack_require__(66);
+	var Symbol = __webpack_require__(65);
 
 	/** Used to convert symbols to primitives and strings. */
-	var symbolProto = _Symbol ? _Symbol.prototype : undefined,
-	    symbolValueOf = _Symbol ? symbolProto.valueOf : undefined;
+	var symbolProto = Symbol ? Symbol.prototype : undefined,
+	    symbolValueOf = Symbol ? symbolProto.valueOf : undefined;
 
 	/**
 	 * Creates a clone of the `symbol` object.
@@ -4407,7 +4426,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {Object} Returns the cloned symbol object.
 	 */
 	function cloneSymbol(symbol) {
-	  return _Symbol ? Object(symbolValueOf.call(symbol)) : {};
+	  return Symbol ? Object(symbolValueOf.call(symbol)) : {};
 	}
 
 	module.exports = cloneSymbol;
@@ -4442,7 +4461,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	var baseCreate = __webpack_require__(121),
-	    isFunction = __webpack_require__(21);
+	    isFunction = __webpack_require__(21),
+	    isPrototype = __webpack_require__(24);
 
 	/**
 	 * Initializes an object clone.
@@ -4452,6 +4472,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @returns {Object} Returns the initialized clone.
 	 */
 	function initCloneObject(object) {
+	  if (isPrototype(object)) {
+	    return {};
+	  }
 	  var Ctor = object.constructor;
 	  return baseCreate(isFunction(Ctor) ? Ctor.prototype : undefined);
 	}
@@ -4769,7 +4792,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    while (++index < length) {
 	      var source = sources[index];
 	      if (source) {
-	        assigner(object, source, customizer);
+	        assigner(object, source, index, customizer);
 	      }
 	    }
 	    return object;
@@ -5359,18 +5382,26 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'loginUsingProvider',
 			value: function loginUsingProvider(provider) {
+				var _this4 = this;
+
 				//Handle 3rd Party signups
 				_logger2.default.debug({
 					description: 'Third party signup called.',
 					provider: provider, func: 'signup', obj: 'Matter'
 				});
 				var auth = new _providerAuth2.default({ provider: provider, app: this });
-				return auth.signup(provider).then(function (res) {
+				return auth.login(provider).then(function (response) {
 					_logger2.default.info({
 						description: 'Provider signup successful.', provider: provider,
-						res: res, func: 'signup', obj: 'Matter'
+						response: response, func: 'signup', obj: 'Matter'
 					});
-					return res;
+					if (response.token) {
+						_this4.token.string = response.token;
+					}
+					if (response.user) {
+						_this4.currentUser = response.user;
+					}
+					return _this4.currentUser;
 				}, function (error) {
 					_logger2.default.error({
 						description: 'Error with provider authentication.',
@@ -5395,8 +5426,14 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'signupUsingProvider',
 			value: function signupUsingProvider(provider) {
+				var _this5 = this;
+
 				if (!provider) {
-					return Promise.reject('Provider data is required to signup.');
+					_logger2.default.info({
+						description: 'Provider required to sign up.',
+						func: 'providerSignup', obj: 'Matter'
+					});
+					return Promise.reject({ message: 'Provider data is required to signup.' });
 				}
 				var auth = new _providerAuth2.default({ provider: provider, app: this });
 				return auth.signup(provider).then(function (response) {
@@ -5404,7 +5441,13 @@ return /******/ (function(modules) { // webpackBootstrap
 						description: 'Provider login successful.',
 						response: response, func: 'providerSignup', obj: 'Matter'
 					});
-					return response;
+					if (response.token) {
+						_this5.token.string = response.token;
+					}
+					if (response.user) {
+						_this5.currentUser = response.user;
+					}
+					return _this5.currentUser;
 				}, function (error) {
 					_logger2.default.error({
 						description: 'Provider signup error.', error: error,
@@ -5428,7 +5471,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'getCurrentUser',
 			value: function getCurrentUser() {
-				var _this4 = this;
+				var _this6 = this;
 
 				if (this.currentUser) {
 					_logger2.default.debug({
@@ -5450,7 +5493,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						description: 'Current User Request responded.',
 						responseData: response, func: 'currentUser', obj: 'Matter'
 					});
-					_this4.currentUser = response;
+					_this6.currentUser = response;
 					return response;
 				})['catch'](function (errRes) {
 					if (errRes.status == 401) {
@@ -5484,7 +5527,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'updateAccount',
 			value: function updateAccount(updateData) {
-				var _this5 = this;
+				var _this7 = this;
 
 				if (!this.isLoggedIn) {
 					_logger2.default.error({
@@ -5511,7 +5554,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						description: 'Update profile request responded.',
 						responseData: response, func: 'updateAccount', obj: 'Matter'
 					});
-					_this5.currentUser = response;
+					_this7.currentUser = response;
 					return response;
 				})['catch'](function (errRes) {
 					_logger2.default.error({
@@ -5538,7 +5581,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'uploadImage',
 			value: function uploadImage(fileData) {
-				var _this6 = this;
+				var _this8 = this;
 
 				if (!this.isLoggedIn) {
 					_logger2.default.error({
@@ -5565,7 +5608,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						description: 'Upload image request responded.',
 						response: response, func: 'uploadImage', obj: 'Matter'
 					});
-					_this6.currentUser = response;
+					_this8.currentUser = response;
 					return response;
 				})['catch'](function (errRes) {
 					_logger2.default.error({
@@ -5592,10 +5635,10 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'uploadAccountImage',
 			value: function uploadAccountImage(fileData) {
-				var _this7 = this;
+				var _this9 = this;
 
 				return this.uploadImage(fileData).then(function (imgUrl) {
-					return _this7.updateAccount({ image: { url: imgUrl } });
+					return _this9.updateAccount({ image: { url: imgUrl } });
 				});
 			}
 
@@ -5704,7 +5747,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'isInGroup',
 			value: function isInGroup(checkGroups) {
-				var _this8 = this;
+				var _this10 = this;
 
 				if (!this.isLoggedIn) {
 					_logger2.default.error({
@@ -5733,14 +5776,14 @@ return /******/ (function(modules) { // webpackBootstrap
 								func: 'isInGroup', obj: 'Matter'
 							});
 							return {
-								v: _this8.isInGroups(groupsArray)
+								v: _this10.isInGroups(groupsArray)
 							};
 						}
 						//Single group
-						var groups = _this8.token.data.groups || [];
+						var groups = _this10.token.data.groups || [];
 						_logger2.default.log({
 							description: 'Checking if user is in group.',
-							group: groupName, userGroups: _this8.token.data.groups,
+							group: groupName, userGroups: _this10.token.data.groups,
 							func: 'isInGroup', obj: 'Matter'
 						});
 						return {
@@ -5774,7 +5817,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'isInGroups',
 			value: function isInGroups(checkGroups) {
-				var _this9 = this;
+				var _this11 = this;
 
 				if (!this.isLoggedIn) {
 					_logger2.default.log({
@@ -5795,11 +5838,11 @@ return /******/ (function(modules) { // webpackBootstrap
 					return (0, _every2.default)(checkGroups.map(function (group) {
 						if ((0, _isString2.default)(group)) {
 							//Group is string
-							return _this9.isInGroup(group);
+							return _this11.isInGroup(group);
 						}
 						//Group is object
 						if ((0, _has2.default)(group, 'name')) {
-							return _this9.isInGroup(group.name);
+							return _this11.isInGroup(group.name);
 						}
 						_logger2.default.error({
 							description: 'Invalid group object.',
@@ -7062,7 +7105,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			return handleResponse(req);
 		},
 		del: function del(endpoint, data) {
-			var req = _superagent2.default.put(endpoint, data);
+			var req = _superagent2.default.del(endpoint, data);
 			req = addAuthHeader(req);
 			return handleResponse(req);
 		}
@@ -7079,10 +7122,6 @@ return /******/ (function(modules) { // webpackBootstrap
 				return reject('req.end is not a function');
 			}
 			req.end(function (errorRes, res) {
-				_logger2.default.debug({
-					message: 'Response recieved.', response: res, errorResponse: errorRes,
-					func: 'addAuthHeader', file: 'request'
-				});
 				if (errorRes) {
 					if (errorRes.status == 401) {
 						_logger2.default.warn({
@@ -7092,28 +7131,35 @@ return /******/ (function(modules) { // webpackBootstrap
 					}
 					var response = errorRes.response;
 
-					var error = response && response.body ? response.body : errorRes;
+					var _error = response && response.body ? response.body : errorRes;
+					_logger2.default.error({
+						description: 'Error in request.', error: _error,
+						file: 'request', func: 'handleResponse'
+					});
+					return reject(_error || errorRes);
+				}
+				if (res.error) {
 					_logger2.default.error({
 						description: 'Error in request.', error: error,
 						file: 'request', func: 'handleResponse'
 					});
-					return reject(error || errorRes);
+					return reject(res.error);
 				}
-				try {
-					resolve(JSON.parse(res.body));
-				} catch (err) {
-					resolve(res.body);
-				}
+				// logger.debug({
+				// 	message: 'Successful response recieved.', response: res.body,
+				// 	func: 'handleResponse', file: 'request'
+				// });
+				resolve(res.body);
 			});
 		});
 	}
 	function addAuthHeader(req) {
 		if (_token2.default.string) {
 			req = req.set('Authorization', 'Bearer ' + _token2.default.string);
-			_logger2.default.debug({
-				message: 'Set auth header', token: _token2.default.string,
-				func: 'addAuthHeader', file: 'request'
-			});
+			// logger.debug({
+			// 	message: 'Set auth header', token: token.string,
+			// 	func: 'addAuthHeader', file: 'request'
+			// });
 		}
 		return req;
 	}
@@ -9026,52 +9072,39 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function login() {
 				var _this = this;
 
-				if (this.provider === 'google') {
-					return this.googleAuth().then(function (googleAccount) {
-						if (!googleAccount) {
-							return Promise.reject('Error loading Google account.');
-						}
-						var image = googleAccount.image;
-						var emails = googleAccount.emails;
-
-						var email = emails && emails[0] && emails[0].value ? emails[0].value : '';
-						var account = {
-							image: image, email: email,
-							username: email.split('@')[0],
-							provider: _this.provider,
-							providerAccount: googleAccount
-						};
-						_logger2.default.info({
-							description: 'Google account loaded, signing up.', account: account,
-							googleAccount: googleAccount, func: 'signup', obj: 'providerAuth'
-						});
-						return new _request2.default.post(_this.app.endpoint + '/signup', account).then(function (newAccount) {
-							_logger2.default.info({
-								description: 'Signup with external account successful.',
-								newAccount: newAccount, func: 'signup', obj: 'providerAuth'
-							});
-							return newAccount;
-						}, function (error) {
-							_logger2.default.error({
-								description: 'Error loading google account.', account: account,
-								googleAccount: googleAccount, error: error, func: 'signup', obj: 'providerAuth'
-							});
-							return Promise.reject(error);
-						});
-					}, function (error) {
-						_logger2.default.error({
-							description: 'Error authenticating with Google.', error: error,
-							func: 'signup', obj: 'providerAuth'
-						});
-						return Promise.reject('Error getting external account.');
-					});
-				} else {
+				if (this.provider !== 'google') {
 					_logger2.default.error({
 						description: 'Invalid provider.',
 						func: 'signup', obj: 'providerAuth'
 					});
-					return Promise.reject('Invalid provider');
+					return Promise.reject({ message: 'Invalid provider' });
 				}
+				return this.googleAuth().then(function (googleAccount) {
+					if (!googleAccount) {
+						return Promise.reject({ message: 'Error loading Google account.' });
+					}
+					var image = googleAccount.image;
+					var emails = googleAccount.emails;
+
+					var email = emails && emails[0] && emails[0].value ? emails[0].value : '';
+					var account = {
+						image: image, email: email,
+						username: email.split('@')[0],
+						provider: _this.provider,
+						google: googleAccount
+					};
+					_logger2.default.info({
+						description: 'Google account loaded, signing up.', account: account,
+						googleAccount: googleAccount, func: 'signup', obj: 'providerAuth'
+					});
+					return _request2.default.post(_this.app.endpoint + '/login', account);
+				}, function (error) {
+					_logger2.default.error({
+						description: 'Error authenticating with Google.', error: error,
+						func: 'signup', obj: 'providerAuth'
+					});
+					return Promise.reject({ message: 'Error getting external account.' });
+				});
 			}
 			/** Signup using external provider account (Google, Facebook, Github)
 	   * @example
@@ -9088,52 +9121,39 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function signup() {
 				var _this2 = this;
 
-				if (this.provider === 'google') {
-					return this.googleAuth().then(function (googleAccount) {
-						if (!googleAccount) {
-							return Promise.reject('Error loading Google account.');
-						}
-						var image = googleAccount.image;
-						var emails = googleAccount.emails;
-
-						var email = emails && emails[0] && emails[0].value ? emails[0].value : '';
-						var account = {
-							image: image, email: email,
-							username: email.split('@')[0],
-							provider: _this2.provider,
-							providerAccount: googleAccount
-						};
-						_logger2.default.info({
-							description: 'Google account loaded, signing up.', account: account,
-							googleAccount: googleAccount, func: 'signup', obj: 'providerAuth'
-						});
-						return new _request2.default.post(_this2.app.endpoint + '/signup', account).then(function (newAccount) {
-							_logger2.default.info({
-								description: 'Signup with external account successful.',
-								newAccount: newAccount, func: 'signup', obj: 'providerAuth'
-							});
-							return newAccount;
-						}, function (error) {
-							_logger2.default.error({
-								description: 'Error loading google account.', account: account,
-								googleAccount: googleAccount, error: error, func: 'signup', obj: 'providerAuth'
-							});
-							return Promise.reject(error);
-						});
-					}, function (error) {
-						_logger2.default.error({
-							description: 'Error authenticating with Google.', error: error,
-							func: 'signup', obj: 'providerAuth'
-						});
-						return Promise.reject('Error getting external account.');
-					});
-				} else {
+				if (this.provider !== 'google') {
 					_logger2.default.error({
 						description: 'Invalid provider.',
 						func: 'signup', obj: 'providerAuth'
 					});
-					return Promise.reject('Invalid provider');
+					return Promise.reject({ message: 'Invalid provider' });
 				}
+				return this.googleAuth().then(function (googleAccount) {
+					if (!googleAccount) {
+						return Promise.reject({ message: 'Error loading Google account.' });
+					}
+					var image = googleAccount.image;
+					var emails = googleAccount.emails;
+
+					var email = emails && emails[0] && emails[0].value ? emails[0].value : '';
+					var account = {
+						image: image, email: email,
+						username: email.split('@')[0],
+						provider: _this2.provider,
+						google: googleAccount
+					};
+					_logger2.default.info({
+						description: 'Google account loaded, signing up.', account: account,
+						googleAccount: googleAccount, func: 'signup', obj: 'providerAuth'
+					});
+					return _request2.default.post(_this2.app.endpoint + '/signup', account);
+				}, function (error) {
+					_logger2.default.error({
+						description: 'Error authenticating with Google.', error: error,
+						func: 'signup', obj: 'providerAuth'
+					});
+					return Promise.reject({ message: 'Error getting external account.' });
+				});
 			}
 		}, {
 			key: 'googleAuth',
@@ -11137,9 +11157,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * // => { 'b': '2' }
 	 */
 	function omitBy(object, predicate) {
-	  predicate = baseIteratee(predicate);
-	  return basePickBy(object, function(value) {
-	    return !predicate(value);
+	  predicate = baseIteratee(predicate, 2);
+	  return basePickBy(object, function(value, key) {
+	    return !predicate(value, key);
 	  });
 	}
 
@@ -11163,7 +11183,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function basePickBy(object, predicate) {
 	  var result = {};
 	  baseForIn(object, function(value, key) {
-	    if (predicate(value)) {
+	    if (predicate(value, key)) {
 	      result[key] = value;
 	    }
 	  });

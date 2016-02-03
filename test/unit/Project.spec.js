@@ -1,12 +1,13 @@
 import Grout from '../../src';
 import config from '../../src/config';
+
 let grout = new Grout();
 let mockGet, mockPut, mockPost, mockLog, mockDebug, mockWarn, mockInfo, mockError;
-
+const mockData = {project: {owner: 'testuser', name: 'exampleApp'}};
 let exampleApp;
-describe.skip('Project model', () => {
+describe('Project model', () => {
 	beforeEach(() => {
-		exampleApp = grout.Project('test', 'exampleApp');
+		exampleApp = grout.Project(mockData.project);
 		mockGet = sinon.stub(grout.utils.request, 'get', () => {
 			// console.log('mock get called with:', arguments);
 			return new Promise((resolve) => {
@@ -49,14 +50,14 @@ describe.skip('Project model', () => {
 	});
 	it('sets name', () => {
 		expect(exampleApp).to.have.property('name');
-		expect(exampleApp.name).to.equal('exampleApp');
+		expect(exampleApp.name).to.equal(mockData.project.name);
 	});
 	describe('url', () => {
 		it('exists', () => {
 			expect(exampleApp).to.have.property('url');
 		});
 		it('is correct', () => {
-			expect(exampleApp.url).to.equal(`${config.serverUrl}/projects/${exampleApp.name}`);
+			expect(exampleApp.url).to.equal(`${config.serverUrl}/projects/${mockData.project.owner}/${mockData.project.name}`);
 		});
 	});
 	describe('get method', () => {
@@ -73,7 +74,7 @@ describe.skip('Project model', () => {
 		it('exists', () => {
 			expect(exampleApp).to.respondTo('update');
 		});
-		it('throws if no update data is passed', () => {
+		it.skip('throws if no update data is passed', () => {
 			return expect(exampleApp.update()).to.eventually.throw;
 		});
 		it('makes request', () => {
@@ -101,23 +102,18 @@ describe.skip('Project model', () => {
 				return expect(mockPost).to.have.been.called;
 			});
 		});
-		it('throws if no template name is provided', () => {
+		it.skip('throws if no template name is provided', () => {
 			return expect(exampleApp.applyTemplate()).to.eventually.throw;
 		});
 	});
-	describe('addCollaborators method', () => {
+	describe('addCollaborator method', () => {
 		it('exists', () => {
-			expect(exampleApp).to.respondTo('addCollaborators');
+			expect(exampleApp).to.respondTo('addCollaborator');
 		});
 		it('makes request', () => {
-			return exampleApp.addCollaborators(['1']).then(() => {
+			return exampleApp.addCollaborator('testuser').then(() => {
 				return expect(mockPut).to.have.been.called;
 			});
-		});
-	});
-	describe('Accounts model', () => {
-		it('exists', () => {
-			expect(exampleApp).to.have.property('Accounts');
 		});
 	});
 	describe('Groups model', () => {

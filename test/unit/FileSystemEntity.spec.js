@@ -1,10 +1,11 @@
 import Grout from '../../src';
 import FileSystemEntity from '../../src/classes/FileSystemEntity';
+
 let grout = new Grout();
 let mockGet, mockPut, mockPost, mockLog, mockDebug, mockWarn, mockInfo, mockError;
 let exampleApp, exampleEntity;
 const exampleData = {project: {name: 'exampleApp', owner: 'test'}, entity: 'somefile.js'};
-describe.skip('FileSystemEntity class', () => {
+describe('FileSystemEntity class', () => {
 	beforeEach(() => {
 		exampleApp = grout.Project(exampleData.project.owner, exampleData.project.name);
 		exampleEntity = new FileSystemEntity(exampleApp, exampleData.entity);

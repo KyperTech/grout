@@ -1,12 +1,9 @@
 import Grout from '../../src';
-import sinon from 'sinon';
-
 let grout = new Grout();
 
-let mockGet, mockPut, mockPost, mockDel, mockLog, mockDebug, mockWarn, mockInfo, mockError;
-
-let exampleUser;
-describe.skip('User model', () => {
+let exampleUser, mockGet, mockPut, mockPost, mockDel,
+mockLog, mockDebug, mockWarn, mockInfo, mockError;
+describe('User model', () => {
 	beforeEach(() => {
 		exampleUser = grout.User('exampleUser');
 		// console.log('exampleUser', exampleUser);
@@ -66,7 +63,7 @@ describe.skip('User model', () => {
 		it('exists', () => {
 			expect(exampleUser).to.respondTo('get');
 		});
-		it('resolves', () => {
+		it.skip('resolves', () => {
 			expect(exampleUser.get()).to.eventually.be.an('object');
 		});
 	});
@@ -74,7 +71,7 @@ describe.skip('User model', () => {
 		it('exists', () => {
 			expect(exampleUser).to.respondTo('update');
 		});
-		it('resolves', () => {
+		it.skip('resolves', () => {
 			expect(exampleUser.update()).to.eventually.be.an('object');
 		});
 	});
@@ -82,7 +79,7 @@ describe.skip('User model', () => {
 		it('exists', () => {
 			expect(exampleUser).to.respondTo('remove');
 		});
-		it('resolves', () => {
+		it.skip('resolves', () => {
 			expect(exampleUser.remove()).to.eventually.be.an('object');
 		});
 	});

@@ -1,31 +1,32 @@
 import Grout from '../../src';
 let grout = new Grout();
+
 let mockGet, mockPut, mockPost, mockLog, mockDebug, mockWarn, mockInfo, mockError;
 let exampleApp;
-describe.skip('Directory model', () => {
+describe('Directory model', () => {
 	beforeEach(() => {
 		exampleApp = grout.Project('test', 'exampleApp');
-		// mockGet = sinon.stub(grout.utils.request, 'get', () => {
-		// 	// console.log('mock get called with:', arguments);
-		// 	return new Promise((resolve) => {
-		// 		resolve({body: {}});
-		// 	});
-		// });
-		// mockPut = sinon.stub(grout.utils.request, 'put', () => {
-		// 	// console.log('mock put called with:', arguments);
-		// 	return new Promise((resolve) => {
-		// 		resolve({body: {}});
-		// 	});
-		// });
-		// mockPost = sinon.stub(grout.utils.request, 'post', (url, postData) => {
-		// 	// console.log('mock post called with:', arguments);
-		// 	return new Promise((resolve, reject) => {
-		// 		if (!postData || postData == {}) {
-		// 			reject({});
-		// 		}
-		// 		resolve({body: {}});
-		// 	});
-		// });
+		mockGet = sinon.stub(grout.utils.request, 'get', () => {
+			// console.log('mock get called with:', arguments);
+			return new Promise((resolve) => {
+				resolve({body: {}});
+			});
+		});
+		mockPut = sinon.stub(grout.utils.request, 'put', () => {
+			// console.log('mock put called with:', arguments);
+			return new Promise((resolve) => {
+				resolve({body: {}});
+			});
+		});
+		mockPost = sinon.stub(grout.utils.request, 'post', (url, postData) => {
+			// console.log('mock post called with:', arguments);
+			return new Promise((resolve, reject) => {
+				if (!postData || postData == {}) {
+					reject({});
+				}
+				resolve({body: {}});
+			});
+		});
 		mockLog = sinon.stub(grout.utils.logger, 'log', () => {});
 		mockDebug = sinon.stub(grout.utils.logger, 'debug', () => {});
 		mockWarn = sinon.stub(grout.utils.logger, 'warn', () => {});
@@ -95,26 +96,6 @@ describe.skip('Directory model', () => {
 	describe('delFromFb method', () => {
 		it('exists', () => {
 			expect(exampleApp.Directory).to.respondTo('delFromFb');
-		});
-	});
-	describe('addLocalToFb method', () => {
-		it('exists', () => {
-			expect(exampleApp.Directory).to.respondTo('addLocalToFb');
-		});
-	});
-	describe('getFromS3 method', () => {
-		it('exists', () => {
-			expect(exampleApp.Directory).to.respondTo('getFromS3');
-		});
-	});
-	describe('buildStructure method', () => {
-		it('exists', () => {
-			expect(exampleApp.Directory).to.respondTo('buildStructure');
-		});
-	});
-	describe('syncStructure method', () => {
-		it('exists', () => {
-			expect(exampleApp.Directory).to.respondTo('syncStructure');
 		});
 	});
 });
