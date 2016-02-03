@@ -5,6 +5,7 @@ import ApiAction from './ApiAction';
 import Group from './Group';
 import Directory from './Directory';
 import FileObj from './File';
+import FileSystemEntity from './FileSystemEntity';
 import firebase from '../utils/firebase';
 
 const { request, logger } = matter.utils;
@@ -146,6 +147,19 @@ export default class Project extends ApiAction {
 			func: 'File', obj: 'Project'
 		});
 		return file;
+	}
+
+	/**
+	 * @description FileSystemEntity within project
+	 */
+	FileSystemEntity(path) {
+		const fileSystemEntity = new FileSystemEntity(this, path);
+		logger.debug({
+			description: 'Projects fileSystemEntity action called.',
+			path, project: this, fileSystemEntity,
+			func: 'FileSystemEntity', obj: 'Project'
+		});
+		return fileSystemEntity;
 	}
 
 	/**
