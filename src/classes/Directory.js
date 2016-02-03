@@ -3,7 +3,7 @@ import matter from './Matter';
 import File from './File';
 import Folder from './Folder';
 import jszip from 'jszip';
-import filesave from 'filesaver.js';
+import filesave from 'node-safe-filesaver';
 //Convenience vars
 const { logger } = matter.utils;
 
