@@ -9290,6 +9290,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _File2 = _interopRequireDefault(_File);
 
+	var _FileSystemEntity2 = __webpack_require__(179);
+
+	var _FileSystemEntity3 = _interopRequireDefault(_FileSystemEntity2);
+
 	var _firebase = __webpack_require__(177);
 
 	var _firebase2 = _interopRequireDefault(_firebase);
@@ -9451,6 +9455,22 @@ return /******/ (function(modules) { // webpackBootstrap
 					func: 'File', obj: 'Project'
 				});
 				return file;
+			}
+
+			/**
+	   * @description FileSystemEntity within project
+	   */
+
+		}, {
+			key: 'FileSystemEntity',
+			value: function FileSystemEntity(path) {
+				var fileSystemEntity = new _FileSystemEntity3.default(this, path);
+				logger.debug({
+					description: 'Projects fileSystemEntity action called.',
+					path: path, project: this, fileSystemEntity: fileSystemEntity,
+					func: 'FileSystemEntity', obj: 'Project'
+				});
+				return fileSystemEntity;
 			}
 
 			/**
