@@ -1,5 +1,5 @@
-import {merge, has, find} from 'lodash';
-let defaultConfig = {
+import { merge, has, find } from 'lodash';
+const defaultConfig = {
 	envs: {
 		local: {
 			isLocal: true,
@@ -49,7 +49,7 @@ class Config {
 	get serverUrl() {
 		let url = defaultConfig.envs[envName].serverUrl || defaultConfig.defaultServerUrl;
 		if (typeof window !== 'undefined' && has(window, 'location') && has(window.location, 'host') && window.location.host !== '') {
-			let matchingEnv = find(defaultConfig.envs, (e) => {
+			const matchingEnv = find(defaultConfig.envs, e => {
 				return e.serverUrl === window.location.host;
 			});
 			if (matchingEnv) {

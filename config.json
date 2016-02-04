@@ -1,19 +1,9 @@
 {
 	"distFolder":"dist",
 	"cdn":{
-		"bucketName":"kyper-cdn",
-		"path":"js/grout"
-	},
-	"linkedModules":{
-		"npm": ["kyper-matter"]
+		"bucket":"kyper-cdn",
+		"prefix":"js/grout"
 	},
   "entryFileName": "src/grout.js",
   "mainVarName": "Grout",
-  "mochaGlobals": [
-    "stub",
-    "spy",
-    "expect",
-    "firebase",
-    "hello"
-  ]
 }
