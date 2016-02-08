@@ -1,6 +1,6 @@
 {
   "name": "kyper-grout",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Library to communicate with tessellate application building/managing service.",
   "main": "lib/index.js",
   "jsnext:main": "src/index.js",
@@ -56,7 +56,7 @@
   "dependencies": {
     "firebase": "^2.4.0",
     "jszip": "^2.5.0",
-    "kyper-matter": "0.2.4",
+    "kyper-matter": "0.2.5",
     "lodash": "4.1.0",
     "node-safe-filesaver": "^0.1.0",
     "qs": "^6.0.2",

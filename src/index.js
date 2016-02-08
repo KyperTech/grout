@@ -17,8 +17,8 @@ export default class Grout extends Matter {
 		if(isObject(projectName)){
 			options = projectName;
 		}
-		config.applySettings(options);
 		super(name, config.matterSettings);
+		config.applySettings(options);
 	}
 
 	/**
