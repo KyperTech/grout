@@ -1,4 +1,4 @@
-/*! grout.js v0.2.2 | (c) Kyper Digital Inc. */
+/*! grout.js v0.2.3 | (c) Kyper Digital Inc. */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -57,6 +57,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
 	var _isObject = __webpack_require__(1);
 
 	var _isObject2 = _interopRequireDefault(_isObject);
@@ -66,10 +70,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _isString2 = _interopRequireDefault(_isString);
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
 
 	var _config = __webpack_require__(5);
 
@@ -128,6 +128,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  * @description Projects action
 	  */
 
+
 		_createClass(Grout, [{
 			key: 'Projects',
 			value: function Projects(username) {
@@ -164,6 +165,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'User',
 
+
 			/**
 	   * @description Users action
 	   * @param {Object|String} accountData - Data of account with which to start action
@@ -186,6 +188,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'Group',
 
+
 			/**
 	   * @description Start a new Group action
 	   * @param {String} groupName - Name of group
@@ -205,6 +208,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		}, {
 			key: 'Template',
+
 
 			/**
 	   * @description Start a new Template action
@@ -407,6 +411,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
 	var _find = __webpack_require__(6);
 
 	var _find2 = _interopRequireDefault(_find);
@@ -420,10 +428,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _merge2 = _interopRequireDefault(_merge);
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -14750,6 +14754,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
 	var _isString = __webpack_require__(2);
 
 	var _isString2 = _interopRequireDefault(_isString);
@@ -14759,10 +14767,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _isObject2 = _interopRequireDefault(_isObject);
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
 
 	var _config = __webpack_require__(5);
 
@@ -14842,8 +14846,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  * @description Generate Firebase reference based on project url
 	  */
 
+
 		_createClass(Project, [{
 			key: 'apiAction',
+
 
 			/**
 	   * @description Start an Api action using project
@@ -14942,6 +14948,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'File',
 
+
 			/**
 	   * @description File within project
 	   */
@@ -14978,6 +14985,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}, {
 			key: 'Account',
 
+
 			/**
 	   * @description Account with project
 	   */
@@ -14995,6 +15003,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		}, {
 			key: 'Group',
+
 
 			/**
 	   * @description Group within Project
@@ -15085,15 +15094,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
 	var _isString = __webpack_require__(2);
 
 	var _isString2 = _interopRequireDefault(_isString);
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
 
 	var _config = __webpack_require__(5);
 
@@ -15128,8 +15137,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  * @return {String}
 	  */
 
+
 		_createClass(ApiAction, [{
 			key: 'get',
+
 
 			/** Get
 	   * @return {Promise}
@@ -15229,15 +15240,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
 	var _isString = __webpack_require__(2);
 
 	var _isString2 = _interopRequireDefault(_isString);
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
 
 	var _Matter = __webpack_require__(366);
 
@@ -15270,6 +15281,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  * @param {Array} accounts - List of accounts ids to add to group
 	  * @return {Promise}
 	  */
+
 
 		_createClass(Group, [{
 			key: 'addAccounts',
@@ -15313,6 +15325,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
 	var _isString = __webpack_require__(2);
 
 	var _isString2 = _interopRequireDefault(_isString);
@@ -15328,10 +15344,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
 
 	var _Matter = __webpack_require__(366);
 
@@ -15378,6 +15390,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  * @description File within directory
 	  */
 
+
 		_createClass(Directory, [{
 			key: 'File',
 			value: function File(path) {
@@ -15396,6 +15409,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 		}, {
 			key: 'get',
+
 
 			/**
 	   * @description Get directory
@@ -15692,11 +15706,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _Matter = __webpack_require__(366);
 
@@ -15743,8 +15757,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  * @return {String}
 	  */
 
+
 		_createClass(File, [{
 			key: 'getOriginalContent',
+
 
 			/**
 	   * @description Get a file's content from default location (Firebase)
@@ -15982,11 +15998,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _config = __webpack_require__(5);
 
@@ -16398,6 +16414,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
 	var _isUndefined = __webpack_require__(374);
 
 	var _isUndefined2 = _interopRequireDefault(_isUndefined);
@@ -16415,10 +16435,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _isString2 = _interopRequireDefault(_isString);
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
 
 	var _Matter = __webpack_require__(366);
 
@@ -16467,8 +16483,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  * @return {Object} Firebase reference
 	  */
 
+
 		_createClass(FileSystemEntity, [{
 			key: 'get',
+
 
 			/**
 	   * @description Get a file or folder's content and meta data from default location (Firebase)
@@ -16739,11 +16757,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _FileSystemEntity2 = __webpack_require__(373);
 

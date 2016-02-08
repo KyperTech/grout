@@ -1,8 +1,14 @@
 {
   "name": "kyper-grout",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Library to communicate with tessellate application building/managing service.",
   "main": "lib/index.js",
+  "jsnext:main": "src/index.js",
+  "files": [
+    "src",
+    "dist",
+    "lib"
+  ],
   "scripts": {
     "clean": "rimraf lib dist coverage",
     "lint": "eslint src test",
@@ -22,11 +28,6 @@
     "type": "git",
     "url": "https://github.com/kypertech/grout.git"
   },
-  "files": [
-    "src",
-    "dist",
-    "lib"
-  ],
   "keywords": [
     "kyper",
     "grout",

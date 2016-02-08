@@ -5,5 +5,5 @@
 		"prefix":"js/grout"
 	},
   "entryFileName": "src/grout.js",
-  "mainVarName": "Grout",
+  "mainVarName": "Grout"
 }
