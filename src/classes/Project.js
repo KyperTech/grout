@@ -33,6 +33,7 @@ export default class Project extends ApiAction {
 			func: 'constructor', obj: 'Project'
 		});
 	}
+
 	/**
 	 * @description Generate Firebase reference based on project url
 	 */

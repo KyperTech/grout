@@ -4,6 +4,7 @@ import File from './File';
 import Folder from './Folder';
 import jszip from 'jszip';
 import filesave from 'node-safe-filesaver';
+import github from '../utils/github';
 //Convenience vars
 const { logger } = matter.utils;
 
@@ -170,6 +171,26 @@ export default class Directory {
 				return Promise.resolve(this);
 			});
 		}
+	}
+
+	/**
+	 * @description Clone a repo and populate the directory
+	 */
+	cloneRepo(url) {
+		return new Promise((resolve, reject) => {
+			url = url.replace(/\.git$/, '').replace(/^https:\/\/github\.com/, '');
+			console.log('here is the url', url);
+			let repo = github.getRepo(url);
+			console.log('here is the repo', repo);
+			debugger;
+			repo.contents('master', "src/github.js", function(err, contents) {
+				if (err) {
+					reject(err);
+				}
+				console.log('here are some contents', contents);
+				resolve(contents)
+			});
+		});
 	}
 
 	/**
