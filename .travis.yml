@@ -6,7 +6,7 @@ branches:
   only:
     - master
 sudo: false
-script: "npm run test"
+script: "npm run test:cov"
 addons:
   code_climate:
     repo_token: $CODECLIMATE_REPO_TOKEN
