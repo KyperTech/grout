@@ -1,5 +1,5 @@
 import config from '../config';
-import { has, isString } from 'lodash';
+import { isString } from 'lodash';
 import matter from './Matter';
 const { logger, request } = matter.utils;
 

@@ -109,7 +109,7 @@ export default class Project extends ApiAction {
 	 * @param {String} username - Username of user to add as collaborator
 	 * @param {Array} rights - Read/Write rights of collaborator
 	 */
-	removeCollaborator(username, rights) {
+	removeCollaborator(username) {
 		logger.debug({
 			description: 'Remove collaborator called', username,
 			project: this, func: 'removeCollaborator', obj: 'Project'

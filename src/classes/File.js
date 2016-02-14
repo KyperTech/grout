@@ -72,15 +72,15 @@ export default class File extends FileSystemEntity {
 	/**
 	 * @description Get content from firepad instance
 	 */
-	getContent() {
-		return new Promise((resolve, reject) => {
-				let headless = new Firepad.Headless(this.fbRef);
-				headless.getText(text => {
-					this.content = text;
-					resolve(this.content);
-				});
-		});
-	}
+	// getContent() {
+	// 	return new Promise(resolve => {
+	// 		let headless = new Firepad.Headless(this.fbRef);
+	// 		headless.getText(text => {
+	// 			this.content = text;
+	// 			resolve(this.content);
+	// 		});
+	// 	});
+	// }
 
 	/**
 	 * @description Open a file from default location (Firebase) (Alias for get)
@@ -113,7 +113,7 @@ export default class File extends FileSystemEntity {
 				description: 'Valid ace editor instance required to create firepad.',
 				editor, error, func: 'openInFirepad', obj: 'File'
 			});
-			Promise.reject(error);
+			return Promise.reject(error);
 		});
 	}
 	/**
@@ -129,7 +129,7 @@ export default class File extends FileSystemEntity {
 			});
 			return;
 		}
-		let firepad = firebaseUtil.getLib();
+		const firepad = firebaseUtil.getLib();
 		if (typeof firepad.fromACE !== 'function') {
 			logger.error({
 				description: 'Firepad does not have fromACE method.',

@@ -1,4 +1,4 @@
-import { isArray, isString, has, each } from 'lodash';
+import { isArray, isString, each } from 'lodash';
 import matter from './Matter';
 import File from './File';
 import Folder from './Folder';
@@ -87,10 +87,10 @@ export default class Directory {
 					});
 					promiseArray.push(promise);
 				});
-			}
+			};
 			handleZip(directory);
 			return Promise.all(promiseArray).then(() => {
-				var content = zip.generate({type:"blob"});
+				let content = zip.generate({type: 'blob'});
 				return filesave.saveAs(content, `${this.project.name}-devShare-export.zip`);
 			});
 		});
@@ -147,9 +147,6 @@ export default class Directory {
 	 * @param {Array} files - Array of file objects to upload
 	 */
 	upload(files) {
-		return new Promise((resolve, reject) => {
-			resolve(console.log('files', files));
-		});
 		//TODO: Allow for options of where to add the file to
 		if(!isArray(files)){
 			return this.addToFb(files);
