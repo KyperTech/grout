@@ -26,8 +26,8 @@ var grout = new Grout({logLevel: 'trace'});
     console.log('Login called');
     var username = document.getElementById('login-username').value;
     var password = document.getElementById('login-password').value;
-
-    grout.login({username:username, password:password}).then(function (loginInfo){
+// {username:username, password:password}
+    grout.login('google').then(function (loginInfo){
       console.log('successful login:', loginInfo);
       setStatus();
     }, function (err){

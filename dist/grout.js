@@ -1,4 +1,4 @@
-/*! grout.js v0.2.9 | (c) Kyper Digital Inc. */
+/*! grout.js v0.2.10 | (c) Kyper Digital Inc. */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -5234,7 +5234,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	  value: true
 	});
 
 	var _has = __webpack_require__(99);
@@ -5300,788 +5300,750 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var Matter = function () {
-		/** Constructor
-	  * @param {String|Object} project Project name or object containing project name and owner
-	  */
-
-		function Matter(project, opts) {
-			_classCallCheck(this, Matter);
-
-			if (!project) {
-				_logger2.default.error({
-					description: 'Project name required to use Matter.',
-					func: 'constructor', obj: 'Matter'
-				});
-				throw new Error('Project name is required to use Matter');
-			}
-			if ((0, _isObject2.default)(project)) {
-				this.name = project.name;
-				this.owner = project.owner || null;
-			} else {
-				this.name = project;
-			}
-			if (opts) {
-				this.options = opts;
-				// config.applySettings(opts);
-				if (opts.env) _config2.default.envName = opts.env;
-				if (opts.envName) _config2.default.envName = opts.envName;
-				if (opts.logLevel) _config2.default.logLevel = opts.logLevel;
-			}
-			_logger2.default.debug({
-				description: 'Matter object built.', matter: this,
-				func: 'constructor', obj: 'Matter'
-			});
-		}
-
-		/** Get current logged in status
-	  * @return {Boolean}
-	  * @example
-	  * //Check if there is an account currently logged in
-	  * if(matter.isLoggedIn){
-	  *   console.log('There is currently an account logged in.');
-	  * } else {
-	  *   console.warn('There is no account currently logged in.');
-	  * }
-	  */
-
-
-		_createClass(Matter, [{
-			key: 'signup',
-
-
-			/** Signup a new user
-	   * @param {Object} signupData - Object containing data to use while signing up to application.
-	   * @param {String} signupData.username - Username of new user (error will be returned if username is taken)
-	   * @param {String} signupData.email - Email of new user (error will be returned if email is already used)
-	   * @param {String} signupData.password - Password to be used with account (will be encrypted).
-	   * @return {Promise}
-	   * @example
-	   * //Signup a new user
-	   * var signupData = {username: 'testuser1', email:'test@email.com', password: 'testpassword'};
-	   * matter.signup(signupData).then(function(signupRes){
-	   *  console.log('New user signed up successfully. New account: ', signupRes.account);
-	   * }, function(err){
-	   *  console.error('Error signing up:', err);
-	   * });
-	   */
-			value: function signup(signupData) {
-				var _this = this;
-
-				_logger2.default.debug({
-					description: 'Signup called.', signupData: signupData,
-					func: 'signup', obj: 'Matter'
-				});
-				if (!signupData || !(0, _isObject2.default)(signupData) && !(0, _isString2.default)(signupData)) {
-					_logger2.default.error({
-						description: 'Signup information is required to signup.',
-						func: 'signup', obj: 'Matter'
-					});
-					return Promise.reject({
-						message: 'Signup data is required to signup.',
-						status: 'NULL_DATA'
-					});
-				}
-				if ((0, _isString2.default)(signupData)) {
-					return this.authUsingProvider(signupData);
-				}
-				//Handle no username or email
-				if (!signupData.username || !signupData.email) {
-					_logger2.default.error({
-						description: 'Email and Username required to signup.',
-						func: 'signup', obj: 'Matter'
-					});
-					return Promise.reject({
-						message: 'Email and Username required to signup.',
-						status: 'EMPTY_DATA'
-					});
-				}
-				if (!signupData.password) {
-					_logger2.default.error({
-						description: 'Password is required to signup.',
-						func: 'signup', obj: 'Matter'
-					});
-					return Promise.reject({
-						message: 'Password is required to signup.',
-						status: 'PASS_REQUIRED'
-					});
-				}
-				return request.post(this.endpoint + '/signup', signupData).then(function (response) {
-					if (response.token) {
-						_this.token.string = response.token;
-					}
-					if (response.user) {
-						_this.currentUser = response.user;
-					}
-					_logger2.default.info({
-						description: 'Signup successful.', user: _this.currentUser,
-						func: 'signup', obj: 'Matter'
-					});
-					return _this.currentUser;
-				})['catch'](function (error) {
-					_logger2.default.error({
-						description: 'Error requesting signup.', error: error,
-						signupData: signupData, func: 'signup', obj: 'Matter'
-					});
-					return Promise.reject(error);
-				});
-			}
-
-			/** Login by username/email
-	   * @param {Object} loginData - Object containing data to use while logging in to application.
-	   * @param {String} loginData.username - Username of user to login as
-	   * @param {String} loginData.email - Email of new user (Optional instead of username)
-	   * @param {String} loginData.password - Password to be used with account (will be encrypted).
-	   * @return {Promise}
-	   * @example
-	   * //Login as 'testuser1'
-	   * var loginData = {username: 'testuser1', password: 'testpassword'};
-	   * matter.login(loginData).then(function(loginRes){
-	   *  console.log('New user logged in succesfully. Account: ', loginRes.user);
-	   * }, function(err){
-	   *  console.error('Error logging in:', err);
-	   * });
+	  /** Constructor
+	   * @param {String|Object} project Project name or object containing project name and owner
 	   */
 
-		}, {
-			key: 'login',
-			value: function login(loginData) {
-				var _this2 = this;
+	  function Matter(project, opts) {
+	    _classCallCheck(this, Matter);
 
-				if (!loginData || !(0, _isObject2.default)(loginData) && !(0, _isString2.default)(loginData)) {
-					_logger2.default.error({
-						description: 'Username/Email and Password are required to login',
-						func: 'login', obj: 'Matter'
-					});
-					return Promise.reject({
-						message: 'Login data is required to login.',
-						status: 'DATA_REQUIRED'
-					});
-				}
-				//Handle provider logins
-				if ((0, _isString2.default)(loginData)) {
-					return this.authUsingProvider(loginData);
-				}
-				//Handle no username or email
-				if (!loginData.username && !loginData.email) {
-					_logger2.default.error({
-						description: 'Email or Username required to login.',
-						func: 'login', obj: 'Matter'
-					});
-					return Promise.reject({
-						message: 'Email or Username required to login.',
-						status: 'ID_REQUIRED'
-					});
-				}
-				//Handle null or invalid password
-				if (!loginData.password || loginData.password === '') {
-					return Promise.reject({
-						message: 'Password is required to login.',
-						status: 'PASS_REQUIRED'
-					});
-				}
-				//Username/Email Login
-				return request.put(this.endpoint + '/login', loginData).then(function (response) {
-					if (response.data && response.data.status && response.data.status == 409) {
-						_logger2.default.error({
-							description: 'User not found.', response: response,
-							func: 'login', obj: 'Matter'
-						});
-						return Promise.reject(response.data);
-					}
-					if (response.token) {
-						_this2.token.string = response.token;
-					}
-					if (response.user) {
-						_this2.currentUser = response.user;
-					}
-					_logger2.default.info({
-						description: 'Successful login.', user: _this2.currentUser,
-						func: 'login', obj: 'Matter'
-					});
-					return _this2.currentUser;
-				})['catch'](function (error) {
-					_logger2.default.error({
-						description: 'Error requesting login.',
-						error: error, func: 'login', obj: 'Matter'
-					});
-					if (error.status == 409 || error.status == 400) {
-						error = error.response.text;
-					}
-					return Promise.reject(error);
-				});
-			}
+	    if (!project) {
+	      _logger2.default.error({
+	        description: 'Project name required to use Matter.',
+	        func: 'constructor', obj: 'Matter'
+	      });
+	      throw new Error('Project name is required to use Matter');
+	    }
+	    if ((0, _isObject2.default)(project)) {
+	      this.name = project.name;
+	      this.owner = project.owner || null;
+	    } else {
+	      this.name = project;
+	    }
+	    if (opts) {
+	      this.options = opts;
+	      _config2.default.applySettings(opts);
+	    }
+	    _logger2.default.debug({
+	      description: 'Matter object built.', matter: this,
+	      func: 'constructor', obj: 'Matter'
+	    });
+	  }
 
-			/** logout
-	   * @description Log out of currently logged in user account
-	   * @return {Promise}
-	   * @example
-	   * //Logout of currently logged in account
-	   * matter.logout().then(function(loginRes){
-	   *  console.log('Logged out successfully');
-	   * }, function(err){
-	   *  console.error('Error logging out:', err);
-	   * });
-	   */
-
-		}, {
-			key: 'logout',
-			value: function logout() {
-				var _this3 = this;
-
-				//TODO: Handle logging out of providers
-				if (!this.isLoggedIn) {
-					_logger2.default.warn({
-						description: 'No logged in account to log out.',
-						func: 'logout', obj: 'Matter'
-					});
-					return Promise.reject({
-						message: 'No logged in account to log out.',
-						status: 'NULL_ACCOUNT'
-					});
-				}
-				return request.put(this.endpoint + '/logout').then(function (response) {
-					_logger2.default.info({
-						description: 'Logout successful.',
-						response: response, func: 'logout', obj: 'Matter'
-					});
-					_this3.currentUser = null;
-					_this3.token.delete();
-					return response;
-					// return ProviderAuth.logout().then(() => {
-					// 	return response;
-					// }, () => {
-					// 	return response;
-					// });
-				})['catch'](function (error) {
-					_logger2.default.error({
-						description: 'Error requesting log out: ',
-						error: error, func: 'logout', obj: 'Matter'
-					});
-					_this3.storage.removeItem(_config2.default.tokenUserDataName);
-					_this3.token.delete();
-					return Promise.reject(error);
-				});
-			}
-
-			/** Authenticate using external provider
-	   * @param {String} provider - Provider name
-	   * @return {Promise}
-	   * @example
-	   * //Signup using google
-	   * matter.authUsingProvider('google').then(function(signupRes){
-	   *  console.log('New user logged in succesfully. Account: ', signupRes.user);
-	   * }, function(err){
-	   *  console.error('Error logging in:', err);
-	   * });
-	   */
-
-		}, {
-			key: 'authUsingProvider',
-			value: function authUsingProvider(provider) {
-				var _this4 = this;
-
-				if (!provider) {
-					_logger2.default.info({
-						description: 'Provider required to sign up.',
-						func: 'authUsingProvider', obj: 'Matter'
-					});
-					return Promise.reject({ message: 'Provider data is required to signup.' });
-				}
-				return ProviderAuth.authWithServer(provider).then(function (response) {
-					_logger2.default.info({
-						description: 'Provider login successful.',
-						response: response, func: 'authUsingProvider', obj: 'Matter'
-					});
-					if (response && response.token) {
-						_this4.token.string = response.token;
-					}
-					if (response && response.user || response.data) {
-						_this4.currentUser = response.data || response.user;
-					}
-					return _this4.currentUser;
-				}, function (error) {
-					_logger2.default.error({
-						description: 'Provider signup error.', error: error,
-						func: 'authUsingProvider', obj: 'Matter'
-					});
-					return Promise.reject(error);
-				});
-			}
-
-			/** getCurrentUser
-	   * @return {Promise}
-	   * @example
-	   * //Logout of currently logged in account
-	   * matter.getCurrentUser().then(function(currentAccount){
-	   *  console.log('Currently logged in account:', currentAccount);
-	   * }, function(err){
-	   *  console.error('Error logging out:', err);
-	   * });
-	   */
-
-		}, {
-			key: 'getCurrentUser',
-			value: function getCurrentUser() {
-				var _this5 = this;
-
-				if (this.currentUser) {
-					_logger2.default.debug({
-						description: 'Current is already available. Returning user.',
-						func: 'currentUser', obj: 'Matter'
-					});
-					return Promise.resolve(this.currentUser);
-				}
-				if (!this.isLoggedIn) {
-					_logger2.default.debug({
-						description: 'Current user is null.',
-						func: 'currentUser', obj: 'Matter'
-					});
-					return Promise.resolve(null);
-				}
-				return request.get(this.endpoint + '/user').then(function (response) {
-					//TODO: Save user information locally
-					_logger2.default.log({
-						description: 'Current User Request responded.',
-						response: response, func: 'currentUser', obj: 'Matter'
-					});
-					_this5.currentUser = response;
-					return response;
-				})['catch'](function (error) {
-					if (error.status == 401) {
-						_logger2.default.warn({
-							description: 'Called for current user without token.',
-							error: error, func: 'currentUser', obj: 'Matter'
-						});
-						_token2.default.delete();
-						return Promise.resolve(null);
-					}
-					_logger2.default.error({
-						description: 'Error requesting current user.',
-						error: error, func: 'currentUser', obj: 'Matter'
-					});
-					return Promise.reject(error);
-				});
-			}
-
-			/** updateAccount
-	   * @param {Object} updateData - Data to update within profile (only provided data will be modified).
-	   * @return {Promise}
-	   * @example
-	   * //Update current account's profile
-	   * matter.updateAccount().then(function(updatedAccount){
-	   *  console.log('Currently logged in account:', updatedAccount);
-	   * }, function(err){
-	   *  console.error('Error updating profile:', err);
-	   * });
-	   */
-
-		}, {
-			key: 'updateAccount',
-			value: function updateAccount(updateData) {
-				var _this6 = this;
-
-				if (!this.isLoggedIn) {
-					_logger2.default.error({
-						description: 'No current user profile to update.',
-						func: 'updateAccount', obj: 'Matter'
-					});
-					return Promise.reject({
-						message: 'Must be logged in to update account.'
-					});
-				}
-				if (!updateData) {
-					_logger2.default.error({
-						description: 'Data is required to update profile.',
-						func: 'updateAccount', obj: 'Matter'
-					});
-					return Promise.reject({
-						message: 'Data required to update account.',
-						status: 'NULL_DATA'
-					});
-				}
-				//Send update request
-				return request.put(this.endpoint + '/users/' + this.currentUser.username, updateData).then(function (response) {
-					_logger2.default.info({
-						description: 'Update profile request responded.',
-						response: response, func: 'updateAccount', obj: 'Matter'
-					});
-					_this6.currentUser = response;
-					return response;
-				})['catch'](function (error) {
-					_logger2.default.error({
-						description: 'Error requesting current user.',
-						error: error, func: 'updateAccount', obj: 'Matter'
-					});
-					return Promise.reject(error);
-				});
-			}
-
-			/** uploadAvatar
-	   * @description Upload account avatar to Tessellate
-	   * @param {Object} file - File object to upload
-	   * @return {Promise}
-	   * @example
-	   * //Upload image to tessellate
-	   * matter.uploadAvatar(file).then(function(imgUrl){
-	   *  console.log('Currently logged in account:', imgUrl);
-	   * }, function(err){
-	   *  console.error('Error uploading image:', err);
-	   * });
-	   */
-
-		}, {
-			key: 'uploadAvatar',
-			value: function uploadAvatar(file) {
-				if (!this.isLoggedIn) {
-					_logger2.default.error({
-						description: 'Must be logged in to upload an image.',
-						func: 'uploadAvatar', obj: 'Matter'
-					});
-					return Promise.reject({
-						message: 'Must be logged in to upload image.'
-					});
-				}
-				if (!file) {
-					_logger2.default.error({
-						description: 'File is required to upload Avatar.',
-						func: 'uploadAvatar', obj: 'Matter'
-					});
-					return Promise.reject({
-						message: 'Data required to update profile.',
-						status: 'NULL_DATA'
-					});
-				}
-				var reqData = { files: [{ key: 'image', file: file }] };
-				//Send update request
-				return request.put(this.endpoint + '/users/' + this.currentUser.username + '/avatar', reqData);
-			}
-
-			/** changePassword
-	   * @param {String} updateData New password for account.
-	   * @return {Promise}
-	   * @example
-	   * //Update current account's password
-	   * var newPassword = 'asdfasdfasdf';
-	   * matter.changePassword(newPassword).then(function(updatedAccount){
-	   *  console.log('Currently logged in account:', updatedAccount);
-	   * }, function(err){
-	   *  console.error('Error changing password:', err);
-	   * });
-	   */
-
-		}, {
-			key: 'changePassword',
-			value: function changePassword(newPassword) {
-				if (!this.isLoggedIn) {
-					_logger2.default.error({
-						description: 'No current user profile for which to change password.',
-						func: 'changePassword', obj: 'Matter'
-					});
-					return Promise.reject({
-						message: 'Must be logged in to change password.'
-					});
-				}
-				//Send update request
-				return request.put(this.endpoint + '/user/password', newPassword);
-			}
-
-			/** recoverAccount
-	   * @param {String} updateData New password for account.
-	   * @return {Promise}
-	   * @example
-	   * //Recover current users password
-	   * matter.recoverAccount().then(function(updatedAccount){
-	   *  console.log('Currently logged in account:', updatedAccount);
-	   * }, function(err){
-	   *  console.error('Error updating profile:', err);
-	   * });
-	   */
-
-		}, {
-			key: 'recoverAccount',
-			value: function recoverAccount(accountData) {
-				if (!accountData || !(0, _isString2.default)(accountData) && !(0, _isObject2.default)(accountData)) {
-					_logger2.default.error({
-						description: 'Account data is required to recover an account.',
-						func: 'recoverAccount', obj: 'Matter'
-					});
-					return Promise.reject({ message: 'Account data is required to recover an account.' });
-				}
-				var account = {};
-				if ((0, _isString2.default)(accountData)) {
-					account = accountData.indexOf('@') !== -1 ? { email: accountData } : { username: accountData };
-				} else {
-					account = accountData;
-				}
-				_logger2.default.debug({
-					description: 'Requesting recovery of account.', account: account,
-					func: 'recoverAccount', obj: 'Matter'
-				});
-				//Send update request
-				return request.put(this.endpoint + '/user/recover');
-			}
-
-			/** Check that user is in a single group or in all of a list of groups
-	   * @param {Array} checkGroups - List of groups to check for account membership
+	  /** Get current logged in status
 	   * @return {Boolean}
 	   * @example
-	   * //Check for group membership
-	   * var isBoth = ;
-	   * if(matter.isInGroup('admins')){
-	   * console.log('Current account is an admin!');
-	   * } else {
-	   * console.warn('Current account is not an admin.');
-	   * }
-	   */
-
-		}, {
-			key: 'isInGroup',
-			value: function isInGroup(checkGroups) {
-				var _this7 = this;
-
-				if (!this.isLoggedIn) {
-					_logger2.default.error({
-						description: 'No logged in user to check for groups.',
-						func: 'isInGroup', obj: 'Matter'
-					});
-					return false;
-				}
-				if (!checkGroups) {
-					_logger2.default.log({
-						description: 'Invalid group(s).',
-						func: 'isInGroup', obj: 'Matter'
-					});
-					return false;
-				}
-				//Check if user is within groups
-				if ((0, _isString2.default)(checkGroups)) {
-					var _ret = function () {
-						var groupName = checkGroups;
-						//Single role or string list of roles
-						var groupsArray = groupName.split(',');
-						if (groupsArray.length > 1) {
-							//String list of groupts
-							_logger2.default.info({
-								description: 'String list of groups.', list: groupsArray,
-								func: 'isInGroup', obj: 'Matter'
-							});
-							return {
-								v: _this7.isInGroups(groupsArray)
-							};
-						}
-						//Single group
-						var groups = _this7.token.data.groups || [];
-						_logger2.default.log({
-							description: 'Checking if user is in group.',
-							group: groupName, userGroups: _this7.token.data.groups,
-							func: 'isInGroup', obj: 'Matter'
-						});
-						return {
-							v: (0, _some2.default)(groups, function (group) {
-								return groupName == group.name;
-							})
-						};
-					}();
-
-					if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
-				}
-				if ((0, _isArray2.default)(checkGroups)) {
-					return this.isInGroups(checkGroups);
-				}
-				return false;
-			}
-
-			/** Check that user is in all of a list of groups
-	   * @param {Array|String} checkGroups - List of groups to check for account membership
-	   * @return {Boolean}
-	   * @example
-	   * //Check for group membership
-	   * var isBoth = matter.isInGroups(['admins', 'users']);
-	   * if(isBoth){
-	   * console.log('Current account is both an admin and a user');
-	   * } else {
-	   * console.warn('Current account is not both an admin and a user')
-	   * }
-	   */
-
-		}, {
-			key: 'isInGroups',
-			value: function isInGroups(checkGroups) {
-				var _this8 = this;
-
-				if (!this.isLoggedIn) {
-					_logger2.default.log({
-						description: 'No logged in user to check.',
-						func: 'isInGroups', obj: 'Matter'
-					});
-					return false;
-				}
-				if (!checkGroups) {
-					_logger2.default.log({
-						description: 'Invalid group(s).',
-						func: 'isInGroup', obj: 'Matter'
-					});
-					return false;
-				}
-				//Check if user is in some of the provided groups
-				if ((0, _isArray2.default)(checkGroups)) {
-					return (0, _every2.default)(checkGroups.map(function (group) {
-						if ((0, _isString2.default)(group)) {
-							//Group is string
-							return _this8.isInGroup(group);
-						}
-						//Group is object
-						if ((0, _has2.default)(group, 'name')) {
-							return _this8.isInGroup(group.name);
-						}
-						_logger2.default.error({
-							description: 'Invalid group object.',
-							group: group, func: 'isInGroups', obj: 'Matter'
-						});
-						return false;
-					}), true);
-				}
-				if ((0, _isString2.default)(checkGroups)) {
-					//TODO: Handle spaces within string list
-					var groupsArray = checkGroups.split(',');
-					if (groupsArray.length > 1) {
-						return this.isInGroups(groupsArray);
-					}
-					return this.isInGroup(groupsArray[0]);
-				}
-				_logger2.default.error({
-					description: 'Invalid groups list.',
-					func: 'isInGroups', obj: 'Matter'
-				});
-				return false;
-			}
-		}, {
-			key: 'isLoggedIn',
-			get: function get() {
-				return this.token.string ? true : false;
-			}
-
-			/** Endpoint generation that handles default/provided settings and environment
-	   * @return {String} endpoint - endpoint for tessellate application
-	   */
-
-		}, {
-			key: 'endpoint',
-			get: function get() {
-				//Handle options
-				if ((0, _has2.default)(this, 'options')) {
-					if (this.options.localServer) {
-						_config2.default.envName = 'local';
-						_logger2.default.log({
-							description: 'LocalServer option was set to true. Now server url is local server.',
-							url: _config2.default.serverUrl, func: 'endpoint', obj: 'Matter'
-						});
-					}
-					if (this.options.env) {
-						_config2.default.envName = this.options.env;
-						_logger2.default.log({
-							description: 'Environment set based on provided environment.',
-							config: _config2.default, func: 'endpoint', obj: 'Matter'
-						});
-					}
-				}
-				//Create an endpoint that is namespaced to the specific project
-				var namespacedEndpoint = this.owner ? _config2.default.serverUrl + '/users/' + this.owner + '/projects/' + this.name : _config2.default.serverUrl + '/projects/' + this.name;
-				//Handle tessellate as name
-				if (this.name == 'tessellate') {
-					//Remove url if host is a tessellate server
-					if (typeof window !== 'undefined' && (0, _has2.default)(window, 'location') && window.location.host.indexOf('tessellate') !== -1) {
-						namespacedEndpoint = '';
-						_logger2.default.info({
-							description: 'App is Tessellate and Host is Tessellate Server, serverUrl simplified!',
-							func: 'endpoint', obj: 'Matter'
-						});
-					} else {
-						_logger2.default.info({
-							description: 'App is tessellate, serverUrl set as main tessellate server.',
-							url: _config2.default.serverUrl, func: 'endpoint', obj: 'Matter'
-						});
-						namespacedEndpoint = _config2.default.serverUrl;
-					}
-				}
-				_logger2.default.debug({
-					description: 'Endpoint created.', url: namespacedEndpoint,
-					func: 'endpoint', obj: 'Matter'
-				});
-				return namespacedEndpoint;
-			}
-
-			/** Save current user (handled automatically by default)
-	   * @param {Object} userData - Account data to set for current user
-	   * @example
-	   * //Save account response to current user
-	   * matter.currentUser = {username: 'testuser1', email: 'test@email.com'};
-	   * console.log('New current user set:', matter.currentUser);
-	   */
-
-		}, {
-			key: 'currentUser',
-			set: function set(userData) {
-				_logger2.default.debug({
-					description: 'Current User set.', user: userData,
-					func: 'currentUser', obj: 'Matter'
-				});
-				envStorage.setItem(_config2.default.tokenUserDataName, userData);
-			}
-
-			/** Get currently logged in user or returns null
-	   * @return {Object|null}
-	   * @example
-	   * //Return account if logged in
+	   * //Check if there is an account currently logged in
 	   * if(matter.isLoggedIn){
-	   * console.log('Current user account: ', matter.currentUser);
+	   *   console.log('There is currently an account logged in.')
 	   * } else {
-	   * console.log('No current user. Current user: ', matter.currentUser)
+	   *   console.warn('There is no account currently logged in.')
 	   * }
-	   * matter.currentUser
-	   * console.log('New current user set:', matter.currentUser);
-	   */
-			,
-			get: function get() {
-				if (this.storage.getItem(_config2.default.tokenUserDataName)) {
-					return this.storage.getItem(_config2.default.tokenUserDataName);
-				} else {
-					return null;
-				}
-			}
-
-			/* Utility to handle safley writing to localStorage, sessionStorage, and cookies
-	   * @return {Object}
 	   */
 
-		}, {
-			key: 'storage',
-			get: function get() {
-				return envStorage;
-			}
 
-			/** Utility to handle token writing/deleting/decoding
-	   * @return {Object}
-	   */
+	  _createClass(Matter, [{
+	    key: 'signup',
 
-		}, {
-			key: 'token',
-			get: function get() {
-				return _token2.default;
-			}
 
-			/** Utils placed in base library
-	   * @return {Object}
-	   */
+	    /** Signup a new user
+	     * @param {Object} signupData - Object containing data to use while signing up to application.
+	     * @param {String} signupData.username - Username of new user (error will be returned if username is taken)
+	     * @param {String} signupData.email - Email of new user (error will be returned if email is already used)
+	     * @param {String} signupData.password - Password to be used with account (will be encrypted).
+	     * @return {Promise}
+	     * @example
+	     * //Signup a new user
+	     * var signupData = {username: 'testuser1', email:'test@email.com', password: 'testpassword'}
+	     * matter.signup(signupData).then(function(signupRes){
+	     *  console.log('New user signed up successfully. New account: ', signupRes.account)
+	     * }, function(err){
+	     *  console.error('Error signing up:', err)
+	     * })
+	     */
+	    value: function signup(signupData) {
+	      var _this = this;
 
-		}, {
-			key: 'utils',
-			get: function get() {
-				return { logger: _logger2.default, request: request, storage: envStorage, dom: dom };
-			}
-		}]);
+	      _logger2.default.debug({
+	        description: 'Signup called.', signupData: signupData,
+	        func: 'signup', obj: 'Matter'
+	      });
+	      if (!signupData) {
+	        _logger2.default.error({
+	          description: 'Signup information is required to signup.',
+	          func: 'signup', obj: 'Matter'
+	        });
+	        return Promise.reject({
+	          message: 'Signup data is required to signup.',
+	          status: 'NULL_DATA'
+	        });
+	      }
+	      if ((0, _isString2.default)(signupData)) {
+	        return this.authUsingProvider(signupData);
+	      }
+	      // Handle no username or email
+	      if (!signupData.username || !signupData.email) {
+	        _logger2.default.error({
+	          description: 'Email and Username required to signup.',
+	          func: 'signup', obj: 'Matter'
+	        });
+	        return Promise.reject({
+	          message: 'Email and Username required to signup.',
+	          status: 'EMPTY_DATA'
+	        });
+	      }
+	      if (!signupData.password) {
+	        _logger2.default.error({
+	          description: 'Password is required to signup.',
+	          func: 'signup', obj: 'Matter'
+	        });
+	        return Promise.reject({
+	          message: 'Password is required to signup.',
+	          status: 'PASS_REQUIRED'
+	        });
+	      }
+	      return request.post(this.endpoint + '/signup', signupData).then(function (response) {
+	        if (response.token) {
+	          _this.token.string = response.token;
+	        }
+	        if (response.user) {
+	          _this.currentUser = response.user;
+	        }
+	        _logger2.default.info({
+	          description: 'Signup successful.', user: _this.currentUser,
+	          func: 'signup', obj: 'Matter'
+	        });
+	        return _this.currentUser;
+	      })['catch'](function (error) {
+	        _logger2.default.error({
+	          description: 'Error requesting signup.', error: error,
+	          signupData: signupData, func: 'signup', obj: 'Matter'
+	        });
+	        return Promise.reject(error);
+	      });
+	    }
 
-		return Matter;
+	    /** Login by username/email
+	     * @param {Object} loginData - Object containing data to use while logging in to application.
+	     * @param {String} loginData.username - Username of user to login as
+	     * @param {String} loginData.email - Email of new user (Optional instead of username)
+	     * @param {String} loginData.password - Password to be used with account (will be encrypted).
+	     * @return {Promise}
+	     * @example
+	     * //Login as 'testuser1'
+	     * var loginData = {username: 'testuser1', password: 'testpassword'}
+	     * matter.login(loginData).then(function(loginRes){
+	     *  console.log('New user logged in succesfully. Account: ', loginRes.user)
+	     * }, function(err){
+	     *  console.error('Error logging in:', err)
+	     * })
+	     */
+
+	  }, {
+	    key: 'login',
+	    value: function login(loginData) {
+	      var _this2 = this;
+
+	      if (!loginData || !(0, _isObject2.default)(loginData) && !(0, _isString2.default)(loginData)) {
+	        _logger2.default.error({
+	          description: 'Username/Email and Password are required to login',
+	          func: 'login', obj: 'Matter'
+	        });
+	        return Promise.reject({
+	          message: 'Login data is required to login.',
+	          status: 'DATA_REQUIRED'
+	        });
+	      }
+	      // Provider login
+	      if ((0, _isString2.default)(loginData)) {
+	        return this.authUsingProvider(loginData);
+	      }
+	      // No username or email
+	      if (!loginData.username && !loginData.email) {
+	        _logger2.default.error({
+	          description: 'Email or Username required to login.',
+	          func: 'login', obj: 'Matter'
+	        });
+	        return Promise.reject({
+	          message: 'Email or Username required to login.',
+	          status: 'ID_REQUIRED'
+	        });
+	      }
+	      // Handle null or invalid password
+	      if (!loginData.password || loginData.password === '') {
+	        return Promise.reject({
+	          message: 'Password is required to login.',
+	          status: 'PASS_REQUIRED'
+	        });
+	      }
+	      // Username/Email Login
+	      return request.put(this.endpoint + '/login', loginData).then(function (response) {
+	        if (response.data && response.data.status && response.data.status === 409) {
+	          _logger2.default.error({
+	            description: 'User not found.', response: response,
+	            func: 'login', obj: 'Matter'
+	          });
+	          return Promise.reject(response.data);
+	        }
+	        if (response.token) {
+	          _this2.token.string = response.token;
+	        }
+	        if (response.user) {
+	          _this2.currentUser = response.user;
+	        }
+	        _logger2.default.info({
+	          description: 'Successful login.', user: _this2.currentUser,
+	          func: 'login', obj: 'Matter'
+	        });
+	        return _this2.currentUser;
+	      })['catch'](function (error) {
+	        _logger2.default.error({
+	          description: 'Error requesting login.',
+	          error: error, func: 'login', obj: 'Matter'
+	        });
+	        if (error.status === 409 || error.status === 400) {
+	          error = error.response.text;
+	        }
+	        return Promise.reject(error);
+	      });
+	    }
+
+	    /** logout
+	     * @description Log out of currently logged in user account
+	     * @return {Promise}
+	     * @example
+	     * //Logout of currently logged in account
+	     * matter.logout().then(function(loginRes){
+	     *  console.log('Logged out successfully')
+	     * }, function(err){
+	     *  console.error('Error logging out:', err)
+	     * })
+	     */
+
+	  }, {
+	    key: 'logout',
+	    value: function logout() {
+	      var _this3 = this;
+
+	      // TODO: Handle logging out of providers
+	      if (!this.isLoggedIn) {
+	        _logger2.default.warn({
+	          description: 'No logged in account to log out.',
+	          func: 'logout', obj: 'Matter'
+	        });
+	        return Promise.reject({
+	          message: 'No logged in account to log out.',
+	          status: 'NULL_ACCOUNT'
+	        });
+	      }
+	      return request.put(this.endpoint + '/logout').then(function (response) {
+	        _logger2.default.info({
+	          description: 'Logout successful.',
+	          response: response, func: 'logout', obj: 'Matter'
+	        });
+	        _this3.currentUser = null;
+	        _this3.token.delete();
+	        return response;
+	      })['catch'](function (error) {
+	        _logger2.default.error({
+	          description: 'Error requesting log out: ',
+	          error: error, func: 'logout', obj: 'Matter'
+	        });
+	        _this3.storage.removeItem(_config2.default.tokenUserDataName);
+	        _this3.token.delete();
+	        return Promise.reject(error);
+	      });
+	    }
+
+	    /** Authenticate using external provider
+	     * @param {String} provider - Provider name
+	     * @return {Promise}
+	     * @example
+	     * //Signup using google
+	     * matter.authUsingProvider('google').then(function(signupRes){
+	     *  console.log('New user logged in succesfully. Account: ', signupRes.user)
+	     * }, function(err){
+	     *  console.error('Error logging in:', err)
+	     * })
+	     */
+
+	  }, {
+	    key: 'authUsingProvider',
+	    value: function authUsingProvider(provider) {
+	      var _this4 = this;
+
+	      if (!provider) {
+	        _logger2.default.info({
+	          description: 'Provider required to sign up.',
+	          func: 'authUsingProvider', obj: 'Matter'
+	        });
+	        return Promise.reject({ message: 'Provider data is required to signup.' });
+	      }
+	      return ProviderAuth.authWithServer(provider).then(function (response) {
+	        _logger2.default.info({
+	          description: 'Provider login successful.',
+	          response: response, func: 'authUsingProvider', obj: 'Matter'
+	        });
+	        if (response && response.token) {
+	          _this4.token.string = response.token;
+	        }
+	        if (response && response.user || response.data) {
+	          _this4.currentUser = response.data || response.user;
+	        }
+	        return _this4.currentUser;
+	      }, function (error) {
+	        _logger2.default.error({
+	          description: 'Provider signup error.', error: error,
+	          func: 'authUsingProvider', obj: 'Matter'
+	        });
+	        return Promise.reject(error);
+	      });
+	    }
+
+	    /** getCurrentUser
+	     * @return {Promise}
+	     * @example
+	     * //Logout of currently logged in account
+	     * matter.getCurrentUser().then(function(currentAccount){
+	     *  console.log('Currently logged in account:', currentAccount)
+	     * }, function(err){
+	     *  console.error('Error logging out:', err)
+	     * })
+	     */
+
+	  }, {
+	    key: 'getCurrentUser',
+	    value: function getCurrentUser() {
+	      var _this5 = this;
+
+	      if (this.currentUser) {
+	        _logger2.default.debug({
+	          description: 'Current is already available. Returning user.',
+	          func: 'currentUser', obj: 'Matter'
+	        });
+	        return Promise.resolve(this.currentUser);
+	      }
+	      if (!this.isLoggedIn) {
+	        _logger2.default.debug({
+	          description: 'Current user is null.',
+	          func: 'currentUser', obj: 'Matter'
+	        });
+	        return Promise.resolve(null);
+	      }
+	      return request.get(this.endpoint + '/user').then(function (response) {
+	        // TODO: Save user information locally
+	        _logger2.default.log({
+	          description: 'Current User Request responded.',
+	          response: response, func: 'currentUser', obj: 'Matter'
+	        });
+	        _this5.currentUser = response;
+	        return response;
+	      })['catch'](function (error) {
+	        if (error.status === 401) {
+	          _logger2.default.warn({
+	            description: 'Called for current user without token.',
+	            error: error, func: 'currentUser', obj: 'Matter'
+	          });
+	          _token2.default.delete();
+	          return Promise.resolve(null);
+	        }
+	        _logger2.default.error({
+	          description: 'Error requesting current user.',
+	          error: error, func: 'currentUser', obj: 'Matter'
+	        });
+	        return Promise.reject(error);
+	      });
+	    }
+
+	    /** updateAccount
+	     * @param {Object} updateData - Data to update within profile (only provided data will be modified).
+	     * @return {Promise}
+	     * @example
+	     * //Update current account's profile
+	     * matter.updateAccount().then(function(updatedAccount){
+	     *  console.log('Currently logged in account:', updatedAccount)
+	     * }, function(err){
+	     *  console.error('Error updating profile:', err)
+	     * })
+	     */
+
+	  }, {
+	    key: 'updateAccount',
+	    value: function updateAccount(updateData) {
+	      var _this6 = this;
+
+	      if (!this.isLoggedIn) {
+	        _logger2.default.error({
+	          description: 'No current user profile to update.',
+	          func: 'updateAccount', obj: 'Matter'
+	        });
+	        return Promise.reject({
+	          message: 'Must be logged in to update account.'
+	        });
+	      }
+	      if (!updateData) {
+	        _logger2.default.error({
+	          description: 'Data is required to update profile.',
+	          func: 'updateAccount', obj: 'Matter'
+	        });
+	        return Promise.reject({
+	          message: 'Data required to update account.',
+	          status: 'NULL_DATA'
+	        });
+	      }
+	      // Send update request
+	      return request.put(this.endpoint + '/users/' + this.currentUser.username, updateData).then(function (response) {
+	        _logger2.default.info({
+	          description: 'Update profile request responded.',
+	          response: response, func: 'updateAccount', obj: 'Matter'
+	        });
+	        _this6.currentUser = response;
+	        return response;
+	      })['catch'](function (error) {
+	        _logger2.default.error({
+	          description: 'Error requesting current user.',
+	          error: error, func: 'updateAccount', obj: 'Matter'
+	        });
+	        return Promise.reject(error);
+	      });
+	    }
+
+	    /** uploadAvatar
+	     * @description Upload account avatar to Tessellate
+	     * @param {Object} file - File object to upload
+	     * @return {Promise}
+	     * @example
+	     * //Upload image to tessellate
+	     * matter.uploadAvatar(file).then(function(imgUrl){
+	     *  console.log('Currently logged in account:', imgUrl)
+	     * }, function(err){
+	     *  console.error('Error uploading image:', err)
+	     * })
+	     */
+
+	  }, {
+	    key: 'uploadAvatar',
+	    value: function uploadAvatar(file) {
+	      if (!this.isLoggedIn) {
+	        _logger2.default.error({
+	          description: 'Must be logged in to upload an image.',
+	          func: 'uploadAvatar', obj: 'Matter'
+	        });
+	        return Promise.reject({
+	          message: 'Must be logged in to upload image.'
+	        });
+	      }
+	      if (!file) {
+	        _logger2.default.error({
+	          description: 'File is required to upload Avatar.',
+	          func: 'uploadAvatar', obj: 'Matter'
+	        });
+	        return Promise.reject({
+	          message: 'Data required to update profile.',
+	          status: 'NULL_DATA'
+	        });
+	      }
+	      var reqData = { files: [{ key: 'image', file: file }] };
+	      // Send update request
+	      return request.put(this.endpoint + '/users/' + this.currentUser.username + '/avatar', reqData);
+	    }
+
+	    /** changePassword
+	     * @param {String} updateData New password for account.
+	     * @return {Promise}
+	     * @example
+	     * //Update current account's password
+	     * var newPassword = 'asdfasdfasdf'
+	     * matter.changePassword(newPassword).then(function(updatedAccount){
+	     *  console.log('Currently logged in account:', updatedAccount)
+	     * }, function(err){
+	     *  console.error('Error changing password:', err)
+	     * })
+	     */
+
+	  }, {
+	    key: 'changePassword',
+	    value: function changePassword(newPassword) {
+	      if (!this.isLoggedIn) {
+	        _logger2.default.error({
+	          description: 'No current user profile for which to change password.',
+	          func: 'changePassword', obj: 'Matter'
+	        });
+	        return Promise.reject({
+	          message: 'Must be logged in to change password.'
+	        });
+	      }
+	      // Send update request
+	      return request.put(this.endpoint + '/user/password', newPassword);
+	    }
+
+	    /** recoverAccount
+	     * @param {String} updateData New password for account.
+	     * @return {Promise}
+	     * @example
+	     * //Recover current users password
+	     * matter.recoverAccount().then(function(updatedAccount){
+	     *  console.log('Currently logged in account:', updatedAccount)
+	     * }, function(err){
+	     *  console.error('Error updating profile:', err)
+	     * })
+	     */
+
+	  }, {
+	    key: 'recoverAccount',
+	    value: function recoverAccount(accountData) {
+	      if (!accountData) {
+	        _logger2.default.error({
+	          description: 'Account data is required to recover an account.',
+	          func: 'recoverAccount', obj: 'Matter'
+	        });
+	        return Promise.reject({ message: 'Account data is required to recover an account.' });
+	      }
+	      var account = {};
+	      if ((0, _isString2.default)(accountData)) {
+	        account = accountData.indexOf('@') !== -1 ? { email: accountData } : { username: accountData };
+	      } else {
+	        account = accountData;
+	      }
+	      _logger2.default.debug({
+	        description: 'Requesting recovery of account.', account: account,
+	        func: 'recoverAccount', obj: 'Matter'
+	      });
+	      return request.put(this.endpoint + '/user/recover', account);
+	    }
+
+	    /** Check that user is in a single group or in all of a list of groups
+	     * @param {Array} checkGroups - List of groups to check for account membership
+	     * @return {Boolean}
+	     * @example
+	     * //Check for group membership
+	     * var isBoth =
+	     * if(matter.isInGroup('admins')){
+	     * console.log('Current account is an admin!')
+	     * } else {
+	     * console.warn('Current account is not an admin.')
+	     * }
+	     */
+
+	  }, {
+	    key: 'isInGroup',
+	    value: function isInGroup(checkGroups) {
+	      var _this7 = this;
+
+	      if (!this.isLoggedIn) {
+	        _logger2.default.error({
+	          description: 'No logged in user to check for groups.',
+	          func: 'isInGroup', obj: 'Matter'
+	        });
+	        return false;
+	      }
+	      if (!checkGroups) {
+	        _logger2.default.log({
+	          description: 'Invalid group(s).',
+	          func: 'isInGroup', obj: 'Matter'
+	        });
+	        return false;
+	      }
+	      // Check if user is within groups
+	      if ((0, _isString2.default)(checkGroups)) {
+	        var _ret = function () {
+	          var groupName = checkGroups;
+	          // Single role or string list of roles
+	          var groupsArray = groupName.split(',');
+	          if (groupsArray.length > 1) {
+	            // String list of groupts
+	            _logger2.default.info({
+	              description: 'String list of groups.', list: groupsArray,
+	              func: 'isInGroup', obj: 'Matter'
+	            });
+	            return {
+	              v: _this7.isInGroups(groupsArray)
+	            };
+	          }
+	          // Single group
+	          var groups = _this7.token.data.groups || [];
+	          _logger2.default.log({
+	            description: 'Checking if user is in group.',
+	            group: groupName, userGroups: _this7.token.data.groups,
+	            func: 'isInGroup', obj: 'Matter'
+	          });
+	          return {
+	            v: (0, _some2.default)(groups, function (group) {
+	              return groupName === group.name;
+	            })
+	          };
+	        }();
+
+	        if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+	      }
+	      if ((0, _isArray2.default)(checkGroups)) {
+	        return this.isInGroups(checkGroups);
+	      }
+	      return false;
+	    }
+
+	    /** Check that user is in all of a list of groups
+	     * @param {Array|String} checkGroups - List of groups to check for account membership
+	     * @return {Boolean}
+	     * @example
+	     * //Check for group membership
+	     * var isBoth = matter.isInGroups(['admins', 'users'])
+	     * if(isBoth){
+	     * console.log('Current account is both an admin and a user')
+	     * } else {
+	     * console.warn('Current account is not both an admin and a user')
+	     * }
+	     */
+
+	  }, {
+	    key: 'isInGroups',
+	    value: function isInGroups(checkGroups) {
+	      var _this8 = this;
+
+	      if (!this.isLoggedIn) {
+	        _logger2.default.log({
+	          description: 'No logged in user to check.',
+	          func: 'isInGroups', obj: 'Matter'
+	        });
+	        return false;
+	      }
+	      if (!checkGroups) {
+	        _logger2.default.log({
+	          description: 'Invalid group(s).',
+	          func: 'isInGroup', obj: 'Matter'
+	        });
+	        return false;
+	      }
+	      // Check if user is in some of the provided groups
+	      if ((0, _isArray2.default)(checkGroups)) {
+	        return (0, _every2.default)(checkGroups.map(function (group) {
+	          if ((0, _isString2.default)(group)) {
+	            // Group is string
+	            return _this8.isInGroup(group);
+	          }
+	          // Group is object
+	          if ((0, _has2.default)(group, 'name')) {
+	            return _this8.isInGroup(group.name);
+	          }
+	          _logger2.default.error({
+	            description: 'Invalid group object.',
+	            group: group, func: 'isInGroups', obj: 'Matter'
+	          });
+	          return false;
+	        }), true);
+	      }
+	      if ((0, _isString2.default)(checkGroups)) {
+	        // TODO: Handle spaces within string list
+	        var groupsArray = checkGroups.split(',');
+	        if (groupsArray.length > 1) {
+	          return this.isInGroups(groupsArray);
+	        }
+	        return this.isInGroup(groupsArray[0]);
+	      }
+	      _logger2.default.error({
+	        description: 'Invalid groups list.',
+	        func: 'isInGroups', obj: 'Matter'
+	      });
+	      return false;
+	    }
+	  }, {
+	    key: 'isLoggedIn',
+	    get: function get() {
+	      return (0, _isString2.default)(this.token.string);
+	    }
+
+	    /** Endpoint generation that handles default/provided settings and environment
+	     * @return {String} endpoint - endpoint for tessellate application
+	     */
+
+	  }, {
+	    key: 'endpoint',
+	    get: function get() {
+	      // Remove url if host is a tessellate server
+	      if (typeof window !== 'undefined' && (0, _has2.default)(window, 'location') && window.location.host.indexOf('tessellate') !== -1) {
+	        _logger2.default.info({
+	          description: 'App is Tessellate and Host is Tessellate Server, serverUrl simplified!',
+	          func: 'endpoint', obj: 'Matter'
+	        });
+	        return '';
+	      }
+	      // Handle tessellate as name
+	      if (this.name !== 'tessellate') {
+	        return this.owner ? _config2.default.serverUrl + '/users/' + this.owner + '/projects/' + this.name : _config2.default.serverUrl + '/projects/' + this.name;
+	      }
+	      return _config2.default.serverUrl;
+	    }
+
+	    /** Save current user (handled automatically by default)
+	     * @param {Object} userData - Account data to set for current user
+	     * @example
+	     * //Save account response to current user
+	     * matter.currentUser = {username: 'testuser1', email: 'test@email.com'}
+	     * console.log('New current user set:', matter.currentUser)
+	     */
+
+	  }, {
+	    key: 'currentUser',
+	    set: function set(userData) {
+	      _logger2.default.debug({
+	        description: 'Current User set.', user: userData,
+	        func: 'currentUser', obj: 'Matter'
+	      });
+	      envStorage.setItem(_config2.default.tokenUserDataName, userData);
+	    }
+
+	    /** Get currently logged in user or returns null
+	     * @return {Object|null}
+	     * @example
+	     * //Return account if logged in
+	     * if(matter.isLoggedIn){
+	     * console.log('Current user account: ', matter.currentUser)
+	     * } else {
+	     * console.log('No current user. Current user: ', matter.currentUser)
+	     * }
+	     * matter.currentUser
+	     * console.log('New current user set:', matter.currentUser)
+	     */
+	    ,
+	    get: function get() {
+	      if (this.storage.getItem(_config2.default.tokenUserDataName)) {
+	        return this.storage.getItem(_config2.default.tokenUserDataName);
+	      }
+	      return null;
+	    }
+
+	    /* Utility to handle safley writing to localStorage, sessionStorage, and cookies
+	     * @return {Object}
+	     */
+
+	  }, {
+	    key: 'storage',
+	    get: function get() {
+	      return envStorage;
+	    }
+
+	    /** Utility to handle token writing/deleting/decoding
+	     * @return {Object}
+	     */
+
+	  }, {
+	    key: 'token',
+	    get: function get() {
+	      return _token2.default;
+	    }
+
+	    /** Utils placed in base library
+	     * @return {Object}
+	     */
+
+	  }, {
+	    key: 'utils',
+	    get: function get() {
+	      return { logger: _logger2.default, request: request, storage: envStorage, dom: dom };
+	    }
+	  }]);
+
+	  return Matter;
 	}();
 
 	exports.default = Matter;
@@ -6285,7 +6247,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	  value: true
 	});
 
 	var _find = __webpack_require__(6);
@@ -6303,29 +6265,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var defaultConfig = {
-		envs: {
-			local: {
-				serverUrl: 'http://localhost:4000',
-				logLevel: 'trace'
-			},
-			dev: {
-				serverUrl: 'http://tessellate-stage.elasticbeanstalk.com',
-				logLevel: 'debug'
-			},
-			stage: {
-				serverUrl: 'http://tessellate-stage.elasticbeanstalk.com',
-				logLevel: 'info'
-			},
-			prod: {
-				serverUrl: 'http://tessellate.elasticbeanstalk.com',
-				logLevel: 'error'
-			}
-		},
-		tokenName: 'tessellate',
-		tokenDataName: 'tessellate-tokenData',
-		tokenUserDataName: 'tessellate-currentUser',
-		oauthioKey: 'sxwuB9Gci8-4pBH7xjD0V_jooNU',
-		oauthioCDN: 'https://s3.amazonaws.com/kyper-cdn/js/libs/oauthio-web/v0.5.0/oauth.min.js'
+	  envs: {
+	    local: {
+	      serverUrl: 'http://localhost:4000',
+	      logLevel: 'trace'
+	    },
+	    dev: {
+	      serverUrl: 'http://tessellate-stage.elasticbeanstalk.com',
+	      logLevel: 'debug'
+	    },
+	    stage: {
+	      serverUrl: 'http://tessellate-stage.elasticbeanstalk.com',
+	      logLevel: 'info'
+	    },
+	    prod: {
+	      serverUrl: 'http://tessellate.elasticbeanstalk.com',
+	      logLevel: 'error'
+	    }
+	  },
+	  tokenName: 'tessellate',
+	  tokenDataName: 'tessellate-tokenData',
+	  tokenUserDataName: 'tessellate-currentUser',
+	  oauthioKey: 'sxwuB9Gci8-4pBH7xjD0V_jooNU',
+	  oauthioCDN: 'https://s3.amazonaws.com/kyper-cdn/js/libs/oauthio-web/v0.5.0/oauth.min.js'
 	};
 
 	var instance = null;
@@ -6333,65 +6295,65 @@ return /******/ (function(modules) { // webpackBootstrap
 	var level = null;
 
 	var Config = function () {
-		function Config() {
-			_classCallCheck(this, Config);
+	  function Config() {
+	    _classCallCheck(this, Config);
 
-			if (!instance) {
-				(0, _merge2.default)(this, defaultConfig);
-				instance = this;
-			}
-			return instance;
-		}
+	    if (!instance) {
+	      (0, _merge2.default)(this, defaultConfig);
+	      instance = this;
+	    }
+	    return instance;
+	  }
 
-		_createClass(Config, [{
-			key: 'applySettings',
-			value: function applySettings(settings) {
-				if (settings) {
-					(0, _merge2.default)(this, settings);
-				}
-			}
-		}, {
-			key: 'serverUrl',
-			get: function get() {
-				if (typeof window !== 'undefined' && window.location && window.location.host && window.location.host !== '') {
-					var matchingEnv = (0, _find2.default)(defaultConfig.envs, function (env) {
-						return env.serverUrl === window.location.host;
-					});
-					if (matchingEnv) {
-						return '';
-					}
-				}
-				return defaultConfig.envs[this.envName].serverUrl;
-			}
-		}, {
-			key: 'logLevel',
-			set: function set(setLevel) {
-				level = setLevel;
-			},
-			get: function get() {
-				if (level) {
-					return level;
-				}
-				return defaultConfig.envs[this.envName].logLevel;
-			}
-		}, {
-			key: 'envName',
-			set: function set(newEnv) {
-				envName = newEnv;
-			},
-			get: function get() {
-				return envName;
-			}
-		}, {
-			key: 'env',
-			get: function get() {
-				if (defaultConfig.envs[this.envName]) {
-					return defaultConfig.envs[this.envName];
-				}
-			}
-		}]);
+	  _createClass(Config, [{
+	    key: 'applySettings',
+	    value: function applySettings(settings) {
+	      if (settings) {
+	        (0, _merge2.default)(this, settings);
+	      }
+	    }
+	  }, {
+	    key: 'serverUrl',
+	    get: function get() {
+	      if (typeof window !== 'undefined' && window.location && window.location.host && window.location.host !== '') {
+	        var matchingEnv = (0, _find2.default)(defaultConfig.envs, function (env) {
+	          return env.serverUrl === window.location.host;
+	        });
+	        if (matchingEnv) {
+	          return '';
+	        }
+	      }
+	      return defaultConfig.envs[this.envName].serverUrl;
+	    }
+	  }, {
+	    key: 'logLevel',
+	    set: function set(setLevel) {
+	      level = setLevel;
+	    },
+	    get: function get() {
+	      if (level) {
+	        return level;
+	      }
+	      return defaultConfig.envs[this.envName].logLevel;
+	    }
+	  }, {
+	    key: 'envName',
+	    set: function set(newEnv) {
+	      envName = newEnv;
+	    },
+	    get: function get() {
+	      return envName;
+	    }
+	  }, {
+	    key: 'env',
+	    get: function get() {
+	      if (defaultConfig.envs[this.envName]) {
+	        return defaultConfig.envs[this.envName];
+	      }
+	    }
+	  }]);
 
-		return Config;
+	  return Config;
 	}();
 
 	var config = new Config();
@@ -6406,7 +6368,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	  value: true
 	});
 
 	var _isString = __webpack_require__(2);
@@ -6436,82 +6398,83 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var logger = {
-		log: function log(logData) {
-			var msgArgs = buildMessageArgs(logData);
-			if (_config2.default.logLevel === 'trace') {
-				runConsoleMethod('log', msgArgs);
-			}
-		},
-		debug: function debug(logData) {
-			var msgArgs = buildMessageArgs(logData);
-			if (_config2.default.logLevel === 'trace' || _config2.default.logLevel === 'debug') {
-				runConsoleMethod('debug', msgArgs);
-			}
-		},
-		info: function info(logData) {
-			if (_config2.default.logLevel === 'trace' || _config2.default.logLevel === 'debug' || _config2.default.logLevel === 'info') {
-				var msgArgs = buildMessageArgs(logData);
-				runConsoleMethod('info', msgArgs);
-			}
-		},
-		warn: function warn(logData) {
-			var msgArgs = buildMessageArgs(logData);
-			if (_config2.default.logLevel === 'trace' || _config2.default.logLevel === 'debug' || _config2.default.logLevel === 'info' || _config2.default.logLevel === 'warn') {
-				runConsoleMethod('warn', msgArgs);
-			}
-		},
-		error: function error(logData) {
-			var msgArgs = buildMessageArgs(logData);
-			if (_config2.default.logLevel === 'trace' || _config2.default.logLevel === 'debug' || _config2.default.logLevel === 'info' || _config2.default.logLevel === 'warn' || _config2.default.logLevel === 'error' || _config2.default.logLevel === 'fatal') {
-				runConsoleMethod('error', msgArgs);
-			}
-		}
+	  log: function log(logData) {
+	    var msgArgs = buildMessageArgs(logData);
+	    if (_config2.default.logLevel === 'trace') {
+	      runConsoleMethod('log', msgArgs);
+	    }
+	  },
+	  debug: function debug(logData) {
+	    var msgArgs = buildMessageArgs(logData);
+	    if (_config2.default.logLevel === 'trace' || _config2.default.logLevel === 'debug') {
+	      runConsoleMethod('debug', msgArgs);
+	    }
+	  },
+	  info: function info(logData) {
+	    if (_config2.default.logLevel === 'trace' || _config2.default.logLevel === 'debug' || _config2.default.logLevel === 'info') {
+	      var msgArgs = buildMessageArgs(logData);
+	      runConsoleMethod('info', msgArgs);
+	    }
+	  },
+	  warn: function warn(logData) {
+	    var msgArgs = buildMessageArgs(logData);
+	    if (_config2.default.logLevel === 'trace' || _config2.default.logLevel === 'debug' || _config2.default.logLevel === 'info' || _config2.default.logLevel === 'warn') {
+	      runConsoleMethod('warn', msgArgs);
+	    }
+	  },
+	  error: function error(logData) {
+	    var msgArgs = buildMessageArgs(logData);
+	    if (_config2.default.logLevel === 'trace' || _config2.default.logLevel === 'debug' || _config2.default.logLevel === 'info' || _config2.default.logLevel === 'warn' || _config2.default.logLevel === 'error' || _config2.default.logLevel === 'fatal') {
+	      runConsoleMethod('error', msgArgs);
+	    }
+	  }
 	};
 
 	exports.default = logger;
 
 
 	function runConsoleMethod(methodName, methodData) {
-		//Safley run console methods or use console log
-		if (methodName && console[methodName]) {
-			return console[methodName].apply(console, methodData);
-		} else {
-			return console.log.apply(console, methodData);
-		}
+	  // Safley run console methods or use console log
+	  if (methodName && console[methodName]) {
+	    return console[methodName].apply(console, methodData);
+	  } else {
+	    return console.log.apply(console, methodData);
+	  }
 	}
 	function buildMessageArgs(logData) {
-		var msgStr = '';
-		var msgObj = {};
-		//TODO: Attach time stamp
-		//Attach location information to the beginning of message
-		if ((0, _isObject2.default)(logData)) {
-			(function () {
-				if (logData.func) {
-					if (logData.obj) {
-						//Object and function provided
-						msgStr += '[' + logData.obj + '.' + logData.func + '()]\n ';
-					} else if (logData.file) {
-						msgStr += '[' + logData.file + ' > ' + logData.func + '()]\n ';
-					} else {
-						msgStr += '[' + logData.func + '()]\n ';
-					}
-				}
-				var hideList = ['func', 'obj', 'file'];
-				//Print each key and its value other than obj and func
-				(0, _each2.default)((0, _omit2.default)((0, _keys2.default)(logData), hideList), function (key) {
-					if (hideList.indexOf(key) === -1) {
-						if (key == 'description' || key == 'message') {
-							return msgStr += logData[key];
-						}
-						msgObj[key] = logData[key];
-					}
-				});
-				msgStr += '\n';
-			})();
-		} else if ((0, _isString2.default)(logData)) {
-			msgStr = logData;
-		}
-		return [msgStr, msgObj];
+	  var msgStr = '';
+	  var msgObj = {};
+	  // TODO: Attach time stamp
+	  // Attach location information to the beginning of message
+	  if ((0, _isObject2.default)(logData)) {
+	    (function () {
+	      if (logData.func) {
+	        if (logData.obj) {
+	          // Object and function provided
+	          msgStr += '[' + logData.obj + '.' + logData.func + '()]\n ';
+	        } else if (logData.file) {
+	          msgStr += '[' + logData.file + ' > ' + logData.func + '()]\n ';
+	        } else {
+	          msgStr += '[' + logData.func + '()]\n ';
+	        }
+	      }
+	      var hideList = ['func', 'obj', 'file'];
+	      // Print each key and its value other than obj and func
+	      (0, _each2.default)((0, _omit2.default)((0, _keys2.default)(logData), hideList), function (key) {
+	        if (hideList.indexOf(key) === -1) {
+	          if (key === 'description' || key === 'message') {
+	            msgStr += logData[key];
+	            return msgStr;
+	          }
+	          msgObj[key] = logData[key];
+	        }
+	      });
+	      msgStr += '\n';
+	    })();
+	  } else if ((0, _isString2.default)(logData)) {
+	    msgStr = logData;
+	  }
+	  return [msgStr, msgObj];
 	}
 	module.exports = exports['default'];
 
@@ -7034,7 +6997,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	  value: true
 	});
 	exports.isBrowser = isBrowser;
 	exports.loadCss = loadCss;
@@ -7053,7 +7016,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @return {Boolean}
 	 */
 	function isBrowser() {
-		return typeof window !== 'undefined' && typeof document !== 'undefined';
+	  return typeof window !== 'undefined' && typeof document !== 'undefined';
 	}
 
 	/**
@@ -7061,23 +7024,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {String} src - url src for css to append
 	 */
 	function loadCss(src) {
-		if (!isBrowser()) {
-			_logger2.default.error({
-				description: 'Load CSS only works within browsers.',
-				func: 'loadCss', obj: 'dom'
-			});
-			throw new Error('Document object is required to load assets.');
-		}
-		var css = document.createElement('link');
-		css.rel = 'stylesheet';
-		css.type = 'text/css';
-		css.href = src;
-		document.getElementsByTagName('head')[0].insertBefore(css, document.getElementsByTagName('head')[0].firstChild);
-		_logger2.default.debug({
-			description: 'CSS was loaded into document.', element: css,
-			func: 'loadCss', obj: 'dom'
-		});
-		return css; //Return link element
+	  if (!isBrowser()) {
+	    _logger2.default.error({
+	      description: 'Load CSS only works within browsers.',
+	      func: 'loadCss', obj: 'dom'
+	    });
+	    throw new Error('Document object is required to load assets.');
+	  }
+	  var css = document.createElement('link');
+	  css.rel = 'stylesheet';
+	  css.type = 'text/css';
+	  css.href = src;
+	  document.getElementsByTagName('head')[0].insertBefore(css, document.getElementsByTagName('head')[0].firstChild);
+	  _logger2.default.debug({
+	    description: 'CSS was loaded into document.', element: css,
+	    func: 'loadCss', obj: 'dom'
+	  });
+	  // Return link element
+	  return css;
 	}
 
 	/**
@@ -7085,22 +7049,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {String} src - url src for javascript to append
 	 */
 	function loadJs(src) {
-		if (!isBrowser()) {
-			_logger2.default.error({
-				description: 'Document does not exsist to load assets into.',
-				func: 'loadJs', obj: 'dom'
-			});
-			throw new Error('Document object is required to load assets.');
-		}
-		var js = window.document.createElement('script');
-		js.src = src;
-		js.type = 'text/javascript';
-		window.document.getElementsByTagName('head')[0].appendChild(js);
-		_logger2.default.debug({
-			description: 'JS was loaded into document.', element: js,
-			func: 'loadJs', obj: 'dom'
-		});
-		return js; //Return script element
+	  if (!isBrowser()) {
+	    _logger2.default.error({
+	      description: 'Document does not exsist to load assets into.',
+	      func: 'loadJs', obj: 'dom'
+	    });
+	    throw new Error('Document object is required to load assets.');
+	  }
+	  var js = window.document.createElement('script');
+	  js.src = src;
+	  js.type = 'text/javascript';
+	  window.document.getElementsByTagName('head')[0].appendChild(js);
+	  _logger2.default.debug({
+	    description: 'JS was loaded into document.', element: js,
+	    func: 'loadJs', obj: 'dom'
+	  });
+	  // Return script element
+	  return js;
 	}
 
 	/**
@@ -7109,24 +7074,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 */
 	function asyncLoadJs(src) {
-		if (!isBrowser()) {
-			_logger2.default.error({
-				description: 'Document does not exsist to load assets into.',
-				func: 'asyncLoadJs', obj: 'dom'
-			});
-			throw new Error('Document object is required to load assets.');
-		}
-		var js = window.document.createElement('script');
-		js.src = src;
-		js.type = 'text/javascript';
-		window.document.getElementsByTagName('head')[0].appendChild(js);
-		_logger2.default.log({
-			description: 'JS was loaded into document.', element: js,
-			func: 'asyncLoadJs', obj: 'dom'
-		});
-		return new Promise(function (resolve) {
-			window.setTimeout(resolve, 200);
-		});
+	  if (!isBrowser()) {
+	    _logger2.default.error({
+	      description: 'Document does not exsist to load assets into.',
+	      func: 'asyncLoadJs', obj: 'dom'
+	    });
+	    throw new Error('Document object is required to load assets.');
+	  }
+	  var js = window.document.createElement('script');
+	  js.src = src;
+	  js.type = 'text/javascript';
+	  window.document.getElementsByTagName('head')[0].appendChild(js);
+	  _logger2.default.log({
+	    description: 'JS was loaded into document.', element: js,
+	    func: 'asyncLoadJs', obj: 'dom'
+	  });
+	  return new Promise(function (resolve) {
+	    window.setTimeout(resolve, 200);
+	  });
 	}
 
 	/**
@@ -7135,17 +7100,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 */
 	function getQueryParam(name) {
-		if (!isBrowser()) {
-			_logger2.default.error({
-				description: 'Browser is required to get query params.',
-				func: 'asyncLoadJs', obj: 'dom'
-			});
-			throw new Error('Query parameters are only available within browsers.');
-		}
-		name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-		var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-		var results = regex.exec(location.search);
-		return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+	  if (!isBrowser()) {
+	    _logger2.default.error({
+	      description: 'Browser is required to get query params.',
+	      func: 'asyncLoadJs', obj: 'dom'
+	    });
+	    throw new Error('Query parameters are only available within browsers.');
+	  }
+	  name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+	  var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+	  var results = regex.exec(window.location.search);
+	  return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 	}
 
 /***/ },
@@ -7155,7 +7120,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	  value: true
 	});
 	exports.get = get;
 	exports.post = post;
@@ -7177,89 +7142,89 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function get(endpoint, queryData) {
-		var req = _superagent2.default.get(endpoint);
-		if (queryData) {
-			req.query(queryData);
-		}
-		req = addAuthHeader(req);
-		return handleResponse(req);
+	  var req = _superagent2.default.get(endpoint);
+	  if (queryData) {
+	    req.query(queryData);
+	  }
+	  req = addAuthHeader(req);
+	  return handleResponse(req);
 	}
 
 	function post(endpoint, data) {
-		var imageData = data && data.files ? handleFiles(data) : null;
-		var req = _superagent2.default.post(endpoint);
-		req = addAuthHeader(req);
-		req.send(imageData || data);
-		return handleResponse(req);
+	  var imageData = data && data.files ? handleFiles(data) : null;
+	  var req = _superagent2.default.post(endpoint);
+	  req = addAuthHeader(req);
+	  req.send(imageData || data);
+	  return handleResponse(req);
 	}
 
 	function put(endpoint, data) {
-		var imageData = data && data.files ? handleFiles(data) : null;
-		var req = _superagent2.default.put(endpoint);
-		req = addAuthHeader(req);
-		req.send(imageData || data);
-		return handleResponse(req);
+	  var imageData = data && data.files ? handleFiles(data) : null;
+	  var req = _superagent2.default.put(endpoint);
+	  req = addAuthHeader(req);
+	  req.send(imageData || data);
+	  return handleResponse(req);
 	}
 
 	function del(endpoint, data) {
-		var req = _superagent2.default.del(endpoint, data);
-		req = addAuthHeader(req);
-		return handleResponse(req);
+	  var req = _superagent2.default.del(endpoint, data);
+	  req = addAuthHeader(req);
+	  return handleResponse(req);
 	}
 
 	function handleResponse(req) {
-		return new Promise(function (resolve, reject) {
-			if (typeof req.end !== 'function') {
-				_logger2.default.warn({
-					description: 'req.end is not a function', func: 'handleResponse'
-				});
-				return reject({ message: 'req.end is not a function' });
-			}
-			req.end(function (errorRes, res) {
-				if (errorRes) {
-					if (errorRes.status == 401) {
-						_logger2.default.warn({
-							description: 'Unauthorized. You must be signed into make this request.',
-							func: 'handleResponse'
-						});
-					}
-					var response = errorRes.response;
+	  return new Promise(function (resolve, reject) {
+	    if (typeof req.end !== 'function') {
+	      _logger2.default.warn({
+	        description: 'req.end is not a function', func: 'handleResponse'
+	      });
+	      return reject({ message: 'req.end is not a function' });
+	    }
+	    req.end(function (errorRes, res) {
+	      if (errorRes) {
+	        if (errorRes.status === 401) {
+	          _logger2.default.warn({
+	            description: 'Unauthorized. You must be signed into make this request.',
+	            func: 'handleResponse'
+	          });
+	        }
+	        var response = errorRes.response;
 
-					var error = response && response.body ? response.body : errorRes;
-					_logger2.default.error({
-						description: 'Error in request.', error: error,
-						file: 'request', func: 'handleResponse'
-					});
-					return reject(error || errorRes);
-				}
-				if (res.error) {
-					_logger2.default.error({
-						description: 'Error in request.', error: res.error,
-						file: 'request', func: 'handleResponse'
-					});
-					return reject(res.error);
-				}
-				// logger.debug({
-				// 	message: 'Successful response recieved.', response: res.body,
-				// 	func: 'handleResponse', file: 'request'
-				// });
-				resolve(res.body);
-			});
-		});
+	        var error = response && response.body ? response.body : errorRes;
+	        _logger2.default.error({
+	          description: 'Error in request.', error: error,
+	          file: 'request', func: 'handleResponse'
+	        });
+	        return reject(error || errorRes);
+	      }
+	      if (res.error) {
+	        _logger2.default.error({
+	          description: 'Error in request.', error: res.error,
+	          file: 'request', func: 'handleResponse'
+	        });
+	        return reject(res.error);
+	      }
+	      // logger.debug({
+	      // 	message: 'Successful response recieved.', response: res.body,
+	      // 	func: 'handleResponse', file: 'request'
+	      // })
+	      resolve(res.body);
+	    });
+	  });
 	}
 	/**
 	 * @description Add auth header to request
 	 * @param {Object} request - Request object on which to add auth header
 	 */
 	function addAuthHeader(req) {
-		if (_token2.default.string) {
-			req = req.set('Authorization', 'Bearer ' + _token2.default.string);
-			// logger.debug({
-			// 	message: 'Set auth header', token: token.string,
-			// 	func: 'addAuthHeader', file: 'request'
-			// });
-		}
-		return req;
+	  if (_token2.default.string) {
+	    req = req.set('Authorization', 'Bearer ' + _token2.default.string);
+	    // logger.debug({
+	    // 	message: 'Set auth header', token: token.string,
+	    // 	func: 'addAuthHeader', file: 'request'
+	    // })
+	  }
+	  return req;
 	}
 
 	/**
@@ -7267,13 +7232,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {Array} files Array of file objects
 	 */
 	function handleFiles(files) {
-		var filesData = new FormData();
-		files.forEach(function (fileObj) {
-			if (fileObj.key && fileObj.file) {
-				filesData.append(fileObj.key || 'image', fileObj.file);
-			}
-		});
-		return filesData;
+	  var filesData = new window.FormData();
+	  files.forEach(function (fileObj) {
+	    if (fileObj.key && fileObj.file) {
+	      filesData.append(fileObj.key || 'image', fileObj.file);
+	    }
+	  });
+	  return filesData;
 	}
 
 /***/ },
@@ -7283,7 +7248,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	  value: true
 	});
 
 	var _isString = __webpack_require__(2);
@@ -7316,83 +7281,83 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var token = {
 
-		/** Get string value of token
-	  * @return {String}
-	  * @example
-	  * console.log('String value of current token', token.string);
-	  */
-		get string() {
-			var cookie = cookiesUtil.getCookie(_config2.default.tokenName);
-			if (cookie === '') return null;
-			return cookie;
-		},
+	  /** Get string value of token
+	   * @return {String}
+	   * @example
+	   * console.log('String value of current token', token.string)
+	   */
+	  get string() {
+	    var cookie = cookiesUtil.getCookie(_config2.default.tokenName);
+	    if (cookie === '') return null;
+	    return cookie;
+	  },
 
-		/**
-	  * @description Get decoded data within token (unencrypted data only)
-	  * @return {Object}
-	  * @example
-	  * console.log('Data of current token:', token.data);
-	  */
-		get data() {
-			if (!this.string) return null;
-			if (envStorage.getItem(_config2.default.tokenDataName)) {
-				return envStorage.getItem(_config2.default.tokenDataName);
-			} else {
-				return decodeToken(this.string);
-			}
-		},
+	  /**
+	   * @description Get decoded data within token (unencrypted data only)
+	   * @return {Object}
+	   * @example
+	   * console.log('Data of current token:', token.data)
+	   */
+	  get data() {
+	    if (!this.string) return null;
+	    if (envStorage.getItem(_config2.default.tokenDataName)) {
+	      return envStorage.getItem(_config2.default.tokenDataName);
+	    } else {
+	      return decodeToken(this.string);
+	    }
+	  },
 
-		/**
-	  * @description Set token data
-	  */
-		set data(tokenData) {
-			envStorage.setItem(_config2.default.tokenDataName, tokenData);
-			_logger2.default.debug({
-				description: 'Token data was set to session storage.', tokenData: tokenData,
-				func: 'data', obj: 'token'
-			});
-		},
+	  /**
+	   * @description Set token data
+	   */
+	  set data(tokenData) {
+	    envStorage.setItem(_config2.default.tokenDataName, tokenData);
+	    _logger2.default.debug({
+	      description: 'Token data was set to session storage.', tokenData: tokenData,
+	      func: 'data', obj: 'token'
+	    });
+	  },
 
-		/**
-	  * @description Set token value as a string
-	  */
-		set string(tokenStr) {
-			//Handle object being passed
-			if (!(0, _isString2.default)(tokenStr)) {
-				//Token is included in object
-				_logger2.default.log({
-					description: 'Token data is not string.',
-					tokenStr: tokenStr, func: 'string', obj: 'token'
-				});
-				throw new Error('Token data should be a string');
-			}
-			cookiesUtil.setCookie(_config2.default.tokenName, tokenStr, 7);
-			this.data = decodeToken(tokenStr);
-			_logger2.default.debug({
-				description: 'Token was set to cookies.',
-				func: 'string', obj: 'token'
-			});
-		},
+	  /**
+	   * @description Set token value as a string
+	   */
+	  set string(tokenStr) {
+	    // Handle object being passed
+	    if (!(0, _isString2.default)(tokenStr)) {
+	      // Token is included in object
+	      _logger2.default.log({
+	        description: 'Token data is not string.',
+	        tokenStr: tokenStr, func: 'string', obj: 'token'
+	      });
+	      throw new Error('Token data should be a string');
+	    }
+	    cookiesUtil.setCookie(_config2.default.tokenName, tokenStr, 7);
+	    this.data = decodeToken(tokenStr);
+	    _logger2.default.debug({
+	      description: 'Token was set to cookies.',
+	      func: 'string', obj: 'token'
+	    });
+	  },
 
-		/** Save token data
-	  */
-		save: function save(tokenStr) {
-			this.string = tokenStr;
-		},
+	  /** Save token data
+	   */
+	  save: function save(tokenStr) {
+	    this.string = tokenStr;
+	  },
 
 
-		/** Delete token data
-	  */
-		delete: function _delete() {
-			//Remove string token
-			cookiesUtil.deleteCookie(_config2.default.tokenName);
-			//Remove user data
-			envStorage.removeItem(_config2.default.tokenDataName);
-			_logger2.default.log({
-				description: 'Token was removed.',
-				func: 'delete', obj: 'token'
-			});
-		}
+	  /** Delete token data
+	   */
+	  delete: function _delete() {
+	    // Remove string token
+	    cookiesUtil.deleteCookie(_config2.default.tokenName);
+	    // Remove user data
+	    envStorage.removeItem(_config2.default.tokenDataName);
+	    _logger2.default.log({
+	      description: 'Token was removed.',
+	      func: 'delete', obj: 'token'
+	    });
+	  }
 	};
 
 	exports.default = token;
@@ -7403,16 +7368,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	function decodeToken(tokenStr) {
-		if (!tokenStr || tokenStr === '') return null;
-		try {
-			return (0, _jwtDecode2.default)(tokenStr);
-		} catch (error) {
-			_logger2.default.error({
-				description: 'Error decoding token.',
-				error: error, func: 'decodeToken', file: 'token'
-			});
-			return null;
-		}
+	  if (!tokenStr || tokenStr === '') return null;
+	  try {
+	    return (0, _jwtDecode2.default)(tokenStr);
+	  } catch (error) {
+	    _logger2.default.error({
+	      description: 'Error decoding token.',
+	      error: error, func: 'decodeToken', file: 'token'
+	    });
+	    return null;
+	  }
 	}
 	module.exports = exports['default'];
 
@@ -7423,7 +7388,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	  value: true
 	});
 
 	var _includes = __webpack_require__(169);
@@ -7448,29 +7413,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 */
 	function getCookie(cookieName) {
-		if (typeof window === 'undefined' || typeof document === 'undefined') {
-			return '';
-		}
-		var name = cookieName + '=';
-		var ca = document.cookie.split(';');
-		for (var i = 0; i < ca.length; i++) {
-			var c = ca[i];
-			while (c.charAt(0) == ' ') {
-				c = c.substring(1);
-			}
-			try {
-				if ((0, _includes2.default)(c, name)) {
-					return c.substring(name.length, c.length);
-				}
-			} catch (error) {
-				_logger2.default.warn({
-					description: 'Cookie cannot be loaded.', cookieName: cookieName,
-					error: error, func: 'getCookie', obj: 'cookiesUtil'
-				});
-				return '';
-			}
-		}
-		return '';
+	  if (typeof window === 'undefined' || typeof document === 'undefined') {
+	    return '';
+	  }
+	  var name = cookieName + '=';
+	  var ca = document.cookie.split(';');
+	  for (var i = 0; i < ca.length; i++) {
+	    var c = ca[i];
+	    while (c.charAt(0) === ' ') {
+	      c = c.substring(1);
+	    }
+	    try {
+	      if ((0, _includes2.default)(c, name)) {
+	        return c.substring(name.length, c.length);
+	      }
+	    } catch (error) {
+	      _logger2.default.warn({
+	        description: 'Cookie cannot be loaded.', cookieName: cookieName,
+	        error: error, func: 'getCookie', obj: 'cookiesUtil'
+	      });
+	      return '';
+	    }
+	  }
+	  return '';
 	}
 
 	/**
@@ -7482,17 +7447,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 */
 	function setCookie(cookieName, cookieValue, expDays) {
-		var d = new Date();
-		d.setTime(d.getTime() + expDays * 24 * 60 * 60 * 1000);
-		var expires = 'expires=' + d.toUTCString();
-		try {
-			document.cookie = cookieName + '=' + cookieValue + '; Path=/; ' + expires;
-		} catch (e) {
-			_logger2.default.warn({
-				description: 'Cookie cannot be set because browser is not capable.',
-				cookieName: cookieName, func: 'setCookie', obj: 'cookiesUtil'
-			});
-		}
+	  var d = new Date();
+	  d.setTime(d.getTime() + expDays * 24 * 60 * 60 * 1000);
+	  var expires = 'expires=' + d.toUTCString();
+	  try {
+	    document.cookie = cookieName + '=' + cookieValue + '; Path=/; ' + expires;
+	  } catch (e) {
+	    _logger2.default.warn({
+	      description: 'Cookie cannot be set because browser is not capable.',
+	      cookieName: cookieName, func: 'setCookie', obj: 'cookiesUtil'
+	    });
+	  }
 	}
 
 	/**
@@ -7501,17 +7466,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 */
 	function deleteCookie(cookieName) {
-		if (getCookie(cookieName)) {
-			document.cookie = cookieName + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-			_logger2.default.debug({
-				description: 'Cookie deleted.', cookieName: cookieName, func: 'deleteCookie'
-			});
-		} else {
-			_logger2.default.warn({
-				description: 'Cookie cannot be deleted because it does not exist.',
-				cookieName: cookieName, func: 'deleteCookie', obj: 'cookiesUtil'
-			});
-		}
+	  if (getCookie(cookieName)) {
+	    document.cookie = cookieName + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+	    _logger2.default.debug({
+	      description: 'Cookie deleted.', cookieName: cookieName, func: 'deleteCookie'
+	    });
+	  } else {
+	    _logger2.default.warn({
+	      description: 'Cookie cannot be deleted because it does not exist.',
+	      cookieName: cookieName, func: 'deleteCookie', obj: 'cookiesUtil'
+	    });
+	  }
 	}
 
 /***/ },
@@ -7642,7 +7607,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	  value: true
 	});
 
 	var _isObject = __webpack_require__(1);
@@ -7669,21 +7634,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 */
 	function localExists() {
-		var testKey = 'test';
-		if (typeof window != 'undefined' && typeof window.sessionStorage != 'undefined') {
-			try {
-				window.sessionStorage.setItem(testKey, '1');
-				window.sessionStorage.removeItem(testKey);
-				return true;
-			} catch (error) {
-				_logger2.default.error({
-					description: 'Error saving to session storage', error: error,
-					obj: 'storage', func: 'localExists'
-				});
-				return false;
-			}
-		}
-		return false;
+	  var testKey = 'test';
+	  if (typeof window !== 'undefined' && typeof window.sessionStorage !== 'undefined') {
+	    try {
+	      window.sessionStorage.setItem(testKey, '1');
+	      window.sessionStorage.removeItem(testKey);
+	      return true;
+	    } catch (error) {
+	      _logger2.default.error({
+	        description: 'Error saving to session storage', error: error,
+	        obj: 'storage', func: 'localExists'
+	      });
+	      return false;
+	    }
+	  }
+	  return false;
 	}
 
 	/**
@@ -7695,14 +7660,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 */
 	function setItem(itemName, itemValue) {
-		data[itemName] = itemValue;
-		if (localExists()) {
-			//Convert object to string
-			if ((0, _isObject2.default)(itemValue)) {
-				itemValue = JSON.stringify(itemValue);
-			}
-			window.sessionStorage.setItem(itemName, itemValue);
-		}
+	  data[itemName] = itemValue;
+	  if (localExists()) {
+	    // Convert object to string
+	    if ((0, _isObject2.default)(itemValue)) {
+	      itemValue = JSON.stringify(itemValue);
+	    }
+	    window.sessionStorage.setItem(itemName, itemValue);
+	  }
 	}
 
 	/**
@@ -7714,31 +7679,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 */
 	function getItem(itemName) {
-		if (data[itemName]) {
-			return data[itemName];
-		} else if (localExists()) {
-			var itemStr = window.sessionStorage.getItem(itemName);
-			//Check that str is not null before parsing
-			if (itemStr) {
-				var isObj = false;
-				var itemObj = null;
-				//Try parsing to object
-				try {
-					itemObj = JSON.parse(itemStr);
-					isObj = true;
-				} catch (err) {
-					// logger.log({message: 'String could not be parsed.', error: err, func: 'getItem', obj: 'storage'});
-					//Parsing failed, this must just be a string
-					isObj = false;
-				}
-				if (isObj) {
-					return itemObj;
-				}
-			}
-			return itemStr;
-		} else {
-			return null;
-		}
+	  if (data[itemName]) {
+	    return data[itemName];
+	  } else if (localExists()) {
+	    var itemStr = window.sessionStorage.getItem(itemName);
+	    // Check that str is not null before parsing
+	    if (itemStr) {
+	      var isObj = false;
+	      var itemObj = null;
+	      // Try parsing to object
+	      try {
+	        itemObj = JSON.parse(itemStr);
+	        isObj = true;
+	      } catch (err) {
+	        // Parsing failed, this must just be a string
+	        // logger.log({message: 'String could not be parsed.', error: err, func: 'getItem', obj: 'storage'})
+	        isObj = false;
+	      }
+	      if (isObj) {
+	        return itemObj;
+	      }
+	    }
+	    return itemStr;
+	  } else {
+	    return null;
+	  }
 	}
 
 	/**
@@ -7748,21 +7713,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 */
 	function removeItem(itemName) {
-		//TODO: Only remove used items
-		if (data[itemName]) {
-			data[itemName] = null;
-		}
-		if (localExists() && getItem(itemName)) {
-			try {
-				//Clear session storage
-				window.sessionStorage.removeItem(itemName);
-			} catch (error) {
-				_logger2.default.warn({
-					description: 'Error removing item from session storage', error: error,
-					obj: 'storage', func: 'removeItem'
-				});
-			}
-		}
+	  // TODO: Only remove used items
+	  if (data[itemName]) {
+	    data[itemName] = null;
+	  }
+	  if (localExists() && getItem(itemName)) {
+	    try {
+	      // Clear session storage
+	      window.sessionStorage.removeItem(itemName);
+	    } catch (error) {
+	      _logger2.default.warn({
+	        description: 'Error removing item from session storage', error: error,
+	        obj: 'storage', func: 'removeItem'
+	      });
+	    }
+	  }
 	}
 
 	/**
@@ -7774,18 +7739,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 */
 	function clear() {
-		//TODO: Only remove used items
-		data = {};
-		if (localExists()) {
-			try {
-				//Clear session storage
-				window.sessionStorage.clear();
-			} catch (err) {
-				_logger2.default.warn({
-					description: 'Session storage could not be cleared.', error: err
-				});
-			}
-		}
+	  // TODO: Only remove used items
+	  data = {};
+	  if (localExists()) {
+	    try {
+	      // Clear session storage
+	      window.sessionStorage.clear();
+	    } catch (error) {
+	      _logger2.default.warn({
+	        description: 'Session storage could not be cleared.', error: error,
+	        obj: 'storage', func: 'removeItem'
+	      });
+	    }
+	  }
 	}
 
 /***/ },
@@ -9321,7 +9287,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	  value: true
 	});
 	exports.authWithServer = authWithServer;
 
@@ -9339,67 +9305,75 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	// import { OAuth, User } from 'oauthio-web'; // window/document undefined error
-	// const OAuthLib = isBrowser ? require('oauthio-web') : undefined; //document undefined error
+	// import { OAuth, User } from 'oauthio-web' // window/document undefined error
 
 	if ((0, _dom.isBrowser)()) {
-		loadOAuthio().then(function () {
-			_logger2.default.debug({ description: 'OAuthIo script loaded:' });
-			initializeOAuth();
-		});
+	  loadOAuthio().then(function () {
+	    initializeOAuth();
+	  });
 	}
 
 	/**
 	 * @description Signup using a token generated from the server (so server and client are both aware of auth state)
 	 */
 	function authWithServer(provider) {
-		initializeOAuth();
-		return (0, _request.get)(_config2.default.serverUrl + '/stateToken').then(function (params) {
-			return window.OAuth.popup(provider, { state: params.token }).done(function (result) {
-				_logger2.default.info({
-					description: 'Result from oauth:', result: result, provider: provider, params: params,
-					func: 'authWithServer', obj: 'providerAuth'
-				});
-				return (0, _request.put)(_config2.default.serverUrl + '/auth', { provider: provider, code: result.code, stateToken: params.token });
-			}).fail(function (error) {
-				_logger2.default.error({
-					description: 'error with request', error: error,
-					func: 'authWithServer', obj: 'providerAuth'
-				});
-				return Promise.reject(error);
-			});
-		}, function (error) {
-			_logger2.default.error({
-				description: 'error with request', error: error,
-				func: 'authWithServer', obj: 'providerAuth'
-			});
-			return Promise.reject(error);
-		});
+	  initializeOAuth();
+	  return (0, _request.get)(_config2.default.serverUrl + '/stateToken').then(function (params) {
+	    return new Promise(function (resolve, reject) {
+	      window.OAuth.popup(provider, { state: params.token }).done(function (result) {
+	        _logger2.default.info({
+	          description: 'Result from oauth:', result: result, provider: provider, params: params,
+	          func: 'authWithServer', obj: 'providerAuth'
+	        });
+	        (0, _request.put)(_config2.default.serverUrl + '/auth', { provider: provider, code: result.code, stateToken: params.token }).then(function (loggedInData) {
+	          _logger2.default.warn({
+	            description: 'logged in info', result: loggedInData,
+	            func: 'authWithServer', obj: 'providerAuth'
+	          });
+	          resolve(loggedInData);
+	        }, function (error) {
+	          reject(error);
+	        });
+	      }).fail(function (error) {
+	        _logger2.default.error({
+	          description: 'error with request', error: error,
+	          func: 'authWithServer', obj: 'providerAuth'
+	        });
+	        return Promise.reject(error);
+	      });
+	    });
+	  }, function (error) {
+	    _logger2.default.error({
+	      description: 'error with request', error: error,
+	      func: 'authWithServer', obj: 'providerAuth'
+	    });
+	    return Promise.reject(error);
+	  });
 	}
 
 	/**
 	 * @description Run initial setup of OAuth Library
 	 */
 	function initializeOAuth() {
-		if ((0, _dom.isBrowser)() && window.OAuth) {
-			console.log('initializing oauth');
-			window.OAuth.initialize(_config2.default.oauthioKey);
-		}
+	  if ((0, _dom.isBrowser)() && window.OAuth) {
+	    console.log('initializing oauth');
+	    window.OAuth.initialize(_config2.default.oauthioKey);
+	  }
 	}
 
 	/**
 	 * @description Load OAuthio-web Library into body as script element
 	 */
 	function loadOAuthio() {
-		// console.log('loading oauthio into script tag:', config.oauthioCDN);
-		if (typeof window.OAuth !== 'undefined') {
-			return Promise.resolve();
-		}
-		return (0, _dom.asyncLoadJs)(_config2.default.oauthioCDN).then(function () {
-			if (window.OAuth) {
-				window.OAuth.initialize(_config2.default.oauthioKey);
-			}
-		});
+	  // console.log('loading oauthio into script tag:', config.oauthioCDN)
+	  if (typeof window.OAuth !== 'undefined') {
+	    return Promise.resolve();
+	  }
+	  return (0, _dom.asyncLoadJs)(_config2.default.oauthioCDN).then(function () {
+	    if (window.OAuth) {
+	      window.OAuth.initialize(_config2.default.oauthioKey);
+	    }
+	  });
 	}
 
 	/**
@@ -9412,14 +9386,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	// 		logger.debug({
 	// 			description: 'Popup response.', res,
 	// 			func: 'signup', obj: 'providerAuth'
-	// 		});
-	// 		const newUser = await User.signup(res);
-	// 		return newUser;
+	// 		})
+	// 		const newUser = await User.signup(res)
+	// 		return newUser
 	// 	} catch(error) {
 	// 		logger.error({
 	// 			description: 'error in oauth request', error
-	// 		});
-	// 		return error;
+	// 		})
+	// 		return error
 	// 	}
 	// }
 
@@ -9430,12 +9404,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	// export async function login(provider) {
 	// 	try {
 	// 		const res = await OAuth.popup(provider, {cache: true})
-	// 		const newUser = await User.signin(res);
-	// 		console.log('user:', newUser);
-	// 		return newUser;
+	// 		const newUser = await User.signin(res)
+	// 		console.log('user:', newUser)
+	// 		return newUser
 	// 	} catch(error) {
-	// 		console.error('error in oauth request', error);
-	// 		return error;
+	// 		console.error('error in oauth request', error)
+	// 		return error
 	// 	}
 	// }
 
@@ -9443,13 +9417,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @description Logout external provider service (Stormpath/oauthio)
 	 */
 	// export async function logout() {
-	// 	if(!currentlyLoggedIn()) return;
+	// 	if(!currentlyLoggedIn()) return
 	// 	try {
-	// 		const user = User.getIdentity();
-	// 		return await user.logout();
+	// 		const user = User.getIdentity()
+	// 		return await user.logout()
 	// 	} catch(error) {
-	// 		console.error('error logging out', error);
-	// 		return error;
+	// 		console.error('error logging out', error)
+	// 		return error
 	// 	}
 	// }
 
@@ -9457,7 +9431,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @description Get currently connected user
 	 */
 	// export function getCurrentUser() {
-	// 	return User.getIdentity();
+	// 	return User.getIdentity()
 	// }
 
 	/**
@@ -9465,10 +9439,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	// export async function getUserData(provider) {
 	// 	try {
-	// 		const result = await OAuth.popup(provider, {cache: true});
-	// 		return await result.me();
+	// 		const result = await OAuth.popup(provider, {cache: true})
+	// 		return await result.me()
 	// 	} catch(error) {
-	// 		console.error('error in oauth request', error);
+	// 		console.error('error in oauth request', error)
 	// 	}
 	// }
 
@@ -9477,11 +9451,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	// export async function updateUserData(newData) {
 	// 	try {
-	// 		user = User.getIdentity();
-	// 		user.data = newData;
-	// 		return await user.save();
+	// 		user = User.getIdentity()
+	// 		user.data = newData
+	// 		return await user.save()
 	// 	} catch(error) {
-	// 		console.error('error updating user data', error);
+	// 		console.error('error updating user data', error)
 	// 	}
 	// }
 
@@ -9489,7 +9463,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @description Check to see if a user is currently logged in to external provider service (Stormpath/oauthio)
 	 */
 	// export function currentlyLoggedIn() {
-	// 	return User.isLogged();
+	// 	return User.isLogged()
 	// }
 
 /***/ },
