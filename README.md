@@ -1,5 +1,7 @@
 # Grout
 
+## Replaced by [devshare](https://github.com/KyperTech/devshare)
+
 [![npm version](https://img.shields.io/npm/v/kyper-grout.svg?style=flat-square)](https://www.npmjs.com/package/kyper-grout)
 [![npm downloads](https://img.shields.io/npm/dm/kyper-grout.svg?style=flat-square)](https://www.npmjs.com/package/kyper-grout)
 [![build status](https://img.shields.io/travis/KyperTech/grout/master.svg?style=flat-square)](https://travis-ci.org/KyperTech/grout)
@@ -8,62 +10,16 @@
 [![coverage](https://img.shields.io/codeclimate/coverage/github/KyperTech/grout.svg?style=flat-square)](https://codeclimate.com/github/KyperTech/grout)
 [![license](https://img.shields.io/npm/l/kyper-grout.svg?style=flat-square)](https://github.com/KyperTech/grout/blob/master/LICENSE)
 
-Client library to simplify communication with Tessellate application building service.
+## CDN
 
-## Getting Started
+The library will remain available on the Kyper CDN until the end of 2016 to allow time for migration (same api methods) to [devshare](https://github.com/KyperTech/devshare).
 
-Grout is isomorphic, so it can be used within a front-end or on a server. Below are options for setups:
 
-### NodeJS
-1. Install:
-    `npm install --save kyper-grout`
+  ```html
+  <script src="http://cdn.kyper.io/js/grout/latest/grout.js"></script>
+  <script src="http://cdn.kyper.io/js/grout/0.2.10/grout.js"></script>
+  ```
 
-2. Include and use `kyper-grout`:
+## About
 
-    ```javascript
-    var Grout = require('kyper-grout');
-  var grout = new Grout();
-    ```
-
-### ES6
-1. Install:
-    `npm install --save kyper-grout`
-
-2. Include and use `kyper-grout`:
-
-    ```javascript
-  import Grout from 'kyper-grout';
-  let grout = new Grout();
-    ```
-
-### Browser
-  1. Include the Grout library using one of the following:
-    #### CDN
-    Add script tag to index.html:
-
-      ```html
-      <script src="http://cdn.kyper.io/js/grout/latest/grout.js"></script>
-      ```
-
-    #### Bower
-    Run `bower install --save kyper-grout`
-    Then include the following in your index.html:
-    ```html
-    <script src="./bower_components/kyper-grout/dist/grout.js"></script>
-    ```
-  2. Begin using grout:
-
-    ```javascript
-    var grout = new Grout();
-    if(grout.isLoggedIn){
-      console.log('The currently logged in user is', grout.currentUser);
-    } else {
-      console.warn('Not logged into grout');
-    }
-    ```
-
-## Documentation
-
-### [API Documentation](https://github.com/KyperTech/grout/wiki/API-Documentation)
-
-### [Main Wiki](https://github.com/KyperTech/grout/wiki)
+ Lessons learned from this library were essential to building [devshare](https://github.com/KyperTech/devshare) (replaced Grout in powering [devshare.io](http://devshare.io)). Initially we built a seperate library that Grout used internally, named [Matter](https://github.com/KyperTech/Matter), to handle authentication. [devshare](https://github.com/KyperTech/devshare) now contains the full functionality from both libraries.
